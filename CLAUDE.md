@@ -138,7 +138,10 @@ fotos recientes de obra; lista vigente de empresas del grupo; acceso a Zoho Page
 - Responder en español.
 - Flujo: brainstorming → spec → plan → ejecución. Aprobar el diseño antes de implementar.
 - Ahorrar tokens: procesos livianos, planes sin código completo.
-- Un commit al final de cada etapa, con aprobación. Ramas con fast-forward a `main` y borrar la rama.
+- **Trabajo por etapas.** El alcance de cada etapa (fase, módulo o tarea) se define sobre la marcha,
+  según avance el desarrollo. Al cerrar cada etapa se hace su commit. Si se trabajó en una rama, se
+  hace merge fast-forward a `main` y se borra la rama. Registro de etapas:
+  - Etapa 0 (2026-10-13): análisis de diagnóstico y propuesta, CLAUDE.md, init del repo → commit `34c9328`.
 - No usar prettier.
 - El repo se gestiona con GitHub Desktop.
 - `desktop.ini` (OneDrive) está ignorado en git.
