@@ -1,0 +1,1293 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Nuevo Sitio Grupo HL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..700&display=swap">
+<style>
+/* Layout: hoja de plano. Cada sección es una lámina con código, cota y rótulo; retícula de 12 columnas sobre módulo de 8px.
+   Tipo: una sola familia (Archivo) en tres anchos: expandida para títulos, normal para texto, condensada para datos y cotas. */
+:root{
+  --bg:#E7EAEB; --paper:#F6F7F7; --ink:#14181C; --muted:#56606A; --line:#C2C9CD; --line-soft:#D7DCDF;
+  --accent:#0B509E; --accent-ink:#FFFFFF; --accent-soft:#D6E2F1;
+  --signal:#B97E00; --signal-soft:#F5E7C2;
+  --bad:#AE4128; --bad-soft:#F2DDD5; --good:#2C7550; --good-soft:#D5E9DC;
+  --grid:rgba(11,80,158,.075);
+  --f:"Archivo","Arial Narrow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --s2:8px; --s3:16px; --s4:24px; --s5:40px; --s6:64px; --s7:104px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1113; --paper:#15191C; --ink:#E5E9EB; --muted:#959FA7; --line:#2D3439; --line-soft:#21272B;
+  --accent:#62A0EC; --accent-ink:#08131F; --accent-soft:#15263B;
+  --signal:#F2B42A; --signal-soft:#3A2F12;
+  --bad:#E2816A; --bad-soft:#3A1E17; --good:#68B98A; --good-soft:#14291D;
+  --grid:rgba(98,160,236,.08); color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0E1113; --paper:#15191C; --ink:#E5E9EB; --muted:#959FA7; --line:#2D3439; --line-soft:#21272B;
+  --accent:#62A0EC; --accent-ink:#08131F; --accent-soft:#15263B;
+  --signal:#F2B42A; --signal-soft:#3A2F12;
+  --bad:#E2816A; --bad-soft:#3A1E17; --good:#68B98A; --good-soft:#14291D;
+  --grid:rgba(98,160,236,.08); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--f);text-wrap:balance;margin:0;line-height:1.05}
+p{margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}
+/* "data": Archivo condensada, la voz de cotas, rótulos y cifras */
+.d,.mono{font-family:var(--f);font-stretch:72%;font-weight:600;font-size:12.5px;letter-spacing:.07em;text-transform:uppercase}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+
+/* barra superior */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:var(--s3);height:52px}
+.mark{display:flex;align-items:center;gap:10px;flex:none;text-decoration:none;color:var(--ink)}
+.mark b{display:grid;place-items:center;width:30px;height:30px;background:var(--accent);color:var(--accent-ink);font-stretch:125%;font-weight:900;font-size:13px}
+.mark span{color:var(--muted)}
+.nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-left:auto;min-width:0}
+.nav::-webkit-scrollbar{display:none}
+.nav a{color:var(--muted);text-decoration:none;padding:6px 9px;white-space:nowrap;border:1px solid transparent}
+.nav a:hover{color:var(--ink);border-color:var(--line)}
+@media (max-width:720px){.mark span{display:none}}
+
+/* hero */
+.hero{position:relative;border-bottom:1px solid var(--line);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+.hero .wrap.top{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:var(--s5);align-items:center;padding-block:var(--s6) var(--s5)}
+@media (max-width:900px){.hero .wrap.top{grid-template-columns:1fr;padding-block:var(--s5)}}
+.eyebrow{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--muted);margin-bottom:var(--s4)}
+.eyebrow span+span::before{content:"/";margin-right:14px;color:var(--line)}
+.hero h1{font-stretch:122%;font-weight:850;font-size:clamp(36px,5.6vw,68px);letter-spacing:-.015em;line-height:.98}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.lead{margin-top:var(--s4);max-width:62ch;font-size:17px;color:var(--muted)}
+.lead strong{color:var(--ink);font-weight:600}
+.drawing{width:100%;max-width:100%;height:auto;display:block;overflow:visible}
+.drawing .st{stroke:var(--ink);fill:none;stroke-linecap:square}
+.drawing .st.thin{stroke-width:1}
+.drawing .st.mid{stroke-width:1.6}
+.drawing .st.heavy{stroke-width:3.2}
+.drawing .ax{stroke:var(--accent);stroke-width:1;stroke-dasharray:2 5;fill:none;opacity:.6}
+.drawing .dim{stroke:var(--signal);stroke-width:1.2;fill:none}
+.drawing text{font-family:var(--f);font-stretch:72%;font-weight:600;font-size:11px;letter-spacing:.07em;fill:var(--muted)}
+.drawing .bub{fill:var(--paper);stroke:var(--accent);stroke-width:1.2}
+.drawing .bubt{fill:var(--accent);font-weight:700;font-size:12px;font-stretch:100%}
+.drawing .load{fill:var(--accent)}
+.drawing .cw{fill:var(--ink)}
+.draw{animation:trazo 1.5s cubic-bezier(.6,.05,.25,1) both;animation-delay:var(--d,0s)}
+@keyframes trazo{from{stroke-dasharray:1;stroke-dashoffset:1}to{stroke-dasharray:1;stroke-dashoffset:0}}
+.hoist{animation:izaje 7s ease-in-out 2.2s infinite alternate}
+@keyframes izaje{from{transform:translateY(0)}to{transform:translateY(-22px)}}
+.fade-in{animation:aparece .8s ease both;animation-delay:var(--d,0s)}
+@keyframes aparece{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:var(--s5)}
+.stat{padding:var(--s3) var(--s3) var(--s3) 0;border-right:1px solid var(--line-soft);min-width:0}
+.stat+.stat{padding-left:var(--s3)}
+.stat:last-child{border-right:0}
+.stat b{display:block;font-stretch:125%;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat b small{font-size:.5em;font-weight:700;margin-left:2px}
+.stat span{display:block;margin-top:6px;color:var(--muted)}
+.stat span.count{display:inline;margin:0;color:inherit}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat{padding:var(--s3) 0!important;border-right:0;border-bottom:1px solid var(--line-soft)}.stat:last-child{border-bottom:0;grid-column:1/-1}}
+
+/* láminas */
+.sheet{padding-block:var(--s7) 0}
+.shead{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--s2) var(--s4);align-items:end;margin-bottom:var(--s5)}
+.code{color:var(--accent);border:1px solid var(--accent);padding:4px 8px;align-self:start;margin-top:6px}
+.shead h2{font-stretch:115%;font-weight:800;font-size:clamp(28px,3.6vw,44px);letter-spacing:-.01em}
+.shead p{grid-column:2;max-width:70ch;color:var(--muted);font-size:16.5px}
+@media (max-width:640px){.shead{grid-template-columns:1fr}.shead p{grid-column:1}}
+.cota{grid-column:1/-1;height:12px;position:relative;margin-top:var(--s2)}
+.cota::before{content:"";position:absolute;left:0;right:0;top:6px;border-top:1px solid var(--signal);transform-origin:left;transition:transform 1.2s cubic-bezier(.6,.05,.25,1)}
+.cota::after{content:"";position:absolute;inset:0;border-left:1px solid var(--signal);border-right:1px solid var(--signal)}
+.js .cota:not(.in)::before{transform:scaleX(.02)}
+h3{font-stretch:108%;font-weight:750;font-size:21px}
+.sub{color:var(--muted);display:block;margin:var(--s5) 0 var(--s3)}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--f);font-stretch:72%;font-weight:600;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border:1px solid currentColor;line-height:1.4;white-space:nowrap}
+.chip::before{content:"";width:6px;height:6px;background:currentColor;flex:none}
+.chip.crit{color:var(--bad);background:var(--bad-soft)}
+.chip.high{color:var(--signal);background:var(--signal-soft)}
+.chip.med{color:var(--muted);background:transparent}
+.chip.ok{color:var(--good);background:var(--good-soft)}
+.chip.acc{color:var(--accent);background:var(--accent-soft)}
+
+/* diagnóstico */
+.scores{border-top:1px solid var(--ink)}
+.score{display:grid;grid-template-columns:minmax(0,230px) 150px minmax(0,1fr);gap:var(--s3);align-items:center;padding-block:12px;border-bottom:1px solid var(--line)}
+.score b{font-stretch:105%;font-weight:700;font-size:15.5px}
+.score p{font-size:14.5px;color:var(--muted)}
+.five{display:flex;gap:3px;align-items:center}
+.five i{width:14px;height:10px;background:var(--line-soft)}
+.five i.on{background:var(--bad)}
+.five i.on.m{background:var(--signal)}
+.five em{white-space:nowrap;font-style:normal;margin-left:8px;font-stretch:72%;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
+@media (max-width:700px){.score{grid-template-columns:minmax(0,1fr) auto}.score p{grid-column:1/-1}}
+.findings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--ink);border-left:1px solid var(--line)}
+.finding{padding:var(--s4);border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:12px;background:var(--paper);min-width:0}
+.finding .top{display:flex;justify-content:space-between;align-items:center;gap:var(--s2)}
+.finding .top .d{color:var(--muted)}
+.finding p{font-size:15px;color:var(--muted)}
+.finding p strong{color:var(--ink);font-weight:600}
+.ev{margin-top:auto;padding-top:10px;border-top:1px dashed var(--line);font-stretch:75%;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+@media (max-width:960px){.findings{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.findings{grid-template-columns:1fr}}
+
+/* tabs y diagramas */
+.tabs{display:inline-flex;border:1px solid var(--ink);margin-bottom:var(--s3)}
+.tabs button{appearance:none;border:0;background:transparent;color:var(--ink);font-family:var(--f);font-stretch:72%;font-weight:600;font-size:13px;letter-spacing:.07em;text-transform:uppercase;padding:9px 16px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.diagram{border:1px solid var(--line);background:var(--paper);padding:var(--s3);overflow-x:auto}
+.diagram svg{display:block;min-width:720px;width:100%;height:auto}
+.dg rect.box{fill:var(--bg);stroke:var(--line);stroke-width:1.2}
+.dg rect.key{stroke:var(--accent);stroke-width:1.6}
+.dg rect.grp{fill:none;stroke:var(--accent);stroke-dasharray:4 4;stroke-width:1.2}
+.dg rect.risk{stroke:var(--bad);stroke-width:1.4}
+.dg text{font-family:var(--f);font-size:13px;fill:var(--ink);font-weight:650}
+.dg text.s{font-stretch:75%;font-size:12px;fill:var(--muted);font-weight:500;letter-spacing:.02em}
+.dg text.lb{font-stretch:72%;font-size:11px;fill:var(--accent);font-weight:700;letter-spacing:.07em}
+.dg .ln{stroke:var(--muted);stroke-width:1.3;fill:none}
+.dg .ln.acc{stroke:var(--accent)}
+.dg .warn circle{fill:var(--bad)}
+.dg .warn text{fill:var(--paper);font-size:12px;font-weight:800}
+.dg .ah{fill:var(--muted)}
+.dg .ah.acc{fill:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:var(--s3);margin-top:var(--s3);font-size:13.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:14px;height:10px;border:1.5px solid var(--line);display:inline-block}
+.legend i.r{border-color:var(--bad)}
+.legend i.a{border-color:var(--accent)}
+
+.cmp{margin-top:var(--s5);border-top:1px solid var(--ink)}
+.cmp-row{display:grid;grid-template-columns:190px minmax(0,1fr) minmax(0,1fr);border-bottom:1px solid var(--line)}
+.cmp-row>div{padding:14px 16px 14px 0;font-size:15px;min-width:0}
+.cmp-row>div+div{padding-left:16px;border-left:1px solid var(--line-soft)}
+.cmp-row.h>div{font-stretch:72%;font-weight:600;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding-block:10px}
+.cmp-row .k{font-stretch:108%;font-weight:700;font-size:15px}
+.cmp-row .now{color:var(--muted)}
+.cmp-row.trade .k::after{content:"Costo de la propuesta";display:block;font-stretch:72%;font-weight:600;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--signal);margin-top:4px}
+@media (max-width:760px){
+  .cmp-row{grid-template-columns:1fr 1fr}
+  .cmp-row .k{grid-column:1/-1;padding-bottom:4px!important}
+  .cmp-row>div:nth-child(2){padding-left:0;border-left:0}
+  .cmp-row.h .k{display:none}
+}
+
+/* opciones de stack */
+.opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s3)}
+.opt{border:1px solid var(--line);background:var(--paper);padding:var(--s4);display:flex;flex-direction:column;gap:14px;min-width:0}
+.opt.rec{border:2px solid var(--accent)}
+.opt .lt{color:var(--muted)}
+.opt h3{font-size:20px}
+.opt p{font-size:14.5px;color:var(--muted)}
+.meters{display:grid;gap:8px;margin-top:4px}
+.meter{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13.5px}
+.segs{display:flex;gap:3px}
+.segs i{width:16px;height:8px;background:var(--line-soft);display:block}
+.segs i.on{background:var(--ink)}
+.opt.rec .segs i.on{background:var(--accent)}
+.opt ul{margin:0;padding-left:18px;font-size:14px;color:var(--muted);display:grid;gap:4px}
+@media (max-width:900px){.opts{grid-template-columns:1fr}}
+.note{margin-top:var(--s4);padding:var(--s3) var(--s4);border-left:3px solid var(--signal);background:var(--paper);font-size:15px;color:var(--muted);max-width:92ch}
+.note strong{color:var(--ink)}
+
+/* identidad */
+.id-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--s3)}
+.panel{background:var(--paper);border:1px solid var(--line);padding:var(--s4);min-width:0}
+.panel>.d{color:var(--muted);display:block;margin-bottom:var(--s3)}
+.span-7{grid-column:span 7}.span-5{grid-column:span 5}.span-6{grid-column:span 6}.span-12{grid-column:span 12}
+@media (max-width:900px){.span-7,.span-5,.span-6{grid-column:span 12}}
+.swatches{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.sw{min-width:0}
+.sw .c{aspect-ratio:3/4;max-width:100%;border:1px solid var(--line);display:flex;align-items:flex-end;padding:8px;font-stretch:72%;font-weight:600;font-size:12px;letter-spacing:.04em}
+.sw b{display:block;margin-top:8px;font-size:14px;font-weight:650}
+.sw small{display:block;font-size:12.5px;color:var(--muted);line-height:1.4}
+@media (max-width:560px){.swatches{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.was{margin-top:var(--s3);display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.was i{width:18px;height:18px;display:inline-block;border:1px solid var(--line)}
+.spec{display:grid;gap:var(--s3)}
+.spec .row{display:grid;grid-template-columns:96px minmax(0,1fr);gap:var(--s3);align-items:baseline;border-bottom:1px solid var(--line-soft);padding-bottom:12px}
+.spec .row:last-child{border-bottom:0;padding-bottom:0}
+.spec .row .d{color:var(--muted);font-size:11.5px}
+.sp-x{font-stretch:125%;font-weight:850;font-size:clamp(22px,2.8vw,32px);line-height:1;overflow-wrap:anywhere}
+.sp-n{font-size:16px}
+.sp-c{font-stretch:68%;font-weight:600;font-size:18px;letter-spacing:.06em;text-transform:uppercase}
+@media (max-width:520px){.spec .row{grid-template-columns:1fr;gap:4px}}
+.elems{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s3)}
+.elem svg{width:100%;height:auto;display:block;border:1px solid var(--line-soft);background:var(--bg)}
+.elem b{display:block;margin-top:8px;font-size:14.5px}
+.elem small{display:block;color:var(--muted);font-size:13px;line-height:1.45}
+.elem svg .st{stroke:var(--ink);fill:none;stroke-width:1.4}
+.elem svg .ac{stroke:var(--accent);fill:none;stroke-width:1.2}
+.elem svg .sg{stroke:var(--signal);fill:none;stroke-width:1.2}
+.elem svg text{font-family:var(--f);font-stretch:72%;font-weight:600;font-size:10px;fill:var(--muted);letter-spacing:.06em}
+.elem svg .bt{fill:var(--accent);font-weight:700;font-size:12px;font-stretch:100%}
+.elem svg .pf{fill:var(--paper)}
+@media (max-width:760px){.elems{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.lemas{display:grid;gap:10px}
+.lemas div{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:baseline;border-top:1px solid var(--line-soft);padding-top:10px}
+.lemas div:first-child{border-top:0;padding-top:0}
+.lemas q{font-stretch:112%;font-weight:750;font-size:18px;quotes:none}
+.lemas .d{color:var(--accent)}
+.kill{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13.5px;color:var(--muted)}
+.kill s{text-decoration-color:var(--bad)}
+
+/* proyectos */
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:var(--s3)}
+.fbtn{appearance:none;font-family:var(--f);font-stretch:72%;font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:6px 11px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.fbtn span{color:var(--muted);margin-left:4px;font-variant-numeric:tabular-nums}
+.fbtn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.fbtn[aria-pressed="true"] span{color:var(--bg);opacity:.7}
+.explorer{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:var(--s3);align-items:start}
+@media (max-width:900px){.explorer{grid-template-columns:1fr}}
+.plist{display:grid;border-top:1px solid var(--ink);max-height:560px;overflow-y:auto}
+.pitem{appearance:none;text-align:left;font:inherit;color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--line);padding:10px 8px 10px 0;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:center}
+.pitem:hover{background:var(--paper)}
+.pitem[aria-current="true"]{background:var(--paper);box-shadow:inset 3px 0 0 var(--accent);padding-left:12px}
+.pitem b{font-weight:650;font-size:15px}
+.pitem small{grid-column:1;color:var(--muted);font-size:13px}
+.pitem .dur{grid-row:1/3;grid-column:2;display:flex;flex-direction:column;align-items:flex-end;gap:4px;width:96px}
+.pitem .dur i{display:block;height:4px;background:var(--accent);opacity:.75}
+.pitem .dur span{font-stretch:72%;font-weight:600;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pcard{border:1px solid var(--ink);background:var(--bg);display:grid;grid-template-rows:auto auto}
+.pcard .img{position:relative;min-height:200px;background:repeating-linear-gradient(135deg,var(--line-soft) 0 1px,transparent 1px 9px),var(--paper);border-bottom:1px solid var(--ink);display:flex;align-items:flex-end;justify-content:space-between;gap:8px;padding:12px}
+.pcard .img .d{font-size:11.5px;color:var(--muted);background:var(--bg);padding:3px 6px;border:1px solid var(--line)}
+.pcard .tag{position:absolute;top:12px;left:12px}
+.pcard .body{padding:var(--s4);display:flex;flex-direction:column;gap:12px;min-width:0}
+.pcard h4{font-stretch:115%;font-weight:800;font-size:24px;line-height:1.1}
+.pcard .big{font-stretch:118%;font-weight:800;font-size:clamp(20px,2.4vw,28px);line-height:1.15;color:var(--accent)}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px}
+.kv div{border-top:1px solid var(--line);padding-top:6px;min-width:0}
+.kv span{display:block;font-stretch:72%;font-weight:600;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.kv b{font-weight:600;font-size:14.5px}
+.kv b.tbd{color:var(--signal)}
+.flag{font-size:13.5px;color:var(--muted);display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap}
+.pending{display:flex;flex-wrap:wrap;gap:6px;margin-top:var(--s3)}
+
+/* servicios digitales */
+.svc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--s5);align-items:start;padding-block:var(--s5);border-top:1px solid var(--line)}
+.svc.first{border-top:1px solid var(--ink)}
+.svc.one{grid-template-columns:1fr}
+@media (max-width:900px){.svc{grid-template-columns:1fr;gap:var(--s4)}}
+.svc .txt{display:flex;flex-direction:column;gap:14px;min-width:0}
+.svc .txt>p{color:var(--muted);font-size:15.5px;max-width:62ch}
+ul.tick{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:14.5px}
+ul.tick li{display:grid;grid-template-columns:14px minmax(0,1fr);gap:10px}
+ul.tick li::before{content:"";width:8px;height:8px;margin-top:8px;border:1.5px solid var(--accent)}
+.sim{color:var(--signal)}
+.bubbles{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+.bub-box{border:1px solid var(--line);background:var(--paper);padding:var(--s3);display:flex;flex-direction:column;gap:10px;min-width:0}
+.bub-box .scr{position:relative;height:120px;border:1px solid var(--line-soft);background:var(--bg)}
+.bub-box .scr i{position:absolute;bottom:10px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:10px;font-weight:700}
+.bub-box p{font-size:13.5px;color:var(--muted)}
+@media (max-width:520px){.bubbles{grid-template-columns:1fr}}
+
+.chat{border:1px solid var(--ink);background:var(--paper);display:flex;flex-direction:column;height:500px;min-width:0}
+.chat-h{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.chat-h b{display:grid;place-items:center;width:28px;height:28px;background:var(--accent);color:var(--accent-ink);font-weight:900;font-stretch:125%;font-size:11px;flex:none}
+.chat-h div{display:flex;flex-direction:column;line-height:1.2;min-width:0}
+.chat-h strong{font-size:14.5px}
+.chat-h small{font-size:12.5px;color:var(--muted)}
+.chat-h button{margin-left:auto}
+.log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:88%;padding:9px 12px;font-size:14.5px;line-height:1.5;animation:aparece .35s ease both}
+.msg.a{background:var(--bg);border:1px solid var(--line);align-self:flex-start}
+.msg.u{background:var(--ink);color:var(--bg);align-self:flex-end}
+.msg .src{display:block;margin-top:6px;font-stretch:75%;font-size:12px;color:var(--muted)}
+.typing{align-self:flex-start;display:flex;gap:4px;padding:10px 12px;border:1px solid var(--line);background:var(--bg)}
+.typing i{width:6px;height:6px;background:var(--muted);animation:tp 1s infinite ease-in-out}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes tp{0%,100%{opacity:.25}50%{opacity:1}}
+.quick{display:flex;flex-wrap:wrap;gap:6px;padding:12px 14px;border-top:1px solid var(--line);min-height:58px}
+.btn{appearance:none;font-family:var(--f);font-size:14px;font-weight:550;padding:7px 12px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;line-height:1.3}
+.btn:hover{background:var(--ink);color:var(--bg)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.sm{font-stretch:72%;font-weight:600;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;padding:5px 9px}
+
+.formbox{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);border:1px solid var(--ink);background:var(--paper)}
+@media (max-width:760px){.formbox{grid-template-columns:1fr}}
+form.lead{padding:var(--s4);display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;min-width:0}
+form.lead .full{grid-column:1/-1}
+@media (max-width:520px){form.lead{grid-template-columns:1fr}}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0}
+.fld label{font-stretch:72%;font-weight:600;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.fld input,.fld select,.fld textarea{font:inherit;font-size:14.5px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-bottom:1.5px solid var(--ink);padding:8px 10px;border-radius:0;width:100%;min-width:0}
+.fld textarea{min-height:76px;resize:vertical}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--muted)}
+.consent input{margin-top:4px;accent-color:var(--accent)}
+.route{border-left:1px solid var(--ink);padding:var(--s4);display:flex;flex-direction:column;gap:14px;background:var(--bg);min-width:0}
+@media (max-width:760px){.route{border-left:0;border-top:1px solid var(--ink)}}
+.route>.d{color:var(--muted)}
+.rt{display:grid;gap:10px}
+.rt div{display:grid;gap:2px;border-top:1px solid var(--line);padding-top:8px;min-width:0}
+.rt span{font-stretch:72%;font-weight:600;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.rt b{font-size:14.5px;font-weight:600;overflow-wrap:anywhere}
+.rt b.mail{color:var(--accent)}
+.rt small{font-size:12.5px;color:var(--signal)}
+.pipe{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.pipe li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;align-items:center;font-size:14px;color:var(--muted)}
+.pipe li i{width:18px;height:18px;border:1.5px solid var(--line);display:grid;place-items:center;font-style:normal;font-stretch:72%;font-weight:700;font-size:11px}
+.pipe li.run i{border-color:var(--signal);background:var(--signal-soft)}
+.pipe li.done{color:var(--ink)}
+.pipe li.done i{border-color:var(--good);background:var(--good);color:var(--paper)}
+.pipe li.skip{text-decoration:line-through;opacity:.6}
+.result{font-size:13.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
+
+.flow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:1px solid var(--ink);border-left:1px solid var(--line)}
+.step{padding:var(--s3);border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper);display:flex;flex-direction:column;gap:8px;min-width:0}
+.step .n{font-stretch:125%;font-weight:850;font-size:26px;color:var(--accent);line-height:1}
+.step b{font-size:15px;line-height:1.3}
+.step p{font-size:13.5px;color:var(--muted);line-height:1.5}
+@media (max-width:1000px){.flow{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.flow{grid-template-columns:1fr}}
+.ethics{margin-top:var(--s3);display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:1px solid var(--bad);background:var(--bad-soft);font-size:14.5px;flex-wrap:wrap}
+.ethics span:last-child{flex:1;min-width:220px}
+
+/* movimiento */
+.motion{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s3)}
+@media (max-width:960px){.motion{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.motion{grid-template-columns:1fr}}
+.mcard{border:1px solid var(--line);background:var(--paper);display:flex;flex-direction:column;min-width:0}
+.stage{height:150px;border-bottom:1px solid var(--line);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:16px 16px;position:relative;overflow:hidden;display:grid;place-items:center}
+.mcard .mb{padding:var(--s3);display:flex;flex-direction:column;gap:8px;flex:1}
+.mcard .mb p{font-size:14px;color:var(--muted)}
+.mcard .mb .btn{align-self:flex-start;margin-top:auto}
+.stage svg{width:80%;height:auto}
+.stage svg .st{stroke:var(--ink);fill:none;stroke-width:1.6}
+.stage.play .m-draw{animation:trazo 1.4s cubic-bezier(.6,.05,.25,1) both;animation-delay:var(--d,0s)}
+.blocks{display:flex;gap:6px;align-items:flex-end;height:90px}
+.blocks i{width:26px;background:var(--ink);display:block}
+.blocks i:nth-child(odd){background:var(--accent)}
+.stage.play .blocks i{animation:sube .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d,0s)}
+@keyframes sube{from{transform:translateY(130px)}to{transform:none}}
+.measure{width:80%;display:grid;gap:8px;text-align:center}
+.measure b{font-stretch:125%;font-weight:850;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.measure .ml{height:12px;position:relative;border-left:1px solid var(--signal);border-right:1px solid var(--signal)}
+.measure .ml::before{content:"";position:absolute;left:0;right:0;top:6px;border-top:1px solid var(--signal)}
+.stage.play .measure .ml::before{animation:mide 1.2s cubic-bezier(.6,.05,.25,1) both}
+@keyframes mide{from{transform:scaleX(0)}to{transform:none}}
+.pages{position:relative;width:70%;height:96px}
+.pages div{position:absolute;inset:0;border:1px solid var(--ink);background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px}
+.pages div i{display:block;height:6px;background:var(--line)}
+.pages div i:first-child{width:60%;height:10px;background:var(--ink)}
+.pages .p2{background:var(--accent-soft);border-color:var(--accent)}
+.pages .p2 i:first-child{background:var(--accent)}
+.stage.play .pages .p2{animation:vt 1.1s cubic-bezier(.7,0,.2,1) both}
+@keyframes vt{from{clip-path:inset(0 0 0 100%)}to{clip-path:inset(0 0 0 0)}}
+.libs{display:flex;flex-wrap:wrap;gap:8px;margin-top:var(--s4)}
+
+/* arquitectura de información */
+.ia{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s3)}
+@media (max-width:960px){.ia{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.ia{grid-template-columns:1fr}}
+.ia .col{border-top:3px solid var(--ink);background:var(--paper);padding:var(--s3);min-width:0}
+.ia .col.acc{border-top-color:var(--accent)}
+.ia .col.out{border-top-color:var(--line);background:transparent;border:1px dashed var(--line);border-top:3px solid var(--line)}
+.ia .col>.d{color:var(--muted);display:block;margin-bottom:10px}
+.ia ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:14.5px}
+.ia li b{display:block;font-weight:650}
+.ia li small{color:var(--muted);font-size:13px;display:block;line-height:1.4}
+.ia li ul{margin-top:6px;padding-left:12px;border-left:1px solid var(--line);gap:4px}
+.tablebox{overflow-x:auto;border-top:1px solid var(--ink);margin-top:var(--s4)}
+table{border-collapse:collapse;width:100%;min-width:700px;font-size:14.5px}
+th{font-stretch:72%;font-weight:600;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 12px 10px 0;border-bottom:1px solid var(--line)}
+td{padding:11px 12px 11px 0;border-bottom:1px solid var(--line-soft);vertical-align:top}
+td.r{font-stretch:78%;font-weight:550;font-size:14px;white-space:nowrap}
+td.r.old{color:var(--muted)}
+td.r.new{color:var(--accent)}
+
+/* hoja de ruta */
+.gantt{overflow-x:auto;border-top:1px solid var(--ink)}
+.g{min-width:780px;display:grid;grid-template-columns:250px repeat(16,minmax(0,1fr))}
+.g .wk{font-stretch:72%;font-weight:600;font-size:12px;color:var(--muted);text-align:center;padding:8px 0;border-bottom:1px solid var(--line);border-left:1px solid var(--line-soft)}
+.g .wk0{border-bottom:1px solid var(--line);color:var(--muted);padding:8px 0}
+.g .ph{padding:11px 12px 11px 0;border-bottom:1px solid var(--line-soft);font-size:14.5px;line-height:1.35}
+.g .ph small{display:block;color:var(--muted);font-size:12.5px}
+.g .tr{grid-column:2/-1;border-bottom:1px solid var(--line-soft);display:grid;grid-template-columns:repeat(16,minmax(0,1fr));align-items:center;background-image:linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);background-size:calc(100%/16) 100%}
+.g .b{height:18px;background:var(--ink);transform-origin:left;transition:transform .9s cubic-bezier(.6,.05,.25,1)}
+.g .b.a{background:var(--accent)}
+.g .b.s{background:var(--signal)}
+.g .b.r{background:var(--bad)}
+.js .gantt:not(.in) .b{transform:scaleX(.04)}
+.ms{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s3)}
+
+/* decisiones */
+.dec{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--ink);border-left:1px solid var(--line)}
+.dec>div{padding:var(--s4);border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper);display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;min-width:0}
+.dec .q{color:var(--accent);padding-top:2px}
+.dec b{font-size:16px}
+.dec p{grid-column:2;font-size:14.5px;color:var(--muted)}
+@media (max-width:760px){.dec{grid-template-columns:1fr}}
+.inputs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.inputs div{border:1px solid var(--line);padding:10px 12px;font-size:14px;background:var(--paper);display:flex;gap:10px;align-items:flex-start;min-width:0}
+.inputs div::before{content:"";flex:none;width:12px;height:12px;border:1.5px solid var(--ink);margin-top:4px}
+@media (max-width:900px){.inputs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.inputs{grid-template-columns:1fr}}
+
+/* rótulo */
+.rotulo{margin-top:var(--s7);border:1.5px solid var(--ink);display:grid;grid-template-columns:1.4fr repeat(4,minmax(0,1fr));background:var(--paper)}
+.rotulo>div{padding:10px 12px;border-right:1px solid var(--ink);min-width:0}
+.rotulo>div:last-child{border-right:0}
+.rotulo span{display:block;font-stretch:72%;font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.rotulo b{display:block;font-size:14px;font-weight:600;margin-top:2px;overflow-wrap:anywhere}
+.rotulo .big b{font-stretch:120%;font-weight:850;font-size:18px}
+@media (max-width:820px){.rotulo{grid-template-columns:1fr 1fr}.rotulo>div{border-bottom:1px solid var(--ink)}.rotulo .big{grid-column:1/-1;border-right:0}.rotulo>div:nth-child(odd):not(.big){border-right:0}.rotulo>div:last-child{border-bottom:0}}
+.foot{font-size:13px;color:var(--muted);margin-top:var(--s3);max-width:92ch;padding-bottom:var(--s7)}
+
+@media (prefers-reduced-motion: reduce){
+  .draw,.fade-in,.hoist,.msg,.stage.play *,.typing i{animation:none!important}
+  .g .b,.cota::before{transition:none}
+  .js .cota:not(.in)::before,.js .gantt:not(.in) .b{transform:none}
+}
+</style>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="mark" href="#top"><b>HL</b><span class="d">Propuesta · Sitio corporativo</span></a>
+    <nav class="nav d" aria-label="Secciones">
+      <a href="#diagnostico">Diagnóstico</a>
+      <a href="#contraste">Contraste</a>
+      <a href="#stack">Stack</a>
+      <a href="#identidad">Identidad</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#servicios">Agentes</a>
+      <a href="#movimiento">Movimiento</a>
+      <a href="#mapa">Mapa y migración</a>
+      <a href="#ruta">Hoja de ruta</a>
+      <a href="#decisiones">Decisiones</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap top">
+    <div>
+      <div class="eyebrow d fade-in"><span>Grupo HL</span><span>Reconstrucción hlingenieros.com</span><span>Rev. 0 · Oct 2026</span></div>
+      <h1 class="fade-in" style="--d:.1s">Un sitio construido con la misma <em>estructura</em> que nuestras obras.</h1>
+      <p class="lead fade-in" style="--d:.25s">El diagnóstico del 29 de septiembre concluyó que el sitio actual está congelado en 2019–2020 y que conviene <strong>reconstruirlo, no reformarlo</strong>. Esta propuesta reemplaza WordPress con The7, WPBakery y Slider Revolution por una plataforma en código, <strong>Astro + React + Tailwind</strong>, con identidad propia, los proyectos en el centro, formularios que llegan a la sede correcta y el chat actual de Zoho convertido en un agente útil. Ninguna URL se pierde: todas redirigen a su nueva página.</p>
+    </div>
+    <svg class="drawing" id="nave" viewBox="0 0 600 430" role="img" aria-label="Elevación de una nave industrial con cercha y una grúa torre izando una viga">
+      <g id="axes"></g><g id="frame"></g><g id="crane"></g><g class="hoist" id="hook"></g><g id="dims"></g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><b class="count" data-to="58">58</b><span class="d">Años · desde 1968</span></div>
+      <div class="stat"><b class="count" data-to="7">7</b><span class="d">Países con obra</span></div>
+      <div class="stat"><b class="count" data-to="4">4</b><span class="d">Sedes</span></div>
+      <div class="stat"><b class="count" data-to="16">16</b><span class="d">Casos con cantidades de obra</span></div>
+      <div class="stat"><b><span class="count" data-to="9.47" data-dec="2">9,47</span><small>M</small></b><span class="d">Horas-hombre · Planta Columbus</span></div>
+    </div>
+  </div>
+</section>
+
+<main>
+<!-- L-01 DIAGNÓSTICO -->
+<section class="sheet" id="diagnostico">
+  <div class="wrap">
+    <div class="shead">
+      <span class="code d">L-01</span>
+      <h2>Lo que encontró el diagnóstico</h2>
+      <p>Siete dimensiones calificadas de 1 a 5 sobre unas 95 URLs. El sitio tiene buen material de fondo, sobre todo las fichas de proyecto con cantidades de obra, pero está enterrado en una plantilla repetitiva, con marca confusa, datos vencidos y riesgos legales.</p>
+      <div class="cota"></div>
+    </div>
+    <div class="scores" id="scores"></div>
+
+    <span class="sub d">Hallazgos que la nueva plataforma resuelve de raíz</span>
+    <div class="findings">
+      <article class="finding">
+        <div class="top"><span class="d">Legal</span><span class="chip crit">Inmediato</span></div>
+        <h3>Riesgo legal visible</h3>
+        <p><strong>Términos y condiciones da 404</strong> desde el pie de todas las páginas. Los formularios, incluido el de hojas de vida, no piden autorización de datos (Ley 1581). "Links de interés" publica accesos al ERP, al BI y al correo.</p>
+        <div class="ev">Contact Form 7 · Links de interés · visión con meta interna de ventas</div>
+      </article>
+      <article class="finding">
+        <div class="top"><span class="d">Navegación</span><span class="chip crit">Crítico</span></div>
+        <h3>La portada no es la portada</h3>
+        <p>hlingenieros.com/ es una prehome de selección de empresa que carga <strong>43 scripts y 18 hojas de estilo</strong> para mostrar tres imágenes. El inicio real vive en /inicio/ y "Ir a Tienda" no lleva a ninguna parte.</p>
+        <div class="ev">/ → /inicio/ · hreflang apunta a /inicio/ y /home/</div>
+      </article>
+      <article class="finding">
+        <div class="top"><span class="d">Marca</span><span class="chip high">Alto</span></div>
+        <h3>Cuatro nombres, cuatro lemas</h3>
+        <p>Grupo HL, HL Ingenieros, HL Ingenieros S.A. y ECOHL conviven sin jerarquía. Hay <strong>tres azules sin regla</strong>, cuatro familias tipográficas cargadas para usar una y un logo solo en PNG.</p>
+        <div class="ev">#1e73be · #001b74 · #0b509e · Lato + Roboto + Roboto Condensed + Open Sans</div>
+      </article>
+      <article class="finding">
+        <div class="top"><span class="d">Contenido</span><span class="chip high">Alto</span></div>
+        <h3>Datos vencidos, proyectos sin año</h3>
+        <p>"52 años" se calculó en 2020: hoy son <strong>58</strong>. Cero casos nuevos desde enero de 2020 y ninguna de las 16 fichas dice en qué año se ejecutó la obra. El sitio presume más de 500 proyectos y muestra 16.</p>
+        <div class="ev">16 fichas cargadas entre el 8 y el 30 de enero de 2020</div>
+      </article>
+      <article class="finding">
+        <div class="top"><span class="d">Servicios</span><span class="chip high">Alto</span></div>
+        <h3>Nueve páginas clonadas</h3>
+        <p>Las 9 páginas de servicio suman unas <strong>680 palabras propias</strong> entre todas. El 80–90 % de cada una es el mismo bloque, y la tubería de PTAR Salitre aparece como prueba de Montajes eléctricos.</p>
+        <div class="ev">Sin normas (NSR-10, RETIE, ASME, API 650), sin botón de cotización</div>
+      </article>
+      <article class="finding">
+        <div class="top"><span class="d">Técnica · SEO</span><span class="chip high">Alto</span></div>
+        <h3>Invisible para Google</h3>
+        <p>Inicio sin H1, contadores en 0 en el HTML, sin Google Analytics ni Search Console, zoom bloqueado en el celular y <strong>Zoho cargado dos veces</strong>. Un preloader deja la página en blanco si falla un script.</p>
+        <div class="ev">user-scalable=0 · "SCC Library has already been loaded" · OG duplicadas</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- L-02 CONTRASTE -->
+<section class="sheet" id="contraste">
+  <div class="wrap">
+    <div class="shead">
+      <span class="code d">L-02</span>
+      <h2>Arquitectura actual frente a la propuesta</h2>
+      <p>Hoy cada visita pasa por una prehome, PHP, base de datos y siete piezas de terceros. En la propuesta, las páginas se generan una vez, se sirven desde el borde de la red y solo los componentes interactivos llaman a funciones en la nube conectadas a Zoho y Microsoft 365.</p>
+      <div class="cota"></div>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Vista de arquitectura">
+      <button role="tab" id="tab-new" aria-selected="true" aria-controls="dg-new">Propuesta</button>
+      <button role="tab" id="tab-old" aria-selected="false" aria-controls="dg-old">Actual</button>
+    </div>
+    <div class="diagram">
+      <svg class="dg" id="dg-new" viewBox="0 0 780 400" role="tabpanel" aria-labelledby="tab-new">
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker>
+          <marker id="aha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah acc" d="M0 0 L10 5 L0 10 z"/></marker>
+        </defs>
+        <rect class="box" x="10" y="172" width="110" height="56"/>
+        <text x="65" y="196" text-anchor="middle">Visitante</text><text class="s" x="65" y="214" text-anchor="middle">web · móvil · ES / EN</text>
+        <rect class="box" x="150" y="172" width="120" height="56"/>
+        <text x="210" y="196" text-anchor="middle">CDN · Edge</text><text class="s" x="210" y="214" text-anchor="middle">Vercel / Azure SWA</text>
+        <rect class="box key" x="310" y="60" width="190" height="96"/>
+        <text x="405" y="86" text-anchor="middle">Sitio Astro</text>
+        <text class="s" x="405" y="106" text-anchor="middle">HTML estático · H1 · schema</text>
+        <text class="s" x="405" y="122" text-anchor="middle">islas React · Tailwind</text>
+        <text class="s" x="405" y="138" text-anchor="middle">GA4 · Search Console</text>
+        <rect class="box key" x="310" y="244" width="190" height="96"/>
+        <text x="405" y="270" text-anchor="middle">Funciones serverless</text>
+        <text class="s" x="405" y="290" text-anchor="middle">/api/solicitud</text>
+        <text class="s" x="405" y="306" text-anchor="middle">/api/agente</text>
+        <text class="s" x="405" y="322" text-anchor="middle">validación · Ley 1581</text>
+        <rect class="box" x="560" y="10" width="210" height="50"/>
+        <text x="665" y="32" text-anchor="middle">CMS headless</text><text class="s" x="665" y="50" text-anchor="middle">proyectos · servicios · sedes</text>
+        <rect class="box" x="560" y="70" width="210" height="50"/>
+        <text x="665" y="92" text-anchor="middle">Modelo IA + conocimiento</text><text class="s" x="665" y="110" text-anchor="middle">responde citando el sitio</text>
+        <rect class="box" x="560" y="130" width="210" height="50"/>
+        <text x="665" y="152" text-anchor="middle">Zoho SalesIQ</text><text class="s" x="665" y="170" text-anchor="middle">asesores en vivo · WhatsApp</text>
+        <rect class="grp" x="560" y="192" width="210" height="200"/>
+        <text class="lb" x="572" y="210">MICROSOFT 365</text>
+        <rect class="box" x="572" y="220" width="186" height="34"/><text x="665" y="242" text-anchor="middle" style="font-size:12.5px">Power Automate</text>
+        <rect class="box" x="572" y="260" width="186" height="34"/><text x="665" y="282" text-anchor="middle" style="font-size:12.5px">SharePoint · lista Leads Web</text>
+        <rect class="box" x="572" y="300" width="186" height="34"/><text x="665" y="322" text-anchor="middle" style="font-size:12.5px">Outlook · buzón por función</text>
+        <rect class="box" x="572" y="340" width="186" height="34"/><text x="665" y="362" text-anchor="middle" style="font-size:12.5px">Teams · canal Comercial</text>
+        <path class="ln" d="M120 200 L148 200" marker-end="url(#ah)"/>
+        <path class="ln" d="M270 190 L290 190 L290 108 L308 108" marker-end="url(#ah)"/>
+        <path class="ln" d="M270 210 L290 210 L290 292 L308 292" marker-end="url(#ah)"/>
+        <path class="ln acc" d="M405 156 L405 242" marker-end="url(#aha)"/><text class="lb" x="412" y="204">FETCH</text>
+        <path class="ln acc" d="M560 35 L530 35 L530 90 L502 90" marker-end="url(#aha)"/><text class="lb" x="545" y="28" text-anchor="middle">BUILD</text>
+        <path class="ln acc" d="M500 280 L540 280 M540 95 L540 310"/>
+        <path class="ln acc" d="M540 95 L558 95" marker-end="url(#aha)"/>
+        <path class="ln acc" d="M540 155 L558 155" marker-end="url(#aha)"/>
+        <path class="ln acc" d="M540 310 L558 310" marker-end="url(#aha)"/>
+      </svg>
+      <svg class="dg" id="dg-old" viewBox="0 0 780 410" role="tabpanel" aria-labelledby="tab-old" hidden>
+        <defs>
+          <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker>
+        </defs>
+        <rect class="box" x="10" y="177" width="110" height="56"/>
+        <text x="65" y="201" text-anchor="middle">Visitante</text><text class="s" x="65" y="219" text-anchor="middle">web · móvil</text>
+        <rect class="box risk" x="145" y="177" width="125" height="56"/>
+        <text x="207" y="201" text-anchor="middle">Prehome /</text><text class="s" x="207" y="219" text-anchor="middle">43 scripts · 18 CSS</text>
+        <rect class="box risk" x="300" y="145" width="190" height="120"/>
+        <text x="395" y="172" text-anchor="middle">WordPress 7.1.2</text>
+        <text class="s" x="395" y="192" text-anchor="middle">PHP + MySQL en cada visita</text>
+        <text class="s" x="395" y="208" text-anchor="middle">preloader bloqueante</text>
+        <text class="s" x="395" y="224" text-anchor="middle">inicio sin H1 · contadores en 0</text>
+        <text class="s" x="395" y="240" text-anchor="middle">zoom bloqueado en móvil</text>
+        <g id="oldstack"></g>
+        <path class="ln" d="M120 205 L143 205" marker-end="url(#ah2)"/>
+        <path class="ln" d="M270 205 L298 205" marker-end="url(#ah2)"/>
+        <path class="ln" d="M490 205 L535 205 M535 31 L535 373"/>
+      </svg>
+      <div class="legend">
+        <span><i class="a"></i>Componente clave de la propuesta</span>
+        <span><i class="r"></i>Punto de riesgo o deuda en el sitio actual</span>
+        <span><i></i>Componente neutro</span>
+      </div>
+    </div>
+
+    <div class="cmp" role="table" aria-label="Comparación criterio por criterio">
+      <div class="cmp-row h" role="row"><div class="k" role="columnheader">Criterio</div><div role="columnheader">Actual · WordPress + The7</div><div role="columnheader">Propuesta · Astro + React + Tailwind</div></div>
+      <div class="cmp-row" role="row"><div class="k">Cómo se sirve</div><div class="now">Prehome + PHP y MySQL en cada visita; preloader que deja la página en blanco si falla un script</div><div>HTML generado al publicar y servido desde CDN; JavaScript solo en componentes interactivos</div></div>
+      <div class="cmp-row" role="row"><div class="k">Contenido</div><div class="now">Atado a shortcodes de WPBakery; migrarlo cuesta</div><div>Colecciones tipadas en un CMS: Proyecto, Servicio, Sector, Sede, Certificación</div></div>
+      <div class="cmp-row" role="row"><div class="k">Rendimiento</div><div class="now">4 familias tipográficas, slider a pantalla completa, JPG/PNG sin WebP</div><div>Una familia, imágenes AVIF/WebP automáticas; meta Lighthouse ≥ 90 en móvil</div></div>
+      <div class="cmp-row" role="row"><div class="k">SEO</div><div class="now">Sin H1, títulos "Grupo HL - Grupo HL", OG duplicadas, sitemap con /tag/ y /error-404/</div><div>H1 y títulos por plantilla, schema Organization, hreflang en todas las páginas, sitemap limpio</div></div>
+      <div class="cmp-row" role="row"><div class="k">Medición</div><div class="now">Solo Zoho PageSense; sin GA4 ni Search Console</div><div>GA4 + Search Console desde el día uno; línea base medida antes del cambio</div></div>
+      <div class="cmp-row" role="row"><div class="k">Seguridad</div><div class="now">/wp-admin público, 7 plugins, Slider Revolution en carpeta no estándar</div><div>Sin servidor ni base de datos expuestos; formularios por funciones con validación</div></div>
+      <div class="cmp-row" role="row"><div class="k">Identidad</div><div class="now">Plantilla The7 con logo PNG y tres azules</div><div>Sistema de diseño propio en tokens: color, tipo, retícula, componentes</div></div>
+      <div class="cmp-row" role="row"><div class="k">Formularios</div><div class="now">Contact Form 7 mínimo, sin autorización de datos, correos personales</div><div>Formularios por intención con casilla Ley 1581, enrutados a buzones por función</div></div>
+      <div class="cmp-row" role="row"><div class="k">Chat</div><div class="now">Zoho SalesIQ y WhatsApp como dos burbujas en la misma esquina</div><div>Un solo botón: agente IA, asesor en vivo por Zoho y WhatsApp</div></div>
+      <div class="cmp-row" role="row"><div class="k">Inglés</div><div class="now">Traducción literal, menú y pie en español, sectores en 404</div><div>Estructura /en/ espejo con glosario técnico y selector a la página equivalente</div></div>
+      <div class="cmp-row trade" role="row"><div class="k">Perfil técnico</div><div class="now">Cualquier agencia WordPress puede mantenerlo</div><div>Requiere un perfil front-end (Astro/React) o un proveedor; el CMS deja el día a día en manos de cada área</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- L-03 STACK -->
+<section class="sheet" id="stack">
+  <div class="wrap">
+    <div class="shead">
+      <span class="code d">L-03</span>
+      <h2>Tres caminos en código</h2>
+      <p>HTML con Tailwind y React son buenas piezas, pero por separado se quedan cortas para un sitio bilingüe de unas 95 URLs con fichas de proyecto que crecen cada año. Astro las combina: entrega HTML estático y monta React solo donde hace falta.</p>
+      <div class="cota"></div>
+    </div>
+    <div class="opts">
+      <article class="opt">
+        <span class="lt d">Opción A</span>
+        <h3>HTML + CSS + Tailwind</h3>
+        <p>Páginas escritas a mano. Máximo rendimiento y cero dependencias en producción.</p>
+        <div class="meters" data-scores="5,1,2,5,2"></div>
+        <ul><li>Cada ficha nueva es un ticket para TI</li><li>Encabezados y pies duplicados en cada página</li><li>Escala mal a dos idiomas</li></ul>
+      </article>
+      <article class="opt">
+        <span class="lt d">Opción B</span>
+        <h3>React SPA (Vite)</h3>
+        <p>Toda la aplicación corre en el navegador. Interactividad rica en todas partes.</p>
+        <div class="meters" data-scores="2,2,5,3,3"></div>
+        <ul><li>Repite el problema de hoy: Google lee una página casi vacía</li><li>Descarga todo el JavaScript antes de mostrar</li><li>Pensado para aplicaciones, no para sitios de contenido</li></ul>
+      </article>
+      <article class="opt rec">
+        <span class="chip acc" style="align-self:flex-start">Recomendada</span>
+        <span class="lt d">Opción C</span>
+        <h3>Astro + islas React + Tailwind + CMS</h3>
+        <p>HTML estático por defecto; React en el explorador de proyectos, el agente y los formularios. Colecciones de contenido tipadas e i18n nativo.</p>
+        <div class="meters" data-scores="5,4,5,5,4"></div>
+        <ul><li>View Transitions para navegar sin parpadeo</li><li>El CMS publica y dispara un nuevo build</li><li>Si se prefiere React puro, Next.js es el equivalente</li></ul>
+      </article>
+    </div>
+    <p class="note"><strong>Por qué ahora y no con un tema nuevo.</strong> El diagnóstico recomienda reescribir casi todo el contenido: servicios, sectores, trayectoria, inglés. Si de todos modos se reescribe, sacarlo de los shortcodes de WPBakery hacia un CMS estructurado cuesta lo mismo y deja de depender de plugins.</p>
+  </div>
+</section>
+
+<!-- L-04 IDENTIDAD -->
+<section class="sheet" id="identidad">
+  <div class="wrap">
+    <div class="shead">
+      <span class="code d">L-04</span>
+      <h2>Identidad: concreto, acero y plano</h2>
+      <p>Se rescata el logotipo HL y el azul como color ancla, como pide el diagnóstico. Lo demás sale del oficio: retícula estructural, ejes con burbuja, cotas y rótulos de plano. Un azul, un acento, neutros y una sola familia tipográfica.</p>
+      <div class="cota"></div>
+    </div>
+    <div class="id-grid">
+      <div class="panel span-7">
+        <span class="d">Paleta · 1 azul + 1 acento + neutros</span>
+        <div class="swatches">
+          <div class="sw"><div class="c" style="background:#0B509E;color:#FFFFFF;border-color:#0B509E">#0B509E</div><b>Azul HL</b><small>El azul medio que ya usa el sitio, ahora único</small></div>
+          <div class="sw"><div class="c" style="background:#14181C;color:#E7EAEB;border-color:#14181C">#14181C</div><b>Grafito</b><small>Texto, estructura, líneas</small></div>
+          <div class="sw"><div class="c" style="background:#E7EAEB;color:#14181C">#E7EAEB</div><b>Concreto</b><small>Fondo base</small></div>
+          <div class="sw"><div class="c" style="background:#8A949B;color:#14181C;border-color:#8A949B">#8A949B</div><b>Acero</b><small>Secundarios y divisiones</small></div>
+          <div class="sw"><div class="c" style="background:#F2B42A;color:#14181C;border-color:#F2B42A">#F2B42A</div><b>Señalización</b><small>Cotas, HSE y cifras clave</small></div>
+        </div>
+        <div class="was"><span>Se retiran:</span><i style="background:#1e73be;border-color:#1e73be"></i><span>#1e73be (azul por defecto de WordPress)</span><i style="background:#001b74;border-color:#001b74"></i><span>#001b74</span></div>
+      </div>
+      <div class="panel span-5">
+        <span class="d">Tipografía · Archivo, una familia en tres anchos</span>
+        <div class="spec">
+          <div class="row"><span class="d">Expandida<br>títulos</span><span class="sp-x">MONTAJE INDUSTRIAL</span></div>
+          <div class="row"><span class="d">Normal<br>texto</span><span class="sp-n">Gestionamos proyectos de construcción generando valor y confianza.</span></div>
+          <div class="row"><span class="d">Condensada<br>datos</span><span class="sp-c num">Eje B · Niv +12.40 · 9.470.000 HH</span></div>
+        </div>
+        <p class="muted" style="font-size:13.5px;margin-top:var(--s3)">Reemplaza Lato, Roboto, Roboto Condensed y Open Sans: de cuatro peticiones a una.</p>
+      </div>
+      <div class="panel span-12">
+        <span class="d">Elementos gráficos</span>
+        <div class="elems">
+          <div class="elem">
+            <svg viewBox="0 0 200 110" aria-hidden="true"><line class="ac" x1="40" y1="10" x2="40" y2="70" stroke-dasharray="2 4"/><line class="ac" x1="100" y1="10" x2="100" y2="70" stroke-dasharray="2 4"/><line class="ac" x1="160" y1="10" x2="160" y2="70" stroke-dasharray="2 4"/><circle class="ac pf" cx="40" cy="86" r="12"/><circle class="ac pf" cx="100" cy="86" r="12"/><circle class="ac pf" cx="160" cy="86" r="12"/><text class="bt" x="40" y="90" text-anchor="middle">A</text><text class="bt" x="100" y="90" text-anchor="middle">B</text><text class="bt" x="160" y="90" text-anchor="middle">C</text></svg>
+            <b>Ejes con burbuja</b><small>Marcan los tres grupos de servicio y la navegación interna</small>
+          </div>
+          <div class="elem">
+            <svg viewBox="0 0 200 110" aria-hidden="true"><line class="sg" x1="25" y1="60" x2="175" y2="60"/><line class="sg" x1="25" y1="50" x2="25" y2="70"/><line class="sg" x1="175" y1="50" x2="175" y2="70"/><line class="sg" x1="20" y1="65" x2="30" y2="55"/><line class="sg" x1="170" y1="65" x2="180" y2="55"/><text x="100" y="52" text-anchor="middle">1968 → 2026</text></svg>
+            <b>Cotas</b><small>Cifras y divisores que se miden al aparecer</small>
+          </div>
+          <div class="elem">
+            <svg viewBox="0 0 200 110" aria-hidden="true"><rect class="st" x="20" y="25" width="160" height="60"/><line class="st" x1="20" y1="55" x2="180" y2="55"/><line class="st" x1="110" y1="25" x2="110" y2="85"/><text x="28" y="42">CLIENTE</text><text x="118" y="42">AÑO</text><text x="28" y="72">SECTOR</text><text x="118" y="72">HH</text></svg>
+            <b>Rótulo de plano</b><small>Fichas de proyecto, pies de página y documentos</small>
+          </div>
+          <div class="elem">
+            <svg viewBox="0 0 200 110" aria-hidden="true"><path class="st" d="M20 85 L20 45 L100 22 L180 45 L180 85"/><path class="st" d="M20 45 L180 45"/><path class="st" d="M40 45 L40 39 M60 45 L60 33 M80 45 L80 28 M100 45 L100 22 M120 45 L120 28 M140 45 L140 33 M160 45 L160 39"/><path class="st" d="M20 45 L40 39 M40 45 L60 33 M60 45 L80 28 M80 45 L100 22 M120 45 L100 22 M140 45 L120 28 M160 45 L140 33 M180 45 L160 39" stroke-width="1"/><line class="st" x1="10" y1="85" x2="190" y2="85"/></svg>
+            <b>Línea estructural</b><small>Ilustración de trazo mientras llega la fotografía nueva</small>
+          </div>
+        </div>
+      </div>
+      <div class="panel span-6">
+        <span class="d">Un solo lema · candidatos para discutir (D2)</span>
+        <div class="lemas">
+          <div><span class="d">A</span><q>Construcción y montaje industrial desde 1968.</q></div>
+          <div><span class="d">B</span><q>Obra civil, montaje y fabricación con un solo responsable.</q></div>
+          <div><span class="d">C</span><q>Plantas completas para la industria de Latinoamérica.</q></div>
+        </div>
+        <p class="muted" style="font-size:13.5px;margin-top:var(--s3)">Hoy hay cuatro, y "Construcción y obras civiles" subvende el negocio: los casos más fuertes son montajes electromecánicos y plantas completas.</p>
+        <div class="kill" style="margin-top:10px"><s>Vemos una tierra llena de oportunidades</s><s>Ejecutamos los proyectos de forma diferente</s><s>Mejor gente, mejores soluciones</s></div>
+      </div>
+      <div class="panel span-6">
+        <span class="d">Logo y fotografía</span>
+        <ul class="tick">
+          <li>Logo en SVG a partir del original, con versión positiva, negativa y monocroma (hoy solo hay PNG de 325×60)</li>
+          <li>Fotografía de obra real y actual: personas con EPP, escala de los equipos, antes y después</li>
+          <li>Pie de foto con proyecto y año en cada imagen; nada de bancos de imágenes</li>
+          <li>Fuera el recurso de demostración de The7 que hoy figura como logo en el pie</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- L-05 PROYECTOS -->
+<section class="sheet" id="proyectos">
+  <div class="wrap">
+    <div class="shead">
+      <span class="code d">L-05</span>
+      <h2>Los proyectos al centro</h2>
+      <p>Es la evidencia que ningún competidor puede copiar: 16 fichas con cantidades de obra reales, hoy escondidas bajo URLs sin criterio y sin año. Este explorador usa los datos del diagnóstico y muestra cómo se verían filtrados por sector, con duración a escala y el estado de cada ficha.</p>
+      <div class="cota"></div>
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Filtrar por sector"></div>
+    <div class="explorer">
+      <div class="plist" id="plist"></div>
+      <article class="pcard" id="pcard" aria-live="polite"></article>
+    </div>
+    <span class="sub d">Casos que solo existen en el PDF de ECOHL y merecen ficha</span>
+    <div class="pending">
+      <span class="chip med">Cementos Diamante · líneas 1 y 2</span><span class="chip med">Cemex Caracolito · 1 día antes</span><span class="chip med">Cerrejón cargador de barcos · 3 días antes</span><span class="chip med">Maceo · 30 % menos tiempo</span><span class="chip med">Chevron Chuchupa A y B · 0 incidentes</span><span class="chip med">Ladrillera Santa Fe</span><span class="chip high">Casos 2020–2026 · por recolectar</span>
+    </div>
+  </div>
+</section>
+
+<!-- L-06 AGENTES -->
+<section class="sheet" id="servicios">
+  <div class="wrap">
+    <div class="shead">
+      <span class="code d">L-06</span>
+      <h2>Agente, formularios y correo</h2>
+      <p>El sitio ya tiene un chat de Zoho SalesIQ y un botón de WhatsApp. Se conservan, pero dejan de competir: un solo punto de contacto donde un agente con IA orienta, pasa a un asesor de Zoho cuando hace falta y deja la solicitud lista en el formulario. Todo termina en Microsoft 365, donde el equipo ya trabaja.</p>
+      <div class="cota"></div>
+    </div>
+
+    <div class="svc first">
+      <div class="txt">
+        <span class="d muted">Pieza 1 · lo que hay y lo que cambia</span>
+        <h3>De dos burbujas a un solo botón</h3>
+        <div class="bubbles">
+          <div class="bub-box">
+            <span class="d muted">Hoy</span>
+            <div class="scr" aria-hidden="true"><i style="right:10px;background:var(--accent);color:var(--accent-ink)">ZOHO</i><i style="right:52px;background:var(--good);color:var(--paper)">WA</i></div>
+            <p>Zoho SalesIQ ("Estamos en línea") y WhatsApp compiten en la misma esquina. Zoho se carga dos veces y produce errores en consola.</p>
+          </div>
+          <div class="bub-box">
+            <span class="d muted">Propuesta</span>
+            <div class="scr" aria-hidden="true"><i style="right:10px;background:var(--ink);color:var(--bg);width:auto;padding:0 12px;border-radius:0">HABLAR CON HL</i></div>
+            <p>Un botón abre tres caminos: asistente IA las 24 horas, asesor en vivo por Zoho en horario de oficina y WhatsApp.</p>
+          </div>
+        </div>
+        <ul class="tick">
+          <li>El asistente responde con el contenido del CMS (proyectos, servicios, sedes, HSE) y cita la página de origen</li>
+          <li>No cotiza precios ni compromete plazos; deriva a un ingeniero comercial</li>
+          <li>Al pasar a un asesor de Zoho, la conversación viaja completa: nadie repite su caso</li>
+          <li>Alternativa a evaluar (D3): usar el bot nativo de Zoho SalesIQ en lugar de un agente propio</li>
+        </ul>
+        <span class="sim d">Prototipo · respuestas guionadas con datos reales del sitio</span>
+      </div>
+      <div class="chat" aria-label="Simulación del asistente Hablar con HL">
+        <div class="chat-h"><b>HL</b><div><strong>Hablar con HL</strong><small>Asistente · asesor Zoho · WhatsApp</small></div><button class="btn sm" id="chat-reset" type="button">Reiniciar</button></div>
+        <div class="log" id="log" aria-live="polite"></div>
+        <div class="quick" id="quick"></div>
+      </div>
+    </div>
+
+    <div class="svc one">
+      <div class="txt">
+        <span class="d muted">Pieza 2</span>
+        <h3>Formularios que saben a dónde ir</h3>
+        <p>Un componente con lógica por intención y país, con la autorización de datos obligatoria que hoy falta. Cambie los campos y vea la ruta. Al enviar se simula el flujo completo; no se envía ningún dato.</p>
+      </div>
+      <div class="formbox">
+        <form class="lead" id="lead" novalidate>
+          <div class="fld"><label for="f-nombre">Nombre</label><input id="f-nombre" value="Laura Gómez" autocomplete="off"></div>
+          <div class="fld"><label for="f-empresa">Empresa</label><input id="f-empresa" value="Minera Ejemplo S.A." autocomplete="off"></div>
+          <div class="fld"><label for="f-correo">Correo</label><input id="f-correo" type="email" value="lgomez@ejemplo.com" autocomplete="off"></div>
+          <div class="fld"><label for="f-pais">País del proyecto</label>
+            <select id="f-pais"><option>Colombia</option><option>Panamá</option><option>República Dominicana</option><option>Otro país</option></select></div>
+          <div class="fld"><label for="f-tipo">Tipo de solicitud</label>
+            <select id="f-tipo"><option>Cotización</option><option>Proveedores</option><option>Trabaja con nosotros</option><option>Buzón ético</option></select></div>
+          <div class="fld" id="w-servicio"><label for="f-servicio">Servicio</label>
+            <select id="f-servicio"><option>EPC / Llave en mano</option><option>Gerencia de proyectos (PMC/EPCM)</option><option>Obras civiles industriales</option><option>Montaje mecánico y tubería</option><option>Montaje eléctrico e instrumentación</option><option>Fabricación metalmecánica</option><option>Mantenimiento y paradas de planta</option></select></div>
+          <div class="fld full"><label for="f-msg">Mensaje</label><textarea id="f-msg">Requerimos montaje mecánico de una planta de beneficio. Inicio estimado en el primer trimestre.</textarea></div>
+          <label class="consent full"><input type="checkbox" id="f-ok" checked> Autorizo el tratamiento de mis datos personales para atender esta solicitud, según la Política de tratamiento de datos (Ley 1581 de 2012).</label>
+          <div class="full"><button class="btn pri" type="submit" id="f-send">Enviar solicitud (simulación)</button></div>
+        </form>
+        <aside class="route" aria-live="polite">
+          <span class="d">Ruta de la solicitud</span>
+          <div class="rt">
+            <div><span>Destino</span><b class="mail" id="r-dest"></b><small id="r-note"></small></div>
+            <div><span>Responsable</span><b id="r-resp"></b></div>
+            <div><span>Registro</span><b id="r-reg"></b></div>
+          </div>
+          <ol class="pipe" id="pipe"></ol>
+          <p class="result" id="r-out"></p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="svc one">
+      <div class="txt">
+        <span class="d muted">Pieza 3</span>
+        <h3>Agente de correo</h3>
+        <p>Un flujo de Power Automate con un paso de IA que atiende lo que llega del sitio y de los buzones públicos. Los buzones son por función, no personales: no se rompen cuando alguien cambia de cargo y concentran menos spam.</p>
+      </div>
+      <div class="flow">
+        <div class="step"><span class="n">1</span><b>Recibe</b><p>Solicitud del formulario, del agente o correo a un buzón público.</p></div>
+        <div class="step"><span class="n">2</span><b>Clasifica</b><p>La IA identifica tipo, servicio, país y urgencia, y extrae empresa y contacto.</p></div>
+        <div class="step"><span class="n">3</span><b>Confirma</b><p>Acuse inmediato con número de radicado y tiempo de respuesta.</p></div>
+        <div class="step"><span class="n">4</span><b>Enruta</b><p>Al buzón de la sede y al responsable de la línea; aviso en Teams.</p></div>
+        <div class="step"><span class="n">5</span><b>Registra</b><p>Ítem en la lista Leads Web de SharePoint, listo para Power BI.</p></div>
+        <div class="step"><span class="n">6</span><b>Sigue</b><p>Si no hay respuesta en el plazo acordado, recuerda al responsable y escala.</p></div>
+      </div>
+      <div class="ethics"><span class="chip crit">Excepción</span><span>El <strong>Buzón ético</strong> no pasa por IA ni por el registro comercial. Va directo a buzonetico@ por un canal confidencial, admite reportes anónimos, declara protección contra represalias y entrega número de radicado, como pide el diagnóstico.</span></div>
+      <p class="note"><strong>Nota de licencias.</strong> El disparador HTTP de Power Automate es un conector premium. Si la licencia no lo incluye, la función serverless escribe en SharePoint y envía el correo con Microsoft Graph, y Power Automate queda solo para el seguimiento.</p>
+    </div>
+  </div>
+</section>
+
+<!-- L-07 MOVIMIENTO -->
+<section class="sheet" id="movimiento">
+  <div class="wrap">
+    <div class="shead">
+      <span class="code d">L-07</span>
+      <h2>Movimiento con oficio</h2>
+      <p>Las animaciones imitan gestos de obra y de oficina técnica. Son cortas, nunca bloquean el contenido (adiós al preloader) y se apagan si el visitante pide reducir el movimiento en su sistema.</p>
+      <div class="cota"></div>
+    </div>
+    <div class="motion">
+      <div class="mcard">
+        <div class="stage" id="m1"><svg viewBox="0 0 160 90" aria-hidden="true"><path class="st m-draw" pathLength="1" d="M10 80 L150 80"/><path class="st m-draw" pathLength="1" style="--d:.2s" d="M25 80 L25 40 L80 18 L135 40 L135 80"/><path class="st m-draw" pathLength="1" style="--d:.45s" d="M25 40 L135 40"/><path class="st m-draw" pathLength="1" style="--d:.65s" d="M47 40 L47 31 M69 40 L69 22 M91 40 L91 22 M113 40 L113 31 M25 40 L47 31 L69 40 L80 18 L91 40 L113 31 L135 40"/></svg></div>
+        <div class="mb"><b>Trazo</b><p>Las ilustraciones se dibujan como un plano al entrar en pantalla.</p><button class="btn sm" data-play="m1" type="button">Reproducir</button></div>
+      </div>
+      <div class="mcard">
+        <div class="stage" id="m2"><div class="blocks"><i style="height:40px"></i><i style="height:64px;--d:.08s"></i><i style="height:88px;--d:.16s"></i><i style="height:54px;--d:.24s"></i><i style="height:74px;--d:.32s"></i></div></div>
+        <div class="mb"><b>Izaje</b><p>Tarjetas y bloques suben a su sitio con desaceleración, como una carga izada.</p><button class="btn sm" data-play="m2" type="button">Reproducir</button></div>
+      </div>
+      <div class="mcard">
+        <div class="stage" id="m3"><div class="measure"><b id="m3n">58</b><div class="ml"></div><span class="d muted">Años desde 1968</span></div></div>
+        <div class="mb"><b>Cota</b><p>Las cifras se miden y vienen escritas en el HTML: Google ve 58, no 0.</p><button class="btn sm" data-play="m3" type="button">Reproducir</button></div>
+      </div>
+      <div class="mcard">
+        <div class="stage" id="m4"><div class="pages"><div class="p1"><i></i><i></i><i></i><i></i></div><div class="p2"><i></i><i></i><i></i></div></div></div>
+        <div class="mb"><b>Transición de vista</b><p>Entre páginas, la nueva entra por barrido sin pantallazo en blanco.</p><button class="btn sm" data-play="m4" type="button">Reproducir</button></div>
+      </div>
+    </div>
+    <div class="libs">
+      <span class="chip med">GSAP + ScrollTrigger</span><span class="chip med">Motion (islas React)</span><span class="chip med">Lenis · desplazamiento suave</span><span class="chip med">View Transitions API</span><span class="chip ok">prefers-reduced-motion</span><span class="chip ok">Zoom permitido · WCAG 1.4.4</span>
+    </div>
+  </div>
+</section>
+
+<!-- L-08 MAPA Y MIGRACIÓN -->
+<section class="sheet" id="mapa">
+  <div class="wrap">
+    <div class="shead">
+      <span class="code d">L-08</span>
+      <h2>Mapa nuevo y migración sin pérdidas</h2>
+      <p>Una sola portada, proyectos al centro, servicios en tres grupos, HSE como argumento de venta y los temas legales y de empleados fuera del menú comercial. Las 95 URLs actuales responden con redirección 301 o se retiran de forma explícita.</p>
+      <div class="cota"></div>
+    </div>
+    <div class="ia">
+      <div class="col acc">
+        <span class="d">Menú comercial</span>
+        <ul>
+          <li><b>Inicio</b><small>Una sola portada con H1, lema único y casos recientes</small></li>
+          <li><b>Proyectos</b><small>Explorador con filtro por sector, servicio y país, mapa y fichas con año</small></li>
+          <li><b>Sectores</b><small>Taxonomía única con texto propio</small></li>
+        </ul>
+      </div>
+      <div class="col acc">
+        <span class="d">Servicios · 3 grupos</span>
+        <ul>
+          <li><b>A · Gestión</b><ul><li>EPC / Llave en mano</li><li>Gerencia de proyectos (PMC/EPCM, ECOHL)</li></ul></li>
+          <li><b>B · Construcción y montaje</b><ul><li>Obras civiles industriales</li><li>Montaje mecánico y tubería</li><li>Montaje eléctrico e instrumentación</li></ul></li>
+          <li><b>C · Fabricación y mantenimiento</b><ul><li>Fabricación metalmecánica</li><li>Mantenimiento y paradas de planta</li></ul></li>
+        </ul>
+      </div>
+      <div class="col acc">
+        <span class="d">Confianza</span>
+        <ul>
+          <li><b>HSE</b><small>Indicadores vigentes, certificaciones con PDF, 10 Reglas de Oro, PIENSA®</small></li>
+          <li><b>Nosotros</b><small>Historia 1968 → hoy, empresas del grupo, equipo directivo y gobierno</small></li>
+          <li><b>Contacto</b><small>Formulario enrutado y 4 sedes con mapa enlazado</small></li>
+        </ul>
+      </div>
+      <div class="col out">
+        <span class="d">Pie · fuera del menú</span>
+        <ul>
+          <li><b>Trabaja con nosotros</b><small>Vacantes y formulario con autorización</small></li>
+          <li><b>Proveedores</b><small>Requisitos, categorías y contacto de Compras</small></li>
+          <li><b>Buzón ético</b></li>
+          <li><b>Información para acreedores</b><small>Avisos Ley 1116 fechados y ordenados</small></li>
+          <li><b>Política de datos y Términos</b></li>
+          <li><b class="muted">ERP, BI, correo, campus</b><small>Salen del sitio público al portal interno</small></li>
+        </ul>
+      </div>
+    </div>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>Contenido actual</th><th>URL actual</th><th>URL nueva</th><th>Decisión</th></tr></thead>
+        <tbody>
+          <tr><td>Prehome</td><td class="r old">/</td><td class="r new">/</td><td>Eliminar; la nueva portada ocupa la raíz</td></tr>
+          <tr><td>Inicio</td><td class="r old">/inicio/</td><td class="r new">/</td><td>301; reescribir con H1, países, sectores y video</td></tr>
+          <tr><td>16 fichas de proyecto</td><td class="r old">/trayectoria/…</td><td class="r new">/proyectos/[slug]</td><td>Conservar cifras, agregar año; slugs normalizados</td></tr>
+          <tr><td>Trayectoria y 8 sectores</td><td class="r old">/trayectoria/[sector]/</td><td class="r new">/sectores/[sector]</td><td>Reescribir; unificar taxonomía (hoy 5, 6 o 7 según la página)</td></tr>
+          <tr><td>9 servicios</td><td class="r old">/obras-civiles/ …</td><td class="r new">/servicios/[servicio]</td><td>Fusionar en 7 líneas y 3 grupos</td></tr>
+          <tr><td>Grupo HL</td><td class="r old">/grupo-hl/</td><td class="r new">/nosotros</td><td>Conservar; quitar meta de ventas y corregir "52 años"</td></tr>
+          <tr><td>Propuesta de valor</td><td class="r old">/propuesta-de-valor/</td><td class="r new">/hse</td><td>Mover; agregar indicadores y certificaciones con nombre</td></tr>
+          <tr><td>Portafolio ECOHL</td><td class="r old">Portafolio-ECOHL.pdf</td><td class="r new">/servicios/gerencia-de-proyectos</td><td>Reescribir; casos nuevos a fichas, PDF actualizado</td></tr>
+          <tr><td>Contáctenos</td><td class="r old">/contactenos/</td><td class="r new">/contacto</td><td>Conservar sedes; teléfonos con formato y buzones por función</td></tr>
+          <tr><td>Trabaja con nosotros · Proveedores</td><td class="r old">/trabaja-con-nosotros/ …</td><td class="r new">/trabaja-con-nosotros …</td><td>Reescribir con formularios completos</td></tr>
+          <tr><td>Links de interés</td><td class="r old">enlace en pie</td><td class="r new">/acreedores</td><td>Mover avisos Ley 1116; accesos internos fuera</td></tr>
+          <tr><td>Términos y condiciones</td><td class="r old">404</td><td class="r new">/legal/terminos</td><td>Crear, validado por jurídica</td></tr>
+          <tr><td>/error-404/ y 16 etiquetas</td><td class="r old">/tag/…</td><td class="r new">—</td><td>Retirar con 410 y sacar del sitemap</td></tr>
+          <tr><td>Versión en inglés</td><td class="r old">/home/, /hl-group/ …</td><td class="r new">/en/…</td><td>Espejo con hreflang y glosario (Fabrication, Safety, Slipform)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- L-09 HOJA DE RUTA -->
+<section class="sheet" id="ruta">
+  <div class="wrap">
+    <div class="shead">
+      <span class="code d">L-09</span>
+      <h2>Hoja de ruta estimada</h2>
+      <p>Sigue la secuencia del diagnóstico. La primera semana cierra los riesgos legales en el sitio actual sin esperar al nuevo. Son dieciséis semanas estimadas que se ajustan cuando se defina el equipo y lleguen los insumos de HL.</p>
+      <div class="cota"></div>
+    </div>
+    <div class="gantt" id="gantt">
+      <div class="g">
+        <div class="wk0 d">Frente</div>
+        <div class="wk">1</div><div class="wk">2</div><div class="wk">3</div><div class="wk">4</div><div class="wk">5</div><div class="wk">6</div><div class="wk">7</div><div class="wk">8</div><div class="wk">9</div><div class="wk">10</div><div class="wk">11</div><div class="wk">12</div><div class="wk">13</div><div class="wk">14</div><div class="wk">15</div><div class="wk">16</div>
+        <div class="ph">Arreglos rápidos en el sitio actual<small>Términos, Ley 1581, intranet, LinkedIn, 58 años, zoom</small></div><div class="tr"><div class="b r" style="grid-column:1/2"></div></div>
+        <div class="ph">Decisiones de marca<small>grupo o HL Ingenieros, lema, empresas</small></div><div class="tr"><div class="b" style="grid-column:1/3"></div></div>
+        <div class="ph">Recolección de contenido<small>años de casos, 2020–2026, HSE, fotos</small></div><div class="tr"><div class="b" style="grid-column:1/6"></div></div>
+        <div class="ph">Arquitectura y redacción ES / EN<small>plantillas de servicio y ficha, textos</small></div><div class="tr"><div class="b" style="grid-column:3/8"></div></div>
+        <div class="ph">Identidad visual<small>logo SVG, tokens, dirección fotográfica</small></div><div class="tr"><div class="b a" style="grid-column:3/7"></div></div>
+        <div class="ph">Construcción e integraciones<small>Astro, CMS, formularios, Zoho, agentes</small></div><div class="tr"><div class="b a" style="grid-column:6/14"></div></div>
+        <div class="ph">Migración, QA y lanzamiento<small>301, GA4, Search Console, línea base</small></div><div class="tr"><div class="b s" style="grid-column:12/17"></div></div>
+      </div>
+    </div>
+    <div class="ms"><span class="chip crit">Semana 1 · riesgos legales cerrados</span><span class="chip acc">Semana 6 · identidad aprobada</span><span class="chip acc">Semana 11 · sitio navegable en staging</span><span class="chip ok">Semana 16 · lanzamiento</span></div>
+  </div>
+</section>
+
+<!-- L-10 DECISIONES -->
+<section class="sheet" id="decisiones">
+  <div class="wrap">
+    <div class="shead">
+      <span class="code d">L-10</span>
+      <h2>Decisiones e insumos para arrancar</h2>
+      <p>Lo que hay que definir antes de la semana 1 y lo que HL tiene que aportar para que el sitio nuevo no repita los vacíos del actual.</p>
+      <div class="cota"></div>
+    </div>
+    <div class="dec">
+      <div><span class="q d">D1</span><b>¿Sitio del grupo o de HL Ingenieros?</b><p>Define la arquitectura de marca y qué empresas se muestran. En inglés aparecen Megacranes y Aktino, que no están en español.</p></div>
+      <div><span class="q d">D2</span><b>Lema único</b><p>Uno de los candidatos de L-04 u otro, que diga qué hace distinto a HL frente a otro contratista electromecánico.</p></div>
+      <div><span class="q d">D3</span><b>Agente: Zoho o propio</b><p>Bot nativo de Zoho SalesIQ (un solo proveedor) o agente propio con IA que entrega a los asesores de Zoho. Ambos usan la misma base de conocimiento del CMS.</p></div>
+      <div><span class="q d">D4</span><b>CMS</b><p>Sanity (editor visual en la nube), Decap (gratuito, sobre Git) o Payload (autoalojado). Depende de quién edita y cuánto.</p></div>
+      <div><span class="q d">D5</span><b>Hosting y automatización</b><p>Vercel o Netlify, o Azure Static Web Apps dentro del tenant de Microsoft 365. Power Automate premium o integración por Microsoft Graph.</p></div>
+      <div><span class="q d">D6</span><b>Casos sensibles</b><p>Cómo presentar el Patio de Carbón y los tanques de Minera Panamá, y si usar los nombres actuales de clientes (Zijin Mining, thyssenkrupp Polysius, OHLA).</p></div>
+      <div><span class="q d">D7</span><b>Buzones por función</b><p>Crear buzones comerciales por sede en lugar de publicar correos personales.</p></div>
+      <div><span class="q d">D8</span><b>Equipo de ejecución</b><p>Interno, proveedor o mixto. Define la hoja de ruta real y el modelo de soporte.</p></div>
+    </div>
+    <span class="sub d">Insumos que aporta HL</span>
+    <div class="inputs">
+      <div>Manual de marca o logos vectoriales (AI, SVG, PDF)</div>
+      <div>Proyectos 2020–2026 con cliente, año, alcance y cifras</div>
+      <div>Año de los 16 casos y aclaración de cifras de Columbus</div>
+      <div>Certificaciones vigentes en PDF</div>
+      <div>Indicadores HSE de los últimos 3 años</div>
+      <div>Fotografías recientes de obra en alta resolución</div>
+      <div>Lista vigente de empresas del grupo</div>
+      <div>Acceso a Zoho PageSense y Search Console</div>
+    </div>
+
+    <div class="rotulo">
+      <div class="big"><span>Proyecto</span><b>Reconstrucción sitio corporativo</b></div>
+      <div><span>Cliente</span><b>Grupo HL</b></div>
+      <div><span>Elaboró</span><b>Juan David Urbina</b></div>
+      <div><span>Fecha · Rev.</span><b class="num">06/10/2026 · R0</b></div>
+      <div><span>Estado</span><b>Para discusión</b></div>
+    </div>
+    <p class="foot">Base: "Diagnóstico integral – hlingenieros.com" (29-sep-2026) y revisión complementaria del 6-oct-2026. Las cifras de proyectos salen de las fichas publicadas en el sitio actual. El chat y el formulario de esta página son simulaciones y no envían datos. Los puntos legales deben validarse con el área jurídica.</p>
+  </div>
+</section>
+</main>
+
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+  var NS='http://www.w3.org/2000/svg';
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function el(parent,tag,attrs){var e=document.createElementNS(NS,tag);for(var k in attrs){e.setAttribute(k,attrs[k]);}parent.appendChild(e);return e;}
+  function line(g,x1,y1,x2,y2,cls,delay){var l=el(g,'line',{x1:x1,y1:y1,x2:x2,y2:y2,'class':cls+' draw',pathLength:1});l.style.setProperty('--d',delay+'s');return l;}
+  function txt(g,x,y,s,attrs){var t=el(g,'text',Object.assign({x:x,y:y},attrs||{}));t.textContent=s;return t;}
+
+  /* ---------- Nave industrial del hero ---------- */
+  var axes=document.getElementById('axes'),frame=document.getElementById('frame'),crane=document.getElementById('crane'),hook=document.getElementById('hook'),dims=document.getElementById('dims');
+  var cols=[60,187,313,440],G=350,E=170,R=110,ridgeX=250;
+  ['A','B','C','D'].forEach(function(L,i){var x=cols[i];
+    el(axes,'line',{x1:x,y1:30,x2:x,y2:392,'class':'ax'});
+    el(axes,'circle',{cx:x,cy:408,r:11,'class':'bub'});
+    txt(axes,x,412,L,{'text-anchor':'middle','class':'bubt'});
+  });
+  line(frame,15,G,590,G,'st mid',0);
+  for(var h=24;h<590;h+=18){line(frame,h,G,h-8,G+8,'st thin',.1);}
+  cols.forEach(function(x,i){line(frame,x,G,x,E,'st heavy',.25+i*.08);});
+  line(frame,60,E,440,E,'st mid',.6);
+  function topY(x){return x<=ridgeX? E-(x-60)*(E-R)/(ridgeX-60) : R+(x-ridgeX)*(E-R)/(440-ridgeX);}
+  line(frame,60,E,ridgeX,R,'st heavy',.7);line(frame,ridgeX,R,440,E,'st heavy',.75);
+  var nodes=[60,98,136,174,212,250,288,326,364,402,440];
+  nodes.forEach(function(x,i){
+    if(i>0&&i<nodes.length-1)line(frame,x,E,x,topY(x),'st thin',.95+i*.04);
+    if(i<nodes.length-1){var nx=nodes[i+1];
+      if(x<ridgeX)line(frame,x,E,nx,topY(nx),'st thin',1.05+i*.04);
+      else line(frame,nx,E,x,topY(x),'st thin',1.05+i*.04);}
+  });
+  var mx1=512,mx2=528,top=56;
+  line(crane,mx1,G,mx1,top,'st mid',.5);line(crane,mx2,G,mx2,top,'st mid',.5);
+  for(var y=G;y>top+10;y-=24){line(crane,mx1,y,mx2,y-24,'st thin',.9);line(crane,mx1,y-24,mx2,y-24,'st thin',.9);}
+  line(crane,360,top,590,top,'st mid',1.1);line(crane,360,top+10,590,top+10,'st mid',1.1);
+  for(var jx=360;jx<590;jx+=20){line(crane,jx,top+10,jx+10,top,'st thin',1.3);line(crane,jx+10,top,jx+20,top+10,'st thin',1.3);}
+  line(crane,520,18,360,top,'st thin',1.5);line(crane,520,18,590,top,'st thin',1.5);
+  line(crane,mx1,top,520,18,'st mid',1.4);line(crane,mx2,top,520,18,'st mid',1.4);
+  var cw=el(crane,'rect',{x:566,y:top+10,width:22,height:20,'class':'cw fade-in'});cw.style.setProperty('--d','1.6s');
+  line(hook,402,top+10,402,128,'st thin',1.6);
+  line(hook,402,128,376,146,'st thin',1.8);line(hook,402,128,428,146,'st thin',1.8);
+  var beam=el(hook,'rect',{x:362,y:146,width:80,height:7,'class':'load fade-in'});beam.style.setProperty('--d','1.9s');
+  line(dims,60,378,440,378,'dim',1.7);
+  cols.forEach(function(x){line(dims,x,372,x,384,'dim',1.8);line(dims,x-5,383,x+5,373,'dim',1.8);});
+  var lt=txt(dims,250,370,'3 VANOS · NAVE INDUSTRIAL TIPO',{'text-anchor':'middle','class':'fade-in'});lt.style.setProperty('--d','2s');
+  var lt2=txt(dims,ridgeX,R-10,'CUMBRERA',{'text-anchor':'middle','class':'fade-in'});lt2.style.setProperty('--d','2s');
+
+  /* ---------- Contadores ---------- */
+  function fmt(v,dec){return dec?v.toFixed(dec).replace('.',','):String(Math.round(v));}
+  function countUp(node,to,ms,dec){
+    if(reduce){node.textContent=fmt(to,dec);return;}
+    var t0=null;function step(t){if(!t0)t0=t;var p=Math.min((t-t0)/ms,1);var e=1-Math.pow(1-p,3);node.textContent=fmt(to*e,dec);if(p<1)requestAnimationFrame(step);}
+    requestAnimationFrame(step);
+  }
+  document.querySelectorAll('.count').forEach(function(n){countUp(n,+n.dataset.to,1400,+(n.dataset.dec||0));});
+
+  /* ---------- Revelado decorativo ---------- */
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.2});
+    document.querySelectorAll('.cota,.gantt').forEach(function(n){io.observe(n);});
+  } else {document.querySelectorAll('.cota,.gantt').forEach(function(n){n.classList.add('in');});}
+
+  /* ---------- Calificaciones del diagnóstico ---------- */
+  var dims7=[['Arquitectura y navegación',2,'Prehome con clic extra, 9 servicios planos, sectores que no cuadran, pie con enlaces rotos'],
+    ['Identidad visual y marca',2,'Cuatro nombres de marca, plantilla genérica de The7, fotos de 2019–2020'],
+    ['Contenido para clientes B2B',2,'~75 palabras por servicio, la misma evidencia en 12 páginas, cero casos después de 2020'],
+    ['Candidatos y proveedores',1,'Sin vacantes, sin requisitos de proveedor, formularios mínimos'],
+    ['Técnica y SEO',2,'Inicio sin H1, contadores en 0, 4 familias tipográficas, sin GA4, zoom bloqueado'],
+    ['Legal y reputación',1,'Términos en 404, formularios sin autorización de datos, avisos Ley 1116 junto a la intranet'],
+    ['Versión en inglés',2,'Traducción literal, menú y pie en español, sectores en 404']];
+  var sc=document.getElementById('scores');
+  dims7.forEach(function(d){
+    var row=document.createElement('div');row.className='score';
+    var b=document.createElement('b');b.textContent=d[0];
+    var f=document.createElement('div');f.className='five';f.setAttribute('aria-label','Nota '+d[1]+' de 5');
+    for(var k=1;k<=5;k++){var i=document.createElement('i');if(k<=d[1])i.className='on'+(d[1]>1?' m':'');f.appendChild(i);}
+    var em=document.createElement('em');em.textContent=d[1]+' / 5';f.appendChild(em);
+    var p=document.createElement('p');p.textContent=d[2];
+    row.appendChild(b);row.appendChild(f);row.appendChild(p);sc.appendChild(row);
+  });
+
+  /* ---------- Diagrama actual: pila de terceros ---------- */
+  var os=document.getElementById('oldstack');
+  var stack=[['The7 12.1 + WPBakery 7.9','contenido atado a shortcodes',1],['Slider Revolution 6.7.28','carpeta no estándar',1],['Contact Form 7 6.1.7','sin autorización Ley 1581',1],['Zoho SalesIQ + PageSense','cargado dos veces',1],['WP WhatsApp 3.8.2','segunda burbuja en la esquina',0],['All in One SEO 5.0.2','OG duplicadas · sitemap sucio',1],['Imágenes PNG / JPG','2019–2020 · logos sin alt',0]];
+  stack.forEach(function(s,i){
+    var y=8+i*57;
+    el(os,'rect',{x:560,y:y,width:210,height:46,'class':'box'+(s[2]?' risk':'')});
+    txt(os,665,y+20,s[0],{'text-anchor':'middle',style:'font-size:12.5px'});
+    txt(os,665,y+37,s[1],{'text-anchor':'middle','class':'s'});
+    el(os,'path',{d:'M535 '+(y+23)+' L558 '+(y+23),'class':'ln','marker-end':'url(#ah2)'});
+    if(s[2]){var g=el(os,'g',{'class':'warn'});el(g,'circle',{cx:770,cy:y,r:8});txt(g,770,y+4,'!',{'text-anchor':'middle'});}
+  });
+  var gw=el(os,'g',{'class':'warn'});el(gw,'circle',{cx:490,cy:145,r:8});txt(gw,490,149,'!',{'text-anchor':'middle'});
+  var gw2=el(os,'g',{'class':'warn'});el(gw2,'circle',{cx:270,cy:177,r:8});txt(gw2,270,181,'!',{'text-anchor':'middle'});
+
+  /* ---------- Tabs ---------- */
+  var tn=document.getElementById('tab-new'),to=document.getElementById('tab-old'),dn=document.getElementById('dg-new'),dO=document.getElementById('dg-old');
+  function setTab(isNew){tn.setAttribute('aria-selected',isNew);to.setAttribute('aria-selected',!isNew);dn.hidden=!isNew;dO.hidden=isNew;}
+  tn.addEventListener('click',function(){setTab(true);});to.addEventListener('click',function(){setTab(false);});
+
+  /* ---------- Medidores ---------- */
+  var labels=['SEO','Edición sin código','Interactividad','Rendimiento','Mantenimiento'];
+  document.querySelectorAll('.meters').forEach(function(m){
+    m.dataset.scores.split(',').forEach(function(s,i){
+      var row=document.createElement('div');row.className='meter';
+      var l=document.createElement('span');l.textContent=labels[i];
+      var segs=document.createElement('span');segs.className='segs';segs.setAttribute('aria-label',labels[i]+': '+s+' de 5');
+      for(var k=1;k<=5;k++){var ii=document.createElement('i');if(k<=+s)ii.className='on';segs.appendChild(ii);}
+      row.appendChild(l);row.appendChild(segs);m.appendChild(row);
+    });
+  });
+
+  /* ---------- Explorador de proyectos (datos de las fichas actuales) ---------- */
+  var P=[
+    {n:'Planta Columbus',c:'Cementos Argos (en consorcio)',s:'Cemento',l:'Cartagena, Colombia',d:42,k:'5.250 t/día · 9.470.000 HH',f:'Completa',x:'Cifras en conflicto con el PDF de ECOHL (18 meses, 12.000 t): aclarar si son alcances distintos'},
+    {n:'Progrefa',c:'thyssenkrupp (hoy thyssenkrupp Polysius)',s:'Cemento',l:'San Juan Sacatepéquez, Guatemala',d:26,k:'11.700 t de equipos · 1.200.000 HH',f:'Parcial'},
+    {n:'Deslizado Chimborazo',c:'UTE Sacyr-Imasa-Polysius',s:'Cemento',l:'Riobamba, Ecuador',d:6,k:'Formaleta deslizante de 105 m',f:'Completa'},
+    {n:'Molienda de cemento',c:'OHL Industrial (hoy OHLA)',s:'Cemento',l:'Sonsón, Colombia',d:9,k:'Molino vertical de 600 t',f:'Parcial'},
+    {n:'Buriticá',c:'Continental Gold (hoy Zijin Mining)',s:'Minería',l:'Buriticá, Colombia',d:18,k:'2 molinos de 550 t · 2.400 instrumentos',f:'Completa'},
+    {n:'Marine Works',c:'Cerrejón',s:'Minería',l:'Puerto Bolívar, Colombia',d:7,k:'1.100 m de banda costa afuera',f:'Completa'},
+    {n:'Tanques',c:'Minera Panamá',s:'Minería',l:'Colón, Panamá',d:7,k:'16 tanques API-650 · 26.000 m³',f:'Completa',x:'Mina cerrada desde 2023: no destacar en portada (D6)'},
+    {n:'Digestores PTAR Bello',c:'Aguas de Aburrá HHA',s:'Agua',l:'Bello, Colombia',d:12,k:'6 digestores ovoidales · 3.000 t',f:'Completa'},
+    {n:'PTAR Salitre',c:'Consorcio PTAR Salitre',s:'Agua',l:'Bogotá, Colombia',d:12,k:'92.000 pulgadas-diámetro · 99 bombas',f:'Completa',x:'Hoy su foto ilustra 12 páginas distintas'},
+    {n:'Patio de Carbón',c:'Presentación por definir (D6)',s:'Energía',l:'Km 45 Carretera Sánchez (sin país)',d:12,k:'6.400 t de estructura',f:'Parcial',x:'Cliente sensible: presentar por el proyecto o el dueño final'},
+    {n:'Termonorte 93 MW',c:'Hyundai Heavy Industries',s:'Energía',l:'Santa Marta, Colombia',d:12,k:'4.500 m³ de concreto',f:'Completa'},
+    {n:'Charlotte',c:'Unilever',s:'Industrial',l:'Palmira, Colombia',d:9,k:'900 instrumentos',f:'Completa'},
+    {n:'Planta de producción',c:'Diana Pet Food',s:'Industrial',l:'Tocancipá, Colombia',d:8,k:'2.300 m³ de concreto',f:'Completa'},
+    {n:'GACE IV',c:'Chevron',s:'Petróleo y gas',l:'La Guajira, Colombia',d:13,k:'253.720 HH',f:'Pobre'},
+    {n:'Vía Chipirón',c:'Estrumetal / Occidental',s:'Infraestructura',l:'Arauca, Colombia',d:15,k:'251.006 HH',f:'Pobre'},
+    {n:'Terminal Barrancabermeja',c:'Impala',s:'Infraestructura',l:'Barrancabermeja, Colombia',d:14,k:'37.000 HH (verificar)',f:'Pobre'}
+  ];
+  var maxD=42,curF='Todos',curP=P[0];
+  var fBox=document.getElementById('filters'),plist=document.getElementById('plist'),pcard=document.getElementById('pcard');
+  var sectors=['Todos'];P.forEach(function(p){if(sectors.indexOf(p.s)<0)sectors.push(p.s);});
+  function chipFor(f){return f==='Completa'?'ok':(f==='Parcial'?'high':'crit');}
+  function renderFilters(){
+    fBox.innerHTML='';
+    sectors.forEach(function(s){
+      var n=s==='Todos'?P.length:P.filter(function(p){return p.s===s;}).length;
+      var b=document.createElement('button');b.type='button';b.className='fbtn';b.setAttribute('aria-pressed',s===curF);
+      b.textContent=s;var sp=document.createElement('span');sp.textContent=n;b.appendChild(sp);
+      b.addEventListener('click',function(){setFilter(s);});fBox.appendChild(b);
+    });
+  }
+  function setFilter(s){curF=s;var vis=P.filter(function(p){return s==='Todos'||p.s===s;});if(vis.indexOf(curP)<0)curP=vis[0];renderFilters();renderList();renderCard();}
+  function renderList(){
+    plist.innerHTML='';
+    P.filter(function(p){return curF==='Todos'||p.s===curF;}).forEach(function(p){
+      var b=document.createElement('button');b.type='button';b.className='pitem';b.setAttribute('aria-current',p===curP);
+      var t=document.createElement('b');t.textContent=p.n;
+      var sm=document.createElement('small');sm.textContent=p.c+' · '+p.l.split(',')[0];
+      var du=document.createElement('span');du.className='dur';
+      var bar=document.createElement('i');bar.style.width=Math.max(6,Math.round(p.d/maxD*96))+'px';
+      var dl=document.createElement('span');dl.textContent=p.d+' meses';
+      du.appendChild(bar);du.appendChild(dl);
+      b.appendChild(t);b.appendChild(du);b.appendChild(sm);
+      b.addEventListener('click',function(){curP=p;renderList();renderCard();});
+      plist.appendChild(b);
+    });
+  }
+  function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+  function renderCard(){
+    var p=curP;
+    pcard.innerHTML='<div class="img"><span class="chip acc tag">'+esc(p.s)+'</span><span class="d">Galería de obra · 5+ fotos con pie</span><span class="chip '+chipFor(p.f)+'">Ficha '+esc(p.f.toLowerCase())+'</span></div>'+
+      '<div class="body"><span class="d muted">'+esc(p.c)+'</span><h4>'+esc(p.n)+'</h4><div class="big num">'+esc(p.k)+'</div>'+
+      '<div class="kv"><div><span>Lugar</span><b>'+esc(p.l)+'</b></div><div><span>Duración</span><b class="num">'+p.d+' meses</b></div>'+
+      '<div><span>Año de ejecución</span><b class="tbd">Falta en todas las fichas</b></div><div><span>Rol de HL</span><b class="tbd">Por completar</b></div></div>'+
+      (p.x?'<p class="flag"><span class="chip high">Nota</span><span>'+esc(p.x)+'</span></p>':'')+'</div>';
+  }
+  renderFilters();renderList();renderCard();
+
+  /* ---------- Formulario con enrutamiento ---------- */
+  var f={pais:document.getElementById('f-pais'),tipo:document.getElementById('f-tipo'),servicio:document.getElementById('f-servicio'),ok:document.getElementById('f-ok'),correo:document.getElementById('f-correo')};
+  var wServ=document.getElementById('w-servicio');
+  var rDest=document.getElementById('r-dest'),rNote=document.getElementById('r-note'),rResp=document.getElementById('r-resp'),rReg=document.getElementById('r-reg'),pipe=document.getElementById('pipe'),out=document.getElementById('r-out');
+  var sedes={
+    'Colombia':['comercial@hlingenieros.com (propuesto)','Hoy se publica hlisa@','Sede principal Bogotá'],
+    'Panamá':['administracionpanama@hlingenieros.com','Ya es un buzón por función','Operaciones Panamá'],
+    'República Dominicana':['comercial.rd@hlingenieros.com (propuesto)','Hoy se publica un correo personal','Sede República Dominicana'],
+    'Otro país':['comercial@hlingenieros.com (propuesto)','Bogotá coordina Ecuador, Guatemala, Costa Rica y Bolivia','Sede principal Bogotá']};
+  var idle='Pulse Enviar para ver el flujo paso a paso.';
+  function route(){
+    var t=f.tipo.value,p=f.pais.value,steps;
+    wServ.hidden=(t!=='Cotización');
+    if(t==='Buzón ético'){
+      rDest.textContent='buzonetico@hlingenieros.com';rNote.textContent='Canal confidencial · admite anonimato';rResp.textContent='Comité de ética';rReg.textContent='Sin registro comercial';
+      steps=[['Validación y antispam',0],['Clasificación con IA',1],['Entrega confidencial al comité',0],['Acuse con radicado y garantía de no represalia',0]];
+    } else if(t==='Trabaja con nosotros'){
+      rDest.textContent='talento@hlingenieros.com (propuesto)';rNote.textContent='Hoy el formulario no pide nombre ni correo';rResp.textContent='Talento Humano';rReg.textContent='SharePoint · Candidatos';
+      steps=[['Validación y antispam',0],['Clasificación con IA (cargo, ciudad)',0],['Registro en SharePoint',0],['Envío a Talento Humano',0],['Acuse al candidato',0]];
+    } else if(t==='Proveedores'){
+      rDest.textContent='compras@hlingenieros.com (propuesto)';rNote.textContent='Hoy la página no tiene contacto de Compras';rResp.textContent='Compras · '+sedes[p][2];rReg.textContent='SharePoint · Proveedores';
+      steps=[['Validación y antispam',0],['Clasificación con IA (categoría)',0],['Registro en SharePoint',0],['Envío a Compras',0],['Acuse al proveedor',0]];
+    } else {
+      rDest.textContent=sedes[p][0];rNote.textContent=sedes[p][1];rResp.textContent=sedes[p][2]+' · '+f.servicio.value;rReg.textContent='SharePoint · Leads Web';
+      steps=[['Validación y antispam',0],['Clasificación con IA',0],['Registro en Leads Web',0],['Envío al buzón de la sede',0],['Aviso en Teams · Comercial',0],['Acuse con radicado',0]];
+    }
+    pipe.innerHTML='';
+    steps.forEach(function(s,i){var li=document.createElement('li');if(s[1])li.className='skip';var ii=document.createElement('i');ii.textContent=i+1;var sp=document.createElement('span');sp.textContent=s[0]+(s[1]?' · omitida':'');li.appendChild(ii);li.appendChild(sp);pipe.appendChild(li);});
+    out.textContent=idle;
+  }
+  ['change','input'].forEach(function(ev){[f.pais,f.tipo,f.servicio].forEach(function(n){n.addEventListener(ev,route);});});
+  route();
+  var timer=null;
+  document.getElementById('lead').addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!f.ok.checked){out.textContent='Falta la autorización de tratamiento de datos. Márquela para continuar.';return;}
+    if(!/^\S+@\S+\.\S+$/.test(f.correo.value)){out.textContent='El correo no tiene un formato válido. Revíselo para continuar.';return;}
+    route();clearTimeout(timer);
+    var items=[].slice.call(pipe.querySelectorAll('li')).filter(function(li){return !li.classList.contains('skip');});
+    var i=0;out.textContent='Procesando…';
+    (function next(){
+      if(i>0)items[i-1].className='done';
+      if(i<items.length){items[i].className='run';i++;timer=setTimeout(next,reduce?60:520);}
+      else{out.textContent='Simulación completa. Radicado WEB-2026-'+(Math.floor(Math.random()*9000)+1000)+'. No se envió ningún dato.';}
+    })();
+  });
+
+  /* ---------- Chat guionado ---------- */
+  var log=document.getElementById('log'),quick=document.getElementById('quick'),ctx={};
+  function addMsg(who,text,src){var d=document.createElement('div');d.className='msg '+who;d.textContent=text;if(src){var s=document.createElement('span');s.className='src';s.textContent='Fuente: '+src;d.appendChild(s);}log.appendChild(d);log.scrollTop=log.scrollHeight;}
+  function bot(text,src,opts){
+    quick.innerHTML='';
+    var ty=document.createElement('div');ty.className='typing';ty.innerHTML='<i></i><i></i><i></i>';log.appendChild(ty);log.scrollTop=log.scrollHeight;
+    setTimeout(function(){ty.remove();addMsg('a',text,src);setOpts(opts);},reduce?50:650);
+  }
+  function setOpts(opts){quick.innerHTML='';(opts||[]).forEach(function(o){var b=document.createElement('button');b.type='button';b.className='btn'+(o.pri?' pri':'');b.textContent=o.t;b.addEventListener('click',function(){addMsg('u',o.t);o.go();});quick.appendChild(b);});}
+  function goTo(id){document.getElementById(id).scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});}
+  var back={t:'Volver al inicio',go:start};
+  function start(){log.innerHTML='';ctx={};bot('Hola, soy el asistente de Grupo HL. Le oriento sobre servicios, proyectos y sedes, o dejo lista su solicitud. Si prefiere, le paso con un asesor.',null,[{t:'Cotizar un proyecto',go:cotizar},{t:'¿Qué han hecho en minería?',go:mineria},{t:'Quiero ser proveedor',go:proveedor},{t:'Hablar con un asesor',go:asesor}]);}
+  function cotizar(){bot('Con gusto. ¿En qué país está el proyecto?',null,[{t:'Colombia',go:function(){pais('Colombia');}},{t:'Panamá',go:function(){pais('Panamá');}},{t:'República Dominicana',go:function(){pais('República Dominicana');}},{t:'Otro país',go:function(){pais('Otro país');}}]);}
+  var sedeTxt={'Colombia':'la sede principal en Bogotá (Calle 127A # 53A–45, Torre 2, Of. 1002) y el patio de El Rosal','Panamá':'Operaciones Panamá (Vía Transístmica, Milla 9)','República Dominicana':'la sede de República Dominicana (Plaza Don Alfonso, Local 2A)','Otro país':'la sede principal en Bogotá, que coordina proyectos en Ecuador, Guatemala, Costa Rica y Bolivia'};
+  function pais(p){ctx.pais=p;bot('Para '+p+' le atiende '+sedeTxt[p]+'. ¿Qué alcance necesita?','Contacto · Sedes',[{t:'EPC / Llave en mano',go:function(){alc('EPC / Llave en mano');}},{t:'Montaje mecánico y tubería',go:function(){alc('Montaje mecánico y tubería');}},{t:'Obras civiles industriales',go:function(){alc('Obras civiles industriales');}}]);}
+  function alc(s){ctx.serv=s;bot('Listo. Dejé el formulario con Cotización, '+ctx.pais+' y '+s+'. Falta su nombre, empresa y una descripción. Un ingeniero comercial le responde; por este medio no doy precios ni plazos.','Servicios · '+s,[{t:'Ver el formulario',pri:true,go:irForm},back]);}
+  function irForm(){f.tipo.value='Cotización';f.pais.value=ctx.pais||'Colombia';f.servicio.value=ctx.serv||'EPC / Llave en mano';route();goTo('lead');bot('Formulario precargado más abajo en esta página.',null,[back]);}
+  function mineria(){bot('En minería, Grupo HL ejecutó Buriticá para Continental Gold (hoy Zijin Mining): 2 molinos de 550 t y 2.400 instrumentos en 18 meses. Para Cerrejón hizo Marine Works en Puerto Bolívar: 1.100 m de banda costa afuera en 7 meses.','Proyectos · Buriticá, Marine Works',[{t:'Ver proyectos de minería',pri:true,go:function(){setFilter('Minería');goTo('proyectos');bot('Filtré el explorador de proyectos por Minería.',null,[{t:'Cotizar un proyecto minero',go:cotizar},back]);}},{t:'Cotizar un proyecto',go:cotizar},back]);}
+  function proveedor(){bot('El registro de proveedores llega a Compras con su categoría. ¿Lo dejo preparado?','Proveedores',[{t:'Sí, prepararlo',pri:true,go:function(){f.tipo.value='Proveedores';route();goTo('lead');bot('Formulario de proveedores listo más abajo.',null,[back]);}},back]);}
+  function asesor(){bot('Le paso con un asesor por Zoho SalesIQ junto con esta conversación, para que no repita su caso. Fuera del horario de oficina, dejo su solicitud registrada y le responden el siguiente día hábil.','Zoho SalesIQ · traspaso a humano',[{t:'Prefiero WhatsApp',go:function(){bot('Abro WhatsApp con un mensaje prellenado para la sede que elija. El resumen de esta conversación queda en el registro.','WhatsApp',[back]);}},back]);}
+  document.getElementById('chat-reset').addEventListener('click',start);
+  start();
+
+  /* ---------- Demos de movimiento ---------- */
+  document.querySelectorAll('[data-play]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var st=document.getElementById(b.dataset.play);
+      st.classList.remove('play');void st.offsetWidth;st.classList.add('play');
+      if(b.dataset.play==='m3')countUp(document.getElementById('m3n'),58,1200,0);
+    });
+  });
+})();
+</script>
+
+</body></html>
