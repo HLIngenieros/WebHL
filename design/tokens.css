@@ -1,0 +1,141 @@
+/* ==========================================================================
+   Grupo HL · Tokens de diseño
+   Única fuente de verdad de los valores visuales. Las reglas de uso están en
+   docs/guia-visual.md. Si cambia un valor aquí, correr design/contraste.py.
+
+   Breakpoints (no pueden ser variables en @media; usar estos valores):
+     520px móvil · 640px móvil grande · 760px tableta · 900px tableta grande · 960px escritorio corto
+   ========================================================================== */
+
+:root {
+  /* ---- Paleta de marca (primitivos, no cambian con el tema) ---- */
+  --hl-azul: #0B509E;
+  --hl-grafito: #14181C;
+  --hl-concreto: #E7EAEB;
+  --hl-acero: #8A949B;
+  --hl-senal: #F2B42A;
+
+  /* ---- Roles de color · modo claro ---- */
+  --bg: #E7EAEB;           /* concreto: fondo base */
+  --paper: #F6F7F7;        /* superficies: paneles, tarjetas, campos */
+  --ink: #14181C;          /* grafito: texto principal, estructura */
+  --muted: #56606A;        /* texto secundario */
+  --steel: #8A949B;        /* acero: solo líneas e ilustración, nunca texto */
+  --line: #C2C9CD;         /* bordes y divisores */
+  --line-soft: #D7DCDF;    /* divisores internos */
+  --accent: #0B509E;       /* azul HL: enlaces, acción principal, ejes */
+  --accent-ink: #FFFFFF;   /* texto sobre --accent */
+  --accent-soft: #D6E2F1;
+  --signal: #B27900;       /* señalización: cotas, líneas y marcas, no texto */
+  --signal-ink: #805700;   /* señalización cuando es texto */
+  --signal-soft: #F5E7C2;
+  --bad: #AC4028;          /* estado: crítico, error */
+  --bad-soft: #F2DDD5;
+  --good: #2B714E;         /* estado: correcto, completado */
+  --good-soft: #D5E9DC;
+  --grid: rgba(11, 80, 158, .075); /* retícula de fondo */
+
+  color-scheme: light;
+
+  /* ---- Tipografía ---- */
+  --f: "Archivo", "Arial Narrow", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* anchos (eje wdth de Archivo) */
+  --wdth-display: 122%;    /* h1, cifras grandes */
+  --wdth-title: 115%;      /* h2, títulos de tarjeta */
+  --wdth-subtitle: 108%;   /* h3 */
+  --wdth-text: 100%;
+  --wdth-data: 72%;        /* voz de datos: rótulos, cotas, etiquetas */
+
+  /* tamaños */
+  --fs-h1: clamp(36px, 5.6vw, 68px);
+  --fs-h2: clamp(28px, 3.6vw, 44px);
+  --fs-h3: 21px;
+  --fs-stat: clamp(26px, 3.4vw, 40px);
+  --fs-lead: 17px;
+  --fs-body: 16px;
+  --fs-sm: 14.5px;
+  --fs-xs: 13px;
+  --fs-data: 12.5px;
+
+  /* pesos */
+  --fw-display: 850;
+  --fw-title: 800;
+  --fw-subtitle: 750;
+  --fw-strong: 600;
+  --fw-text: 400;
+  --fw-data: 600;
+
+  /* interlineado y tracking */
+  --lh-display: .98;
+  --lh-title: 1.05;
+  --lh-text: 1.6;
+  --ls-display: -.015em;
+  --ls-data: .07em;
+
+  /* ---- Espaciado (módulo 8px) ---- */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 16px;
+  --s4: 24px;
+  --s5: 40px;
+  --s6: 64px;
+  --s7: 104px;
+
+  /* ---- Layout ---- */
+  --wrap: 1180px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --cols: 12;
+  --bar-h: 52px;
+  --grid-cell: 24px;       /* retícula de fondo; 16px en piezas pequeñas */
+  --measure: 70ch;         /* ancho máximo de párrafo */
+
+  /* ---- Bordes y trazos ---- */
+  --radius: 0;             /* esquinas rectas en todo el sistema */
+  --border: 1px;
+  --border-strong: 1.5px;
+  --stroke-thin: 1px;
+  --stroke-mid: 1.6px;
+  --stroke-heavy: 3.2px;
+  --focus-ring: 2px solid var(--accent);
+
+  /* ---- Movimiento ---- */
+  --ease-plano: cubic-bezier(.6, .05, .25, 1);   /* trazo y cota: arranca lento, se asienta */
+  --ease-izaje: cubic-bezier(.2, .8, .2, 1);     /* carga que llega y frena */
+  --ease-barrido: cubic-bezier(.7, 0, .2, 1);    /* transición entre páginas */
+  --t-rapido: .35s;
+  --t-aparece: .8s;
+  --t-izaje: .9s;
+  --t-vista: 1.1s;
+  --t-cota: 1.2s;
+  --t-trazo: 1.4s;
+}
+
+/* ---- Roles de color · modo oscuro ---- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1113; --paper: #15191C; --ink: #E5E9EB; --muted: #959FA7;
+    --steel: #5E6870; --line: #2D3439; --line-soft: #21272B;
+    --accent: #62A0EC; --accent-ink: #08131F; --accent-soft: #15263B;
+    --signal: #F2B42A; --signal-ink: #F2B42A; --signal-soft: #3A2F12;
+    --bad: #E2816A; --bad-soft: #3A1E17; --good: #68B98A; --good-soft: #14291D;
+    --grid: rgba(98, 160, 236, .08);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1113; --paper: #15191C; --ink: #E5E9EB; --muted: #959FA7;
+  --steel: #5E6870; --line: #2D3439; --line-soft: #21272B;
+  --accent: #62A0EC; --accent-ink: #08131F; --accent-soft: #15263B;
+  --signal: #F2B42A; --signal-ink: #F2B42A; --signal-soft: #3A2F12;
+  --bad: #E2816A; --bad-soft: #3A1E17; --good: #68B98A; --good-soft: #14291D;
+  --grid: rgba(98, 160, 236, .08);
+  color-scheme: dark;
+}
+
+/* ---- Movimiento reducido: duraciones a cero ---- */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-rapido: 0s; --t-aparece: 0s; --t-izaje: 0s; --t-vista: 0s; --t-cota: 0s; --t-trazo: 0s;
+  }
+}

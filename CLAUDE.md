@@ -41,24 +41,15 @@ Meta: Lighthouse ≥ 90 en móvil. Descartadas: HTML+Tailwind a mano (no escala)
 Alternativa si se prefiere React puro: Next.js.
 
 ### Identidad: "concreto, acero y plano"
-Lenguaje de plano técnico: retícula de 12 columnas sobre módulo de 8 px, ejes con burbuja, cotas,
-rótulos de plano, línea estructural.
+**La referencia obligatoria es [docs/guia-visual.md](docs/guia-visual.md); los valores viven en
+[design/tokens.css](design/tokens.css).** No escribir colores, tamaños ni curvas a mano: usar tokens.
+Si se cambia un color, correr `python design/contraste.py`, que debe terminar en OK.
 
-| Token | Color | Uso |
-|---|---|---|
-| Azul HL | `#0B509E` | Único azul de marca (se retiran `#1e73be` y `#001b74`) |
-| Grafito | `#14181C` | Texto, estructura, líneas |
-| Concreto | `#E7EAEB` | Fondo base |
-| Acero | `#8A949B` | Secundarios y divisiones |
-| Señalización | `#F2B42A` | Acento: cotas, HSE, cifras clave |
-
-Tipografía: **una sola familia, Archivo** (variable, eje `wdth`), en tres anchos: expandida para
-títulos, normal para texto, condensada para datos/cotas. Modo oscuro definido en la propuesta.
-Logo: pasar a SVG (positivo, negativo, monocromo). Fotografía real de obra, con pie (proyecto y año).
-
-Movimiento: Trazo (SVG que se dibuja), Izaje (bloques suben con desaceleración), Cota (cifras
-animadas pero **ya escritas en el HTML**), transición de vista. GSAP + ScrollTrigger, Motion, Lenis.
-Respetar `prefers-reduced-motion`; nunca preloader; zoom permitido (WCAG 1.4.4).
+En resumen: lenguaje de plano técnico (retícula de 12 columnas, módulo de 8 px, ejes con burbuja,
+cotas, rótulo de plano, línea estructural). Un azul (`#0B509E`), un acento de señalización, neutros
+(grafito, concreto, acero). Una familia, Archivo, en tres voces: expandida, normal y condensada (los
+datos van en mayúsculas). Radio 0 y sin sombras. Modo claro y oscuro. Movimiento: Trazo, Izaje, Cota y
+Transición de vista; sin preloader, cifras escritas en el HTML, respeta reduced-motion y permite zoom.
 
 ### Arquitectura de información
 - Menú comercial: Inicio · Proyectos (explorador por sector/servicio/país + mapa) · Sectores ·
@@ -142,6 +133,8 @@ fotos recientes de obra; lista vigente de empresas del grupo; acceso a Zoho Page
   según avance el desarrollo. Al cerrar cada etapa se hace su commit. Si se trabajó en una rama, se
   hace merge fast-forward a `main` y se borra la rama. Registro de etapas:
   - Etapa 0 (2026-10-13): análisis de diagnóstico y propuesta, CLAUDE.md, init del repo → commit `34c9328`.
+  - Etapa 1 (2026-10-13): guía visual base (`docs/guia-visual.md`), `design/tokens.css` y
+    `design/contraste.py`.
 - No usar prettier.
 - El repo se gestiona con GitHub Desktop.
 - `desktop.ini` (OneDrive) está ignorado en git.
