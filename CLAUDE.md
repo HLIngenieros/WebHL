@@ -52,6 +52,12 @@ datos van en mayúsculas). Radio 0 y sin sombras. Modo claro y oscuro. Movimient
 Transición de vista; sin preloader, cifras escritas en el HTML, respeta reduced-motion y permite zoom.
 
 ### Arquitectura de información
+- **En discusión (14-oct):** Juan David propuso esta jerarquía, que difiere de la propuesta y se
+  resolverá al armar el camino por fases: 1 Home · 2 Historia/Nosotros (línea del tiempo dinámica;
+  2.1 Visión, misión y valores; 2.2 Sistema de Gestión Integral) · 3 Proyectos (clientes, cifras; 3.1
+  Servicios/áreas de impacto; 3.2 Presencia) · 4 Contacto (4.1 Asistente virtual; 4.2 Redes) · 5 Datos
+  y políticas · 6 Empresas asociadas (ECOHL…) · 7 Noticias (7.1 Proyectos adjudicados; 7.2 Trabaje con
+  nosotros). [contenido/](contenido/) ya está ordenado según esta jerarquía.
 - Menú comercial: Inicio · Proyectos (explorador por sector/servicio/país + mapa) · Sectores ·
   Servicios · HSE · Nosotros · Contacto.
 - Servicios (de 9 a 7 líneas en 3 grupos):
@@ -108,9 +114,11 @@ de 5+ fotos con pie.
 
 ## Insumos que debe aportar HL (pendientes)
 Manual de marca / logos vectoriales; proyectos 2020-2026 (cliente, año, alcance, cifras); año de los
-16 casos y aclaración de cifras de Columbus (web: 42 meses, 8.300 t estructura, 18.600 t equipos vs.
-PDF ECOHL: 18 meses, 12.000 t, 10.500 t); certificaciones vigentes en PDF; indicadores HSE de 3 años;
-fotos recientes de obra; lista vigente de empresas del grupo; acceso a Zoho PageSense y Search Console.
+16 casos y confirmación de cifras de Columbus (web: 42 meses, 8.300 t estructura, 18.600 t equipos vs.
+PDF ECOHL: 18 meses, 12.000 t, 10.500 t; el PDF habla de *fabricación*, así que probablemente son
+alcances distintos); certificaciones vigentes en PDF; indicadores HSE de 3 años; fotos recientes de
+obra; lista vigente de empresas del grupo; acceso a Zoho PageSense y Search Console. Lista detallada
+en [contenido/README.md](contenido/README.md).
 
 ## Datos de referencia
 - 58 años (desde 1968; calcular dinámicamente, nunca fijo), 7 países con obra, 4 sedes (Bogotá,
@@ -135,6 +143,9 @@ fotos recientes de obra; lista vigente de empresas del grupo; acceso a Zoho Page
   - Etapa 0 (2026-10-13): análisis de diagnóstico y propuesta, CLAUDE.md, init del repo → commit `34c9328`.
   - Etapa 1 (2026-10-13): guía visual base (`docs/guia-visual.md`), `design/tokens.css` y
     `design/contraste.py`.
+  - Etapa 2 (2026-10-14): extracción del contenido del sitio actual en `contenido/` (16 fichas,
+    textos institucionales, inventario de URLs con destino 301/410, medios, PDF de ECOHL).
 - No usar prettier.
+- Mantener pocos directorios y archivos: la información va primero, la estructura después.
 - El repo se gestiona con GitHub Desktop.
 - `desktop.ini` (OneDrive) está ignorado en git.
