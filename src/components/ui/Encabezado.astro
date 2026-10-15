@@ -6,7 +6,7 @@ const { codigo, titulo, entrada, nivel = 2, medida } = Astro.props;
 const H = nivel === 1 ? 'h1' : 'h2';
 ---
 <header class="encabezado">
-  <span class="lamina voz-datos">{codigo}</span>
+  <span class="codigo-lamina voz-datos">{codigo}</span>
   <div>
     {Astro.slots.has('pod') && <div class="pod"><slot name="pod" /></div>}
     <H class="titulo">{titulo}</H>
@@ -24,7 +24,7 @@ const H = nivel === 1 ? 'h1' : 'h2';
 <style>
   .encabezado { display: grid; grid-template-columns: auto 1fr; gap: var(--s3) var(--s4); align-items: start; }
   .pod { margin-bottom: var(--s3); }
-  .lamina { color: var(--sec); border: var(--border) solid var(--sec); padding: 2px 7px; margin-top: .5em; }
+  .codigo-lamina { color: var(--sec); border: var(--border) solid var(--sec); padding: 2px 7px; margin-top: .5em; }
   .lead { margin: var(--s3) 0 0; }
   .cota { position: relative; height: 20px; margin-top: var(--s4); max-width: 520px; }
   .cota-linea { position: absolute; inset: 4px 0 auto; width: 100%; height: 12px; overflow: visible; }
@@ -45,6 +45,6 @@ const H = nivel === 1 ? 'h1' : 'h2';
 
   @media (max-width: 519.98px) {
     .encabezado { grid-template-columns: 1fr; }
-    .lamina { justify-self: start; margin-top: 0; }
+    .codigo-lamina { justify-self: start; margin-top: 0; }
   }
 </style>
