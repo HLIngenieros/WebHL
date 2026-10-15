@@ -232,6 +232,60 @@
   .ley-sede::before { content: ''; width: 9px; height: 9px; background: var(--signal); }
 }
 
+/* ---- Explorador de proyectos (isla de React: sus estilos viven aquí) ---- */
+@layer components {
+  .explorador > * + * { margin-top: var(--s5); }
+  .explorador-cab { display: grid; gap: var(--s5); align-items: start; }
+  @media (min-width: 900px) { .explorador-cab { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); } }
+  .filtros-titulo { margin: 0 0 var(--s3); color: var(--muted); }
+  .panel-filtros { display: grid; gap: var(--s4); }
+  .grupo-filtro { margin: 0; padding: 0; border: 0; min-width: 0; }
+  .grupo-filtro legend { padding: 0; margin-bottom: var(--s2); color: var(--muted); }
+  .opciones { display: flex; flex-wrap: wrap; gap: var(--s1); }
+  .filtro {
+    display: inline-flex; align-items: center; gap: var(--s2); min-height: 36px; padding: 4px 10px;
+    background: var(--paper); color: var(--ink); border: var(--border) solid var(--line); cursor: pointer;
+    font: inherit; font-size: var(--fs-sm); transition: background-color var(--t-rapido) ease, border-color var(--t-rapido) ease;
+  }
+  .filtro:hover:not(:disabled) { border-color: var(--ink); }
+  .filtro[aria-pressed='true'] { background: var(--sec-soft); color: var(--sec); border-color: var(--sec); font-weight: var(--fw-strong); box-shadow: inset 0 -2px var(--sec); }
+  .filtro:disabled { cursor: not-allowed; color: var(--muted); background: transparent; border-style: dashed; }
+  .filtro .conteo { color: var(--muted); font-variant-numeric: tabular-nums; font-size: var(--fs-data); }
+  .filtro[aria-pressed='true'] .conteo { color: var(--sec); }
+  .explorador-barra {
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s3);
+    padding-bottom: var(--s2); border-bottom: var(--border) solid var(--line);
+  }
+  .contador { margin: 0 auto 0 0; color: var(--sec); }
+  .abrir-filtros, .quitar {
+    min-height: 44px; padding: 0 var(--s3); background: var(--paper); color: var(--ink);
+    border: var(--border) solid var(--ink); cursor: pointer; font-family: inherit;
+  }
+  .quitar { border-color: var(--line); }
+  .ver-n {
+    min-height: 44px; padding: 0 var(--s4); background: var(--sec); color: var(--sec-ink); border: 0; cursor: pointer;
+    font: inherit; font-weight: var(--fw-boton);
+  }
+  .filtros-inline { display: none; }
+  @media (min-width: 900px) {
+    html.js .filtros-inline { display: block; }
+    .abrir-filtros { display: none; }
+  }
+  html:not(.js) .abrir-filtros, html:not(.js) .quitar { display: none; }
+  /* Hoja inferior (móvil): entra desde abajo con transform */
+  .hoja-filtros {
+    width: 100%; max-width: none; max-height: 85vh; margin: auto 0 0; padding: var(--s4) var(--gutter) var(--s5);
+    box-sizing: border-box; border: 0; border-top: var(--border-strong) solid var(--ink); background: var(--bg); color: var(--ink);
+    transform: none; transition: transform var(--t-aparece) var(--ease-izaje), display var(--t-aparece) allow-discrete, overlay var(--t-aparece) allow-discrete;
+  }
+  .hoja-filtros:not([open]) { transform: translateY(100%); }
+  @starting-style { .hoja-filtros[open] { transform: translateY(100%); } }
+  .hoja-filtros::backdrop { background: color-mix(in srgb, var(--ink) 55%, transparent); }
+  .hoja-filtros .ver-n { width: 100%; margin-top: var(--s4); }
+  .sin-resultados { display: grid; gap: var(--s3); justify-items: start; padding: var(--s5); background: var(--paper); border: var(--border) dashed var(--line); }
+  .sin-resultados p { margin: 0; }
+}
+
 /* ---- Movimiento (guía §9) ---- */
 @layer components {
   /* Aparece: texto de primera pantalla; solo CSS, arranca con el primer pintado y no depende del JS */

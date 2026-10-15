@@ -1,0 +1,48 @@
+---
+// Explorador de proyectos (especificación §5). La lista completa va en el HTML; la isla agrega filtros,
+// reacomodo y mapa interactivo cuando el navegador está libre (client:idle).
+import Base from '../layouts/Base.astro';
+import Encabezado from '../components/ui/Encabezado.astro';
+import Pod from '../components/Pod.astro';
+import Explorador from '../components/Explorador';
+import { cargar, tarjetas } from '../lib/datos';
+import { bloque, paraExplorador, txt, type Entrada, type Proyecto } from '../lib/contenido';
+import { proyectar, puntosDe } from '../lib/mapa';
+import { PAISES, t, tn } from '../i18n/ui';
+import type { Lang } from '../i18n/rutas';
+
+interface Props { lang: Lang; alterno: string }
+const { lang, alterno } = Astro.props;
+const { datos } = await cargar();
+const todas = await tarjetas(paraExplorador(datos.proyectos as unknown as Entrada<Proyecto>[]), lang);
+
+const nombre = (d: { es: { nombre: string }; en?: { nombre: string } }) => bloque(d, lang).nombre;
+const servicios = [...datos.servicios].sort((a, b) => a.data.grupo.localeCompare(b.data.grupo) || a.data.orden - b.data.orden);
+const sectores = [...datos.sectores].sort((a, b) => a.data.orden - b.data.orden);
+const paises = [...new Set(todas.flatMap((x) => (x.pais ? [x.pais] : [])))];
+const opciones = {
+  servicio: servicios.map((s) => ({ valor: s.data.slug[lang], nombre: nombre(s.data) })),
+  sector: sectores.map((s) => ({ valor: s.data.slug[lang], nombre: nombre(s.data) })),
+  pais: paises.map((p) => ({ valor: p, nombre: PAISES[p.toUpperCase()][lang] })).sort((a, b) => a.nombre.localeCompare(b.nombre, lang)),
+};
+const mapa = {
+  paises,
+  puntos: puntosDe(todas.map((x) => ({ coordenadas: x.coordenadas, titulo: x.titulo, pais: x.pais }))),
+  sedes: datos.sedes.map((s) => {
+    const [x, y] = proyectar(s.data.coordenadas);
+    return { x, y, etiqueta: `${txt(s.data.nombre, lang)} · ${s.data.ciudad}` };
+  }),
+};
+---
+<Base titulo={t(lang, 'proyectos')} descripcion={t(lang, 'proyectosEntrada')} lang={lang} alterno={alterno}>
+  <div class="wrap proyectos pila">
+    <Encabezado nivel={1} titulo={t(lang, 'proyectos')} entrada={t(lang, 'proyectosEntrada')} medida={tn(lang, 'nProyectos', todas.length)}>
+      <Pod slot="pod" forma="rotulo" codigo="L-02" nombre={t(lang, 'proyectos')} />
+    </Encabezado>
+    <Explorador client:idle lang={lang} tarjetas={todas} opciones={opciones} mapa={mapa} />
+  </div>
+</Base>
+
+<style>
+  .proyectos { --pila: var(--s6); padding-block: var(--s5) var(--s7); }
+</style>

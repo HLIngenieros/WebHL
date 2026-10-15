@@ -312,3 +312,84 @@ test.describe('mapa de presencia', () => {
     expect(t.filter((v) => v !== 'none')).toEqual([]);
   });
 });
+
+test.describe('explorador de proyectos', () => {
+  const DISCRETAS = ['patio-de-carbon-estrella', 'tanques-cobre-panama'];
+  const hidratado = (page: import('@playwright/test').Page) => page.waitForSelector('astro-island:not([ssr])', { state: 'attached' });
+  const visibles = (page: import('@playwright/test').Page) => page.locator('.explorador .tarjeta:visible');
+  const boton = (page: import('@playwright/test').Page, dim: string, valor: string) =>
+    page.locator(`.filtros-inline [data-dim="${dim}"] button[data-valor="${valor}"]`);
+
+  test.describe('sin JavaScript', () => {
+    test.use({ javaScriptEnabled: false });
+    test('(foco 5) se ven las 22 tarjetas y no hay filtros muertos; las discretas van al final', async ({ page }) => {
+      await page.goto('/proyectos/');
+      await expect(visibles(page)).toHaveCount(22);
+      await expect(page.locator('.filtros-inline')).toBeHidden();
+      await expect(page.locator('.abrir-filtros')).toBeHidden();
+      const ids = await page.locator('.explorador .tarjeta').evaluateAll((xs) => xs.map((x) => x.getAttribute('data-id')));
+      expect(ids.slice(-2).sort()).toEqual([...DISCRETAS].sort());
+    });
+  });
+
+  test('filtrar por sector marca el botón, cambia la URL y la lista', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 900 });
+    await page.goto('/proyectos/');
+    await hidratado(page);
+    await boton(page, 'sector', 'mineria').click();
+    await expect(boton(page, 'sector', 'mineria')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page).toHaveURL(/\?sector=mineria$/);
+    await expect(visibles(page)).toHaveCount(4);
+    await expect(page.locator('.contador')).toContainText('4');
+  });
+
+  test('en inglés el filtro usa el slug EN', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 900 });
+    await page.goto('/en/projects/');
+    await hidratado(page);
+    await boton(page, 'sector', 'mining').click();
+    await expect(page).toHaveURL(/\?sector=mining$/);
+  });
+
+  test('la URL llega filtrada y los valores desconocidos se ignoran', async ({ page }) => {
+    await page.goto('/proyectos/?sector=cemento&servicio=fabricacion');
+    await hidratado(page);
+    await expect(visibles(page)).toHaveCount(1);
+    await page.goto('/proyectos/?sector=nada');
+    await hidratado(page);
+    await expect(visibles(page)).toHaveCount(22);
+  });
+
+  test('(foco 5) sin resultados aparece "Quitar filtros" y devuelve las 22', async ({ page }) => {
+    await page.goto('/proyectos/?sector=infraestructura&servicio=fabricacion');
+    await hidratado(page);
+    await expect(visibles(page)).toHaveCount(0);
+    await page.locator('.sin-resultados button').click();
+    await expect(visibles(page)).toHaveCount(22);
+    await expect(page).toHaveURL(/\/proyectos\/$/);
+  });
+
+  test('clic en Panamá en el mapa filtra por país', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 900 });
+    await page.goto('/proyectos/');
+    await hidratado(page);
+    await page.locator('.explorador path.con-obra[data-pais="pa"]').click({ force: true });
+    await expect(page).toHaveURL(/\?pais=pa$/);
+    await expect(visibles(page)).toHaveCount(1);
+  });
+
+  test('(foco 5) en móvil los filtros van en una hoja que atrapa y devuelve el foco', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/proyectos/');
+    await hidratado(page);
+    await expect(page.locator('.filtros-inline')).toBeHidden();
+    const abrir = page.locator('.abrir-filtros');
+    await abrir.click();
+    const hoja = page.locator('dialog.hoja-filtros');
+    await expect(hoja).toHaveAttribute('open', '');
+    expect(await page.evaluate(() => !!document.activeElement?.closest('dialog.hoja-filtros'))).toBe(true);
+    await page.keyboard.press('Escape');
+    await expect(hoja).not.toHaveAttribute('open', '');
+    await expect(abrir).toBeFocused();
+  });
+});

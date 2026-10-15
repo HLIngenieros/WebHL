@@ -27,6 +27,12 @@ export function modulosDe(html) {
   for (const m of contenido.matchAll(/<script[^>]*\ssrc=["']([^"']+)["']/g)) {
     pendientes.push(resolve(DIST, '.' + sinQuery(m[1])));
   }
+  // Islas: el componente, su renderizador (React) y lo que corra antes de hidratar.
+  for (const m of contenido.matchAll(/<astro-island[^>]*>/g)) {
+    for (const u of m[0].matchAll(/\s(?:component|renderer|before-hydration)-url="([^"]+)"/g)) {
+      if (u[1]) pendientes.push(resolve(DIST, '.' + sinQuery(u[1])));
+    }
+  }
   for (const m of contenido.matchAll(/<script(?![^>]*\ssrc=)[^>]*>([\s\S]*?)<\/script>/g)) {
     for (const i of importsDe(m[1])) pendientes.push(resolve(DIST, '.' + (i.startsWith('/') ? i : '/' + i)));
   }

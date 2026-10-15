@@ -8,6 +8,7 @@ import Nota from '../components/ui/Nota.astro';
 import { cargar, rutasDeContenido, type PropsContenido } from '../lib/datos';
 import { bloque } from '../lib/contenido';
 import Ficha from '../plantillas/Ficha.astro';
+import Proyectos from '../plantillas/Proyectos.astro';
 
 export async function getStaticPaths() {
   // getStaticPaths corre aislado del resto del archivo: sus constantes van aquí dentro.
@@ -43,6 +44,8 @@ if ('tipo' in props) {
 ---
 {'tipo' in props && props.tipo === 'ficha' ? (
   <Ficha id={props.id!} lang={lang} alterno={props.alterno} />
+) : 'tipo' in props && props.tipo === 'proyectos' ? (
+  <Proyectos lang={lang} alterno={props.alterno} />
 ) : (
   <Base titulo={titulo} lang={lang} alterno={alterno}>
     <section class="wrap py-s7">
