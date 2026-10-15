@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Barra from '../components/Barra.astro';
 import Pie from '../components/Pie.astro';
 import Contacto from '../components/Contacto.astro';
+import { ClientRouter } from 'astro:transitions';
 import { par, type Lang } from '../i18n/rutas';
 import { t } from '../i18n/ui';
 
@@ -20,9 +21,16 @@ const aqui = Astro.url.pathname;
 const otra = alterno ?? par(aqui);
 const abs = (p: string) => new URL(p, Astro.site).href;
 const [es, en] = lang === 'es' ? [aqui, otra] : [otra, aqui];
+
+// Transición de vista (guía §9): el contenido entra por barrido lateral; barra y contacto quedan quietos.
+const fase = (name: string) => ({ name, duration: 'var(--t-vista)', easing: 'var(--ease-barrido)', fillMode: 'both' });
+const barrido = {
+  forwards: { old: fase('vista-sale'), new: fase('vista-entra') },
+  backwards: { old: fase('vista-sale-atras'), new: fase('vista-entra-atras') },
+};
 ---
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} transition:animate="none">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -43,16 +51,19 @@ const [es, en] = lang === 'es' ? [aqui, otra] : [otra, aqui];
         }
         aplicar(document.documentElement);
         document.addEventListener('astro:before-swap', function (e) { aplicar(e.newDocument.documentElement); });
+        setTimeout(function () { if (!window.__revela) document.documentElement.classList.add('sin-revela'); }, 2000);
       })();
     </script>
+    <ClientRouter />
   </head>
   <body>
     <a class="saltar" href="#contenido">{t(lang, 'saltar')}</a>
     <Barra lang={lang} alterno={alterno} />
-    <main id="contenido">
+    <main id="contenido" transition:name="contenido" transition:animate={barrido}>
       <slot />
     </main>
     <Pie lang={lang} />
     <Contacto lang={lang} />
+    <script>import '../scripts/revela.ts';</script>
   </body>
 </html>

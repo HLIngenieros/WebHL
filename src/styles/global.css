@@ -95,3 +95,23 @@
   .saltar { position: absolute; left: var(--s3); top: -100px; z-index: 100; padding: var(--s2) var(--s3); background: var(--accent); color: var(--accent-ink); }
   .saltar:focus { top: var(--s3); }
 }
+
+/* ---- Movimiento (guía §9) ---- */
+@layer components {
+  html.js .izaje:not(.visible) { opacity: 0; transform: translateY(24px); }
+  html.js .aparece:not(.visible) { opacity: 0; transform: translateY(6px); }
+  html.js .izaje, html.js .aparece {
+    transition: opacity var(--t-izaje) var(--ease-izaje), transform var(--t-izaje) var(--ease-izaje);
+    transition-delay: calc(var(--i, 0) * 60ms);
+  }
+  html.js .aparece { transition-duration: var(--t-aparece); }
+  html.sin-revela .izaje:not(.visible), html.sin-revela .aparece:not(.visible) { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    html.js .izaje, html.js .aparece { opacity: 1; transform: none; transition: none; }
+  }
+}
+
+@keyframes vista-entra { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0 0 0 0); } }
+@keyframes vista-sale { to { opacity: .4; transform: translateX(-32px); } }
+@keyframes vista-entra-atras { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes vista-sale-atras { to { opacity: .4; transform: translateX(32px); } }

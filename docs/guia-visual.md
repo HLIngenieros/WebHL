@@ -413,8 +413,10 @@ hay preloader**, y todo el contenido existe en el HTML aunque el JavaScript fall
 - **Navegación casi instantánea:** precarga al pasar el cursor o al entrar el enlace en pantalla
   (Astro prefetch) y Speculation Rules en Chromium.
 - **Desplazamiento nativo.** Sin Lenis ni scroll suave por librería.
-- Herramientas: CSS primero (`animation-timeline: view()` con un respaldo de ~1 KB); Motion solo en el
-  explorador de proyectos; GSAP solo si una secuencia lo exige, cargado en esa página.
+- Herramientas: las entradas (Izaje, Aparece, Cota) usan un IntersectionObserver de ~1 KB: se disparan
+  una vez, con la duración y la curva de los tokens. `animation-timeline: view()` se reserva para efectos
+  que deben seguir al scroll. Motion solo en el explorador de proyectos; GSAP solo si una secuencia lo
+  exige, cargado en esa página.
 
 ---
 

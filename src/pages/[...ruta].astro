@@ -18,7 +18,7 @@ const titulo = clave === 'inicio' ? 'HL Ingenieros' : t(lang, clave);
 ---
 <Base titulo={titulo} lang={lang}>
   <section class="wrap py-s7">
-    <h1>{titulo}</h1>
-    <p class="lead mt-s4">{t(lang, 'construccion')}</p>
+    <h1 class="aparece">{titulo}</h1>
+    <p class="lead mt-s4 aparece" style="--i:1">{t(lang, 'construccion')}</p>
   </section>
 </Base>
