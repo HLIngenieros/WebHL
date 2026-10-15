@@ -50,3 +50,19 @@ test('el campo con error lo anuncia con aria-describedby', async ({ page }) => {
   const id = await campo.getAttribute('aria-describedby');
   await expect(page.locator(`#${id}`)).not.toBeEmpty();
 });
+
+for (const width of [360, 1366, 1920, 2560]) {
+  test(`a ${width} px ninguna cifra destacada se sale de su celda`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/muestra/');
+    const desbordes = await page.evaluate(() =>
+      [...document.querySelectorAll('.cifras > div')].filter((celda) => {
+        const c = celda.getBoundingClientRect();
+        const v = celda.querySelector('dd')!;
+        const r = document.createRange(); r.selectNodeContents(v);
+        const t = r.getBoundingClientRect();
+        return t.right > c.right - 8 || t.left < c.left;
+      }).length);
+    expect(desbordes).toBe(0);
+  });
+}

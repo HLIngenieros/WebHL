@@ -251,7 +251,9 @@ La voz de datos es la firma del sistema: es como se escriben las cotas en un pla
   Bajo 900 px todo pasa a una columna.
 - **Ritmo vertical:** secciones separadas por `--s7`; encabezado de sección a contenido `--s5`;
   dentro de tarjetas `--s3`/`--s4`.
-- **Breakpoints:** 520 · 640 · 760 · 900 · 960 · 1280 · 1600 px (enfoque móvil primero).
+- **Breakpoints:** 520 · 640 · 760 · 900 · 960 · 1100 (menú completo) · 1600 · 2200 px (enfoque móvil
+  primero). Desde 1600 px `--wrap` pasa a 1360 px y desde 2200 px a 1600 px; títulos, cifras y texto
+  crecen con ellos (valores en `tokens.css`).
 - **Igual de impactante en cualquier pantalla.** Cada formato se diseña, no solo se apila:
   - **Móvil:** menú a pantalla completa con animación; "Hablar con HL" en una barra inferior al alcance
     del pulgar; filtros del explorador en hoja inferior; el rótulo de plano pasa a 2 columnas y las

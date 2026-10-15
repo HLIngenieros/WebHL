@@ -176,6 +176,11 @@ en [contenido/README.md](contenido/README.md).
     textos institucionales, inventario de URLs con destino 301/410, medios, PDF de ECOHL).
   - Etapa 3 (2026-10-15): decisiones D1, D4, D5 y D6; especificación aprobada por secciones
     (`docs/especificacion.md`); guía visual v1.1 (movimiento, rendimiento, pantallas).
+  - Etapa 4 (2026-10-15): F0 · Base ([docs/plan-f0.md](docs/plan-f0.md)). Astro 7.3 + Tailwind 4.3 con los
+    tokens, rutas ES/EN emparejadas (barra final), barra y menú móvil, pie con rótulo, "Hablar con HL",
+    transiciones y revelado, componentes base y `/muestra/` (se elimina en F6). 113 pruebas Playwright
+    (`npm test`), `npm run presupuesto` (JS del inicio 5,3 KB gz) y Lighthouse móvil 100/100/100/100
+    (LCP 1,7 s, CLS 0, TBT 0). Comandos: `npm run dev`, `npm run build`, `npm test`, `npm run check`.
 - No usar prettier.
 - Mantener pocos directorios y archivos: la información va primero, la estructura después.
 - El repo se gestiona con GitHub Desktop.

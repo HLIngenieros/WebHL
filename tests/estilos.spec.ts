@@ -34,3 +34,22 @@ test('no hay peticiones a dominios externos', async ({ page }) => {
   await page.waitForLoadState('networkidle');
   expect(externas).toEqual([]);
 });
+
+test('en pantallas grandes el contenido y los títulos crecen', async ({ page }) => {
+  await page.setViewportSize({ width: 2560, height: 1440 });
+  await page.goto('/muestra/');
+  const m = await page.evaluate(() => ({
+    ancho: document.querySelector('main .wrap')!.getBoundingClientRect().width,
+    h1: parseFloat(getComputedStyle(document.querySelector('h1')!).fontSize),
+    cuerpo: parseFloat(getComputedStyle(document.body).fontSize),
+  }));
+  expect(m.ancho).toBeGreaterThanOrEqual(1500);
+  expect(m.h1).toBeGreaterThan(90);
+  expect(m.cuerpo).toBeGreaterThanOrEqual(18);
+});
+
+test('a 1366 px la escala base no cambia', async ({ page }) => {
+  await page.setViewportSize({ width: 1366, height: 800 });
+  await page.goto('/muestra/');
+  expect(await page.evaluate(() => parseFloat(getComputedStyle(document.querySelector('h1')!).fontSize))).toBe(68);
+});

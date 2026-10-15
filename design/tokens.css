@@ -5,6 +5,7 @@
 
    Breakpoints (no pueden ser variables en @media; usar estos valores):
      520px móvil · 640px móvil grande · 760px tableta · 900px tableta grande · 960px escritorio corto
+     · 1100px menú completo · 1600px y 2200px pantallas grandes
    ========================================================================== */
 
 :root {
@@ -109,6 +110,21 @@
   --t-vista: .5s;
   --t-cota: 1.2s;
   --t-trazo: 1.4s;
+}
+
+/* ---- Pantallas grandes: más ancho útil y tipografía de display que sigue creciendo (guía §5) ---- */
+@media (min-width: 1600px) {
+  :root {
+    --wrap: 1360px;
+    --fs-h1: clamp(68px, 4.4vw, 112px);
+    --fs-h2: clamp(44px, 2.6vw, 64px);
+    --fs-stat: clamp(40px, 2.4vw, 60px);
+    --fs-lead: 19px;
+    --fs-body: 17px;
+  }
+}
+@media (min-width: 2200px) {
+  :root { --wrap: 1600px; --fs-lead: 21px; --fs-body: 18px; --fs-sm: 15.5px; --fs-data: 13.5px; }
 }
 
 /* ---- Roles de color · modo oscuro ---- */
