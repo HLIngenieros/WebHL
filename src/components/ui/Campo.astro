@@ -1,6 +1,6 @@
 ---
 // Campo de formulario (guía §7): etiqueta siempre visible y línea de escritura inferior.
-interface Props { etiqueta: string; nombre: string; tipo?: string; requerido?: boolean; error?: string; autocompletar?: string }
+interface Props { etiqueta: string; nombre: string; tipo?: 'text' | 'email' | 'tel' | 'textarea'; requerido?: boolean; error?: string; autocompletar?: HTMLInputElement['autocomplete'] }
 const { etiqueta, nombre, tipo = 'text', requerido = false, error, autocompletar } = Astro.props;
 const id = `campo-${nombre}`;
 ---
