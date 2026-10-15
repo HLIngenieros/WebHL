@@ -1,0 +1,20 @@
+---
+// Tabla (guía §7): en móvil se desplaza dentro de su caja, nunca la página.
+interface Props { titulo: string }
+const { titulo } = Astro.props;
+---
+<div class="tabla" role="region" aria-label={titulo} tabindex="0">
+  <table><caption class="sr-only">{titulo}</caption><slot /></table>
+</div>
+
+<style>
+  .tabla { overflow-x: auto; border-top: var(--border-strong) solid var(--ink); }
+  table { width: 100%; min-width: 520px; border-collapse: collapse; font-size: var(--fs-sm); font-variant-numeric: tabular-nums; }
+  .tabla :global(th) {
+    text-align: left; padding: var(--s2) var(--s3); color: var(--muted);
+    font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: var(--fs-data);
+    letter-spacing: var(--ls-data); text-transform: uppercase;
+  }
+  .tabla :global(td) { padding: var(--s2) var(--s3); border-top: var(--border) solid var(--line-soft); }
+  .tabla :global(td.num), .tabla :global(th.num) { text-align: right; }
+</style>

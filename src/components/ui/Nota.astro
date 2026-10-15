@@ -1,0 +1,12 @@
+---
+// Nota (guía §7): aclaraciones y avisos no críticos.
+---
+<aside class="nota"><slot /></aside>
+
+<style>
+  .nota {
+    max-width: var(--measure); padding: var(--s3) var(--s4); background: var(--paper);
+    border-left: 3px solid var(--signal); color: var(--muted); font-size: var(--fs-sm);
+  }
+  .nota :global(strong) { color: var(--ink); }
+</style>

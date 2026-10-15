@@ -1,0 +1,26 @@
+---
+// Botón (guía §7). Una acción primaria por vista.
+interface Props { variante?: 'primario' | 'secundario' | 'datos'; href?: string; type?: 'button' | 'submit' }
+const { variante = 'primario', href, type = 'button' } = Astro.props;
+const Tag = href ? 'a' : 'button';
+---
+<Tag class:list={['boton', variante]} href={href} type={href ? undefined : type}><slot /></Tag>
+
+<style>
+  .boton {
+    display: inline-flex; align-items: center; gap: var(--s2); min-height: 44px; box-sizing: border-box;
+    padding: 7px 16px; border: var(--border) solid; font: inherit; font-size: 14px; font-weight: 550;
+    text-decoration: none; cursor: pointer;
+    transition: background-color var(--t-rapido) ease, color var(--t-rapido) ease, filter var(--t-rapido) ease;
+  }
+  .primario { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .primario:hover { filter: brightness(1.08); }
+  .secundario { background: transparent; color: var(--ink); border-color: var(--ink); }
+  .secundario:hover { background: var(--ink); color: var(--bg); }
+  .datos {
+    min-height: 32px; padding: 5px 9px; background: var(--paper); color: var(--ink); border-color: var(--line);
+    font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: var(--fs-data);
+    letter-spacing: var(--ls-data); text-transform: uppercase;
+  }
+  .datos:hover { border-color: var(--ink); }
+</style>

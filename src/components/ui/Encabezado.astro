@@ -1,0 +1,47 @@
+---
+// Encabezado de sección (guía §6): código de lámina + título + entrada + cota que se mide al entrar.
+interface Props { codigo: string; titulo: string; entrada?: string; nivel?: 1 | 2; medida?: string }
+const { codigo, titulo, entrada, nivel = 2, medida } = Astro.props;
+const H = nivel === 1 ? 'h1' : 'h2';
+---
+<header class="encabezado">
+  <span class="lamina voz-datos">{codigo}</span>
+  <div>
+    <H class="titulo">{titulo}</H>
+    {entrada && <p class="lead">{entrada}</p>}
+    <div class="cota" aria-hidden="true">
+      <svg viewBox="0 0 100 12" preserveAspectRatio="none" class="cota-linea">
+        <line x1="0" y1="6" x2="100" y2="6" vector-effect="non-scaling-stroke" />
+      </svg>
+      <span class="tope izq"></span><span class="tope der"></span>
+      {medida && <span class="cota-texto voz-datos">{medida}</span>}
+    </div>
+  </div>
+</header>
+
+<style>
+  .encabezado { display: grid; grid-template-columns: auto 1fr; gap: var(--s3) var(--s4); align-items: start; }
+  .lamina { color: var(--accent); border: var(--border) solid var(--accent); padding: 2px 7px; margin-top: .5em; }
+  .lead { margin: var(--s3) 0 0; }
+  .cota { position: relative; height: 20px; margin-top: var(--s4); max-width: 520px; }
+  .cota-linea { position: absolute; inset: 4px 0 auto; width: 100%; height: 12px; overflow: visible; }
+  .cota-linea line { stroke: var(--signal); stroke-width: var(--stroke-thin); }
+  .tope { position: absolute; top: 0; width: 1px; height: 20px; background: var(--signal); }
+  .tope::after {
+    content: ''; position: absolute; top: 6px; left: -4px; width: 9px; height: 1px; background: var(--signal);
+    transform: rotate(-45deg);
+  }
+  .izq { left: 0; } .der { right: 0; }
+  .cota-texto { position: absolute; right: 0; top: -18px; color: var(--signal-ink); font-size: 11px; }
+
+  /* Medición: la cota crece de izquierda a derecha una vez, al entrar en pantalla */
+  :global(html.js) .cota-linea { transform-origin: left; transform: scaleX(0); transition: transform var(--t-cota) var(--ease-plano); }
+  :global(html.js) .der { opacity: 0; transition: opacity var(--t-rapido) ease var(--t-cota); }
+  :global(html.js) .cota.visible .cota-linea, :global(html.sin-revela) .cota-linea { transform: none; }
+  :global(html.js) .cota.visible .der, :global(html.sin-revela) .der { opacity: 1; }
+
+  @media (max-width: 519.98px) {
+    .encabezado { grid-template-columns: 1fr; }
+    .lamina { justify-self: start; margin-top: 0; }
+  }
+</style>

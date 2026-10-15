@@ -1,0 +1,20 @@
+---
+// Chip de estado (guía §7). El estado nunca va solo en color: siempre lleva texto.
+interface Props { tipo?: 'crit' | 'high' | 'ok' | 'acc' | 'med' }
+const { tipo = 'med' } = Astro.props;
+---
+<span class:list={['chip', tipo]}><slot /></span>
+
+<style>
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; padding: 2px 7px; border: var(--border) solid currentColor;
+    font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: 11.5px;
+    letter-spacing: var(--ls-data); text-transform: uppercase; line-height: 1.4; white-space: nowrap;
+  }
+  .chip::before { content: ''; width: 6px; height: 6px; background: currentColor; }
+  .crit { color: var(--bad); background: var(--bad-soft); }
+  .high { color: var(--signal-ink); background: var(--signal-soft); }
+  .ok { color: var(--good); background: var(--good-soft); }
+  .acc { color: var(--accent); background: var(--accent-soft); }
+  .med { color: var(--muted); }
+</style>

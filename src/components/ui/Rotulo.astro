@@ -1,0 +1,28 @@
+---
+// Rótulo de plano (guía §6): datos clave en celdas con borde, como el cajetín de un plano.
+interface Props { celdas: { etiqueta: string; valor: string }[]; titulo?: string }
+const { celdas, titulo } = Astro.props;
+---
+<div class="rotulo-cont">
+  {titulo && <p class="cab voz-datos">{titulo}</p>}
+  <dl class="rotulo">
+    {celdas.map((c) => (
+      <div><dt class="voz-datos">{c.etiqueta}</dt><dd>{c.valor}</dd></div>
+    ))}
+  </dl>
+</div>
+
+<style>
+  .rotulo-cont { container-type: inline-size; }
+  .rotulo {
+    margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    border: var(--border-strong) solid var(--ink);
+    /* bordes interiores con la técnica de separación: el fondo de la rejilla dibuja las líneas */
+    gap: var(--border); background-color: var(--ink);
+  }
+  .rotulo > div { background: var(--paper); padding: var(--s2) var(--s3); min-width: 0; }
+  .cab { margin: 0; max-width: none; padding: var(--s1) var(--s3); background: var(--ink); color: var(--bg); }
+  dt { color: var(--muted); }
+  dd { margin: 2px 0 0; font-weight: var(--fw-strong); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  @container (min-width: 640px) { .rotulo { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+</style>

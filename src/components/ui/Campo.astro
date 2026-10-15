@@ -1,0 +1,26 @@
+---
+// Campo de formulario (guía §7): etiqueta siempre visible y línea de escritura inferior.
+interface Props { etiqueta: string; nombre: string; tipo?: string; requerido?: boolean; error?: string; autocompletar?: string }
+const { etiqueta, nombre, tipo = 'text', requerido = false, error, autocompletar } = Astro.props;
+const id = `campo-${nombre}`;
+---
+<div class:list={['campo', { 'con-error': error }]}>
+  <label for={id} class="voz-datos">{etiqueta}{requerido && <span aria-hidden="true"> *</span>}</label>
+  {tipo === 'textarea'
+    ? <textarea id={id} name={nombre} rows="4" required={requerido} aria-invalid={error ? 'true' : undefined} aria-describedby={error ? `${id}-error` : undefined}></textarea>
+    : <input id={id} name={nombre} type={tipo} required={requerido} autocomplete={autocompletar} aria-invalid={error ? 'true' : undefined} aria-describedby={error ? `${id}-error` : undefined} />}
+  {error && <p id={`${id}-error`} class="error">{error}</p>}
+</div>
+
+<style>
+  .campo { display: grid; gap: 6px; }
+  label { color: var(--muted); }
+  input, textarea {
+    font: inherit; color: var(--ink); background: var(--bg); min-height: 44px; box-sizing: border-box;
+    padding: 8px 12px; border: var(--border) solid var(--line); border-bottom: var(--border-strong) solid var(--ink);
+    border-radius: 0; transition: border-color var(--t-rapido) ease;
+  }
+  input:focus-visible, textarea:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .con-error input, .con-error textarea { border-color: var(--bad); }
+  .error { margin: 0; color: var(--bad); font-size: var(--fs-xs); }
+</style>

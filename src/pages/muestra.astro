@@ -1,0 +1,104 @@
+---
+// Catálogo de componentes base (guía §7) con datos reales de Columbus. Solo para revisión: se elimina en F6.
+import Base from '../layouts/Base.astro';
+import Encabezado from '../components/ui/Encabezado.astro';
+import Rotulo from '../components/ui/Rotulo.astro';
+import Cifras from '../components/ui/Cifras.astro';
+import Tabla from '../components/ui/Tabla.astro';
+import Boton from '../components/ui/Boton.astro';
+import Chip from '../components/ui/Chip.astro';
+import Nota from '../components/ui/Nota.astro';
+import Campo from '../components/ui/Campo.astro';
+
+const cantidades = [
+  ['Excavaciones', '442.000', 'm³'],
+  ['Rellenos', '117.000', 'm³'],
+  ['Concreto', '95.000', 'm³'],
+  ['Acero de refuerzo', '12.000', 't'],
+  ['Estructura metálica', '8.300', 't'],
+  ['Equipos', '18.600', 't'],
+  ['Cables de baja y media tensión y control', '353.000', 'm'],
+  ['Luminarias', '3.300', 'un'],
+];
+---
+<Base titulo="Muestra de componentes" lang="es" noindex>
+  <div class="wrap muestra">
+    <Encabezado
+      nivel={1}
+      codigo="P-01"
+      titulo="Planta Columbus"
+      entrada="Diseño, construcción, montaje y puesta en marcha de una planta de cemento de 5.250 t/día para Cementos Argos en Cartagena."
+      medida="42 meses"
+    />
+
+    <Rotulo
+      titulo="Ficha técnica"
+      celdas={[
+        { etiqueta: 'Cliente', valor: 'Cementos Argos S.A.' },
+        { etiqueta: 'Ubicación', valor: 'Cartagena, Colombia' },
+        { etiqueta: 'Sector', valor: 'Cemento' },
+        { etiqueta: 'Duración', valor: '42 meses' },
+        { etiqueta: 'Horas hombre', valor: '9.470.000' },
+        { etiqueta: 'Producción', valor: '5.250 t/día' },
+        { etiqueta: 'Rol de HL', valor: 'Consorcio' },
+        { etiqueta: 'Años', valor: 'Por confirmar' },
+      ]}
+    />
+
+    <section class="bloque">
+      <Encabezado codigo="C-01" titulo="Cifras destacadas" />
+      <Cifras items={[
+        { valor: '9.470.000', etiqueta: 'Horas hombre' },
+        { valor: '5.250', etiqueta: 't/día de clínker' },
+        { valor: '95.000', etiqueta: 'm³ de concreto' },
+        { valor: '8.300', etiqueta: 't de estructura' },
+      ]} />
+    </section>
+
+    <section class="bloque">
+      <Encabezado codigo="C-02" titulo="Cantidades de obra" entrada="Cantidades representativas del proyecto completo." />
+      <Tabla titulo="Cantidades de obra de la planta Columbus">
+        <thead><tr><th>Actividad</th><th class="num">Cantidad</th><th>Unidad</th></tr></thead>
+        <tbody>
+          {cantidades.map(([a, c, u]) => <tr><td>{a}</td><td class="num">{c}</td><td>{u}</td></tr>)}
+        </tbody>
+      </Tabla>
+    </section>
+
+    <section class="bloque">
+      <Encabezado codigo="C-03" titulo="Estados y acciones" />
+      <p class="fila">
+        <Chip tipo="ok">Ficha completa</Chip>
+        <Chip tipo="high">Año por confirmar</Chip>
+        <Chip tipo="acc">Consorcio</Chip>
+        <Chip tipo="crit">Sin fotos</Chip>
+        <Chip tipo="med">Discreta</Chip>
+      </p>
+      <p class="fila">
+        <Boton href="/contacto/">Solicitar cotización</Boton>
+        <Boton variante="secundario" href="/proyectos/">Ver proyectos</Boton>
+        <Boton variante="datos">Cemento</Boton>
+        <Boton variante="datos">Colombia</Boton>
+      </p>
+      <Nota><strong>Dato por confirmar.</strong> El PDF de ECOHL reporta 12.000 t de estructura en 18 meses; se refiere a la fabricación, no al proyecto completo.</Nota>
+    </section>
+
+    <section class="bloque">
+      <Encabezado codigo="C-04" titulo="Formulario" />
+      <form class="formulario" onsubmit="return false">
+        <Campo etiqueta="Nombre" nombre="nombre" requerido autocompletar="name" />
+        <Campo etiqueta="Correo" nombre="correo" tipo="email" requerido autocompletar="email" error="Escriba un correo con @, por ejemplo nombre@empresa.com." />
+        <Campo etiqueta="Mensaje" nombre="mensaje" tipo="textarea" />
+        <Boton type="submit">Enviar solicitud</Boton>
+      </form>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .muestra { display: grid; gap: var(--s6); padding-block: var(--s6); }
+  .bloque { display: grid; gap: var(--s5); }
+  .fila { display: flex; flex-wrap: wrap; gap: var(--s2); margin: 0; max-width: none; }
+  .formulario { display: grid; gap: var(--s4); max-width: 560px; }
+  .formulario :global(.boton) { justify-self: start; }
+</style>
