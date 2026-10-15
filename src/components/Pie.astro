@@ -1,0 +1,59 @@
+---
+// Pie (guía §7): navegación completa y rótulo de plano con los datos de la empresa.
+// Datos tomados de contenido/institucional.md. Pendiente de confirmar con HL: NIT (no se publica aún).
+import { MENU, PIE, ruta, type Lang } from '../i18n/rutas';
+import { t } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const anio = new Date().getFullYear();
+const celdas = [
+  { etiqueta: t(lang, 'razonSocial'), valor: 'HL Ingenieros S.A.' },
+  { etiqueta: t(lang, 'sede'), valor: 'Calle 127A # 53A-45, Torre 2, Of. 1002 · Bogotá, Colombia' },
+  { etiqueta: t(lang, 'telefono'), valor: '+57 601 518 5777', href: 'tel:+576015185777' },
+  { etiqueta: t(lang, 'correo'), valor: 'hlisa@hlingenieros.com', href: 'mailto:hlisa@hlingenieros.com' },
+  { etiqueta: t(lang, 'trayectoria'), valor: `1968 — ${anio}` },
+];
+---
+<footer class="pie">
+  <div class="wrap pie-in">
+    <nav id="navegacion-pie" aria-label={t(lang, 'navegacion')}>
+      <ul>{MENU.map((k) => <li><a href={ruta(k, lang)}>{t(lang, k)}</a></li>)}</ul>
+      <ul aria-label={t(lang, 'legal')}>{PIE.map((k) => <li><a href={ruta(k, lang)}>{t(lang, k)}</a></li>)}</ul>
+    </nav>
+    <dl class="rotulo">
+      {celdas.map((c) => (
+        <div>
+          <dt class="voz-datos">{c.etiqueta}</dt>
+          <dd>{c.href ? <a href={c.href}>{c.valor}</a> : c.valor}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+  <p class="wrap legal voz-datos">© {anio} HL Ingenieros S.A.</p>
+</footer>
+
+<style>
+  .pie { margin-top: var(--s7); border-top: var(--border-strong) solid var(--ink); background: var(--paper); }
+  .pie-in { display: grid; gap: var(--s5); padding-block: var(--s6) var(--s5); }
+  nav { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); }
+  nav ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s1); align-content: start; }
+  nav a { display: inline-block; padding-block: 6px; color: var(--ink); text-decoration: none; font-size: var(--fs-sm); }
+  nav a:hover { color: var(--accent); }
+  nav ul + ul a { color: var(--muted); }
+
+  .rotulo { margin: 0; display: grid; grid-template-columns: 1fr 1fr; border: var(--border-strong) solid var(--ink); }
+  .rotulo div { padding: var(--s2) var(--s3); border: 0 solid var(--ink); border-right-width: var(--border); border-bottom-width: var(--border); min-width: 0; }
+  .rotulo div:nth-child(2n) { border-right-width: 0; }
+  .rotulo div:first-child, .rotulo div:nth-child(2) { grid-column: 1 / -1; border-right-width: 0; }
+  .rotulo div:last-child { border-bottom-width: 0; grid-column: 1 / -1; }
+  dt { color: var(--muted); }
+  dd { margin: 2px 0 0; font-weight: var(--fw-strong); font-size: var(--fs-sm); overflow-wrap: anywhere; }
+  dd a { color: inherit; text-decoration: none; }
+  dd a:hover { color: var(--accent); }
+  .legal { color: var(--muted); padding-block: var(--s3) var(--s4); border-top: var(--border) solid var(--line); }
+
+  @media (min-width: 900px) {
+    .pie-in { grid-template-columns: 5fr 7fr; gap: var(--s6); }
+  }
+</style>

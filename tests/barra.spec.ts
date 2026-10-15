@@ -60,6 +60,7 @@ test.describe('sin JavaScript', () => {
     await page.setViewportSize({ width: 390, height: 800 });
     await page.goto('/');
     await expect(page.locator('#boton-menu')).toHaveAttribute('href', '#navegacion-pie');
+    await expect(page.locator('#navegacion-pie a')).toHaveCount(13);
   });
 });
 

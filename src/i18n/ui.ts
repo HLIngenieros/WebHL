@@ -25,6 +25,13 @@ const es = {
   idioma: 'English',
   construccion: 'Esta sección está en construcción.',
   noEncontrada: 'Página no encontrada',
+  razonSocial: 'Razón social',
+  sede: 'Sede principal',
+  telefono: 'Teléfono',
+  correo: 'Correo',
+  trayectoria: 'Trayectoria',
+  navegacion: 'Navegación',
+  legal: 'Información legal',
 };
 
 const en: Record<keyof typeof es, string> = {
@@ -51,6 +58,13 @@ const en: Record<keyof typeof es, string> = {
   idioma: 'Español',
   construccion: 'This section is under construction.',
   noEncontrada: 'Page not found',
+  razonSocial: 'Company',
+  sede: 'Head office',
+  telefono: 'Phone',
+  correo: 'Email',
+  trayectoria: 'Track record',
+  navegacion: 'Navigation',
+  legal: 'Legal information',
 };
 
 export type ClaveUI = keyof typeof es;

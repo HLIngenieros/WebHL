@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import Barra from '../components/Barra.astro';
+import Pie from '../components/Pie.astro';
+import Contacto from '../components/Contacto.astro';
 import { par, type Lang } from '../i18n/rutas';
 import { t } from '../i18n/ui';
 
@@ -50,5 +52,7 @@ const [es, en] = lang === 'es' ? [aqui, otra] : [otra, aqui];
     <main id="contenido">
       <slot />
     </main>
+    <Pie lang={lang} />
+    <Contacto lang={lang} />
   </body>
 </html>
