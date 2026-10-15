@@ -1,6 +1,6 @@
 # Guía visual base · Grupo HL
 
-Versión 1.0 · 2026-10-13 · Etapa 1
+Versión 1.2 · 2026-10-15
 
 Esta guía define cómo se ve y cómo se mueve el nuevo sitio de Grupo HL. Es la referencia obligatoria
 durante el desarrollo: si un componente nuevo no encaja en estas reglas, primero se ajusta la guía y
@@ -25,8 +25,9 @@ seriedad la dan la precisión y las cifras reales, no el adorno.
 
 1. **La evidencia manda.** Cifras de obra, años, toneladas, horas-hombre. Los elementos gráficos
    existen para presentar datos, no para decorar.
-2. **Un color de marca, un acento.** Azul HL para identidad y acción; amarillo de señalización solo
-   para medir y advertir.
+2. **Un color de marca, un acento por sección.** Azul HL para identidad y acción; amarillo de
+   señalización para medir y advertir; cada sección suma su propio acento (§3.5), que la demarca sin
+   reemplazar al azul.
 3. **Una familia, tres voces.** Archivo expandida, normal y condensada. Nada más.
 4. **Ángulos rectos.** Sin esquinas redondeadas, sin sombras difusas, sin degradados decorativos.
    Bordes de 1 px y planos de color.
@@ -154,8 +155,8 @@ roles**, que cambian con el tema.
   estados.
 - El amarillo **mide y advierte**; no es un segundo color de marca.
 - Rojo y verde son **solo estados**. No se usan para sectores ni categorías.
-- Para distinguir categorías (sectores, servicios) se usan los grupos A/B/C con ejes con burbuja,
-  no colores nuevos.
+- Para distinguir categorías **dentro** de una sección (sectores, servicios) se usan los grupos A/B/C
+  con ejes con burbuja, no colores nuevos. El color distingue secciones, no categorías (§3.5).
 
 ### 3.3 Modo oscuro
 
@@ -163,6 +164,32 @@ Definido completo en `tokens.css`: se activa por `prefers-color-scheme` y se pue
 `data-theme="dark"` o `data-theme="light"` en `<html>`. El azul se aclara a `#62A0EC` y la
 señalización vuelve a `#F2B42A`. **Los dos bloques oscuros de `tokens.css` deben mantenerse
 idénticos.** El logo usa su versión negativa.
+
+### 3.5 Acentos de sección
+
+Cada sección tiene un acento que la demarca: tiñe su pod (§6), el indicador del menú, las cotas, las
+láminas de foto (§8), los filtros activos y el pod de las tarjetas que enlazan a ella. El azul HL
+sigue siendo la marca: logo, botón primario, foco y enlaces de texto corrido no cambian.
+
+| Sección | Acento | Claro (referencia) | Carácter |
+|---|---|---|---|
+| Inicio, Nosotros, Contacto y pie | Azul HL | `#0B509E` | Origen |
+| Proyectos | Ámbar | `#8A5A00` | Señal de obra |
+| Servicios | Cian | `#006B80` | Plano |
+| Sectores | Violeta | `#5B3FA0` | Industria |
+| HSE y calidad | Verde | `#1F6F3A` | Seguridad |
+| Noticias | Óxido | `#B13F12` | Actualidad |
+
+- **Tokens:** cada página declara su sección en `<html data-seccion="…">` y `tokens.css` define para
+  ella `--sec` (acento como texto y línea), `--sec-soft` (fondo de chip y filtro activo) y
+  `--sec-ink` (texto sobre `--sec`), con su versión oscura. Sin sección, `--sec` es `--accent`. Los
+  componentes usan `--sec`, nunca el valor.
+- **Contraste:** `contraste.py` verifica cada acento como texto sobre `--bg` y `--paper`, `--sec-ink`
+  sobre `--sec` y `--sec` sobre `--sec-soft`, en claro y oscuro.
+- Proporción: el acento de sección ocupa a lo sumo lo que ocupaba el azul (≈ 15 %); nunca es fondo de
+  áreas grandes salvo la lámina de foto y el pod P3.
+- El verde de HSE y el óxido de Noticias se parecen a `--good` y `--bad`: por eso un estado **siempre**
+  va como chip con texto (§7), nunca solo como color.
 
 ### 3.4 Contraste verificado
 
@@ -282,6 +309,15 @@ respondan al modo oscuro. Terminaciones rectas (`stroke-linecap: square`).
 | **Rótulo de plano** | Rejilla de celdas con borde `--ink` (1.5 px exterior, 1 px interior); cada celda lleva etiqueta de datos en `--muted` y valor en 600 | Ficha técnica de proyecto (cliente, año, sector, HH), pie de página, documentos descargables |
 | **Línea estructural** | Dibujo de trazo (cerchas, naves, grúas, tanques) en `--ink` con grosores `--stroke-thin` / `--stroke-mid` / `--stroke-heavy`; ejes en `--accent` punteado; cotas en `--signal` | Ilustración mientras llega la fotografía nueva; estados vacíos |
 | **Código de lámina** | Etiqueta de datos en `--accent` con borde de 1 px `--accent` (p. ej. "L-01", "P-07") | Numerar secciones o fichas, como un plano |
+| **Lámina de foto** | Foto en monocromo teñida con `--sec` (multiplicar) y un trazo de plano blanco encima que se dibuja al entrar; al pasar el cursor o tocar, la foto vuelve a color | Foto protagonista: cabecera de ficha, tarjetas, portadas (§8) |
+
+**Pods de sección.** Tres formas, cada una con un papel fijo, todas en `--sec`:
+
+| Pod | Construcción | Papel | Frecuencia |
+|---|---|---|---|
+| **P1 · Rótulo** | Celda de cajetín: barra de 6 px en `--sec`, código de lámina y nombre de la sección, borde `--ink` 1.5 px | Identifica la página: encima del H1, en todas | Una por página; también en tarjetas que enlazan a otra sección |
+| **P2 · Burbuja de eje** | Círculo con letra en `--sec`, nombre y línea; el eje punteado baja por el borde y acompaña el scroll | Estructura el contenido: grupos A/B/C, subsecciones de ficha, hitos | Las que pida la estructura |
+| **P3 · Señal** | Franja de rayas a 135° en `--sec` + bloque de color con el nombre en `--sec-ink` + código | Llama la atención: indicadores HSE, "Adjudicado", franja de contacto | A lo sumo una por pantalla |
 
 **Encabezado de sección (patrón):** código de lámina a la izquierda + H2 + entrada en `--muted` +
 cota que se mide al entrar en pantalla.
@@ -375,7 +411,15 @@ abre el panel con los tres caminos (asistente, asesor y WhatsApp). Los mensajes 
 - **Cada foto lleva pie** con el proyecto y el año, y `alt` descriptivo.
 - Formatos AVIF/WebP generados en el build, con `srcset` responsive. Carga diferida salvo la primera
   imagen visible.
-- Proporciones: 16:9 (hero, galería), 4:3 (tarjeta), 3:2 (ficha).
+- Proporciones: 3:2 (ficha), 4:3 (tarjeta), 4:5 (galería).
+- **Nunca grandes ni a sangre.** Las fotos actuales miden 1200 px y muchas son de celular: ninguna se
+  muestra a más de 800 px CSS de ancho. En pantallas grandes el espacio sobrante lo ocupan la
+  retícula, la ilustración y los datos, no la foto estirada.
+- **Lámina de foto** (§6) para la foto protagonista; el tinte usa el acento de la sección. Es el único
+  tratamiento de color permitido: sin otros duotonos, semitonos ni filtros.
+- **Hoja de contactos** para galerías: fotos pequeñas a color (≤ 480 px), recorte vertical 4:5,
+  marcas de corte en dos esquinas, número y pie en voz de datos. Al pulsar, se abre en un visor a lo
+  sumo de 800 px, con el pie completo.
 - **Mientras no hay foto:** placeholder rayado (líneas a 135° `--line-soft` cada 9 px sobre
   `--paper`) con la etiqueta de datos "Foto pendiente · Proyecto · Año", o una línea estructural.
   No se rellena con bancos de imágenes.
@@ -403,6 +447,20 @@ hay preloader**, y todo el contenido existe en el HTML aunque el JavaScript fall
 | **Cota** | La línea de cota se mide (`scaleX` de 0 a 1) y la cifra cuenta hasta su valor | `--ease-plano` | `--t-cota` 1.2 s | Divisores de sección, cifras destacadas |
 | **Transición de vista** | La página nueva entra por barrido lateral (`clip-path`) sin pantallazo en blanco; barra superior y botón de contacto quedan fijos | `--ease-barrido` | `--t-vista` .5 s | Navegación entre páginas (View Transitions de Astro) |
 | **Aparece** | Opacidad de 0 a 1 y desplazamiento de 6 px; solo CSS, arranca con el primer pintado (no espera al JS) | `--ease-izaje` | `--t-aparece` .5 s / `--t-rapido` .2 s (hover, filtros, menú) | Texto del hero, mensajes del chat |
+
+**Firma por sección.** Además de los gestos comunes, cada sección tiene uno propio:
+
+| Sección | Firma |
+|---|---|
+| Proyectos | En el mapa, los puntos caen como estacas de topografía; al filtrar, las tarjetas se reacomodan (FLIP). En la ficha, la lámina se traza y las cifras se miden con su cota |
+| Servicios | Un eje vertical (P2) recorre la página con el scroll; cada subcapacidad entra como una capa de plano que se superpone a la anterior |
+| Sectores | Escenario: la ilustración del sector a todo el ancho, en capas (estructura, ejes, cotas) con paralaje leve al hacer scroll |
+| Nosotros | Línea del tiempo horizontal 1968 → hoy: una cota que se estira con el scroll y los hitos como burbujas de eje |
+| HSE y calidad | Los indicadores en franjas P3 que bajan como una barrera de obra; las Reglas de Oro se encienden en secuencia |
+| Noticias | La fecha como sello de recibido de plano; los adjudicados con franja P3 |
+
+Los efectos ligados al scroll usan `animation-timeline: view()` / `scroll()` en CSS; sin soporte, se
+ve el estado final. No suman JavaScript.
 
 **Reglas**
 
@@ -459,3 +517,4 @@ hay preloader**, y todo el contenido existe en el HTML aunque el JavaScript fall
 |---|---|---|
 | 1.0 | 2026-10-13 | Primera versión a partir de la propuesta Rev. 0. Ajustes de contraste (`--signal`, `--bad`, `--good`) y nuevos tokens `--signal-ink` y `--steel`. |
 | 1.1 | 2026-10-15 | Movimiento más corto y fluido (`--t-vista` .5 s, `--t-izaje` .6 s, `--t-aparece` .5 s, `--t-rapido` .2 s), reglas de rendimiento y diseño por formato de pantalla (§5). |
+| 1.2 | 2026-10-15 | Ampliación controlada para dar personalidad a cada sección: acentos de sección (§3.5), pods P1/P2/P3 y lámina de foto (§6), fotos nunca mayores de 800 px con lámina y hoja de contactos (§8), firma de movimiento por sección (§9). Decidido con maquetas sobre fotos reales. |

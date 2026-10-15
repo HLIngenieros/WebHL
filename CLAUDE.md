@@ -58,7 +58,10 @@ Si se cambia un color, correr `python design/contraste.py`, que debe terminar en
 
 En resumen: lenguaje de plano técnico (retícula de 12 columnas, módulo de 8 px, ejes con burbuja,
 cotas, rótulo de plano, línea estructural). Un azul (`#0B509E`), un acento de señalización, neutros
-(grafito, concreto, acero). Una familia, Archivo, en tres voces: expandida, normal y condensada (los
+(grafito, concreto, acero) y, desde la v1.2, **un acento por sección** (Proyectos ámbar, Servicios cian,
+Sectores violeta, HSE verde, Noticias óxido; el resto azul) con pods P1 Rótulo, P2 Burbuja de eje y P3
+Señal. Fotos nunca mayores de 800 px: lámina teñida con el acento (protagonista) y hoja de contactos
+(galerías). Cada sección tiene su firma de movimiento (guía §9). Una familia, Archivo, en tres voces: expandida, normal y condensada (los
 datos van en mayúsculas). Radio 0 y sin sombras. Modo claro y oscuro. Movimiento: Trazo, Izaje, Cota y
 Transición de vista; sin preloader, cifras escritas en el HTML, respeta reduced-motion y permite zoom.
 

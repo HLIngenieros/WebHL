@@ -126,9 +126,9 @@ Las colecciones de Astro se validan con esquema al compilar.
   sector, país), el reacomodo animado y el mapa SVG propio; sin JavaScript la lista funciona igual. En
   móvil, los filtros van en una hoja inferior.
 - **Ficha de proyecto:**
-  - rótulo de plano con los datos;
+  - rótulo de plano con los datos y la foto principal en lámina (guía §8);
   - cifras destacadas, descripción, reto o resultado y cantidades;
-  - galería con pie;
+  - galería en hoja de contactos, con pie;
   - enlaces a su servicio y su sector, y proyectos relacionados;
   - llamada a contacto.
 - **Servicio:**
@@ -160,6 +160,8 @@ Las reglas detalladas están en la guía visual §5 y §9. Lo esencial:
 | LCP / CLS / INP | < 2,0 s / < 0,05 / < 200 ms |
 | JavaScript por página | ≤ 30 KB gz (explorador ≤ 100 KB) |
 
+- **Identidad por sección:** cada sección tiene su acento, sus pods y su firma de movimiento (guía
+  §3.5, §6 y §9). Las fotos nunca se muestran a más de 800 px de ancho.
 - **Recursos:** Archivo en un solo archivo variable, reducido y alojado en el servidor. Imágenes
   AVIF/WebP responsivas con dimensiones fijas. Mapa en SVG propio, sin terceros. Compresión y caché en
   `.htaccess` (un año para recursos con hash; HTML sin caché).
