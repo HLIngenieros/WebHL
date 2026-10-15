@@ -2,8 +2,12 @@
 // referencia rota o un slug repetido detiene cualquier compilación, y en `--mode lanzamiento` también
 // lo que falte, sin depender de que exista /pendientes/.
 import { getCollection } from 'astro:content';
-import { auditar, type Datos, type Pendiente } from './contenido';
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { auditar, bloque, txt, medida, periodo, paraExplorador, type Datos, type Entrada, type Pendiente, type Proyecto } from './contenido';
+import type { DatosTarjeta, Imagen } from './explorador';
 import { RUTAS, urlDe, type Lang, type Seccion } from '../i18n/rutas';
+import { PAISES } from '../i18n/ui';
 
 const NOMBRES = ['proyectos', 'servicios', 'sectores', 'sedes', 'certificaciones', 'historia', 'testimonios', 'sitio', 'paginas'] as const;
 
@@ -52,4 +56,60 @@ export async function rutasDeContenido(): Promise<{ params: { ruta: string }; pr
     }
   }
   return out;
+}
+
+// ── Imágenes y tarjetas: datos serializables para los componentes React ──
+
+/** AVIF y WebP a 480 y 800 px (nunca más: guía §8), con el respaldo a 800. */
+export async function imagen(src: ImageMetadata, alt: string): Promise<Imagen> {
+  const ancho = Math.min(800, src.width);
+  const widths = [480, 800].filter((w) => w <= src.width);
+  const base = { src, width: ancho, widths: widths.length ? widths : [ancho] };
+  const [avif, webp] = await Promise.all([getImage({ ...base, format: 'avif' }), getImage({ ...base, format: 'webp' })]);
+  return {
+    avif: avif.srcSet.attribute, webp: webp.srcSet.attribute, src: webp.src,
+    width: ancho, height: Math.round((ancho * src.height) / src.width), alt,
+  };
+}
+
+type ProyectoEntrada = Entrada<Proyecto>;
+
+/** Lugar legible: "Cartagena, Colombia". */
+export const lugarDe = (p: Proyecto, lang: Lang) =>
+  [p.ciudad, p.pais ? PAISES[p.pais]?.[lang] : undefined].filter(Boolean).join(', ') || undefined;
+
+/** Código de lámina estable en todo el sitio: la posición en el explorador. */
+export async function codigos(): Promise<Map<string, string>> {
+  const { datos } = await cargar();
+  return new Map(paraExplorador(datos.proyectos as unknown as ProyectoEntrada[]).map((x, i) => [x.id, `P-${String(i + 1).padStart(2, '0')}`]));
+}
+
+export async function tarjetas(xs: ProyectoEntrada[], lang: Lang): Promise<DatosTarjeta[]> {
+  const { datos } = await cargar();
+  const cods = await codigos();
+  const etiqueta = (seccion: 'servicios' | 'sectores', id: string) => {
+    const e = datos[seccion].find((x) => x.id === id)!;
+    return { id, slug: e.data.slug[lang], nombre: bloque(e.data as { es: { nombre: string }; en?: { nombre: string } }, lang).nombre };
+  };
+  return Promise.all(xs.map(async ({ id, data: p }) => {
+    const textos = bloque(p, lang);
+    const foto = p.fotos[0];
+    const c = p.cifras[0];
+    return {
+      id,
+      codigo: cods.get(id)!,
+      url: urlDe('proyectos', p.slug, lang),
+      titulo: textos.titulo,
+      cliente: p.cliente,
+      lugar: lugarDe(p, lang),
+      periodo: periodo(p),
+      sector: etiqueta('sectores', p.sector.id),
+      servicios: p.servicios.map((s) => etiqueta('servicios', s.id)),
+      pais: p.pais?.toLowerCase(),
+      coordenadas: p.coordenadas,
+      cifra: c ? { valor: medida(c.valor, c.unidad, lang), etiqueta: txt(c.etiqueta, lang)! } : undefined,
+      imagen: foto ? await imagen(foto.archivo as ImageMetadata, txt(foto.pie, lang) ?? [textos.titulo, p.ciudad].filter(Boolean).join(' · ')) : undefined,
+      discreta: p.visibilidad === 'discreta',
+    };
+  }));
 }

@@ -136,6 +136,70 @@
   .pod-senal .pod-cod { color: var(--sec); border: var(--border-strong) solid var(--sec); border-left: 0; padding: 3px 9px; }
 }
 
+/* ---- Ilustración, lámina de foto y tarjetas de proyecto (guía §6-§8) ---- */
+@layer components {
+  .ilustracion { display: block; width: 100%; height: auto; overflow: visible; }
+  .ilustracion path, .ilustracion line, .ilustracion circle { fill: none; stroke-linecap: square; vector-effect: non-scaling-stroke; }
+  .ilustracion .capa-estructura path { stroke: var(--ink); stroke-width: var(--stroke-mid); }
+  .ilustracion .capa-estructura path:first-child { stroke-width: var(--stroke-heavy); }
+  .ilustracion .capa-ejes line { stroke: var(--sec); stroke-width: var(--stroke-thin); stroke-dasharray: 2 4; }
+  .ilustracion .capa-ejes circle { stroke: var(--sec); stroke-width: var(--stroke-thin); fill: var(--paper); }
+  .ilustracion .capa-cotas path { stroke: var(--signal); stroke-width: var(--stroke-thin); }
+  .ilustracion.tono-blanco .capa-estructura path, .ilustracion.tono-blanco .capa-ejes line,
+  .ilustracion.tono-blanco .capa-ejes circle { stroke: #fff; fill: none; }
+
+  /* Lámina: nunca más de 800 px (las fotos actuales miden 1200 px y muchas son de celular) */
+  .lamina { position: relative; overflow: hidden; max-width: 800px; aspect-ratio: var(--proporcion, 3 / 2); background: var(--ink); }
+  .lamina picture { display: contents; }
+  .lamina img {
+    display: block; width: 100%; height: 100%; object-fit: cover;
+    filter: grayscale(1) contrast(1.15) brightness(1.05); transition: filter calc(var(--t-rapido) * 2) ease;
+  }
+  .lamina-tinte { position: absolute; inset: 0; background: var(--sec); mix-blend-mode: multiply; opacity: .85; transition: opacity calc(var(--t-rapido) * 2) ease; }
+  .lamina .lamina-trazo { position: absolute; inset: 8% 6%; width: 88%; height: 84%; transition: opacity calc(var(--t-rapido) * 2) ease; }
+  .lamina.sin-foto {
+    background-color: var(--paper);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: var(--grid-cell) var(--grid-cell);
+  }
+  @media (hover: hover) {
+    .lamina:hover img, .con-lamina:hover .lamina img { filter: none; }
+    .lamina:hover :is(.lamina-tinte, .lamina-trazo), .con-lamina:hover .lamina:not(.sin-foto) :is(.lamina-tinte, .lamina-trazo) { opacity: 0; }
+  }
+  .con-lamina:focus-within .lamina img { filter: none; }
+  .con-lamina:focus-within .lamina:not(.sin-foto) :is(.lamina-tinte, .lamina-trazo) { opacity: 0; }
+
+  /* Rejilla de tarjetas que comparten bordes (no tarjetas flotantes) */
+  .tarjetas-cont { container-type: inline-size; }
+  .tarjetas {
+    display: grid; grid-template-columns: minmax(0, 1fr);
+    border-top: var(--border-strong) solid var(--ink); border-left: var(--border) solid var(--line);
+  }
+  @container (min-width: 560px) { .tarjetas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @container (min-width: 880px) { .tarjetas { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @container (min-width: 1300px) { .tarjetas { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .tarjeta {
+    position: relative; display: flex; flex-direction: column; background: var(--paper);
+    border-right: var(--border) solid var(--line); border-bottom: var(--border) solid var(--line);
+  }
+  .tarjeta[hidden] { display: none; }
+  .tarjeta .lamina { --proporcion: 4 / 3; max-width: none; }
+  .tarjeta-cuerpo { display: grid; gap: var(--s2); align-content: start; padding: var(--s4); }
+  .tarjeta-titulo { font-size: var(--fs-h3); }
+  .tarjeta-titulo a { color: var(--ink); text-decoration: none; }
+  .tarjeta-titulo a::after { content: ''; position: absolute; inset: 0; }
+  .tarjeta:hover .tarjeta-titulo a { color: var(--sec); }
+  .tarjeta-titulo a:focus-visible { outline: none; }
+  .tarjeta:has(.tarjeta-titulo a:focus-visible) { outline: var(--focus-ring); outline-offset: 2px; z-index: 1; }
+  .tarjeta-cifra { margin: 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: var(--s1) var(--s2); }
+  .tarjeta-cifra .cifra { color: var(--sec); font-size: var(--fs-h3); font-stretch: var(--wdth-display); font-weight: var(--fw-display); }
+  .tarjeta-cifra .voz-datos { color: var(--muted); }
+  .tarjeta-datos { margin: 0; display: grid; gap: var(--s1); }
+  .tarjeta-datos > div { display: grid; grid-template-columns: 9ch 1fr; gap: var(--s2); }
+  .tarjeta-datos dt { color: var(--muted); }
+  .tarjeta-datos dd { margin: 0; font-weight: var(--fw-strong); min-width: 0; }
+}
+
 /* ---- Movimiento (guía §9) ---- */
 @layer components {
   /* Aparece: texto de primera pantalla; solo CSS, arranca con el primer pintado y no depende del JS */
@@ -147,13 +211,25 @@
     transition-delay: calc(var(--i, 0) * 60ms);
   }
   html.sin-revela .izaje:not(.visible) { opacity: 1; transform: none; }
+  /* Trazo: la línea se dibuja como un plano, una vez, al entrar en pantalla (revela.ts) */
+  .trazo .t { stroke-dasharray: 1; stroke-dashoffset: 0; }
+  html.js .trazo:not(.visible) .t { stroke-dashoffset: 1; }
+  html.js .trazo .t { transition: stroke-dashoffset var(--t-trazo) var(--ease-plano); transition-delay: calc(var(--i, 0) * 90ms); }
+  html.js .trazo .capa-ejes { transition: opacity var(--t-aparece) ease; }
+  html.js .trazo:not(.visible) .capa-ejes { opacity: 0; }
+  html.sin-revela .trazo:not(.visible) .t { stroke-dashoffset: 0; }
+  html.sin-revela .trazo:not(.visible) .capa-ejes { opacity: 1; }
   @media (prefers-reduced-motion: reduce) {
+    html.js .trazo:is(.visible, :not(.visible)) .t { stroke-dashoffset: 0; transition: none; }
+    html.js .trazo:is(.visible, :not(.visible)) .capa-ejes { opacity: 1; transition: none; }
     .aparece { animation: none; }
     html.js .izaje { opacity: 1; transform: none; transition: none; }
   }
   @media print {
     .aparece, html.js .izaje { animation: none; opacity: 1; transform: none; transition: none; }
     html.js .cota-linea { transform: none !important; transition: none !important; }
+    html.js .trazo .t { stroke-dashoffset: 0 !important; transition: none !important; }
+    html.js .trazo .capa-ejes { opacity: 1 !important; }
   }
 }
 

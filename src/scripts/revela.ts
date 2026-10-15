@@ -1,7 +1,7 @@
-// Entradas Izaje y Cota (guía §9; Aparece es solo CSS): se disparan una vez al entrar en pantalla.
+// Entradas Izaje, Cota y Trazo (guía §9; Aparece es solo CSS): se disparan una vez al entrar en pantalla.
 // Sin este script el contenido se ve igual (el estado oculto solo existe bajo html.js),
 // y si no llega a iniciarse, el script en línea del <head> lo rescata a los 2 s.
-const SELECTOR = '.izaje, .cota';
+const SELECTOR = '.izaje, .cota, .trazo';
 
 const iniciadas = new WeakSet<Element>();
 

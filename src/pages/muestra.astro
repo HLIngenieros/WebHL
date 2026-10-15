@@ -12,6 +12,14 @@ import Campo from '../components/ui/Campo.astro';
 import Foto from '../components/ui/Foto.astro';
 import columbus from '../assets/proyectos/planta-columbus/1.jpg';
 import Pod from '../components/Pod.astro';
+import Tarjeta from '../components/Tarjeta';
+import Lamina from '../components/Lamina';
+import Ilustracion, { SECTORES_ILUSTRADOS } from '../components/Ilustracion';
+import { cargar, tarjetas, imagen } from '../lib/datos';
+
+const { datos } = await cargar();
+const ejemplos = await tarjetas(datos.proyectos.filter((p) => ['planta-columbus', 'torre-grua-maceo'].includes(p.id)), 'es');
+const laminaSuelta = await imagen(columbus, 'Patio de almacenamiento de la planta Columbus');
 
 const SECCIONES = [
   ['nosotros', 'Nosotros', 'L-01'], ['proyectos', 'Proyectos', 'L-02'], ['servicios', 'Servicios', 'L-03'],
@@ -75,6 +83,15 @@ const cantidades = [
       </div>
     </section>
 
+    <section class="bloque" id="laminas">
+      <Encabezado codigo="C-05" titulo="Lámina, tarjetas e ilustraciones" entrada="La foto va teñida con el acento de la sección y vuelve a color al pasar el cursor; sin foto, la línea estructural del sector." />
+      <div class="con-lamina lamina-suelta"><Lamina imagen={laminaSuelta} sector="cemento" sizes="(min-width: 900px) 800px, 100vw" /></div>
+      <div class="tarjetas-cont"><div class="tarjetas">{ejemplos.map((t) => <Tarjeta t={t} lang="es" />)}</div></div>
+      <div class="ilustraciones" id="ilustraciones">
+        {SECTORES_ILUSTRADOS.map((s) => <figure><Ilustracion sector={s} titulo={`Ilustración de ${s}`} /><figcaption class="voz-datos">{s}</figcaption></figure>)}
+      </div>
+    </section>
+
     <section class="bloque">
       <Encabezado codigo="C-01" titulo="Cifras destacadas" />
       <Cifras items={[
@@ -132,6 +149,9 @@ const cantidades = [
   .foto-muestra figcaption { color: var(--muted); }
   .fila { display: flex; flex-wrap: wrap; gap: var(--s2); margin: 0; max-width: none; }
   .pods { align-items: center; gap: var(--s4); }
+  .ilustraciones { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--s4); }
+  .ilustraciones figure { margin: 0; display: grid; gap: var(--s2); background: var(--paper); padding: var(--s3); }
+  .ilustraciones figcaption { color: var(--muted); }
   .formulario { display: grid; gap: var(--s4); max-width: 560px; }
   .formulario :global(.boton) { justify-self: start; }
 </style>

@@ -10,11 +10,15 @@ type Ref = { id: string };
 export interface Proyecto {
   slug: { es: string; en: string };
   cliente?: string;
+  duenoFinal?: string;
   rol?: { tipo: 'contratista' | 'subcontratista' | 'consorcio'; nombre?: string };
   pais?: string;
   ciudad?: string;
+  coordenadas?: [number, number];
   inicio?: number;
   fin?: number;
+  meses?: number;
+  hh?: number;
   sector: Ref;
   servicios: Ref[];
   cifras: { valor: number; unidad?: Unidad; etiqueta: Texto }[];

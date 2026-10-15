@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import fs from 'node:fs';
+import path from 'node:path';
 import { medida, relacionados, sectoresDe, serviciosDe, clientesDe, auditar } from '../src/lib/contenido';
 import { cumple, conteos, leerFiltros, escribirFiltros } from '../src/lib/explorador';
 import { urlDe } from '../src/i18n/rutas';
@@ -147,4 +149,57 @@ test.describe('identidad por sección', () => {
       expect(r.violations.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);
     });
   }
+});
+
+test.describe('lámina, tarjeta e ilustraciones', () => {
+  test('la tarjeta con foto sale en AVIF y WebP con dimensiones fijas', async ({ page }) => {
+    await page.goto('/muestra/');
+    const tarjeta = page.locator('.tarjeta[data-id="planta-columbus"]');
+    await expect(tarjeta.locator('source[type="image/avif"]')).toHaveCount(1);
+    await expect(tarjeta.locator('source[type="image/webp"]')).toHaveCount(1);
+    await expect(tarjeta.locator('img')).toHaveAttribute('width', /^\d+$/);
+    await expect(tarjeta.locator('img')).toHaveAttribute('height', /^\d+$/);
+    await expect(tarjeta.locator('h3 a')).toHaveAttribute('href', '/proyectos/planta-columbus/');
+  });
+
+  test('la tarjeta sin foto muestra la ilustración del sector', async ({ page }) => {
+    await page.goto('/muestra/');
+    const tarjeta = page.locator('.tarjeta[data-id="torre-grua-maceo"]');
+    await expect(tarjeta.locator('svg[role="img"]')).toHaveCount(1);
+    await expect(tarjeta.locator('img')).toHaveCount(0);
+  });
+
+  test('las seis ilustraciones existen y la muestra no carga React', async ({ page }) => {
+    await page.goto('/muestra/');
+    await expect(page.locator('#ilustraciones svg.ilustracion')).toHaveCount(6);
+    await expect(page.locator('astro-island')).toHaveCount(0);
+  });
+
+  test('la lámina va en gris y vuelve a color al pasar el cursor', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 900 });
+    await page.goto('/muestra/');
+    const img = page.locator('.tarjeta[data-id="planta-columbus"] img');
+    expect(await img.evaluate((el) => getComputedStyle(el).filter)).toContain('grayscale(1)');
+    await page.locator('.tarjeta[data-id="planta-columbus"]').hover();
+    await expect.poll(() => img.evaluate((el) => getComputedStyle(el).filter)).toBe('none');
+  });
+
+  test('(foco 5) con reduced-motion los trazos están completos', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/muestra/');
+    const offsets = await page.locator('.trazo .t').evaluateAll((xs) => xs.map((x) => parseFloat(getComputedStyle(x).strokeDashoffset)));
+    expect(offsets.length).toBeGreaterThan(0);
+    expect(offsets.filter((o) => o !== 0)).toEqual([]);
+  });
+
+  test('(foco 3) ninguna variante generada pasa de 800 px de ancho', async () => {
+    const sharp = (await import('sharp')).default;
+    const dir = path.join(process.cwd(), 'dist', '_astro');
+    const anchas: string[] = [];
+    for (const f of fs.readdirSync(dir).filter((x) => /\.(avif|webp)$/.test(x))) {
+      const { width } = await sharp(path.join(dir, f)).metadata();
+      if ((width ?? 0) > 800) anchas.push(`${f}: ${width}`);
+    }
+    expect(anchas).toEqual([]);
+  });
 });

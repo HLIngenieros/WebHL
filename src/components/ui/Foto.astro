@@ -1,18 +1,20 @@
 ---
 // Foto responsiva (especificación §6): AVIF y WebP con dimensiones fijas para no mover la página.
-// `prioridad` solo para la imagen del LCP; el resto carga en diferido.
+// `prioridad` solo para la imagen del LCP; el resto carga en diferido. Nunca más de 800 px (guía §8).
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 interface Props { src: ImageMetadata; alt: string; sizes: string; prioridad?: boolean; class?: string }
 const { src, alt, sizes, prioridad = false, class: clase } = Astro.props;
-const widths = [480, 800, 1200].filter((w) => w <= src.width);
+const widths = [480, 800].filter((w) => w <= src.width);
 ---
 <Picture
   src={src}
   alt={alt}
   sizes={sizes}
   widths={widths.length ? widths : [src.width]}
+  width={Math.min(800, src.width)}
+  height={Math.round((Math.min(800, src.width) * src.height) / src.width)}
   formats={['avif', 'webp']}
   loading={prioridad ? 'eager' : 'lazy'}
   decoding={prioridad ? 'sync' : 'async'}
@@ -22,5 +24,5 @@ const widths = [480, 800, 1200].filter((w) => w <= src.width);
 
 <style>
   /* Global: Picture es otro componente y no recibe el atributo de alcance. */
-  :global(img.foto) { display: block; width: 100%; height: auto; background: var(--line-soft); }
+  :global(img.foto) { display: block; width: 100%; max-width: 800px; height: auto; background: var(--line-soft); }
 </style>
