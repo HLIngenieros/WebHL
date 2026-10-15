@@ -8,7 +8,9 @@ const texto = z.object({ es: z.string(), en: z.string().optional() });
 const slug = z.object({ es: z.string().regex(/^[a-z0-9-]+$/), en: z.string().regex(/^[a-z0-9-]+$/) });
 const confirmar = z.array(z.string()).optional();
 const coordenadas = z.tuple([z.number(), z.number()]);
-const yaml = (carpeta: string) => glob({ pattern: '*.yaml', base: `./src/content/${carpeta}` });
+// El id es el nombre del archivo: glob() usaría el campo slug, que aquí es un objeto { es, en }.
+const porArchivo = ({ entry }: { entry: string }) => entry.replace(/\.(yaml|md)$/, '');
+const yaml = (carpeta: string) => glob({ pattern: '*.yaml', base: `./src/content/${carpeta}`, generateId: porArchivo });
 const idiomas = <T extends z.ZodType>(t: T) => ({ es: t, en: t.optional() });
 
 const proyectos = defineCollection({
@@ -131,7 +133,7 @@ const sitio = defineCollection({
 });
 
 const paginas = defineCollection({
-  loader: glob({ pattern: '*.md', base: './src/content/paginas', generateId: ({ entry }) => entry.replace(/\.md$/, '') }),
+  loader: glob({ pattern: '*.md', base: './src/content/paginas', generateId: porArchivo }),
   schema: z.object({
     pagina: z.enum(['nosotros', 'hse', 'datos', 'terminos', 'acreedores']),
     lang: z.enum(['es', 'en']),

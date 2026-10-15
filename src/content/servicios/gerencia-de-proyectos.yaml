@@ -1,0 +1,29 @@
+# Fuente: "Gerencia de proyectos", "Asistencia en la ejecución de proyectos" y el portafolio de ECOHL
+# (contenido/institucional.md §3.1 y §6).
+grupo: A
+orden: 2
+slug: { es: gerencia-de-proyectos, en: project-management }
+normas: []
+es:
+  nombre: Gerencia de proyectos
+  resumen: Planeamos, programamos y controlamos cada proyecto de forma integral, desde su concepción hasta la puesta en marcha.
+  alcance:
+    - subcapacidad: Gerencia de proyectos (PMC y EPCM)
+      texto: Nuestros equipos reciben los requerimientos del cliente e integran todas las áreas de conocimiento para planear, programar y controlar el proyecto, desde la conceptualización hasta la ejecución y la puesta en marcha.
+    - subcapacidad: Control de costos
+      texto: Control de costos con alarmas tempranas e informes periódicos para la toma de decisiones.
+    - subcapacidad: Control técnico
+      texto: Actualización del programa de trabajo, medición del avance físico real y contractual, rendimientos y curva S.
+    - subcapacidad: Administración de contratos
+      texto: Apoyo en la ejecución y administración de subcontratistas, actas de avance y control contractual con alarmas por desviaciones de alcance y plazo.
+    - subcapacidad: Gerencia de riesgos
+      texto: Identificación y análisis cualitativo de riesgos y factores de éxito, análisis de causa raíz, acciones de respuesta y responsables.
+    - subcapacidad: Interventoría
+      texto: Interventoría técnica, administrativa, de gestión HSE y ambiental, y de gestión de calidad.
+    - subcapacidad: Apoyo al equipo del dueño
+      texto: Nuestro personal especializado se integra a la organización del cliente, asesora y participa en la ejecución de sus proyectos con la experiencia de grandes obras de construcción.
+    - subcapacidad: Formación y modelo de seguridad
+      texto: Formación en el sistema de gestión de seguridad y salud en el trabajo (talleres, seminarios y diplomado) y diseño e implementación de modelos de gestión de seguridad industrial.
+  capacidad: 394.200 horas de gerencia de proyectos (portafolio de ECOHL).
+confirmar:
+  - "Actualizar las horas de gerencia de proyectos: la cifra (394.200 h) es del portafolio de ECOHL de 2020."

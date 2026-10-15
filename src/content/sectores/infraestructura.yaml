@@ -1,0 +1,8 @@
+# Fuente: texto de portada "Infraestructura" (contenido/institucional.md §3.1).
+orden: 5
+slug: { es: infraestructura, en: infrastructure }
+es:
+  nombre: Infraestructura
+  intro: Proyectos con empresas de los sectores siderúrgico y de infraestructura.
+confirmar:
+  - "Ampliar la introducción de Infraestructura: el texto actual es de una línea y no describe el alcance."

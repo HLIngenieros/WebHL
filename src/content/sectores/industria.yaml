@@ -1,0 +1,8 @@
+# Sector nuevo (especificación §3): alimentos, consumo y manufactura. Base: fichas de Unilever y Diana Pet Food.
+orden: 6
+slug: { es: industria, en: industrial }
+es:
+  nombre: Industria
+  intro: Construcción y montaje de plantas y ampliaciones para la industria de alimentos, consumo y manufactura.
+confirmar:
+  - "Validar la introducción del sector Industria (nuevo; no existe en el sitio actual)."

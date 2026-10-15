@@ -1,0 +1,17 @@
+# Fuente: "Montajes mecánicos" (contenido/institucional.md §3.1).
+grupo: B
+orden: 4
+slug: { es: montaje-mecanico, en: mechanical-installation }
+normas: [ASME, API 650, AWS]
+es:
+  nombre: Montaje mecánico y tubería
+  resumen: Instalamos los equipos de proceso y sus estructuras para construir plantas nuevas o mejorar líneas de producción existentes.
+  alcance:
+    - subcapacidad: Equipos de proceso
+      texto: Instalación, alineación y calibración de equipos de proceso.
+    - subcapacidad: Estructura metálica
+      texto: Montaje de todas las estructuras metálicas de soporte.
+    - subcapacidad: Recubrimientos, aislamientos y refractarios
+      texto: Aplicación de recubrimientos, aislamientos y refractarios.
+    - subcapacidad: Tubería
+      texto: Prefabricación y montaje de tuberías en todos los diámetros y en los materiales de la industria (acero al carbono, acero inoxidable, HDPE, entre otros), con el proceso de soldadura adecuado a los requisitos de cada cliente.

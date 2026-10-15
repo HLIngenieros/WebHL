@@ -1,0 +1,6 @@
+# Fuente: texto de portada "Cementero" (contenido/institucional.md §3.1).
+orden: 1
+slug: { es: cemento, en: cement }
+es:
+  nombre: Cemento
+  intro: Montaje electromecánico y obras civiles de líneas productoras de cemento, en Colombia y en el exterior.

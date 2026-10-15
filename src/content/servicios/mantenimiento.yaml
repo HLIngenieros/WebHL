@@ -1,0 +1,13 @@
+# Fuente: "Mantenimiento industrial" (contenido/institucional.md §3.1).
+grupo: C
+orden: 7
+slug: { es: mantenimiento, en: maintenance-shutdowns }
+normas: []
+es:
+  nombre: Mantenimiento y paradas de planta
+  resumen: Ejecutamos los mantenimientos mayores de plantas de producción y tratamos cada parada como un proyecto de plazos muy cortos.
+  alcance:
+    - subcapacidad: Paradas de planta
+      texto: Mantenimientos mayores de plantas de producción, concebidos como proyectos de altas exigencias con límites de tiempo muy cortos.
+    - subcapacidad: Mantenimiento rutinario
+      texto: Personal de campo que refuerza el equipo de mantenimiento del cliente en sus labores rutinarias.

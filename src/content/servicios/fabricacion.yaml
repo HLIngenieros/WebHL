@@ -1,0 +1,20 @@
+# Fuente: "Fabricaciones" (contenido/institucional.md §3.1).
+grupo: C
+orden: 6
+slug: { es: fabricacion, en: fabrication }
+normas: [ASME, API 650, AWS]
+es:
+  nombre: Fabricación metalmecánica
+  resumen: Fabricamos bienes de capital para la industria, con la solución óptima según la especialidad, la logística y los acuerdos comerciales de cada país.
+  alcance:
+    - subcapacidad: Estructuras metalmecánicas
+      texto: Estructuras metalmecánicas para la industria.
+    - subcapacidad: Tanques y recipientes
+      texto: Tanques atmosféricos y de presión.
+    - subcapacidad: Calderas y ductos
+      texto: Calderas y ductos.
+    - subcapacidad: Manejo de materiales
+      texto: Equipos para el manejo de materiales, entre otros bienes de capital.
+  aliados: Desarrollamos aliados y socios en todas las regiones donde tenemos presencia, según la especialidad de la fabricación, las condiciones logísticas de transporte y los acuerdos comerciales entre los países de la zona.
+confirmar:
+  - "¿Se puede usar como capacidad demostrada la fabricación de 12.000 t de estructura y 10.500 t de equipos para Columbus en 18 meses (PDF de ECOHL)?"

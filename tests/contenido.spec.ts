@@ -157,3 +157,15 @@ test.describe('página de pendientes', () => {
     expect(violations).toEqual([]);
   });
 });
+
+const conteo = (page: import('@playwright/test').Page, coleccion: string) => page.locator(`[data-conteo="${coleccion}"] dd`);
+
+test.describe('contenido migrado', () => {
+  test.beforeEach(async ({ page }) => { await page.goto('/pendientes/'); });
+
+  test('7 servicios y 6 sectores; los servicios esperan su buzón (D7)', async ({ page }) => {
+    await expect(conteo(page, 'servicios')).toHaveText('7');
+    await expect(conteo(page, 'sectores')).toHaveText('6');
+    await expect(page.locator('tr[data-coleccion="servicios"][data-campo="buzon"]')).toHaveCount(7);
+  });
+});

@@ -1,0 +1,6 @@
+# Fuente: texto de portada "Minero" (contenido/institucional.md §3.1).
+orden: 2
+slug: { es: mineria, en: mining }
+es:
+  nombre: Minería
+  intro: Obras de expansión de puertos y construcción de plantas de proceso para proyectos mineros.

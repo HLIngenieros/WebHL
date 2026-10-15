@@ -1,0 +1,17 @@
+# Fuente: "Montajes eléctricos" (contenido/institucional.md §3.1).
+grupo: B
+orden: 5
+slug: { es: montaje-electrico, en: electrical-installation }
+normas: [RETIE]
+es:
+  nombre: Montaje eléctrico e instrumentación
+  resumen: Instalamos el sistema eléctrico de potencia y control y la instrumentación para la puesta en marcha de los proyectos.
+  alcance:
+    - subcapacidad: Potencia
+      texto: Instalaciones de media y baja tensión, subestaciones eléctricas, tableros de distribución, celdas y centros de control de motores (CCM).
+    - subcapacidad: Puesta a tierra y apantallamiento
+      texto: Mallas de puesta a tierra y apantallamientos.
+    - subcapacidad: Cableado y canalizaciones
+      texto: Todo el cableado y las canalizaciones necesarios.
+    - subcapacidad: Instrumentación y control
+      texto: Instalación de la instrumentación para el control integrado del proceso productivo.

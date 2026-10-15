@@ -1,0 +1,18 @@
+# Fuente: "Proyectos llave en mano" e "Ingeniería y diseños" (contenido/institucional.md §3.1).
+grupo: A
+orden: 1
+slug: { es: epc-llave-en-mano, en: epc-turnkey }
+normas: [NSR-10]
+es:
+  nombre: EPC y llave en mano
+  resumen: Desarrollamos el proyecto completo, de la ingeniería a la puesta en marcha, para entregar una planta de producción operativa.
+  alcance:
+    - subcapacidad: Ingeniería básica y de detalle
+      texto: Ingenierías básicas y de detalle en las especialidades civil, mecánica y eléctrica, como soporte a la ejecución de nuestros proyectos de construcción, para todos los sectores de la industria.
+    - subcapacidad: Procura
+      texto: Gestión de compras y suministros del proyecto como parte de la integración total de sus fases.
+    - subcapacidad: Construcción y montaje
+      texto: Obras civiles y montajes electromecánicos ejecutados bajo un solo responsable.
+    - subcapacidad: Comisionamiento y arranque
+      texto: Comisionamiento, pruebas y acompañamiento al personal de operación hasta convertir el proyecto de inversión en una planta completamente operativa.
+  aliados: Las ingenierías básicas y de detalle se realizan a través de aliados y contratistas; el esquema llave en mano se apoya en asociaciones estratégicas.
