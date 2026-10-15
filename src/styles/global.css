@@ -90,3 +90,8 @@
   .lead { font-size: var(--fs-lead); color: var(--muted); max-width: 62ch; }
   .cifra { font-variant-numeric: tabular-nums; white-space: nowrap; }
 }
+
+@layer components {
+  .saltar { position: absolute; left: var(--s3); top: -100px; z-index: 100; padding: var(--s2) var(--s3); background: var(--accent); color: var(--accent-ink); }
+  .saltar:focus { top: var(--s3); }
+}

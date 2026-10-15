@@ -1,0 +1,24 @@
+---
+// Páginas provisionales del mapa completo. Cada fase las reemplaza con una página propia.
+import Base from '../layouts/Base.astro';
+import { RUTAS, type ClaveRuta, type Lang } from '../i18n/rutas';
+import { t } from '../i18n/ui';
+
+export function getStaticPaths() {
+  return (Object.keys(RUTAS) as ClaveRuta[]).flatMap((clave) =>
+    (['es', 'en'] as Lang[]).map((lang) => ({
+      params: { ruta: RUTAS[clave][lang].replace(/^\/|\/$/g, '') || undefined },
+      props: { clave, lang },
+    })),
+  );
+}
+
+const { clave, lang } = Astro.props as { clave: ClaveRuta; lang: Lang };
+const titulo = clave === 'inicio' ? 'HL Ingenieros' : t(lang, clave);
+---
+<Base titulo={titulo} lang={lang}>
+  <section class="wrap py-s7">
+    <h1>{titulo}</h1>
+    <p class="lead mt-s4">{t(lang, 'construccion')}</p>
+  </section>
+</Base>

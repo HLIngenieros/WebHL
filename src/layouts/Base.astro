@@ -1,0 +1,41 @@
+---
+import '../styles/global.css';
+import { par, type Lang } from '../i18n/rutas';
+import { t } from '../i18n/ui';
+
+interface Props {
+  titulo: string;
+  descripcion?: string;
+  lang: Lang;
+  alterno?: string;
+  noindex?: boolean;
+}
+
+const { titulo, lang, alterno, noindex = false } = Astro.props;
+const descripcion = Astro.props.descripcion ?? t(lang, 'descripcion');
+const aqui = Astro.url.pathname;
+const otra = alterno ?? par(aqui);
+const abs = (p: string) => new URL(p, Astro.site).href;
+const [es, en] = lang === 'es' ? [aqui, otra] : [otra, aqui];
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo === 'HL Ingenieros' ? titulo : `${titulo} · HL Ingenieros`}</title>
+    <meta name="description" content={descripcion} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={abs(aqui)} />
+    <link rel="alternate" hreflang="es" href={abs(es)} />
+    <link rel="alternate" hreflang="en" href={abs(en)} />
+    <link rel="alternate" hreflang="x-default" href={abs(es)} />
+    <link rel="preload" href="/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <a class="saltar" href="#contenido">{t(lang, 'saltar')}</a>
+    <main id="contenido">
+      <slot />
+    </main>
+  </body>
+</html>

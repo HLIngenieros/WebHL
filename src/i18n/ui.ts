@@ -1,0 +1,58 @@
+// Textos de interfaz. Los nombres de sección usan la misma clave que RUTAS.
+import type { Lang } from './rutas';
+
+const es = {
+  inicio: 'Inicio',
+  nosotros: 'Nosotros',
+  proyectos: 'Proyectos',
+  servicios: 'Servicios',
+  sectores: 'Sectores',
+  hse: 'HSE y calidad',
+  noticias: 'Noticias',
+  contacto: 'Contacto',
+  trabaje: 'Trabaje con nosotros',
+  proveedores: 'Proveedores',
+  buzon: 'Buzón ético',
+  acreedores: 'Información para acreedores',
+  datos: 'Política de datos',
+  terminos: 'Términos y condiciones',
+  descripcion: 'HL Ingenieros: construcción, montaje electromecánico y fabricación para la industria desde 1968.',
+  hablar: 'Hablar con HL',
+  saltar: 'Saltar al contenido',
+  menu: 'Menú',
+  cerrar: 'Cerrar',
+  tema: 'Cambiar tema',
+  idioma: 'English',
+  construccion: 'Esta sección está en construcción.',
+  noEncontrada: 'Página no encontrada',
+};
+
+const en: Record<keyof typeof es, string> = {
+  inicio: 'Home',
+  nosotros: 'About',
+  proyectos: 'Projects',
+  servicios: 'Services',
+  sectores: 'Sectors',
+  hse: 'HSE & Quality',
+  noticias: 'News',
+  contacto: 'Contact',
+  trabaje: 'Careers',
+  proveedores: 'Suppliers',
+  buzon: 'Ethics line',
+  acreedores: 'Creditor information',
+  datos: 'Privacy policy',
+  terminos: 'Terms of use',
+  descripcion: 'HL Ingenieros: construction, electromechanical installation and fabrication for industry since 1968.',
+  hablar: 'Talk to HL',
+  saltar: 'Skip to content',
+  menu: 'Menu',
+  cerrar: 'Close',
+  tema: 'Change theme',
+  idioma: 'Español',
+  construccion: 'This section is under construction.',
+  noEncontrada: 'Page not found',
+};
+
+export type ClaveUI = keyof typeof es;
+const UI: Record<Lang, Record<ClaveUI, string>> = { es, en };
+export const t = (lang: Lang, clave: ClaveUI): string => UI[lang][clave];
