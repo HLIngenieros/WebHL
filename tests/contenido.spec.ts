@@ -4,36 +4,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {
   txt, numero, edad, periodo, deServicio, deSector, destacados, paraExplorador, auditar,
-  type Proyecto, type Entrada, type Pendiente,
+  type Pendiente,
 } from '../src/lib/contenido';
+import { p, ids } from './apoyo';
 
-// Proyecto completo de ejemplo; cada prueba cambia solo lo que necesita.
-function p(id: string, cambios: Partial<Proyecto> = {}): Entrada<Proyecto> {
-  return {
-    id,
-    data: {
-      slug: { es: id, en: `${id}-en` },
-      cliente: 'Cliente',
-      rol: { tipo: 'contratista' },
-      pais: 'CO',
-      ciudad: 'Bogotá',
-      inicio: 2015,
-      fin: 2017,
-      sector: { id: 'cemento' },
-      servicios: [{ id: 'montaje-mecanico' }],
-      cifras: [1, 2, 3].map((valor) => ({ valor, unidad: 't', etiqueta: { es: 'E', en: 'E' } })),
-      cantidades: [{ valor: 1, unidad: 't', concepto: { es: 'C', en: 'C' } }],
-      fotos: [{ archivo: {}, pie: { es: 'Pie', en: 'Caption' } }],
-      visibilidad: 'normal',
-      fuente: 'web',
-      es: { titulo: 'T', resumen: 'R', descripcion: 'D' },
-      en: { titulo: 'T', resumen: 'R', descripcion: 'D' },
-      ...cambios,
-    },
-  };
-}
-
-const ids = (xs: Entrada<Proyecto>[]) => xs.map((x) => x.id);
 const de = (ps: Pendiente[], id: string) => ps.filter((x) => x.id === id);
 
 test.describe('relaciones derivadas', () => {

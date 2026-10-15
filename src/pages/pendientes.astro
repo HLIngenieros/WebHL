@@ -1,21 +1,14 @@
 ---
 // Pendientes de contenido (especificación §4): lo que falta para lanzar. Es la futura solicitud de insumos.
-// En `astro build --mode lanzamiento` auditar() lanza un error si queda algo bloqueante. Se elimina en F6.
-import { getCollection } from 'astro:content';
+// La validación vive en src/lib/datos.ts (la usan todas las páginas de contenido). Se elimina en F6.
 import Base from '../layouts/Base.astro';
 import Encabezado from '../components/ui/Encabezado.astro';
 import Tabla from '../components/ui/Tabla.astro';
 import Chip from '../components/ui/Chip.astro';
-import { auditar, type Datos, type Pendiente } from '../lib/contenido';
+import { cargar, type Pendiente } from '../lib/datos';
 
 const nombres = ['proyectos', 'servicios', 'sectores', 'sedes', 'certificaciones', 'historia', 'testimonios', 'sitio', 'paginas'] as const;
-const datos = Object.fromEntries(await Promise.all(nombres.map(async (n) => [n, await getCollection(n)]))) as Required<Datos>;
-const modo = import.meta.env.MODE === 'lanzamiento' ? 'lanzamiento' : 'desarrollo';
-const pendientes = auditar(datos, { modo });
-
-for (const x of pendientes) {
-  if (x.coleccion === 'certificaciones' && x.tipo === 'aviso') console.warn(`[contenido] ${x.id}: ${x.detalle}`);
-}
+const { datos, pendientes } = await cargar();
 
 const grupos: { tipo: Pendiente['tipo']; titulo: string; entrada: string }[] = [
   { tipo: 'insumo', titulo: 'Insumos que debe aportar HL', entrada: 'Datos que no existen en el sitio actual ni en el PDF de ECOHL.' },

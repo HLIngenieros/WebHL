@@ -1,23 +1,46 @@
 ---
-// Páginas provisionales del mapa completo. Cada fase las reemplaza con una página propia.
+// Enrutador único: páginas de contenido (proyectos, servicios, sectores) y provisionales del resto del
+// mapa. Cada fase cambia una provisional por su plantilla.
 import Base from '../layouts/Base.astro';
 import { RUTAS, type ClaveRuta, type Lang } from '../i18n/rutas';
 import { t } from '../i18n/ui';
 import Nota from '../components/ui/Nota.astro';
+import { cargar, rutasDeContenido, type PropsContenido } from '../lib/datos';
+import { bloque } from '../lib/contenido';
 
-export function getStaticPaths() {
-  return (Object.keys(RUTAS) as ClaveRuta[]).flatMap((clave) =>
-    (['es', 'en'] as Lang[]).map((lang) => ({
-      params: { ruta: RUTAS[clave][lang].replace(/^\/|\/$/g, '') || undefined },
-      props: { clave, lang },
-    })),
-  );
+export async function getStaticPaths() {
+  // getStaticPaths corre aislado del resto del archivo: sus constantes van aquí dentro.
+  const CONTENIDO: ClaveRuta[] = ['proyectos', 'servicios', 'sectores'];
+  const provisionales = (Object.keys(RUTAS) as ClaveRuta[])
+    .filter((clave) => !CONTENIDO.includes(clave))
+    .flatMap((clave) =>
+      (['es', 'en'] as Lang[]).map((lang) => ({
+        params: { ruta: RUTAS[clave][lang].replace(/^\/|\/$/g, '') || undefined },
+        props: { clave, lang },
+      })),
+    );
+  return [...provisionales, ...(await rutasDeContenido())];
 }
 
-const { clave, lang } = Astro.props as { clave: ClaveRuta; lang: Lang };
-const titulo = clave === 'inicio' ? 'HL Ingenieros' : t(lang, clave);
+type Props = { clave: ClaveRuta; lang: Lang } | PropsContenido;
+const props = Astro.props as Props;
+const { lang } = props;
+const { datos } = await cargar();
+
+let titulo: string;
+let alterno: string | undefined;
+if ('tipo' in props) {
+  alterno = props.alterno;
+  const coleccion = props.tipo === 'ficha' ? 'proyectos' : props.tipo === 'servicio' ? 'servicios' : props.tipo === 'sector' ? 'sectores' : undefined;
+  const entrada = coleccion && datos[coleccion].find((x) => x.id === props.id);
+  titulo = entrada
+    ? (() => { const b = bloque(entrada.data as { es: { titulo?: string; nombre?: string } }, lang); return b.titulo ?? b.nombre ?? ''; })()
+    : t(lang, props.tipo as ClaveRuta);
+} else {
+  titulo = props.clave === 'inicio' ? 'HL Ingenieros' : t(lang, props.clave);
+}
 ---
-<Base titulo={titulo} lang={lang}>
+<Base titulo={titulo} lang={lang} alterno={alterno}>
   <section class="wrap py-s7">
     <h1 class="aparece">{titulo}</h1>
     <div class="mt-s5 aparece" style="--i:1"><Nota>{t(lang, 'construccion')}</Nota></div>

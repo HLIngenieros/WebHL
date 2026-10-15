@@ -3,13 +3,14 @@
 import { defineCollection, reference } from 'astro:content';
 import { glob, file } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { UNIDADES, type Unidad } from './i18n/ui';
 
 const texto = z.object({ es: z.string(), en: z.string().optional() });
 const slug = z.object({ es: z.string().regex(/^[a-z0-9-]+$/), en: z.string().regex(/^[a-z0-9-]+$/) });
 const confirmar = z.array(z.string()).optional();
 const coordenadas = z.tuple([z.number(), z.number()]); // [lat, lon] de la ciudad, nunca de la planta
-// Unidades cerradas: el texto de cada una por idioma se agrega en F2 (src/i18n/ui.ts).
-const unidad = z.enum(['t', 'kg', 'm', 'm2', 'm3', 'pd', 'u', 'tpd', 'tpa', 'hh', 'meses', 'dias', 'pct', 'mw']);
+// Unidades cerradas: su texto por idioma está en src/i18n/ui.ts.
+const unidad = z.enum(Object.keys(UNIDADES) as [Unidad, ...Unidad[]]);
 // El id es el nombre del archivo: glob() usaría el campo slug, que aquí es un objeto { es, en }.
 const porArchivo = ({ entry }: { entry: string }) => entry.replace(/\.(yaml|md)$/, '');
 const yaml = (carpeta: string) => glob({ pattern: '*.yaml', base: `./src/content/${carpeta}`, generateId: porArchivo });

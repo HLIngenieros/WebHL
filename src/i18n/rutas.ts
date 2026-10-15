@@ -25,6 +25,10 @@ export const PIE: ClaveRuta[] = ['trabaje', 'proveedores', 'buzon', 'acreedores'
 
 export const ruta = (clave: ClaveRuta, lang: Lang): string => RUTAS[clave][lang];
 
+/** Secciones con páginas de contenido (una por entrada de la colección del mismo nombre). */
+export type Seccion = 'proyectos' | 'servicios' | 'sectores';
+export const urlDe = (seccion: Seccion, slug: { es: string; en: string }, lang: Lang): string => `${RUTAS[seccion][lang]}${slug[lang]}/`;
+
 export const langDe = (pathname: string): Lang => (pathname === '/en' || pathname.startsWith('/en/') ? 'en' : 'es');
 
 /** URL equivalente en el otro idioma, o undefined si la página no tiene par (para hreflang). */

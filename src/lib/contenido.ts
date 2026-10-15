@@ -1,6 +1,7 @@
 // Funciones puras sobre las colecciones (especificación §4). No importa astro:content para poder
 // probarse fuera de Astro; las páginas le pasan lo que devuelve getCollection().
 import type { Lang } from '../i18n/rutas';
+import { UNIDADES, PAISES, type Unidad } from '../i18n/ui';
 
 export type Texto = { es: string; en?: string };
 export type Entrada<T> = { id: string; data: T };
@@ -16,8 +17,8 @@ export interface Proyecto {
   fin?: number;
   sector: Ref;
   servicios: Ref[];
-  cifras: { valor: number; unidad?: string; etiqueta: Texto }[];
-  cantidades: { valor?: number; unidad?: string; concepto: Texto }[];
+  cifras: { valor: number; unidad?: Unidad; etiqueta: Texto }[];
+  cantidades: { valor?: number; unidad?: Unidad; concepto: Texto }[];
   fotos: { archivo: unknown; pie?: Texto }[];
   visibilidad: 'destacado' | 'normal' | 'discreta';
   fuente: 'web' | 'ecohl';
@@ -69,6 +70,14 @@ const formatos = {
 };
 export const numero = (valor: number, lang: Lang): string => formatos[lang].format(valor);
 
+/** Cifra con su unidad: `5.250 t/día` / `5,250 t/day`; el porcentaje lleva espacio fino solo en español. */
+export function medida(valor: number, unidad: Unidad | undefined, lang: Lang): string {
+  const n = numero(valor, lang);
+  if (!unidad) return n;
+  if (unidad === 'pct') return lang === 'es' ? `${n} %` : `${n}%`;
+  return `${n} ${UNIDADES[unidad][lang]}`;
+}
+
 export const edad = (fundacion: number, hoy = new Date()): number => hoy.getFullYear() - fundacion;
 
 export function periodo(p: { inicio?: number; fin?: number }): string | undefined {
@@ -89,6 +98,28 @@ export const deServicio = (xs: P[], id: string) => ordenar(visibles(xs).filter((
 export const deSector = (xs: P[], id: string) => ordenar(visibles(xs).filter((x) => x.data.sector.id === id));
 export const destacados = (xs: P[]) => ordenar(xs.filter((x) => x.data.visibilidad === 'destacado'));
 export const paraExplorador = (xs: P[]) => [...ordenar(visibles(xs)), ...ordenar(xs.filter((x) => x.data.visibilidad === 'discreta'))];
+
+/** Proyectos parecidos: 2 puntos por mismo sector y 1 por servicio compartido; sin la actual ni discretas. */
+export function relacionados(xs: P[], actual: P, n = 3): P[] {
+  const mios = new Set(actual.data.servicios.map((s) => s.id));
+  const puntaje = (x: P) => (x.data.sector.id === actual.data.sector.id ? 2 : 0) + x.data.servicios.filter((s) => mios.has(s.id)).length;
+  const orden = new Map(ordenar(xs).map((x, i) => [x.id, i]));
+  return visibles(xs)
+    .filter((x) => x.id !== actual.id && puntaje(x) > 0)
+    .sort((a, b) => puntaje(b) - puntaje(a) || orden.get(a.id)! - orden.get(b.id)!)
+    .slice(0, n);
+}
+
+/** Ids más frecuentes primero (empate por id). */
+function porFrecuencia(ids: string[]): string[] {
+  const c = new Map<string, number>();
+  for (const id of ids) c.set(id, (c.get(id) ?? 0) + 1);
+  return [...c.keys()].sort((a, b) => c.get(b)! - c.get(a)! || a.localeCompare(b));
+}
+export const sectoresDe = (xs: P[], servicioId: string) => porFrecuencia(deServicio(xs, servicioId).map((x) => x.data.sector.id));
+export const serviciosDe = (xs: P[], sectorId: string) => porFrecuencia(deSector(xs, sectorId).flatMap((x) => x.data.servicios.map((s) => s.id)));
+export const clientesDe = (xs: P[], sectorId: string) =>
+  [...new Set(deSector(xs, sectorId).flatMap((x) => (x.data.cliente ? [x.data.cliente] : [])))].sort((a, b) => a.localeCompare(b, 'es'));
 
 // ── Auditoría: lo que falta para lanzar (especificación §4, validación en dos modos) ──
 
@@ -118,6 +149,7 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
   for (const { id, data: p } of proyectos) {
     for (const s of p.servicios) if (!existe(datos.servicios, s)) errores.push(`- proyectos/${id}: servicio "${s.id}" no existe`);
     if (!existe(datos.sectores, p.sector)) errores.push(`- proyectos/${id}: sector "${p.sector.id}" no existe`);
+    if (p.pais && !PAISES[p.pais]) errores.push(`- proyectos/${id}: país "${p.pais}" sin nombre en src/i18n/ui.ts (PAISES)`);
     if (p.slug.es !== id) errores.push(`- proyectos/${id}: slug.es "${p.slug.es}" debe ser igual al nombre del archivo`);
   }
   for (const lang of ['es', 'en'] as const) {
