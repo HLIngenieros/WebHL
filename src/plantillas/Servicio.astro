@@ -77,7 +77,7 @@ const letra = (k: (typeof secciones)[number][0]) => String(presentes.indexOf(k) 
         <h2 class="sr-only" id="s-normas">{t(lang, 'normas')}</h2>
         {s.normas.length > 0 && <p class="normas">{s.normas.map((n) => <Chip tipo="sec">{n}</Chip>)}</p>}
         {tx.capacidad && <div><h3>{t(lang, 'capacidad')}</h3><p>{tx.capacidad}</p></div>}
-        {tx.contratos?.length && <div><h3>{t(lang, 'contratos')}</h3><ul>{tx.contratos.map((c) => <li>{c}</li>)}</ul></div>}
+        {tx.contratos?.length ? <div><h3>{t(lang, 'contratos')}</h3><ul>{tx.contratos.map((c) => <li>{c}</li>)}</ul></div> : null}
       </section>
     )}
 

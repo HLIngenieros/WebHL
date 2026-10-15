@@ -11,7 +11,7 @@ import Tarjeta from '../components/Tarjeta';
 import { cargar, tarjetas } from '../lib/datos';
 import { bloque, clientesDe, deSector, serviciosDe, type Entrada, type Proyecto } from '../lib/contenido';
 import { urlDe, type Lang } from '../i18n/rutas';
-import { t } from '../i18n/ui';
+import { t, tn } from '../i18n/ui';
 
 interface Props { id: string; lang: Lang; alterno: string }
 const { id, lang, alterno } = Astro.props;
@@ -27,7 +27,7 @@ let n = 0;
 ---
 <Base titulo={tx.nombre} descripcion={tx.intro} lang={lang} alterno={alterno}>
   <div class="wrap sector-cab">
-    <Encabezado nivel={1} titulo={tx.nombre} entrada={tx.intro} medida={codigo}>
+    <Encabezado nivel={1} titulo={tx.nombre} entrada={tx.intro} medida={tn(lang, 'nProyectos', suyos.length)}>
       <Pod slot="pod" forma="rotulo" codigo={codigo} nombre={t(lang, 'sectores')} />
     </Encabezado>
   </div>

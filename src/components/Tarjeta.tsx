@@ -18,7 +18,8 @@ export default function Tarjeta({ t: d, lang, prioridad = false, oculta = false 
   ].filter((x): x is [string, string] => Boolean(x[1]));
   return (
     <article className="tarjeta con-lamina" data-seccion="proyectos" data-id={d.id} hidden={oculta || undefined}>
-      <Lamina imagen={d.imagen} sector={d.sector.id} sizes={SIZES} prioridad={prioridad} titulo={`${d.titulo} · ${d.sector.nombre}`} />
+      {/* Sin título: la ilustración es decorativa y el H3 ya nombra el proyecto */}
+      <Lamina imagen={d.imagen} sector={d.sector.id} sizes={SIZES} prioridad={prioridad} />
       <div className="tarjeta-cuerpo">
         <span className="pod-rotulo voz-datos"><span className="pod-cod">{d.codigo}</span><span className="pod-nom">{d.sector.nombre}</span></span>
         <h3 className="tarjeta-titulo"><a href={d.url}>{d.titulo}</a></h3>

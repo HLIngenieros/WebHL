@@ -170,8 +170,9 @@ test.describe('lámina, tarjeta e ilustraciones', () => {
   test('la tarjeta sin foto muestra la ilustración del sector', async ({ page }) => {
     await page.goto('/muestra/');
     const tarjeta = page.locator('.tarjeta[data-id="torre-grua-maceo"]');
-    await expect(tarjeta.locator('svg[role="img"]')).toHaveCount(1);
-    await expect(tarjeta.locator('img')).toHaveCount(0);
+    // Decorativa: el título ya lo lee el H3 de la tarjeta.
+    await expect(tarjeta.locator('svg.ilustracion[aria-hidden="true"]')).toHaveCount(1);
+    await expect(tarjeta.locator('svg[role="img"], img')).toHaveCount(0);
   });
 
   test('las seis ilustraciones existen y la muestra no carga React', async ({ page }) => {
@@ -480,5 +481,27 @@ test.describe('revisión final', () => {
     expect(tn('es', 'verN', 1)).toBe('Ver 1 proyecto');
     expect(tn('en', 'verN', 1)).toBe('See 1 project');
     expect(tn('es', 'verN', 3)).toBe('Ver 3 proyectos');
+  });
+});
+
+test.describe('menores de la revisión', () => {
+  test('la cifra de la tarjeta no repite la unidad que ya dice la etiqueta', async ({ page }) => {
+    await page.goto('/muestra/');
+    await expect(page.locator('.tarjeta[data-id="planta-columbus"] .tarjeta-cifra .cifra')).toHaveText('9.470.000');
+  });
+
+  test('la fila de cifras no deja tramos vacíos con 1 o 3 cifras', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 900 });
+    for (const url of ['/proyectos/torre-grua-maceo/', '/proyectos/molienda-de-cemento-sonson/']) {
+      await page.goto(url);
+      const [fila, celdas] = await page.locator('.cifras').evaluate((dl) => [dl.getBoundingClientRect().width,
+        [...dl.children].reduce((t, c) => t + c.getBoundingClientRect().width, 0)]);
+      expect(Math.abs(fila - celdas), url).toBeLessThan(2);
+    }
+  });
+
+  test('la cabecera de sector no repite su código', async ({ page }) => {
+    await page.goto('/sectores/mineria/');
+    await expect(page.locator('.cota-texto')).toHaveText(/proyectos/);
   });
 });

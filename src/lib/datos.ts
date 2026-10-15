@@ -78,7 +78,8 @@ type ProyectoEntrada = Entrada<Proyecto>;
 export const lugarDe = (p: Proyecto, lang: Lang) =>
   [p.ciudad, p.pais ? PAISES[p.pais]?.[lang] : undefined].filter(Boolean).join(', ') || undefined;
 
-/** Código de lámina estable en todo el sitio: la posición en el explorador. */
+/** Código de lámina: la posición en el explorador, el mismo en todas las páginas de una compilación.
+ *  Se renumera al agregar fichas (no es un identificador; los enlaces usan el slug). */
 export async function codigos(): Promise<Map<string, string>> {
   const { datos } = await cargar();
   return new Map(paraExplorador(datos.proyectos as unknown as ProyectoEntrada[]).map((x, i) => [x.id, `P-${String(i + 1).padStart(2, '0')}`]));
@@ -107,7 +108,8 @@ export async function tarjetas(xs: ProyectoEntrada[], lang: Lang): Promise<Datos
       servicios: p.servicios.map((s) => etiqueta('servicios', s.id)),
       pais: p.pais?.toLowerCase(),
       coordenadas: p.coordenadas,
-      cifra: c ? { valor: medida(c.valor, c.unidad, lang), etiqueta: txt(c.etiqueta, lang)! } : undefined,
+      // La etiqueta ya dice "Horas hombre": la unidad HH sobraría en la tarjeta.
+      cifra: c ? { valor: medida(c.valor, c.unidad === 'hh' ? undefined : c.unidad, lang), etiqueta: txt(c.etiqueta, lang)! } : undefined,
       imagen: foto ? await imagen(foto.archivo as ImageMetadata, txt(foto.pie, lang) ?? [textos.titulo, p.ciudad].filter(Boolean).join(' · ')) : undefined,
       discreta: p.visibilidad === 'discreta',
     };

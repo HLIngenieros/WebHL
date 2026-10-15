@@ -35,6 +35,7 @@
   --good: #2B714E;         /* estado: correcto, completado */
   --good-soft: #D5E9DC;
   --grid: rgba(11, 80, 158, .075); /* retícula de fondo */
+  --trazo-foto: #FFFFFF;   /* trazo sobre la lámina de foto (igual en claro y oscuro) */
 
   /* Acentos de sección (guía §3.5): primitivos por tema; [data-seccion] los asigna a --sec */
   --sec-proyectos: #8A5A00; --sec-proyectos-soft: #F5E7C2; --sec-proyectos-ink: #FFFFFF;

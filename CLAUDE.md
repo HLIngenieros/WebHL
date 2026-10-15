@@ -204,11 +204,14 @@ en [contenido/README.md](contenido/README.md).
     gz); solo el explorador hidrata. Mapa propio desde Natural Earth (`node design/mapa.mjs <geojson>`).
     Fotos a ≤ 800 px. 282 pruebas. Lighthouse móvil: explorador 98/100/100/100 (LCP 2,3 s), ficha
     99/100/100/100 (LCP 2,0 s), servicio 100 (1,7 s), sector 99 (1,8 s); CLS 0. 195 bloqueantes.
-  - **Pendiente de decidir:** LCP del explorador y la ficha sobre la meta (< 2,0 s): es el repintado del
-    texto al llegar Archivo (88 KB, `font-display: swap`). Opciones: reducir más la fuente o cambiar la
-    estrategia de carga. Menores diferidos de la revisión: `{contratos?.length && …}` en Servicio, códigos
-    P-xx que se renumeran, fila de cifras con 1 o 3, medida repetida en la cabecera de sector, lectura
-    doble de la ilustración en tarjetas sin foto, unidad y etiqueta redundantes en la cifra de la tarjeta.
+  - Cierre de F2: corregidos los menores de la revisión (cifras con 1 o 3 sin tramo vacío, tarjeta sin
+    foto con ilustración decorativa, HH no repetida en la tarjeta, token `--trazo-foto`, claves sin uso).
+    285 pruebas. Los códigos P-xx son la posición en el explorador: se renumeran al agregar fichas.
+  - **Pendiente de decidir:** LCP del explorador (2,3 s) y la ficha (2,0 s) sobre la meta (< 2,0 s): es
+    el repintado del texto al llegar Archivo (88 KB, `font-display: swap`). Opciones: reducir más la
+    fuente o cambiar la estrategia de carga.
+  - **Ojo en desarrollo:** tras cambiar integraciones o dependencias, reiniciar `npm run dev` (Astro 7
+    admite un solo servidor de desarrollo y uno de vista previa a la vez; las pruebas usan la vista previa).
   - **Siguiente paso:** `docs/plan-f3.md` (F3 · Institucional: inicio, Nosotros, HSE y calidad, noticias,
     acreedores, legales; con las firmas de Nosotros, HSE y Noticias de la guía §9). Requiere D2 (lema).
 - No usar prettier.

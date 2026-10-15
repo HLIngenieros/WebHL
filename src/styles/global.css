@@ -149,7 +149,7 @@
   .ilustracion .capa-ejes circle { stroke: var(--sec); stroke-width: var(--stroke-thin); fill: var(--paper); }
   .ilustracion .capa-cotas path { stroke: var(--signal); stroke-width: var(--stroke-thin); }
   .ilustracion.tono-blanco .capa-estructura path, .ilustracion.tono-blanco .capa-ejes line,
-  .ilustracion.tono-blanco .capa-ejes circle { stroke: #fff; fill: none; }
+  .ilustracion.tono-blanco .capa-ejes circle { stroke: var(--trazo-foto); fill: none; }
 
   /* Lámina: nunca más de 800 px (las fotos actuales miden 1200 px y muchas son de celular) */
   .lamina { position: relative; overflow: hidden; max-width: 800px; aspect-ratio: var(--proporcion, 3 / 2); background: var(--ink); }

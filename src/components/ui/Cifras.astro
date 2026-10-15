@@ -22,6 +22,8 @@ const partes = (v: string) => { const [num, ...resto] = v.split(' '); return { 
   }
   .cifras > div { position: relative; container-type: inline-size; display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: var(--s1); padding: var(--s4) var(--s3); border-left: var(--border) solid var(--line-soft); }
   .cifras > div:nth-child(2n + 1) { border-left: 0; }
+  /* La última cifra llega al final de la fila: con 1 o 3 no queda un tramo vacío */
+  .cifras > div:last-child:nth-child(odd) { grid-column: span 2; }
   dd {
     /* la cifra nunca se sale de su celda: se ajusta al ancho disponible, con el tamaño de la guía como tope */
     margin: 0; color: var(--sec); font-size: min(var(--fs-stat), 15cqi); font-stretch: var(--wdth-stat);
@@ -39,5 +41,9 @@ const partes = (v: string) => { const [num, ...resto] = v.split(' '); return { 
     .cifras { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     .cifras > div:nth-child(2n + 1) { border-left: var(--border) solid var(--line-soft); }
     .cifras > div:first-child { border-left: 0; }
+    .cifras > div:last-child:nth-child(odd) { grid-column: auto; }
+    .cifras > div:last-child:nth-child(4n + 1) { grid-column: span 4; }
+    .cifras > div:last-child:nth-child(4n + 2) { grid-column: span 3; }
+    .cifras > div:last-child:nth-child(4n + 3) { grid-column: span 2; }
   }
 </style>
