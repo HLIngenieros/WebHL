@@ -34,7 +34,7 @@ const DIBUJOS: Record<string, Dibujo> = {
       'M262 70 m-9 0 a9 9 0 1 0 18 0 a9 9 0 1 0 -18 0',
     ],
     ejes: [90, 222],
-    cotas: [[30, 150, 140], [180, 262, 50]],
+    cotas: [[30, 150, 194], [180, 262, 50]],
   },
   // Dos digestores con cúpula, tubería de unión y chimenea
   'agua-y-energia': {
@@ -111,11 +111,11 @@ export default function Ilustracion({ sector, titulo, clase, tono = 'linea' }: P
         ))}
       </g>
       <g className="capa-estructura">
-        {d.estructura.map((p) => <path key={p} className="t" d={p} pathLength={1} style={{ '--i': i++ } as React.CSSProperties} />)}
+        {d.estructura.map((p) => <path key={p} className="t" d={p} style={{ '--i': i++ } as React.CSSProperties} />)}
       </g>
       <g className="capa-cotas">
         {d.cotas.map(([x1, x2, y]) => (
-          <path key={`${x1}-${x2}-${y}`} className="t" pathLength={1} style={{ '--i': i++ } as React.CSSProperties}
+          <path key={`${x1}-${x2}-${y}`} className="t" style={{ '--i': i++ } as React.CSSProperties}
             d={`M${x1} ${y} H${x2} M${x1} ${y - 5} V${y + 5} M${x2} ${y - 5} V${y + 5} M${x1 - 3} ${y + 3} L${x1 + 3} ${y - 3} M${x2 - 3} ${y + 3} L${x2 + 3} ${y - 3}`} />
         ))}
       </g>

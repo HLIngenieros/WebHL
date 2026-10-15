@@ -446,7 +446,7 @@ hay preloader**, y todo el contenido existe en el HTML aunque el JavaScript fall
 
 | Gesto | Qué hace | Curva | Duración | Dónde |
 |---|---|---|---|---|
-| **Trazo** | El SVG se dibuja como un plano (`stroke-dashoffset` de 1 a 0) | `--ease-plano` | `--t-trazo` 1.4 s, escalonado con retraso | Ilustraciones de línea estructural al entrar en pantalla |
+| **Trazo** | El SVG se dibuja como un plano: cada trazo se revela de izquierda a derecha (`clip-path`), escalonado (con `non-scaling-stroke`, `stroke-dashoffset` dejaba trazos a medias en dibujos grandes) | `--ease-plano` | `--t-trazo` 1.4 s, escalonado con retraso | Ilustraciones de línea estructural al entrar en pantalla |
 | **Izaje** | Bloques y tarjetas suben a su sitio y frenan, como una carga izada | `--ease-izaje` | `--t-izaje` .6 s, escalonado (total ≤ .6 s) | Rejillas de tarjetas, listas de proyectos |
 | **Cota** | La línea de cota se mide (`scaleX` de 0 a 1) y la cifra cuenta hasta su valor | `--ease-plano` | `--t-cota` 1.2 s | Divisores de sección, cifras destacadas |
 | **Transición de vista** | La página nueva entra por barrido lateral (`clip-path`) sin pantallazo en blanco; barra superior y botón de contacto quedan fijos | `--ease-barrido` | `--t-vista` .5 s | Navegación entre páginas (View Transitions de Astro) |

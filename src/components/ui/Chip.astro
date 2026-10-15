@@ -1,6 +1,6 @@
 ---
 // Chip de estado (guía §7). El estado nunca va solo en color: siempre lleva texto.
-interface Props { tipo?: 'crit' | 'high' | 'ok' | 'acc' | 'med' }
+interface Props { tipo?: 'crit' | 'high' | 'ok' | 'acc' | 'sec' | 'med' }
 const { tipo = 'med' } = Astro.props;
 ---
 <span class:list={['chip', tipo]}><slot /></span>
@@ -16,5 +16,6 @@ const { tipo = 'med' } = Astro.props;
   .high { color: var(--signal-ink); background: var(--signal-soft); }
   .ok { color: var(--good); background: var(--good-soft); }
   .acc { color: var(--accent); background: var(--accent-soft); }
+  .sec { color: var(--sec); background: var(--sec-soft); }
   .med { color: var(--muted); }
 </style>

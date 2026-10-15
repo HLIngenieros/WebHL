@@ -298,15 +298,16 @@
   }
   html.sin-revela .izaje:not(.visible) { opacity: 1; transform: none; }
   /* Trazo: la línea se dibuja como un plano, una vez, al entrar en pantalla (revela.ts) */
-  .trazo .t { stroke-dasharray: 1; stroke-dashoffset: 0; }
-  html.js .trazo:not(.visible) .t { stroke-dashoffset: 1; }
-  html.js .trazo .t { transition: stroke-dashoffset var(--t-trazo) var(--ease-plano); transition-delay: calc(var(--i, 0) * 90ms); }
+  /* Se revela cada trazo de izquierda a derecha con clip-path: el guion (stroke-dasharray) se calcula
+     en píxeles de pantalla con non-scaling-stroke y dejaba trazos a medias en los dibujos grandes. */
+  html.js .trazo:not(.visible) .t { clip-path: inset(0 100% 0 0); }
+  html.js .trazo .t { transition: clip-path var(--t-trazo) var(--ease-plano); transition-delay: calc(var(--i, 0) * 90ms); }
   html.js .trazo .capa-ejes { transition: opacity var(--t-aparece) ease; }
   html.js .trazo:not(.visible) .capa-ejes { opacity: 0; }
-  html.sin-revela .trazo:not(.visible) .t { stroke-dashoffset: 0; }
+  html.sin-revela .trazo:not(.visible) .t { clip-path: none; }
   html.sin-revela .trazo:not(.visible) .capa-ejes { opacity: 1; }
   @media (prefers-reduced-motion: reduce) {
-    html.js .trazo:is(.visible, :not(.visible)) .t { stroke-dashoffset: 0; transition: none; }
+    html.js .trazo:is(.visible, :not(.visible)) .t { clip-path: none; transition: none; }
     html.js .trazo:is(.visible, :not(.visible)) .capa-ejes { opacity: 1; transition: none; }
     .aparece { animation: none; }
     html.js .izaje { opacity: 1; transform: none; transition: none; }
@@ -314,7 +315,7 @@
   @media print {
     .aparece, html.js .izaje { animation: none; opacity: 1; transform: none; transition: none; }
     html.js .cota-linea { transform: none !important; transition: none !important; }
-    html.js .trazo .t { stroke-dashoffset: 0 !important; transition: none !important; }
+    html.js .trazo .t { clip-path: none !important; transition: none !important; }
     html.js .trazo .capa-ejes { opacity: 1 !important; }
   }
 }

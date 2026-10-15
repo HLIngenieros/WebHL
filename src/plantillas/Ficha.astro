@@ -7,7 +7,7 @@ import Encabezado from '../components/ui/Encabezado.astro';
 import Rotulo from '../components/ui/Rotulo.astro';
 import Cifras from '../components/ui/Cifras.astro';
 import Tabla from '../components/ui/Tabla.astro';
-import Boton from '../components/ui/Boton.astro';
+import Llamada from '../components/Llamada.astro';
 import Foto from '../components/ui/Foto.astro';
 import Pod from '../components/Pod.astro';
 import Lamina from '../components/Lamina';
@@ -131,12 +131,7 @@ const letra = (i: number) => String(pasos.slice(0, i + 1).filter(Boolean).length
       </section>
     )}
 
-    <section class="wrap llamada">
-      <Pod forma="senal" nombre={t(lang, 'contacto')} codigo={codigo} />
-      <h2>{t(lang, 'ctaProyecto')}</h2>
-      <p class="lead">{t(lang, 'ctaTexto')}</p>
-      <Boton href={ruta('contacto', lang)}>{t(lang, 'hablar')}</Boton>
-    </section>
+    <Llamada lang={lang} titulo={t(lang, 'ctaProyecto')} codigo={codigo} />
   </article>
 </Base>
 
@@ -173,6 +168,4 @@ const letra = (i: number) => String(pasos.slice(0, i + 1).filter(Boolean).length
   .visor figure { margin: 0; display: grid; gap: var(--s2); }
   .visor figcaption { color: var(--muted); }
   .visor .cerrar { margin-top: var(--s3); min-height: 44px; padding: 0 var(--s3); background: none; border: var(--border) solid var(--line); color: var(--ink); cursor: pointer; font-family: inherit; }
-  .llamada { display: grid; gap: var(--s3); justify-items: start; padding-top: var(--s5); border-top: var(--border-strong) solid var(--ink); }
-  .llamada p { margin: 0; }
 </style>

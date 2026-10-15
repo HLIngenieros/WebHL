@@ -5,10 +5,13 @@ import Base from '../layouts/Base.astro';
 import { RUTAS, type ClaveRuta, type Lang } from '../i18n/rutas';
 import { t } from '../i18n/ui';
 import Nota from '../components/ui/Nota.astro';
-import { cargar, rutasDeContenido, type PropsContenido } from '../lib/datos';
-import { bloque } from '../lib/contenido';
+import { rutasDeContenido, type PropsContenido } from '../lib/datos';
 import Ficha from '../plantillas/Ficha.astro';
 import Proyectos from '../plantillas/Proyectos.astro';
+import Servicios from '../plantillas/Servicios.astro';
+import Servicio from '../plantillas/Servicio.astro';
+import Sectores from '../plantillas/Sectores.astro';
+import Sector from '../plantillas/Sector.astro';
 
 export async function getStaticPaths() {
   // getStaticPaths corre aislado del resto del archivo: sus constantes van aquí dentro.
@@ -27,27 +30,18 @@ export async function getStaticPaths() {
 type Props = { clave: ClaveRuta; lang: Lang } | PropsContenido;
 const props = Astro.props as Props;
 const { lang } = props;
-const { datos } = await cargar();
-
-let titulo: string;
-let alterno: string | undefined;
-if ('tipo' in props) {
-  alterno = props.alterno;
-  const coleccion = props.tipo === 'ficha' ? 'proyectos' : props.tipo === 'servicio' ? 'servicios' : props.tipo === 'sector' ? 'sectores' : undefined;
-  const entrada = coleccion && datos[coleccion].find((x) => x.id === props.id);
-  titulo = entrada
-    ? (() => { const b = bloque(entrada.data as { es: { titulo?: string; nombre?: string } }, lang); return b.titulo ?? b.nombre ?? ''; })()
-    : t(lang, props.tipo as ClaveRuta);
-} else {
-  titulo = props.clave === 'inicio' ? 'HL Ingenieros' : t(lang, props.clave);
-}
+// Las páginas de contenido llevan su título en su plantilla; aquí solo el de las provisionales.
+const titulo = 'clave' in props ? (props.clave === 'inicio' ? 'HL Ingenieros' : t(lang, props.clave)) : '';
 ---
-{'tipo' in props && props.tipo === 'ficha' ? (
-  <Ficha id={props.id!} lang={lang} alterno={props.alterno} />
-) : 'tipo' in props && props.tipo === 'proyectos' ? (
-  <Proyectos lang={lang} alterno={props.alterno} />
+{'tipo' in props ? (
+  props.tipo === 'ficha' ? <Ficha id={props.id!} lang={lang} alterno={props.alterno} />
+  : props.tipo === 'proyectos' ? <Proyectos lang={lang} alterno={props.alterno} />
+  : props.tipo === 'servicios' ? <Servicios lang={lang} alterno={props.alterno} />
+  : props.tipo === 'servicio' ? <Servicio id={props.id!} lang={lang} alterno={props.alterno} />
+  : props.tipo === 'sectores' ? <Sectores lang={lang} alterno={props.alterno} />
+  : <Sector id={props.id!} lang={lang} alterno={props.alterno} />
 ) : (
-  <Base titulo={titulo} lang={lang} alterno={alterno}>
+  <Base titulo={titulo} lang={lang}>
     <section class="wrap py-s7">
       <h1 class="aparece">{titulo}</h1>
       <div class="mt-s5 aparece" style="--i:1"><Nota>{t(lang, 'construccion')}</Nota></div>

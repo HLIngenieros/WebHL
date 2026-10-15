@@ -1,0 +1,144 @@
+---
+// Página de servicio (especificación §5). Cada bloque aparece solo si tiene contenido; proyectos y
+// sectores se derivan de las fichas. Firma de Servicios: el eje crece con el scroll y cada subcapacidad
+// entra como una capa de plano (CSS con animation-timeline; sin soporte, todo queda quieto y visible).
+import Base from '../layouts/Base.astro';
+import Encabezado from '../components/ui/Encabezado.astro';
+import Chip from '../components/ui/Chip.astro';
+import Pod from '../components/Pod.astro';
+import Llamada from '../components/Llamada.astro';
+import Tarjeta from '../components/Tarjeta';
+import { cargar, tarjetas } from '../lib/datos';
+import { bloque, deServicio, sectoresDe, type Entrada, type Proyecto } from '../lib/contenido';
+import { RUTAS, urlDe, type Lang } from '../i18n/rutas';
+import { escribirFiltros } from '../lib/explorador';
+import { t } from '../i18n/ui';
+
+interface Props { id: string; lang: Lang; alterno: string }
+const { id, lang, alterno } = Astro.props;
+const { datos } = await cargar();
+const proyectos = datos.proyectos as unknown as Entrada<Proyecto>[];
+const s = datos.servicios.find((x) => x.id === id)!.data;
+const tx = bloque(s, lang);
+const codigo = `${s.grupo}-${String(s.orden).padStart(2, '0')}`;
+const suyos = deServicio(proyectos, id);
+const muestra = await tarjetas(suyos.slice(0, 4), lang);
+const sectores = sectoresDe(proyectos, id).map((sid) => datos.sectores.find((x) => x.id === sid)!);
+
+// Las secciones presentes se numeran en orden con su eje (P2).
+const secciones = [
+  ['alcance', tx.alcance.length > 0],
+  ['recursos', Boolean(tx.propios || tx.aliados)],
+  ['normas', s.normas.length > 0 || Boolean(tx.capacidad) || Boolean(tx.contratos?.length)],
+  ['proyectos', suyos.length > 0],
+  ['faq', Boolean(tx.faq?.length)],
+] as const;
+const presentes = secciones.filter(([, si]) => si).map(([k]) => k);
+const letra = (k: (typeof secciones)[number][0]) => String(presentes.indexOf(k) + 1);
+---
+<Base titulo={tx.nombre} descripcion={tx.resumen} lang={lang} alterno={alterno}>
+  <div class="wrap servicio pila">
+    <Encabezado nivel={1} titulo={tx.nombre} entrada={tx.resumen} medida={`${t(lang, 'grupo')} ${s.grupo}`}>
+      <Pod slot="pod" forma="rotulo" codigo={codigo} nombre={t(lang, 'servicios')} />
+    </Encabezado>
+
+    {presentes.includes('alcance') && (
+      <section class="con-eje alcance" aria-labelledby="s-alcance">
+        <Pod forma="eje" letra={letra('alcance')} nombre={t(lang, 'alcance')} dato={String(tx.alcance.length)} />
+        <h2 class="sr-only" id="s-alcance">{t(lang, 'alcance')}</h2>
+        <ol class="capas">
+          {tx.alcance.map((a, i) => (
+            <li class="capa-plano" style={`--i:${i}`}>
+              <span class="voz-datos num">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{a.subcapacidad}</h3>
+              <p>{a.texto}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    {presentes.includes('recursos') && (
+      <section class="con-eje" aria-labelledby="s-recursos">
+        <Pod forma="eje" letra={letra('recursos')} nombre={`${t(lang, 'propios')} · ${t(lang, 'aliados')}`} />
+        <h2 class="sr-only" id="s-recursos">{t(lang, 'propios')}</h2>
+        <div class="dos">
+          {tx.propios && <div><h3>{t(lang, 'propios')}</h3><p>{tx.propios}</p></div>}
+          {tx.aliados && <div><h3>{t(lang, 'aliados')}</h3><p>{tx.aliados}</p></div>}
+        </div>
+      </section>
+    )}
+
+    {presentes.includes('normas') && (
+      <section class="con-eje" aria-labelledby="s-normas">
+        <Pod forma="eje" letra={letra('normas')} nombre={t(lang, 'normas')} />
+        <h2 class="sr-only" id="s-normas">{t(lang, 'normas')}</h2>
+        {s.normas.length > 0 && <p class="normas">{s.normas.map((n) => <Chip tipo="sec">{n}</Chip>)}</p>}
+        {tx.capacidad && <div><h3>{t(lang, 'capacidad')}</h3><p>{tx.capacidad}</p></div>}
+        {tx.contratos?.length && <div><h3>{t(lang, 'contratos')}</h3><ul>{tx.contratos.map((c) => <li>{c}</li>)}</ul></div>}
+      </section>
+    )}
+
+    {presentes.includes('proyectos') && (
+      <section class="con-eje" aria-labelledby="s-proyectos">
+        <Pod forma="eje" letra={letra('proyectos')} nombre={t(lang, 'proyectosServicio')} dato={String(suyos.length)} />
+        <h2 class="sr-only" id="s-proyectos">{t(lang, 'proyectosServicio')}</h2>
+        <div class="tarjetas-cont"><div class="tarjetas">{muestra.map((x) => <Tarjeta t={x} lang={lang} />)}</div></div>
+        {suyos.length > 4 && (
+          <a class="ver-todos voz-datos" data-seccion="proyectos" href={RUTAS.proyectos[lang] + escribirFiltros({ servicio: s.slug[lang] })}>
+            {t(lang, 'verTodos').replace('{n}', String(suyos.length))} →
+          </a>
+        )}
+        {sectores.length > 0 && (
+          <div class="sectores-servicio">
+            <h3>{t(lang, 'sectoresServicio')}</h3>
+            <ul class="enlaces">
+              {sectores.map((x) => <li><a data-seccion="sectores" href={urlDe('sectores', x.data.slug, lang)}>{bloque(x.data, lang).nombre}</a></li>)}
+            </ul>
+          </div>
+        )}
+      </section>
+    )}
+
+    {presentes.includes('faq') && (
+      <section class="con-eje" aria-labelledby="s-faq">
+        <Pod forma="eje" letra={letra('faq')} nombre={t(lang, 'faq')} />
+        <h2 class="sr-only" id="s-faq">{t(lang, 'faq')}</h2>
+        {tx.faq!.map((f) => <details class="faq"><summary>{f.p}</summary><p>{f.r}</p></details>)}
+      </section>
+    )}
+  </div>
+  <div class="cierre"><Llamada lang={lang} titulo={t(lang, 'ctaServicio')} codigo={codigo} /></div>
+</Base>
+
+<style>
+  .servicio { --pila: var(--s6); padding-block: var(--s5) var(--s6); }
+  .con-eje > * + * { margin-top: var(--s4); }
+  .cierre { padding-bottom: var(--s7); }
+  .capas { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s3); max-width: 900px; }
+  .capa-plano {
+    display: grid; grid-template-columns: auto 1fr; gap: var(--s1) var(--s3); padding: var(--s4);
+    background: var(--paper); border: var(--border) solid var(--line); border-left: 3px solid var(--sec);
+  }
+  .capa-plano .num { color: var(--sec); grid-row: span 2; padding-top: 4px; }
+  .capa-plano p { margin: 0; color: var(--muted); }
+  /* Firma de Servicios: el eje crece con el scroll y las capas se superponen al entrar (guía §9) */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .alcance::before { transform-origin: top; animation: crece-eje linear both; animation-timeline: view(); animation-range: entry 10% cover 70%; }
+      .capa-plano { animation: capa linear both; animation-timeline: view(); animation-range: entry 0% entry 90%; }
+    }
+  }
+  @keyframes crece-eje { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes capa { from { opacity: 0; transform: translate(-24px, 12px); clip-path: inset(0 100% 0 0); } to { opacity: 1; transform: none; clip-path: inset(0 0 0 0); } }
+  .dos { display: grid; gap: var(--s4); max-width: 900px; }
+  @media (min-width: 760px) { .dos { grid-template-columns: 1fr 1fr; } }
+  .dos p, .con-eje p { margin: 0; }
+  .normas { display: flex; flex-wrap: wrap; gap: var(--s2); max-width: none; }
+  .ver-todos { display: inline-block; color: var(--sec); }
+  .enlaces { list-style: none; margin: var(--s2) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); }
+  .enlaces a { color: var(--sec); font-weight: var(--fw-strong); }
+  .faq { border-top: var(--border) solid var(--line); padding: var(--s3) 0; max-width: 900px; }
+  .faq summary { cursor: pointer; font-weight: var(--fw-strong); }
+  .faq p { margin-top: var(--s2); color: var(--muted); }
+</style>

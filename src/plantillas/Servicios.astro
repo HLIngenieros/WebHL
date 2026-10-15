@@ -1,0 +1,67 @@
+---
+// Índice de servicios (especificación §3): 7 líneas en 3 grupos, cada grupo con su eje (P2).
+import Base from '../layouts/Base.astro';
+import Encabezado from '../components/ui/Encabezado.astro';
+import Pod from '../components/Pod.astro';
+import { cargar } from '../lib/datos';
+import { bloque, deServicio, type Entrada, type Proyecto } from '../lib/contenido';
+import { urlDe, type Lang } from '../i18n/rutas';
+import { t, tn } from '../i18n/ui';
+
+interface Props { lang: Lang; alterno: string }
+const { lang, alterno } = Astro.props;
+const { datos } = await cargar();
+const proyectos = datos.proyectos as unknown as Entrada<Proyecto>[];
+const GRUPOS = ['A', 'B', 'C'] as const;
+const NOMBRE_GRUPO = { A: 'grupoA', B: 'grupoB', C: 'grupoC' } as const;
+const servicios = [...datos.servicios].sort((a, b) => a.data.orden - b.data.orden);
+---
+<Base titulo={t(lang, 'servicios')} descripcion={t(lang, 'serviciosEntrada')} lang={lang} alterno={alterno}>
+  <div class="wrap servicios pila">
+    <Encabezado nivel={1} titulo={t(lang, 'servicios')} entrada={t(lang, 'serviciosEntrada')} medida={`${servicios.length} · A B C`}>
+      <Pod slot="pod" forma="rotulo" codigo="L-03" nombre={t(lang, 'servicios')} />
+    </Encabezado>
+    {GRUPOS.map((g) => {
+      const lista = servicios.filter((s) => s.data.grupo === g);
+      return (
+        <section class="con-eje grupo" aria-labelledby={`grupo-${g}`}>
+          <Pod forma="eje" letra={g} nombre={t(lang, NOMBRE_GRUPO[g])} dato={String(lista.length)} />
+          <h2 class="sr-only" id={`grupo-${g}`}>{t(lang, NOMBRE_GRUPO[g])}</h2>
+          <ul class="lineas">
+            {lista.map((s, i) => {
+              const tx = bloque(s.data, lang);
+              const n = deServicio(proyectos, s.id).length;
+              return (
+                <li data-id={s.id} class="izaje" style={`--i:${i}`}>
+                  <span class="voz-datos codigo">{`${g}-${String(s.data.orden).padStart(2, '0')}`}</span>
+                  <h3><a href={urlDe('servicios', s.data.slug, lang)}>{tx.nombre}</a></h3>
+                  <p>{tx.resumen}</p>
+                  <span class="voz-datos conteo">{tn(lang, 'nProyectos', n)}</span>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      );
+    })}
+  </div>
+</Base>
+
+<style>
+  .servicios { --pila: var(--s6); padding-block: var(--s5) var(--s7); }
+  .grupo > * + * { margin-top: var(--s4); }
+  .lineas { list-style: none; margin: 0; padding: 0; display: grid; border-top: var(--border-strong) solid var(--ink); }
+  @media (min-width: 760px) { .lineas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1100px) { .lineas { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .lineas li {
+    position: relative; display: grid; gap: var(--s2); align-content: start; padding: var(--s4);
+    background: var(--paper); border-bottom: var(--border) solid var(--line); border-right: var(--border) solid var(--line);
+  }
+  .lineas li:hover h3 a { color: var(--sec); }
+  .lineas h3 a { color: var(--ink); text-decoration: none; }
+  .lineas h3 a::after { content: ''; position: absolute; inset: 0; }
+  .lineas li:has(a:focus-visible) { outline: var(--focus-ring); outline-offset: 2px; }
+  .lineas h3 a:focus-visible { outline: none; }
+  .lineas p { margin: 0; color: var(--muted); }
+  .codigo, .conteo { color: var(--sec); }
+</style>

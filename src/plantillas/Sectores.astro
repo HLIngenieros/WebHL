@@ -1,0 +1,62 @@
+---
+// Índice de sectores: cada uno con su línea estructural, su introducción y cuántos proyectos tiene.
+import Base from '../layouts/Base.astro';
+import Encabezado from '../components/ui/Encabezado.astro';
+import Pod from '../components/Pod.astro';
+import Ilustracion from '../components/Ilustracion';
+import { cargar } from '../lib/datos';
+import { bloque, deSector, type Entrada, type Proyecto } from '../lib/contenido';
+import { urlDe, type Lang } from '../i18n/rutas';
+import { t, tn } from '../i18n/ui';
+
+interface Props { lang: Lang; alterno: string }
+const { lang, alterno } = Astro.props;
+const { datos } = await cargar();
+const proyectos = datos.proyectos as unknown as Entrada<Proyecto>[];
+const sectores = [...datos.sectores].sort((a, b) => a.data.orden - b.data.orden);
+---
+<Base titulo={t(lang, 'sectores')} descripcion={t(lang, 'sectoresEntrada')} lang={lang} alterno={alterno}>
+  <div class="wrap sectores pila">
+    <Encabezado nivel={1} titulo={t(lang, 'sectores')} entrada={t(lang, 'sectoresEntrada')} medida={String(sectores.length)}>
+      <Pod slot="pod" forma="rotulo" codigo="L-04" nombre={t(lang, 'sectores')} />
+    </Encabezado>
+    <ul class="lista-sectores">
+      {sectores.map((s, i) => {
+        const tx = bloque(s.data, lang);
+        return (
+          <li data-id={s.id} class="izaje" style={`--i:${i}`}>
+            <div class="dibujo"><Ilustracion sector={s.id} /></div>
+            <span class="voz-datos codigo">{`S-${String(s.data.orden).padStart(2, '0')}`}</span>
+            <h2><a href={urlDe('sectores', s.data.slug, lang)}>{tx.nombre}</a></h2>
+            <p>{tx.intro}</p>
+            <span class="voz-datos conteo">{tn(lang, 'nProyectos', deSector(proyectos, s.id).length)}</span>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .sectores { --pila: var(--s6); padding-block: var(--s5) var(--s7); }
+  .lista-sectores { list-style: none; margin: 0; padding: 0; display: grid; border-top: var(--border-strong) solid var(--ink); border-left: var(--border) solid var(--line); }
+  @media (min-width: 640px) { .lista-sectores { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1100px) { .lista-sectores { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .lista-sectores li {
+    position: relative; display: grid; gap: var(--s2); align-content: start; padding: var(--s4);
+    background: var(--paper); border-right: var(--border) solid var(--line); border-bottom: var(--border) solid var(--line);
+  }
+  .dibujo {
+    padding: var(--s3); margin-bottom: var(--s2);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: var(--grid-cell) var(--grid-cell);
+  }
+  .lista-sectores h2 { font-size: var(--fs-h3); }
+  .lista-sectores h2 a { color: var(--ink); text-decoration: none; }
+  .lista-sectores h2 a::after { content: ''; position: absolute; inset: 0; }
+  .lista-sectores li:hover h2 a { color: var(--sec); }
+  .lista-sectores li:has(a:focus-visible) { outline: var(--focus-ring); outline-offset: 2px; }
+  .lista-sectores h2 a:focus-visible { outline: none; }
+  .lista-sectores p { margin: 0; color: var(--muted); }
+  .codigo, .conteo { color: var(--sec); }
+</style>

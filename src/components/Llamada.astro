@@ -1,0 +1,21 @@
+---
+// Llamada a contacto al final de fichas, servicios y sectores: pod P3 (una por pantalla) + botón.
+import Pod from './Pod.astro';
+import Boton from './ui/Boton.astro';
+import { ruta, type Lang } from '../i18n/rutas';
+import { t } from '../i18n/ui';
+
+interface Props { lang: Lang; titulo: string; codigo?: string }
+const { lang, titulo, codigo } = Astro.props;
+---
+<section class="wrap llamada">
+  <Pod forma="senal" nombre={t(lang, 'contacto')} codigo={codigo} />
+  <h2>{titulo}</h2>
+  <p class="lead">{t(lang, 'ctaTexto')}</p>
+  <Boton href={ruta('contacto', lang)}>{t(lang, 'hablar')}</Boton>
+</section>
+
+<style>
+  .llamada { display: grid; gap: var(--s3); justify-items: start; padding-top: var(--s5); border-top: var(--border-strong) solid var(--ink); }
+  .llamada p { margin: 0; }
+</style>

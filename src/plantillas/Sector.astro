@@ -1,0 +1,98 @@
+---
+// Página de sector (especificación §5): introducción, servicios aplicados, proyectos y clientes, todos
+// derivados de las fichas. Firma de Sectores: escenario a todo el ancho con la ilustración en tres
+// capas que se desplazan a distinta velocidad con el scroll (CSS; sin soporte, quietas).
+import Base from '../layouts/Base.astro';
+import Encabezado from '../components/ui/Encabezado.astro';
+import Pod from '../components/Pod.astro';
+import Llamada from '../components/Llamada.astro';
+import Ilustracion from '../components/Ilustracion';
+import Tarjeta from '../components/Tarjeta';
+import { cargar, tarjetas } from '../lib/datos';
+import { bloque, clientesDe, deSector, serviciosDe, type Entrada, type Proyecto } from '../lib/contenido';
+import { urlDe, type Lang } from '../i18n/rutas';
+import { t } from '../i18n/ui';
+
+interface Props { id: string; lang: Lang; alterno: string }
+const { id, lang, alterno } = Astro.props;
+const { datos } = await cargar();
+const proyectos = datos.proyectos as unknown as Entrada<Proyecto>[];
+const s = datos.sectores.find((x) => x.id === id)!.data;
+const tx = bloque(s, lang);
+const codigo = `S-${String(s.orden).padStart(2, '0')}`;
+const suyos = await tarjetas(deSector(proyectos, id), lang);
+const servicios = serviciosDe(proyectos, id).map((sid) => datos.servicios.find((x) => x.id === sid)!);
+const clientes = clientesDe(proyectos, id);
+let n = 0;
+---
+<Base titulo={tx.nombre} descripcion={tx.intro} lang={lang} alterno={alterno}>
+  <div class="wrap sector-cab">
+    <Encabezado nivel={1} titulo={tx.nombre} entrada={tx.intro} medida={codigo}>
+      <Pod slot="pod" forma="rotulo" codigo={codigo} nombre={t(lang, 'sectores')} />
+    </Encabezado>
+  </div>
+
+  <figure class="escenario" aria-hidden="true">
+    <Ilustracion sector={id} />
+  </figure>
+
+  <div class="wrap sector pila">
+    {(servicios.length > 0 || tx.serviciosTipicos) && (
+      <section class="con-eje" aria-labelledby="s-servicios">
+        <Pod forma="eje" letra={String(++n)} nombre={t(lang, 'serviciosAplicados')} dato={String(servicios.length)} />
+        <h2 class="sr-only" id="s-servicios">{t(lang, 'serviciosAplicados')}</h2>
+        {tx.serviciosTipicos && <p>{tx.serviciosTipicos}</p>}
+        <ul class="enlaces">
+          {servicios.map((x) => <li><a data-seccion="servicios" href={urlDe('servicios', x.data.slug, lang)}>{bloque(x.data, lang).nombre}</a></li>)}
+        </ul>
+      </section>
+    )}
+
+    {suyos.length > 0 && (
+      <section class="con-eje" aria-labelledby="s-proyectos">
+        <Pod forma="eje" letra={String(++n)} nombre={t(lang, 'proyectosSector')} dato={String(suyos.length)} />
+        <h2 class="sr-only" id="s-proyectos">{t(lang, 'proyectosSector')}</h2>
+        <div class="tarjetas-cont"><div class="tarjetas">{suyos.map((x) => <Tarjeta t={x} lang={lang} />)}</div></div>
+      </section>
+    )}
+
+    {clientes.length > 0 && (
+      <section class="con-eje" aria-labelledby="s-clientes">
+        <Pod forma="eje" letra={String(++n)} nombre={t(lang, 'clientesSector')} dato={String(clientes.length)} />
+        <h2 class="sr-only" id="s-clientes">{t(lang, 'clientesSector')}</h2>
+        <ul class="clientes">{clientes.map((c) => <li>{c}</li>)}</ul>
+      </section>
+    )}
+  </div>
+  <div class="cierre"><Llamada lang={lang} titulo={t(lang, 'ctaSector')} codigo={codigo} /></div>
+</Base>
+
+<style>
+  .sector-cab { padding-top: var(--s5); }
+  .escenario {
+    margin: var(--s5) 0 var(--s6); padding: var(--s5) var(--gutter); overflow: hidden;
+    background-color: var(--paper); border-block: var(--border) solid var(--line);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: var(--grid-cell) var(--grid-cell);
+  }
+  .escenario :global(.ilustracion) { max-width: 1100px; max-height: 60vh; margin-inline: auto; }
+  /* Firma de Sectores: paralaje por capas (≤ 40 px), solo transform */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .escenario :global(.capa-estructura) { animation: capa-lenta linear both; animation-timeline: view(); }
+      .escenario :global(.capa-ejes) { animation: capa-media linear both; animation-timeline: view(); }
+      .escenario :global(.capa-cotas) { animation: capa-rapida linear both; animation-timeline: view(); }
+    }
+  }
+  @keyframes capa-lenta { from { transform: translateY(8px); } to { transform: translateY(-8px); } }
+  @keyframes capa-media { from { transform: translateY(20px); } to { transform: translateY(-20px); } }
+  @keyframes capa-rapida { from { transform: translateY(40px); } to { transform: translateY(-40px); } }
+  .sector { --pila: var(--s6); }
+  .con-eje > * + * { margin-top: var(--s4); }
+  .con-eje p { margin: 0; }
+  .enlaces { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); }
+  .enlaces a { color: var(--sec); font-weight: var(--fw-strong); }
+  .clientes { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s2); }
+  .clientes li { padding: var(--s1) var(--s3); background: var(--paper); border: var(--border) solid var(--line); font-weight: var(--fw-strong); }
+  .cierre { padding-block: var(--s6) var(--s7); }
+</style>

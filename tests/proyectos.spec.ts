@@ -192,9 +192,9 @@ test.describe('lámina, tarjeta e ilustraciones', () => {
   test('(foco 5) con reduced-motion los trazos están completos', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/muestra/');
-    const offsets = await page.locator('.trazo .t').evaluateAll((xs) => xs.map((x) => parseFloat(getComputedStyle(x).strokeDashoffset)));
-    expect(offsets.length).toBeGreaterThan(0);
-    expect(offsets.filter((o) => o !== 0)).toEqual([]);
+    const estado = await page.locator('.trazo .t').evaluateAll((xs) => xs.map((x) => [getComputedStyle(x).clipPath, getComputedStyle(x).strokeDasharray]));
+    expect(estado.length).toBeGreaterThan(0);
+    expect(estado.filter(([clip, guion]) => clip !== 'none' || guion !== 'none')).toEqual([]);
   });
 
   test('(foco 3) ninguna variante generada pasa de 800 px de ancho', async () => {
@@ -391,5 +391,60 @@ test.describe('explorador de proyectos', () => {
     await page.keyboard.press('Escape');
     await expect(hoja).not.toHaveAttribute('open', '');
     await expect(abrir).toBeFocused();
+  });
+});
+
+test.describe('servicios y sectores', () => {
+  const DISCRETAS = ['patio-de-carbon-estrella', 'tanques-cobre-panama'];
+
+  test('(foco 1) ninguna página de servicio o sector enlaza a una discreta, y no cargan React', async ({ page }) => {
+    const urls = ['/servicios/', '/sectores/', ...slugs('servicios').map((s) => urlDe('servicios', s, 'es')), ...slugs('sectores').map((s) => urlDe('sectores', s, 'es'))];
+    for (const url of urls) {
+      await page.goto(url);
+      await expect(page.locator('h1'), url).toHaveCount(1);
+      for (const d of DISCRETAS) await expect(page.locator(`main a[href*="${d}"]`), url).toHaveCount(0);
+      await expect(page.locator('astro-island'), url).toHaveCount(0);
+    }
+  });
+
+  test('(foco 1) los conteos de los índices cuentan solo visibles', async ({ page }) => {
+    await page.goto('/sectores/');
+    await expect(page.locator('[data-id="mineria"] .conteo')).toHaveText(/^3\b/);
+    await page.goto('/servicios/');
+    await expect(page.locator('[data-id="montaje-mecanico"] .conteo')).not.toHaveText(/^0\b/);
+  });
+
+  test('montaje mecánico: 4 tarjetas, enlace al explorador filtrado y normas', async ({ page }) => {
+    await page.goto('/servicios/montaje-mecanico/');
+    await expect(page.locator('main .tarjeta')).toHaveCount(4);
+    await expect(page.locator('a.ver-todos')).toHaveAttribute('href', '/proyectos/?servicio=montaje-mecanico');
+    for (const n of ['ASME', 'API 650', 'AWS']) await expect(page.locator('.normas').getByText(n, { exact: true })).toHaveCount(1);
+  });
+
+  test('un servicio sin FAQ ni capacidad no muestra esas secciones', async ({ page }) => {
+    await page.goto('/servicios/montaje-mecanico/');
+    await expect(page.getByRole('heading', { name: 'Preguntas frecuentes' })).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: 'Capacidad' })).toHaveCount(0);
+    await page.goto('/servicios/gerencia-de-proyectos/');
+    await expect(page.getByRole('heading', { name: 'Capacidad' })).toHaveCount(1);
+  });
+
+  test('(foco 4) en inglés los enlaces internos y el filtro son EN', async ({ page }) => {
+    await page.goto('/en/services/mechanical-installation/');
+    const hrefs = await page.locator('main a[href^="/"]').evaluateAll((xs) => xs.map((x) => x.getAttribute('href')!));
+    expect(hrefs.filter((h) => !h.startsWith('/en/'))).toEqual([]);
+    await expect(page.locator('a.ver-todos')).toHaveAttribute('href', '/en/projects/?servicio=mechanical-installation');
+  });
+
+  test('(foco 5) con reduced-motion las capas y subcapacidades quedan quietas y visibles', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/sectores/mineria/');
+    const capas = await page.locator('.escenario g[class^="capa-"]').evaluateAll((xs) => xs.map((x) => getComputedStyle(x).transform));
+    expect(capas.length).toBe(3);
+    expect(capas.filter((v) => v !== 'none')).toEqual([]);
+    await page.goto('/servicios/montaje-mecanico/');
+    const subs = await page.locator('.capa-plano').evaluateAll((xs) => xs.map((x) => [getComputedStyle(x).transform, getComputedStyle(x).opacity]));
+    expect(subs.length).toBe(4);
+    expect(subs.filter(([t, o]) => t !== 'none' || o !== '1')).toEqual([]);
   });
 });
