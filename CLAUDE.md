@@ -184,6 +184,10 @@ en [contenido/README.md](contenido/README.md).
     Cierre con los 8 menores de la revisión: tokens tipográficos de componentes, tema con estado
     (`aria-pressed`) y respaldo sin almacenamiento, foco sin sombra, breakpoints alineados, Aparece solo
     CSS, impresión y observador único (126 pruebas).
+  - **Siguiente paso:** escribir `docs/plan-f1.md` (F1 · Contenido, especificación §4 y §7) y ejecutarlo:
+    colecciones con esquema, migración de `contenido/` (~22 fichas, 7 servicios, 6 sectores, sedes,
+    historia, testimonios, certificaciones), descarga y optimización de las 51 fotos (~10 MB) y listado
+    de pendientes generado al compilar.
 - No usar prettier.
 - Mantener pocos directorios y archivos: la información va primero, la estructura después.
 - El repo se gestiona con GitHub Desktop.
