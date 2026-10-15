@@ -77,7 +77,7 @@ const sectores = defineCollection({
 const sedes = defineCollection({
   loader: file('src/content/sedes.yaml'),
   schema: z.object({
-    nombre: z.string(),
+    nombre: texto,
     ciudad: z.string(),
     pais: z.string().length(2),
     direccion: z.string(),
@@ -94,6 +94,7 @@ const certificaciones = defineCollection({
   schema: ({ image }) => z.object({
     norma: z.string(),
     ente: z.string(),
+    codigo: z.string().optional(),
     vence: z.coerce.date().optional(),
     sello: image().optional(),
     pdf: z.string().optional(),

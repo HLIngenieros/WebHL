@@ -28,7 +28,7 @@ export interface Proyecto {
 
 interface ConIdiomas { en?: unknown; confirmar?: string[] }
 interface Servicio extends ConIdiomas { buzon?: string }
-interface Sede { buzon?: string; confirmar?: string[] }
+interface Sede { nombre: Texto; buzon?: string; confirmar?: string[] }
 interface Certificacion { norma: string; vence?: Date; pdf?: string; confirmar?: string[] }
 interface Hito extends ConIdiomas { anio?: number }
 interface Testimonio { autorizado: boolean; cargo: Texto; cita: Texto }
@@ -143,6 +143,7 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
   ingles('sectores', datos.sectores);
   for (const { id, data } of datos.sedes ?? []) {
     if (!data.buzon) add('sedes', id, 'buzon', 'insumo', true, 'D7');
+    if (!data.nombre.en) add('sedes', id, 'en', 'traduccion');
     dudas('sedes', id, data.confirmar);
   }
   for (const { id, data } of datos.certificaciones ?? []) {

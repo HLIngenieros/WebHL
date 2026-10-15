@@ -1,0 +1,28 @@
+# Fuente: "Una historia de crecimiento" (contenido/institucional.md §2). El original está en primera persona
+# (Hernando Londoño); aquí va en tercera persona con los mismos hechos. Solo la primera etapa tiene año.
+- id: la-idea-de-servicio
+  orden: 1
+  anio: 1968
+  es:
+    titulo: La idea de servicio
+    texto: Después de 5 años de trabajo con la industria cementera (Cementos Diamante, en Apulo y Buenos Aires) y con la industria de equipos para manejo de materiales (Rapiscol), nace una compañía de ingeniería basada en esa experiencia. Su primer gerente es Guillermo Londoño.
+- id: iniciando-la-operacion
+  orden: 2
+  es:
+    titulo: Iniciando la operación
+    texto: Los primeros clientes son Planta de Soda (Cartagena y Zipaquirá), American Pipe (construcción de Tibitó II), Cementos Diamante (conversión a carbón y rediseño de las empacadoras de cemento), Cementos Samper, Cementos Boyacá y otros menores, con diseños de plantas de agregados y mejoras de eficiencia en sistemas de trituración.
+- id: hacia-la-especializacion
+  orden: 3
+  es:
+    titulo: Hacia la especialización
+    texto: Hernando Londoño asume la presidencia y orienta la compañía hacia un camino más especializado. Los clientes y los contratos crecen, y a HL Ingenieros se le encomienda el montaje del sistema de correos que Adpostal contrató con G.E. de Inglaterra.
+- id: el-desarrollo
+  orden: 4
+  es:
+    titulo: El desarrollo
+    texto: En ese contrato la compañía se encuentra con Marco Arturo Muñoz, parte integral de su desarrollo desde entonces, que pronto trae uno de los contratos más importantes de su historia, la gerencia de proyecto, la fabricación de equipos y estructuras y el montaje mecánico y eléctrico de una línea de cemento completa para Cementos del Norte en Cúcuta.
+- id: alianzas-para-crecer
+  orden: 5
+  es:
+    titulo: Alianzas para crecer
+    texto: Ante nuevos retos, la compañía busca fortalecer su flujo de trabajo para garantizar planes a largo plazo y establecer alianzas que fortalezcan su posición financiera para participar en contratos más acordes con su tamaño.

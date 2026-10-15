@@ -1,0 +1,35 @@
+# Datos generales del sitio. La edad se calcula desde `fundacion`; nunca se escribe fija.
+- id: hl
+  fundacion: 1968
+  cifras:
+    - { valor: 530, prefijo: '+', etiqueta: { es: Proyectos ejecutados } }
+    - { valor: 4000000, prefijo: '+', unidad: hh, etiqueta: { es: Horas hombre al año } }
+    - { valor: 7, etiqueta: { es: Países con obra } }
+    - { valor: 4, etiqueta: { es: Sedes } }
+  redes:
+    - { red: LinkedIn, url: 'https://www.linkedin.com/company/hl-ingenieros-sa' }
+  # Logos de la portada actual. Sin First Quantum / Cobre Panamá: es cliente de un caso discreto (D6).
+  clientes:
+    - { nombre: Emgesa, logo: ../assets/clientes/emgesa.png }
+    - { nombre: Drummond, logo: ../assets/clientes/drummond.png }
+    - { nombre: Argos, logo: ../assets/clientes/argos.png }
+    - { nombre: Continental Gold, logo: ../assets/clientes/continental-gold.png }
+    - { nombre: Cemex, logo: ../assets/clientes/cemex.png }
+    - { nombre: Ladrillera Santafé, logo: ../assets/clientes/ladrillera-santafe.png }
+    - { nombre: Unilever, logo: ../assets/clientes/unilever.png }
+    - { nombre: OHL Industrial, logo: ../assets/clientes/ohl-industrial.png }
+    - { nombre: Vopak, logo: ../assets/clientes/vopak.png }
+    - { nombre: Peldar, logo: ../assets/clientes/peldar.png }
+    - { nombre: Colsubsidio, logo: ../assets/clientes/colsubsidio.png }
+    - { nombre: Diana Pet Food, logo: ../assets/clientes/diana-pet-food.png }
+    - { nombre: Cerrejón, logo: ../assets/clientes/cerrejon.png }
+    - { nombre: Bolsa y Mercados de Valores de la República Dominicana, logo: ../assets/clientes/bolsa-valores-rd.png }
+    - { nombre: Hyundai Heavy Industries, logo: ../assets/clientes/hyundai.png }
+    - { nombre: Grupo Prodeco, logo: ../assets/clientes/prodeco.png }
+    - { nombre: Oxy, logo: ../assets/clientes/oxy.png }
+    - { nombre: Chevron, logo: ../assets/clientes/chevron.png }
+  confirmar:
+    - "Cifras de portada de 2020 (+530 proyectos, +4.000.000 HH al año): actualizar."
+    - "7 países con obra: no hay fichas de Costa Rica ni de Bolivia."
+    - "¿Bolsa y Mercados de Valores de la República Dominicana es cliente?"
+    - "Logos de clientes: ¿se mantienen los 18 y se agregan clientes 2020-2026?"

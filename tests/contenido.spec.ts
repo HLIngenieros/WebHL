@@ -151,6 +151,12 @@ test.describe('auditar()', () => {
     expect(ps).toMatchObject([{ id: 'iso-9001', tipo: 'aviso', bloquea: true }]);
   });
 
+  test('sede sin buzón ni nombre en inglés: insumo y traducción', () => {
+    const s = { id: 'bogota', data: { nombre: { es: 'Sede principal' } } };
+    const ps = auditar({ sedes: [s] }, { modo: 'desarrollo', hoy });
+    expect(ps.map((x) => x.campo).sort()).toEqual(['buzon', 'en']);
+  });
+
   test('testimonio sin autorizar: aviso que no bloquea', () => {
     const t = { id: 'ana', data: { nombre: 'Ana', cargo: { es: 'Ingeniera' }, autorizado: false, cita: { es: 'Cita' } } };
     expect(auditar({ testimonios: [t] }, { modo: 'desarrollo', hoy })).toMatchObject([{ tipo: 'aviso', bloquea: false }]);
@@ -208,6 +214,25 @@ test.describe('contenido migrado', () => {
     await expect(page.locator('tr[data-proyecto="tanques-cobre-panama"]')).toHaveAttribute('data-visibilidad', 'discreta');
     await expect(page.locator('tr[data-visibilidad="destacado"]')).toHaveCount(4);
     await expect(page.locator('tr[data-proyecto][data-fuente="ecohl"]')).toHaveCount(6);
+  });
+
+  test('institucional: sedes, certificaciones, historia, testimonios, sitio y páginas', async ({ page }) => {
+    await expect(conteo(page, 'sedes')).toHaveText('4');
+    expect(Number(await conteo(page, 'certificaciones').textContent())).toBeGreaterThanOrEqual(3);
+    await expect(conteo(page, 'historia')).toHaveText('5');
+    await expect(conteo(page, 'testimonios')).toHaveText('4');
+    await expect(conteo(page, 'sitio')).toHaveText('1');
+    await expect(conteo(page, 'paginas')).toHaveText('5');
+    await expect(page.locator('tr[data-coleccion="testimonios"][data-campo="autorizado"]')).toHaveCount(4);
+    await expect(page.locator('tr[data-coleccion="paginas"][data-campo="revisión jurídica"]')).toHaveCount(3);
+  });
+
+  test('el contenido no publica correos personales, solo buzones por función', () => {
+    const permitidos = ['buzonetico@hlingenieros.com', 'hlisa@hlingenieros.com', 'administracionpanama@hlingenieros.com'];
+    const raiz = path.join(process.cwd(), 'src', 'content');
+    const archivos = fs.readdirSync(raiz, { recursive: true }).map(String).filter((f) => /\.(ya?ml|md)$/.test(f));
+    const correos = archivos.flatMap((f) => fs.readFileSync(path.join(raiz, f), 'utf8').match(/[\w.+-]+@[\w-]+\.[\w.]+/g) ?? []);
+    expect(correos.filter((c) => !permitidos.includes(c.toLowerCase()))).toEqual([]);
   });
 
   test('cada ficha actual del inventario apunta a una URL nueva de proyecto', () => {

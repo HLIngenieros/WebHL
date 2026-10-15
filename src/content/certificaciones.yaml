@@ -1,0 +1,23 @@
+# Fuente: sellos de la biblioteca de medios (2025). Los certificados en PDF y sus fechas de vencimiento se piden a HL.
+# No se incluyen los sellos anteriores (TÜV Rheinland, Iticcol, OHSAS 18001, NORSOK S006, Compite).
+- id: iso-9001
+  norma: ISO 9001
+  ente: SGS
+  codigo: CO24/00000108
+  sello: ../assets/certificaciones/sgs-iso-9001.png
+- id: iso-14001
+  norma: ISO 14001
+  ente: SGS
+  codigo: CO24/00000109
+  sello: ../assets/certificaciones/sgs-iso-14001.png
+- id: iso-45001
+  norma: ISO 45001
+  ente: SGS
+  codigo: CO24/00000107
+  sello: ../assets/certificaciones/sgs-iso-45001.png
+- id: bpi
+  norma: Buenas Prácticas de Innovación (BPI)
+  ente: Icontec y Cámara de Comercio de Bogotá
+  sello: ../assets/certificaciones/bpi-icontec.png
+  confirmar:
+    - "El sello BPI es de 2022: ¿sigue vigente?"
