@@ -251,7 +251,15 @@ La voz de datos es la firma del sistema: es como se escriben las cotas en un pla
   Bajo 900 px todo pasa a una columna.
 - **Ritmo vertical:** secciones separadas por `--s7`; encabezado de sección a contenido `--s5`;
   dentro de tarjetas `--s3`/`--s4`.
-- **Breakpoints:** 520 · 640 · 760 · 900 · 960 px (enfoque móvil primero).
+- **Breakpoints:** 520 · 640 · 760 · 900 · 960 · 1280 · 1600 px (enfoque móvil primero).
+- **Igual de impactante en cualquier pantalla.** Cada formato se diseña, no solo se apila:
+  - **Móvil:** menú a pantalla completa con animación; "Hablar con HL" en una barra inferior al alcance
+    del pulgar; filtros del explorador en hoja inferior; el rótulo de plano pasa a 2 columnas y las
+    tablas a tarjetas. Ilustraciones y cifras conservan su presencia, no se esconden.
+  - **Pantallas grandes (≥ 1440 px):** hero, mapa y escenarios de ilustración a todo el ancho; el texto
+    sigue dentro de `--wrap`; los tamaños de display crecen con `clamp()` hasta 2560 px.
+  - Los componentes se adaptan al espacio que ocupan (container queries), no solo al ancho de la ventana.
+  - Matriz de prueba: 360, 390, 768, 1024, 1366, 1920 y 2560 px, y móvil en horizontal.
 - **Retícula de fondo:** líneas `--grid` cada `--grid-cell` (24 px; 16 px en piezas pequeñas). Solo
   en la portada (hero) y escenarios de ilustración, nunca detrás de texto largo.
 
@@ -386,10 +394,10 @@ hay preloader**, y todo el contenido existe en el HTML aunque el JavaScript fall
 | Gesto | Qué hace | Curva | Duración | Dónde |
 |---|---|---|---|---|
 | **Trazo** | El SVG se dibuja como un plano (`stroke-dashoffset` de 1 a 0) | `--ease-plano` | `--t-trazo` 1.4 s, escalonado con retraso | Ilustraciones de línea estructural al entrar en pantalla |
-| **Izaje** | Bloques y tarjetas suben a su sitio y frenan, como una carga izada | `--ease-izaje` | `--t-izaje` .9 s, escalonado | Rejillas de tarjetas, listas de proyectos |
+| **Izaje** | Bloques y tarjetas suben a su sitio y frenan, como una carga izada | `--ease-izaje` | `--t-izaje` .6 s, escalonado (total ≤ .6 s) | Rejillas de tarjetas, listas de proyectos |
 | **Cota** | La línea de cota se mide (`scaleX` de 0 a 1) y la cifra cuenta hasta su valor | `--ease-plano` | `--t-cota` 1.2 s | Divisores de sección, cifras destacadas |
-| **Transición de vista** | La página nueva entra por barrido lateral (`clip-path`) sin pantallazo en blanco | `--ease-barrido` | `--t-vista` 1.1 s | Navegación entre páginas (View Transitions API) |
-| **Aparece** | Opacidad de 0 a 1 y desplazamiento de 6 px | `ease` | `--t-aparece` .8 s / `--t-rapido` .35 s | Texto del hero, mensajes del chat |
+| **Transición de vista** | La página nueva entra por barrido lateral (`clip-path`) sin pantallazo en blanco; barra superior y botón de contacto quedan fijos | `--ease-barrido` | `--t-vista` .5 s | Navegación entre páginas (View Transitions de Astro) |
+| **Aparece** | Opacidad de 0 a 1 y desplazamiento de 6 px | `ease` | `--t-aparece` .5 s / `--t-rapido` .2 s (hover, filtros, menú) | Texto del hero, mensajes del chat |
 
 **Reglas**
 
@@ -399,9 +407,14 @@ hay preloader**, y todo el contenido existe en el HTML aunque el JavaScript fall
   muestra el estado final.
 - Las cifras animadas parten del **valor real ya escrito**: Google y los lectores de pantalla ven 58,
   no 0.
-- Herramientas previstas: CSS para lo simple, GSAP + ScrollTrigger para secuencias, Motion en islas
-  React y View Transitions de Astro. Lenis (scroll suave) es opcional y se descarta si afecta la
-  accesibilidad.
+- **Ninguna animación hace esperar:** el contenido es legible desde el primer instante.
+- **Solo se anima `transform`, `opacity` y `clip-path`** (60 fps en un Android de gama media); nunca
+  propiedades que recalculan la página (`width`, `top`, `height`…).
+- **Navegación casi instantánea:** precarga al pasar el cursor o al entrar el enlace en pantalla
+  (Astro prefetch) y Speculation Rules en Chromium.
+- **Desplazamiento nativo.** Sin Lenis ni scroll suave por librería.
+- Herramientas: CSS primero (`animation-timeline: view()` con un respaldo de ~1 KB); Motion solo en el
+  explorador de proyectos; GSAP solo si una secuencia lo exige, cargado en esa página.
 
 ---
 
@@ -438,3 +451,4 @@ hay preloader**, y todo el contenido existe en el HTML aunque el JavaScript fall
 | Versión | Fecha | Cambio |
 |---|---|---|
 | 1.0 | 2026-10-13 | Primera versión a partir de la propuesta Rev. 0. Ajustes de contraste (`--signal`, `--bad`, `--good`) y nuevos tokens `--signal-ink` y `--steel`. |
+| 1.1 | 2026-10-15 | Movimiento más corto y fluido (`--t-vista` .5 s, `--t-izaje` .6 s, `--t-aparece` .5 s, `--t-rapido` .2 s), reglas de rendimiento y diseño por formato de pantalla (§5). |

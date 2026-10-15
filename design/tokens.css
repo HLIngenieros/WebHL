@@ -103,10 +103,10 @@
   --ease-plano: cubic-bezier(.6, .05, .25, 1);   /* trazo y cota: arranca lento, se asienta */
   --ease-izaje: cubic-bezier(.2, .8, .2, 1);     /* carga que llega y frena */
   --ease-barrido: cubic-bezier(.7, 0, .2, 1);    /* transición entre páginas */
-  --t-rapido: .35s;
-  --t-aparece: .8s;
-  --t-izaje: .9s;
-  --t-vista: 1.1s;
+  --t-rapido: .2s;
+  --t-aparece: .5s;
+  --t-izaje: .6s;
+  --t-vista: .5s;
   --t-cota: 1.2s;
   --t-trazo: 1.4s;
 }

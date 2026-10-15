@@ -2,7 +2,11 @@
 
 Reconstrucción de **hlingenieros.com**, el sitio de Grupo HL / HL Ingenieros S.A. (contratista
 colombiano de construcción, montaje electromecánico y fabricación, fundado en 1968 por Guillermo
-Londoño). Es un proyecto **no urgente** que se avanza de forma ocasional. Responsable: Juan David
+Londoño). Es un proyecto **no urgente** que se avanza de forma ocasional y **aún no está lanzado oficialmente**:
+se adelanta con discreción mientras se aprueba su priorización, para tener mucho hecho cuando se
+apruebe. Por eso el WordPress actual **queda congelado** (sin arreglos rápidos), todo se prueba en
+**local** (sin sitio de pruebas publicado) y no se piden insumos a las áreas todavía: se trabaja con lo
+que hay y lo faltante queda marcado. Responsable: Juan David
 Urbina (Transformación Digital HL).
 
 ## Documentos base (fuente de verdad)
@@ -11,6 +15,9 @@ Urbina (Transformación Digital HL).
 - [docs/Nuevo Sitio Grupo HL.html](docs/) (06-oct-2026, Rev. 0, "Para discusión"): propuesta completa.
   Es en sí un prototipo de la identidad (láminas L-01 a L-10, explorador de proyectos, chat y
   formulario simulados). Sirve como referencia de diseño, no es el sitio final.
+
+- **[docs/especificacion.md](docs/especificacion.md) (15-oct, v1.0): diseño aprobado del sitio nuevo**
+  (arquitectura, modelo de contenido, plantillas, rendimiento y fases F0-F6). Manda sobre la propuesta.
 
 Antes de proponer algo, verificar que no contradiga estos dos documentos; si se decide algo distinto,
 actualizar la sección "Decisiones" de este archivo.
@@ -37,7 +44,11 @@ HSE / PIENSA®, logotipo HL y el azul como ancla.
 **Astro + islas React + Tailwind, sin CMS** (contenido en el repo, ver D4). HTML estático por defecto; React solo en el
 explorador de proyectos, el agente de chat y los formularios. Colecciones tipadas: Proyecto,
 Servicio, Sector, Sede, Certificación. i18n nativo (`/en/` espejo con hreflang). View Transitions.
-Meta: Lighthouse ≥ 90 en móvil. Descartadas: HTML+Tailwind a mano (no escala) y React SPA (mal SEO).
+**Presupuesto de rendimiento (15-oct):** Lighthouse ≥ 95 en móvil en las 4 categorías, LCP < 2,0 s
+(4G), CLS < 0,05, INP < 200 ms, JS ≤ 30 KB gz por página (explorador ≤ 100 KB), Archivo variable
+reducido y alojado en el servidor, imágenes AVIF/WebP responsivas, mapa de presencia en SVG propio,
+caché y compresión en `.htaccess`. Igual de impactante en móvil y en pantallas grandes (guía §5 y §9).
+Se mide al cerrar cada fase y en un Android de gama media real. Descartadas: HTML+Tailwind a mano (no escala) y React SPA (mal SEO).
 Alternativa si se prefiere React puro: Next.js.
 
 ### Identidad: "concreto, acero y plano"
@@ -87,7 +98,7 @@ Transición de vista; sin preloader, cifras escritas en el HTML, respeta reduced
   - C · Fabricación y mantenimiento: Fabricación metalmecánica; Mantenimiento y paradas de planta.
 - ~50 páginas por idioma + 404, `sitemap.xml`, `robots.txt` y `.htaccess` (301/410 según
   [contenido/inventario.csv](contenido/inventario.csv)).
-- Pendiente de diseñar: contenido de cada plantilla, modelo de colecciones y fases de construcción.
+- Plantillas, modelo de contenido y fases: ver [docs/especificacion.md](docs/especificacion.md).
 
 Plantilla de servicio: alcance por subcapacidad, recursos propios vs. aliados, normas (NSR-10, RETIE,
 ASME, API 650, AWS), capacidad, 2-4 proyectos de ese servicio, sectores, modelos de contrato, FAQ,
@@ -111,8 +122,8 @@ de 5+ fotos con pie.
   buzonetico@, permite anónimo, declara no represalias y da radicado.
 
 ### Hoja de ruta (16 semanas estimadas)
-1. Arreglos rápidos en el sitio actual (sem. 1): Términos, Ley 1581, sacar intranet, LinkedIn a
-   `/company/hl-ingenieros-sa`, 58 años, quitar meta de ventas, permitir zoom.
+1. ~~Arreglos rápidos en el sitio actual~~ (descartado 15-oct: el WordPress queda congelado; esos
+   puntos se resuelven en el sitio nuevo).
 2. Decisiones de marca → 3. Recolección de contenido → 4. Arquitectura y redacción ES/EN →
 5. Identidad visual (aprobada sem. 6) → 6. Construcción e integraciones (staging sem. 11) →
 7. Migración, QA y lanzamiento (sem. 16): 301, GA4, Search Console, línea base antes y después.
@@ -163,8 +174,8 @@ en [contenido/README.md](contenido/README.md).
     `design/contraste.py`.
   - Etapa 2 (2026-10-14): extracción del contenido del sitio actual en `contenido/` (16 fichas,
     textos institucionales, inventario de URLs con destino 301/410, medios, PDF de ECOHL).
-  - Etapa 3 (2026-10-15, en curso): decisiones D1, D4, D5 y D6; arquitectura de información y mapa
-    del sitio aprobados. Faltan plantillas, modelo de contenido y fases.
+  - Etapa 3 (2026-10-15): decisiones D1, D4, D5 y D6; especificación aprobada por secciones
+    (`docs/especificacion.md`); guía visual v1.1 (movimiento, rendimiento, pantallas).
 - No usar prettier.
 - Mantener pocos directorios y archivos: la información va primero, la estructura después.
 - El repo se gestiona con GitHub Desktop.
