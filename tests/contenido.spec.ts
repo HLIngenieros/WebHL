@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import fs from 'node:fs';
+import path from 'node:path';
 import {
   txt, numero, edad, periodo, deServicio, deSector, destacados, paraExplorador, auditar,
   type Proyecto, type Entrada, type Pendiente,
@@ -155,6 +157,26 @@ test.describe('página de pendientes', () => {
     await expect(page.locator('[data-conteo="proyectos"]')).toHaveCount(1);
     const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
     expect(violations).toEqual([]);
+  });
+});
+
+test.describe('fotos', () => {
+  test('salen en AVIF y WebP con dimensiones fijas', async ({ page }) => {
+    await page.goto('/muestra/');
+    const foto = page.locator('picture').first();
+    await expect(foto.locator('source[type="image/avif"]')).toHaveCount(1);
+    await expect(foto.locator('source[type="image/webp"]')).toHaveCount(1);
+    const img = foto.locator('img');
+    await expect(img).toHaveAttribute('width', /^\d+$/);
+    await expect(img).toHaveAttribute('height', /^\d+$/);
+    await expect(img).toHaveAttribute('alt', /.+/);
+  });
+
+  test('ninguna variante optimizada pasa de 200 KB', () => {
+    const dir = path.join(process.cwd(), 'dist', '_astro');
+    const pesadas = fs.readdirSync(dir).filter((f) => /\.(avif|webp)$/.test(f))
+      .map((f) => [f, fs.statSync(path.join(dir, f)).size] as const).filter(([, kb]) => kb > 200 * 1024);
+    expect(pesadas).toEqual([]);
   });
 });
 

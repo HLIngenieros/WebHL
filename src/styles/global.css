@@ -113,7 +113,7 @@
     html.js .izaje { opacity: 1; transform: none; transition: none; }
   }
   @media print {
-    .aparece, html.js .izaje:not(.visible) { animation: none; opacity: 1; transform: none; }
+    .aparece, html.js .izaje { animation: none; opacity: 1; transform: none; transition: none; }
     html.js .cota-linea { transform: none !important; }
   }
 }

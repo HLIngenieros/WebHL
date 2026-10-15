@@ -9,6 +9,8 @@ import Boton from '../components/ui/Boton.astro';
 import Chip from '../components/ui/Chip.astro';
 import Nota from '../components/ui/Nota.astro';
 import Campo from '../components/ui/Campo.astro';
+import Foto from '../components/ui/Foto.astro';
+import columbus from '../assets/proyectos/planta-columbus/1.jpg';
 
 const cantidades = [
   ['Excavaciones', '442.000', 'm³'],
@@ -44,6 +46,11 @@ const cantidades = [
         { etiqueta: 'Años', valor: 'Por confirmar' },
       ]}
     />
+
+    <figure class="foto-muestra">
+      <Foto src={columbus} alt="Apiladora y banda transportadora bajo la cubierta del patio de almacenamiento de la planta Columbus" sizes="(min-width: 1200px) 1200px, 100vw" />
+      <figcaption class="voz-datos">Planta Columbus · Foto del sitio actual; pie provisional</figcaption>
+    </figure>
 
     <section class="bloque">
       <Encabezado codigo="C-01" titulo="Cifras destacadas" />
@@ -98,6 +105,8 @@ const cantidades = [
 <style>
   .muestra { display: grid; gap: var(--s6); padding-block: var(--s6); }
   .bloque { display: grid; gap: var(--s5); }
+  .foto-muestra { margin: 0; display: grid; gap: var(--s2); }
+  .foto-muestra figcaption { color: var(--muted); }
   .fila { display: flex; flex-wrap: wrap; gap: var(--s2); margin: 0; max-width: none; }
   .formulario { display: grid; gap: var(--s4); max-width: 560px; }
   .formulario :global(.boton) { justify-self: start; }
