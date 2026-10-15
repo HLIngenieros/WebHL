@@ -1,7 +1,7 @@
 // Funciones puras sobre las colecciones (especificación §4). No importa astro:content para poder
 // probarse fuera de Astro; las páginas le pasan lo que devuelve getCollection().
 import type { Lang } from '../i18n/rutas';
-import { UNIDADES, PAISES, type Unidad } from '../i18n/ui';
+import { UNIDADES, SINGULAR, PAISES, type Unidad } from '../i18n/ui';
 
 export type Texto = { es: string; en?: string };
 export type Entrada<T> = { id: string; data: T };
@@ -79,7 +79,7 @@ export function medida(valor: number, unidad: Unidad | undefined, lang: Lang): s
   const n = numero(valor, lang);
   if (!unidad) return n;
   if (unidad === 'pct') return lang === 'es' ? `${n} %` : `${n}%`;
-  return `${n} ${UNIDADES[unidad][lang]}`;
+  return `${n} ${(valor === 1 && SINGULAR[unidad]?.[lang]) || UNIDADES[unidad][lang]}`;
 }
 
 export const edad = (fundacion: number, hoy = new Date()): number => hoy.getFullYear() - fundacion;

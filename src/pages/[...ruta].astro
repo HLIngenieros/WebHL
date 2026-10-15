@@ -7,6 +7,7 @@ import { t } from '../i18n/ui';
 import Nota from '../components/ui/Nota.astro';
 import { cargar, rutasDeContenido, type PropsContenido } from '../lib/datos';
 import { bloque } from '../lib/contenido';
+import Ficha from '../plantillas/Ficha.astro';
 
 export async function getStaticPaths() {
   // getStaticPaths corre aislado del resto del archivo: sus constantes van aquí dentro.
@@ -40,9 +41,13 @@ if ('tipo' in props) {
   titulo = props.clave === 'inicio' ? 'HL Ingenieros' : t(lang, props.clave);
 }
 ---
-<Base titulo={titulo} lang={lang} alterno={alterno}>
-  <section class="wrap py-s7">
-    <h1 class="aparece">{titulo}</h1>
-    <div class="mt-s5 aparece" style="--i:1"><Nota>{t(lang, 'construccion')}</Nota></div>
-  </section>
-</Base>
+{'tipo' in props && props.tipo === 'ficha' ? (
+  <Ficha id={props.id!} lang={lang} alterno={props.alterno} />
+) : (
+  <Base titulo={titulo} lang={lang} alterno={alterno}>
+    <section class="wrap py-s7">
+      <h1 class="aparece">{titulo}</h1>
+      <div class="mt-s5 aparece" style="--i:1"><Nota>{t(lang, 'construccion')}</Nota></div>
+    </section>
+  </Base>
+)}

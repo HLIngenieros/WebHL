@@ -1,13 +1,17 @@
 ---
 // Rótulo de plano (guía §6): datos clave en celdas con borde, como el cajetín de un plano.
-interface Props { celdas: { etiqueta: string; valor: string }[]; titulo?: string }
+// Una celda lleva texto o enlaces; los enlaces pueden tomar el acento de su sección (data-seccion).
+type Enlace = { texto: string; href: string; seccion?: string };
+interface Props { celdas: { etiqueta: string; valor?: string; enlaces?: Enlace[] }[]; titulo?: string }
 const { celdas, titulo } = Astro.props;
 ---
 <div class="rotulo-cont">
   {titulo && <p class="cab voz-datos">{titulo}</p>}
   <dl class="rotulo">
     {celdas.map((c) => (
-      <div><dt class="voz-datos">{c.etiqueta}</dt><dd>{c.valor}</dd></div>
+      <div><dt class="voz-datos">{c.etiqueta}</dt><dd>{c.enlaces
+        ? c.enlaces.map((e, i) => <>{i > 0 && ', '}<a href={e.href} data-seccion={e.seccion}>{e.texto}</a></>)
+        : c.valor}</dd></div>
     ))}
   </dl>
 </div>
@@ -20,9 +24,18 @@ const { celdas, titulo } = Astro.props;
     /* bordes interiores con la técnica de separación: el fondo de la rejilla dibuja las líneas */
     gap: var(--border); background-color: var(--ink);
   }
+  /* La última celda llega al final de su fila: nunca queda un hueco en negro. */
+  .rotulo > div:last-child:nth-child(odd) { grid-column: span 2; }
   .rotulo > div { background: var(--paper); padding: var(--s2) var(--s3); min-width: 0; }
   .cab { margin: 0; max-width: none; padding: var(--s1) var(--s3); background: var(--ink); color: var(--bg); }
   dt { color: var(--muted); }
+  dd a { color: var(--sec); }
   dd { margin: 2px 0 0; font-weight: var(--fw-strong); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-  @container (min-width: 640px) { .rotulo { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  @container (min-width: 640px) {
+    .rotulo { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .rotulo > div:last-child:nth-child(odd) { grid-column: auto; }
+    .rotulo > div:last-child:nth-child(4n + 1) { grid-column: span 4; }
+    .rotulo > div:last-child:nth-child(4n + 2) { grid-column: span 3; }
+    .rotulo > div:last-child:nth-child(4n + 3) { grid-column: span 2; }
+  }
 </style>

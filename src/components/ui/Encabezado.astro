@@ -1,12 +1,12 @@
 ---
 // Encabezado de sección (guía §6): código de lámina + título + entrada + cota que se mide al entrar.
 // Toma el acento de la sección (--sec). El slot `pod` va encima del título (P1 en los H1).
-interface Props { codigo: string; titulo: string; entrada?: string; nivel?: 1 | 2; medida?: string }
+interface Props { codigo?: string; titulo: string; entrada?: string; nivel?: 1 | 2; medida?: string }
 const { codigo, titulo, entrada, nivel = 2, medida } = Astro.props;
 const H = nivel === 1 ? 'h1' : 'h2';
 ---
-<header class="encabezado">
-  <span class="codigo-lamina voz-datos">{codigo}</span>
+<header class:list={['encabezado', { 'sin-codigo': !codigo }]}>
+  {codigo && <span class="codigo-lamina voz-datos">{codigo}</span>}
   <div>
     {Astro.slots.has('pod') && <div class="pod"><slot name="pod" /></div>}
     <H class="titulo">{titulo}</H>
@@ -24,6 +24,7 @@ const H = nivel === 1 ? 'h1' : 'h2';
 <style>
   .encabezado { display: grid; grid-template-columns: auto 1fr; gap: var(--s3) var(--s4); align-items: start; }
   .pod { margin-bottom: var(--s3); }
+  .sin-codigo { grid-template-columns: 1fr; }
   .codigo-lamina { color: var(--sec); border: var(--border) solid var(--sec); padding: 2px 7px; margin-top: .5em; }
   .lead { margin: var(--s3) 0 0; }
   .cota { position: relative; height: 20px; margin-top: var(--s4); max-width: 520px; }

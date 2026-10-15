@@ -200,6 +200,11 @@ export const UNIDADES = {
   mw: { es: 'MW', en: 'MW' },
 } as const satisfies Record<string, Record<Lang, string>>;
 export type Unidad = keyof typeof UNIDADES;
+/** Unidades que cambian en singular (1 día, 1 month). */
+export const SINGULAR: Partial<Record<Unidad, Record<Lang, string>>> = {
+  meses: { es: 'mes', en: 'month' },
+  dias: { es: 'día', en: 'day' },
+};
 
 // Países en uso (ISO-2). Un código que no esté aquí detiene la compilación (auditar).
 export const PAISES: Record<string, Record<Lang, string>> = {

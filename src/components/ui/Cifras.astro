@@ -1,12 +1,15 @@
 ---
-// Cifras destacadas (guía §7). El valor final va escrito en el HTML.
+// Cifras destacadas (guía §7). El valor final va escrito en el HTML; la regla de cada cifra se mide
+// con el gesto Cota al entrar en pantalla (revela.ts) y toma el acento de la sección.
 interface Props { items: { valor: string; etiqueta: string }[] }
 const { items } = Astro.props;
+// La unidad (después del espacio duro de medida()) va más pequeña para que la cifra quepa en su celda.
+const partes = (v: string) => { const [num, ...resto] = v.split(' '); return { num, unidad: resto.join(' ') }; };
 ---
-<div class="cifras-cont">
+<div class="cifras-cont cota">
   <dl class="cifras">
-    {items.map((c) => (
-      <div><dt class="voz-datos">{c.etiqueta}</dt><dd class="cifra">{c.valor}</dd></div>
+    {items.map((c, i) => (
+      <div style={`--i:${i}`}><dt class="voz-datos">{c.etiqueta}</dt><dd class="cifra">{partes(c.valor).num}{partes(c.valor).unidad && <span class="unidad"> {partes(c.valor).unidad}</span>}</dd><span class="regla" aria-hidden="true"></span></div>
     ))}
   </dl>
 </div>
@@ -17,14 +20,21 @@ const { items } = Astro.props;
     margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
     border-block: var(--border) solid var(--line);
   }
-  .cifras > div { container-type: inline-size; display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: var(--s1); padding: var(--s4) var(--s3); border-left: var(--border) solid var(--line-soft); }
+  .cifras > div { position: relative; container-type: inline-size; display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: var(--s1); padding: var(--s4) var(--s3); border-left: var(--border) solid var(--line-soft); }
   .cifras > div:nth-child(2n + 1) { border-left: 0; }
   dd {
     /* la cifra nunca se sale de su celda: se ajusta al ancho disponible, con el tamaño de la guía como tope */
-    margin: 0; color: var(--accent); font-size: min(var(--fs-stat), 17cqi); font-stretch: var(--wdth-stat);
+    margin: 0; color: var(--sec); font-size: min(var(--fs-stat), 15cqi); font-stretch: var(--wdth-stat);
     font-weight: var(--fw-title); line-height: 1;
   }
   dt { color: var(--muted); }
+  .unidad { font-size: .42em; font-stretch: var(--wdth-data); letter-spacing: var(--ls-data); }
+  .regla { position: absolute; left: var(--s3); right: var(--s3); bottom: -1px; height: 2px; background: var(--sec); transform-origin: left; }
+  :global(html.js) .cota:not(.visible) .regla { transform: scaleX(0); }
+  :global(html.js) .regla { transition: transform var(--t-cota) var(--ease-plano); transition-delay: calc(var(--i, 0) * 120ms); }
+  :global(html.sin-revela) .cota:not(.visible) .regla { transform: none; }
+  @media print { .regla { transform: none !important; } }
+  @media (prefers-reduced-motion: reduce) { :global(html.js) .regla { transition: none; } }
   @container (min-width: 720px) {
     .cifras { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     .cifras > div:nth-child(2n + 1) { border-left: var(--border) solid var(--line-soft); }

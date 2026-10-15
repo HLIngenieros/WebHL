@@ -90,6 +90,9 @@
   .voz-datos { font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: var(--fs-data); letter-spacing: var(--ls-data); text-transform: uppercase; line-height: 1.4; }
   .lead { font-size: var(--fs-lead); color: var(--muted); max-width: 62ch; }
   .cifra { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  /* Pila: flujo normal con separación. Se usa en lugar de grid + gap cuando hay hijos con
+     container-type, que el cálculo de pistas del grid mide mal (alturas y anchos encogidos). */
+  .pila > * + * { margin-top: var(--pila, var(--s5)); }
 }
 
 @layer components {

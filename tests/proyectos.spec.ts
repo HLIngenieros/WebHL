@@ -53,6 +53,11 @@ test.describe('medida()', () => {
     expect(medida(30, 'pct', 'es')).toBe('30 %');
     expect(medida(30, 'pct', 'en')).toBe('30%');
   });
+  test('singular con 1 día o 1 mes', () => {
+    expect(medida(1, 'dias', 'es')).toBe('1 día');
+    expect(medida(1, 'meses', 'en')).toBe('1 month');
+    expect(medida(2, 'dias', 'es')).toBe('2 días');
+  });
   test('sin unidad, solo el número', () => {
     expect(medida(4, undefined, 'es')).toBe('4');
   });
@@ -201,5 +206,77 @@ test.describe('lámina, tarjeta e ilustraciones', () => {
       if ((width ?? 0) > 800) anchas.push(`${f}: ${width}`);
     }
     expect(anchas).toEqual([]);
+  });
+});
+
+test.describe('ficha de proyecto', () => {
+  const DISCRETAS = ['patio-de-carbon-estrella', 'tanques-cobre-panama'];
+
+  test('(foco 2) ninguna ficha se ve rota, con o sin datos', async ({ page }) => {
+    for (const slug of slugs('proyectos')) {
+      for (const lang of ['es', 'en'] as const) {
+        const url = urlDe('proyectos', slug, lang);
+        await page.goto(url);
+        await expect(page.locator('h1'), url).toHaveCount(1);
+        const texto = await page.locator('main').innerText();
+        expect(texto, url).not.toMatch(/\b(undefined|NaN|null)\b/);
+        const vacias = await page.locator('.rotulo dd').evaluateAll((xs) => xs.filter((x) => !x.textContent?.trim()).length);
+        expect(vacias, url).toBe(0);
+        const fotos = await page.locator('.ficha-portada img').count();
+        if (!fotos) await expect(page.locator('.ficha-portada svg[role="img"]'), url).toHaveCount(1);
+      }
+    }
+  });
+
+  test('Columbus: cifras por idioma, cantidades, hoja de contactos y LCP', async ({ page }) => {
+    await page.goto('/proyectos/planta-columbus/');
+    await expect(page.locator('.cifras dd').first()).toContainText('9.470.000');
+    await expect(page.locator('.cantidades tbody tr')).toHaveCount(11);
+    await expect(page.locator('.hoja figure')).toHaveCount(4);
+    await expect(page.locator('.ficha-portada img')).toHaveAttribute('fetchpriority', 'high');
+    await page.locator('.hoja button').nth(1).click();
+    const visor = page.locator('.visor:popover-open');
+    await expect(visor).toHaveCount(1);
+    await page.keyboard.press('Escape');
+    await expect(visor).toHaveCount(0);
+    await page.goto('/en/projects/columbus-plant/');
+    await expect(page.locator('.cifras dd').first()).toContainText('9,470,000');
+  });
+
+  test('(foco 3) a 2560 px ninguna foto pasa de 800 px, ni abierta', async ({ page }) => {
+    await page.setViewportSize({ width: 2560, height: 1440 });
+    await page.goto('/proyectos/planta-columbus/');
+    const anchos = () => page.locator('main img').evaluateAll((xs) => xs.filter((x) => x.getClientRects().length).map((x) => x.getBoundingClientRect().width));
+    expect((await anchos()).filter((w) => w > 800.5)).toEqual([]);
+    await page.locator('.hoja button').first().click();
+    expect((await anchos()).filter((w) => w > 800.5)).toEqual([]);
+  });
+
+  test('(foco 1) los relacionados nunca enlazan a una discreta; las discretas se indexan', async ({ page }) => {
+    for (const slug of slugs('proyectos')) {
+      await page.goto(urlDe('proyectos', slug, 'es'));
+      for (const d of DISCRETAS) await expect(page.locator(`.relacionados a[href*="${d}"]`)).toHaveCount(0);
+    }
+    for (const d of DISCRETAS) {
+      const resp = await page.goto(`/proyectos/${d}/`);
+      expect(resp?.status()).toBe(200);
+      await expect(page.locator('meta[name=robots]')).toHaveCount(0);
+    }
+  });
+
+  test('(foco 4) en inglés todos los enlaces internos de la ficha son EN', async ({ page }) => {
+    await page.goto('/en/projects/columbus-plant/');
+    const hrefs = await page.locator('main a[href^="/"]').evaluateAll((xs) => xs.map((x) => x.getAttribute('href')!));
+    expect(hrefs.length).toBeGreaterThan(3);
+    expect(hrefs.filter((h) => !h.startsWith('/en/'))).toEqual([]);
+  });
+
+  test('las 51 fotos de proyecto aparecen en su ficha', async ({ page }) => {
+    let total = 0;
+    for (const slug of slugs('proyectos')) {
+      await page.goto(urlDe('proyectos', slug, 'es'));
+      total += await page.locator('.ficha-portada img, .hoja img').count();
+    }
+    expect(total).toBe(51);
   });
 });
