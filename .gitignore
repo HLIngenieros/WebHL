@@ -11,3 +11,6 @@ dist/
 .netlify/
 *.log
 __pycache__/
+.superpowers/
+test-results/
+playwright-report/
