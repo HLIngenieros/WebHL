@@ -1,0 +1,92 @@
+/* Estilos globales. Los valores salen de design/tokens.css (única fuente de verdad);
+   aquí solo se exponen a Tailwind y se fija la base tipográfica. */
+@import "../../design/tokens.css";
+@import "tailwindcss";
+
+/* Archivo variable (wght 100-900, wdth 62-125), subconjunto latino de @fontsource-variable/archivo 5.3 */
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  src: url("/fonts/archivo-var-latin.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+    U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Sin paleta ni radios por defecto: solo existen los tokens */
+@theme {
+  --color-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --font-*: initial;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-steel: var(--steel);
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-signal: var(--signal);
+  --color-signal-ink: var(--signal-ink);
+  --color-signal-soft: var(--signal-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --font-sans: var(--f);
+  --spacing-s1: var(--s1);
+  --spacing-s2: var(--s2);
+  --spacing-s3: var(--s3);
+  --spacing-s4: var(--s4);
+  --spacing-s5: var(--s5);
+  --spacing-s6: var(--s6);
+  --spacing-s7: var(--s7);
+  --breakpoint-xs: 520px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 760px;
+  --breakpoint-lg: 900px;
+  --breakpoint-xl: 960px;
+  --breakpoint-2xl: 1280px;
+  --breakpoint-3xl: 1600px;
+}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--f);
+    font-size: var(--fs-body);
+    font-weight: var(--fw-text);
+    line-height: var(--lh-text);
+  }
+  h1, h2, h3, h4 { text-wrap: balance; margin: 0; }
+  h1 { font-size: var(--fs-h1); font-stretch: var(--wdth-display); font-weight: var(--fw-display); line-height: var(--lh-display); letter-spacing: var(--ls-display); }
+  h2 { font-size: var(--fs-h2); font-stretch: var(--wdth-title); font-weight: var(--fw-title); line-height: var(--lh-title); }
+  h3 { font-size: var(--fs-h3); font-stretch: var(--wdth-subtitle); font-weight: var(--fw-subtitle); line-height: var(--lh-title); }
+  p { max-width: var(--measure); }
+  a { color: var(--accent); }
+  :focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+}
+
+@layer components {
+  .wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); box-sizing: content-box; }
+  .voz-display { font-stretch: var(--wdth-display); font-weight: var(--fw-display); line-height: var(--lh-display); letter-spacing: var(--ls-display); }
+  .voz-titulo { font-stretch: var(--wdth-title); font-weight: var(--fw-title); line-height: var(--lh-title); }
+  .voz-subtitulo { font-stretch: var(--wdth-subtitle); font-weight: var(--fw-subtitle); line-height: var(--lh-title); }
+  .voz-datos { font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: var(--fs-data); letter-spacing: var(--ls-data); text-transform: uppercase; line-height: 1.4; }
+  .lead { font-size: var(--fs-lead); color: var(--muted); max-width: 62ch; }
+  .cifra { font-variant-numeric: tabular-nums; white-space: nowrap; }
+}
