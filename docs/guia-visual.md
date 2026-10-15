@@ -171,14 +171,18 @@ Cada sección tiene un acento que la demarca: tiñe su pod (§6), el indicador d
 láminas de foto (§8), los filtros activos y el pod de las tarjetas que enlazan a ella. El azul HL
 sigue siendo la marca: logo, botón primario, foco y enlaces de texto corrido no cambian.
 
-| Sección | Acento | Claro (referencia) | Carácter |
-|---|---|---|---|
-| Inicio, Nosotros, Contacto y pie | Azul HL | `#0B509E` | Origen |
-| Proyectos | Ámbar | `#8A5A00` | Señal de obra |
-| Servicios | Cian | `#006B80` | Plano |
-| Sectores | Violeta | `#5B3FA0` | Industria |
-| HSE y calidad | Verde | `#1F6F3A` | Seguridad |
-| Noticias | Óxido | `#B13F12` | Actualidad |
+| Sección | Acento | Claro | Oscuro | Contraste mínimo (claro / oscuro) | Carácter |
+|---|---|---|---|---|---|
+| Inicio, Nosotros, Contacto y pie | Azul HL | `#0B509E` | `#62A0EC` | (los de `--accent`) | Origen |
+| Proyectos | Ámbar | `#8A5A00` | `#F2B42A` | 4,82 / 7,11 | Señal de obra |
+| Servicios | Cian | `#006B80` | `#4FC3D9` | 4,79 / 6,93 | Plano |
+| Sectores | Violeta | `#5B3FA0` | `#A894E0` | 5,93 / 5,97 | Industria |
+| HSE y calidad | Verde | `#1F6F3A` | `#5CC27D` | 4,91 / 6,97 | Seguridad |
+| Noticias | Óxido | `#B13F12` | `#F08A5D` | 4,84 / 6,27 | Actualidad |
+
+El mínimo es el peor de los cuatro pares que verifica `contraste.py` para cada sección (acento sobre
+fondo y papel, `--sec-ink` sobre el acento y acento sobre `--sec-soft`). Los primitivos se llaman
+`--sec-<sección>`, `--sec-<sección>-soft` y `--sec-<sección>-ink`.
 
 - **Tokens:** cada página declara su sección en `<html data-seccion="…">` y `tokens.css` define para
   ella `--sec` (acento como texto y línea), `--sec-soft` (fondo de chip y filtro activo) y

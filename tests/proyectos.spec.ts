@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 import { medida, relacionados, sectoresDe, serviciosDe, clientesDe, auditar } from '../src/lib/contenido';
 import { cumple, conteos, leerFiltros, escribirFiltros } from '../src/lib/explorador';
 import { urlDe } from '../src/i18n/rutas';
@@ -101,6 +102,49 @@ test.describe('rutas de contenido', () => {
           await expect(page.locator('a.idioma')).toHaveAttribute('href', otra);
         }
       }
+    });
+  }
+});
+
+test.describe('identidad por sección', () => {
+  test.use({ colorScheme: 'light' });
+
+  test('(foco 4) <html> declara la sección de la página', async ({ page }) => {
+    const seccion = async (url: string) => { await page.goto(url); return page.locator('html').getAttribute('data-seccion'); };
+    expect(await seccion('/proyectos/')).toBe('proyectos');
+    expect(await seccion('/proyectos/planta-columbus/')).toBe('proyectos');
+    expect(await seccion('/en/services/')).toBe('servicios');
+    expect(await seccion('/sectores/mineria/')).toBe('sectores');
+    expect(await seccion('/')).toBeNull();
+    expect(await seccion('/nosotros/')).toBeNull();
+  });
+
+  test('el indicador del menú toma el acento de la sección', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 768 });
+    const color = async (url: string) => {
+      await page.goto(url);
+      return page.locator('#nav-principal a[aria-current=page]').evaluate((a) => getComputedStyle(a).borderBottomColor);
+    };
+    expect(await color('/proyectos/')).toBe('rgb(138, 90, 0)');
+    expect(await color('/servicios/')).toBe('rgb(0, 107, 128)');
+  });
+
+  test('un pod con otra sección toma su acento dentro de la página', async ({ page }) => {
+    await page.goto('/muestra/');
+    expect(await page.locator('html').getAttribute('data-seccion')).toBe('proyectos');
+    const barra = (sel: string) => page.locator(sel).first().evaluate((el) => getComputedStyle(el, '::before').backgroundColor);
+    expect(await barra('.pod-rotulo[data-seccion="hse"]')).toBe('rgb(31, 111, 58)');
+    expect(await barra('.pod-rotulo:not([data-seccion])')).toBe('rgb(138, 90, 0)');
+    await expect(page.locator('.pod-eje')).not.toHaveCount(0);
+    await expect(page.locator('.pod-senal')).not.toHaveCount(0);
+  });
+
+  for (const tema of ['light', 'dark'] as const) {
+    test(`los pods cumplen contraste en tema ${tema}`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
+      await page.goto('/muestra/');
+      const r = await new AxeBuilder({ page }).include('#pods').withTags(['wcag2a', 'wcag2aa']).analyze();
+      expect(r.violations.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);
     });
   }
 });

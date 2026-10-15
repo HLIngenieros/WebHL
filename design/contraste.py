@@ -31,6 +31,15 @@ PARES = [
     ("ink", "bg", 3.0, "borde inferior de campos (no texto)"),
 ]
 
+# Acentos de sección (guía §3.5): texto sobre fondo y papel, texto sobre el acento y chip.
+for _s in ("proyectos", "servicios", "sectores", "hse", "noticias"):
+    PARES += [
+        (f"sec-{_s}", "bg", 4.5, f"acento {_s}"),
+        (f"sec-{_s}", "paper", 4.5, f"acento {_s} en paneles"),
+        (f"sec-{_s}-ink", f"sec-{_s}", 4.5, f"texto sobre {_s} (pod P3)"),
+        (f"sec-{_s}", f"sec-{_s}-soft", 4.5, f"chip / filtro {_s}"),
+    ]
+
 
 def bloque(css, selector):
     i = css.index(selector)
@@ -56,9 +65,9 @@ def main():
     claro = bloque(css, ":root {")
     oscuro = {**claro, **bloque(css, ':root[data-theme="dark"]')}
     fallos = 0
-    print(f"{'Par':<28}{'Uso':<38}{'Mín':>5}{'Claro':>8}{'Oscuro':>8}")
+    print(f"{'Par':<40}{'Uso':<38}{'Mín':>5}{'Claro':>8}{'Oscuro':>8}")
     for fg, bg, minimo, uso in PARES:
-        fila = f"{fg + ' / ' + bg:<28}{uso:<38}{minimo:>5}"
+        fila = f"{fg + ' / ' + bg:<40}{uso:<38}{minimo:>5}"
         for tema in (claro, oscuro):
             r = contraste(tema[fg], tema[bg])
             ok = r >= minimo

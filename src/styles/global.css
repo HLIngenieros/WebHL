@@ -97,6 +97,45 @@
   .saltar:focus { top: var(--s3); }
 }
 
+/* ---- Pods de sección (guía §6): mismo marcado en Astro (Pod.astro) y en React ---- */
+@layer components {
+  /* P1 · Rótulo: identifica la página o la sección a la que enlaza una tarjeta */
+  .pod-rotulo {
+    display: inline-grid; grid-template-columns: 6px auto auto; width: max-content; max-width: 100%;
+    border: var(--border-strong) solid var(--ink); background: var(--paper);
+  }
+  .pod-rotulo::before { content: ''; background: var(--sec); }
+  .pod-rotulo > span { padding: 3px 9px; }
+  .pod-rotulo .pod-cod { color: var(--sec); border-right: var(--border) solid var(--line); font-variant-numeric: tabular-nums; }
+  .pod-rotulo .pod-nom { color: var(--ink); }
+
+  /* P2 · Burbuja de eje: estructura; con .con-eje el eje punteado baja por el borde del bloque */
+  .pod-eje { display: flex; align-items: center; gap: var(--s3); }
+  .pod-bur {
+    flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+    border: var(--border-strong) solid var(--sec); background: var(--paper); color: var(--sec);
+    font-weight: var(--fw-display); font-stretch: var(--wdth-title); line-height: 1;
+  }
+  .pod-eje .pod-nom { color: var(--sec); font-stretch: var(--wdth-title); font-weight: var(--fw-title); font-size: var(--fs-h3); }
+  .pod-eje .pod-lin { flex: 1; max-width: 160px; height: 1px; background: var(--sec); opacity: .5; }
+  .pod-eje .pod-dato { color: var(--muted); }
+  .con-eje { position: relative; padding-left: calc(34px + var(--s4)); }
+  .con-eje > .pod-eje { margin-left: calc(-34px - var(--s4)); }
+  .con-eje::before {
+    content: ''; position: absolute; left: 17px; top: 34px; bottom: 0;
+    border-left: var(--border) dashed var(--sec);
+  }
+
+  /* P3 · Señal: llama la atención, a lo sumo una por pantalla */
+  .pod-senal { display: inline-flex; align-items: stretch; width: max-content; max-width: 100%; }
+  .pod-senal::before {
+    content: ''; width: 32px; flex: none; border: var(--border-strong) solid var(--sec);
+    background: repeating-linear-gradient(135deg, var(--sec) 0 5px, var(--paper) 5px 10px);
+  }
+  .pod-senal .pod-nom { background: var(--sec); color: var(--sec-ink); padding: 3px 11px; }
+  .pod-senal .pod-cod { color: var(--sec); border: var(--border-strong) solid var(--sec); border-left: 0; padding: 3px 9px; }
+}
+
 /* ---- Movimiento (guía §9) ---- */
 @layer components {
   /* Aparece: texto de primera pantalla; solo CSS, arranca con el primer pintado y no depende del JS */

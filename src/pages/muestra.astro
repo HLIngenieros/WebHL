@@ -11,6 +11,12 @@ import Nota from '../components/ui/Nota.astro';
 import Campo from '../components/ui/Campo.astro';
 import Foto from '../components/ui/Foto.astro';
 import columbus from '../assets/proyectos/planta-columbus/1.jpg';
+import Pod from '../components/Pod.astro';
+
+const SECCIONES = [
+  ['nosotros', 'Nosotros', 'L-01'], ['proyectos', 'Proyectos', 'L-02'], ['servicios', 'Servicios', 'L-03'],
+  ['sectores', 'Sectores', 'L-04'], ['hse', 'HSE y calidad', 'L-05'], ['noticias', 'Noticias', 'L-06'],
+];
 
 const cantidades = [
   ['Excavaciones', '442.000', 'm³'],
@@ -23,7 +29,7 @@ const cantidades = [
   ['Luminarias', '3.300', 'un'],
 ];
 ---
-<Base titulo="Muestra de componentes" lang="es" noindex>
+<Base titulo="Muestra de componentes" lang="es" seccion="proyectos" noindex>
   <div class="wrap muestra">
     <Encabezado
       nivel={1}
@@ -31,7 +37,9 @@ const cantidades = [
       titulo="Planta Columbus"
       entrada="Diseño, construcción, montaje y puesta en marcha de una planta de cemento de 5.250 t/día para Cementos Argos en Cartagena."
       medida="42 meses"
-    />
+    >
+      <Pod slot="pod" forma="rotulo" codigo="P-01" nombre="Proyectos" />
+    </Encabezado>
 
     <Rotulo
       titulo="Ficha técnica"
@@ -51,6 +59,21 @@ const cantidades = [
       <Foto src={columbus} alt="Apiladora y banda transportadora bajo la cubierta del patio de almacenamiento de la planta Columbus" sizes="(min-width: 1200px) 1200px, 100vw" />
       <figcaption class="voz-datos">Planta Columbus · Foto del sitio actual; pie provisional</figcaption>
     </figure>
+
+    <section class="bloque" id="pods">
+      <Encabezado codigo="C-00" titulo="Pods de sección" entrada="P1 identifica, P2 estructura, P3 llama la atención. Cada uno toma el acento de su sección." />
+      {SECCIONES.map(([id, nombre, codigo]) => (
+        <div class="fila pods">
+          <Pod forma="rotulo" seccion={id} codigo={codigo} nombre={nombre} />
+          <Pod forma="eje" seccion={id} nombre={nombre} dato={codigo} />
+          <Pod forma="senal" seccion={id} codigo={codigo} nombre={nombre} />
+        </div>
+      ))}
+      <div class="con-eje">
+        <Pod forma="eje" letra="B" nombre="Construcción y montaje" dato="3 líneas" />
+        <p>Bloque con eje: la línea punteada baja por el borde mientras dura la subsección.</p>
+      </div>
+    </section>
 
     <section class="bloque">
       <Encabezado codigo="C-01" titulo="Cifras destacadas" />
@@ -108,6 +131,7 @@ const cantidades = [
   .foto-muestra { margin: 0; display: grid; gap: var(--s2); }
   .foto-muestra figcaption { color: var(--muted); }
   .fila { display: flex; flex-wrap: wrap; gap: var(--s2); margin: 0; max-width: none; }
+  .pods { align-items: center; gap: var(--s4); }
   .formulario { display: grid; gap: var(--s4); max-width: 560px; }
   .formulario :global(.boton) { justify-self: start; }
 </style>

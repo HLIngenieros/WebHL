@@ -1,5 +1,6 @@
 ---
 // Encabezado de sección (guía §6): código de lámina + título + entrada + cota que se mide al entrar.
+// Toma el acento de la sección (--sec). El slot `pod` va encima del título (P1 en los H1).
 interface Props { codigo: string; titulo: string; entrada?: string; nivel?: 1 | 2; medida?: string }
 const { codigo, titulo, entrada, nivel = 2, medida } = Astro.props;
 const H = nivel === 1 ? 'h1' : 'h2';
@@ -7,6 +8,7 @@ const H = nivel === 1 ? 'h1' : 'h2';
 <header class="encabezado">
   <span class="lamina voz-datos">{codigo}</span>
   <div>
+    {Astro.slots.has('pod') && <div class="pod"><slot name="pod" /></div>}
     <H class="titulo">{titulo}</H>
     {entrada && <p class="lead">{entrada}</p>}
     <div class="cota" aria-hidden="true">
@@ -21,18 +23,19 @@ const H = nivel === 1 ? 'h1' : 'h2';
 
 <style>
   .encabezado { display: grid; grid-template-columns: auto 1fr; gap: var(--s3) var(--s4); align-items: start; }
-  .lamina { color: var(--accent); border: var(--border) solid var(--accent); padding: 2px 7px; margin-top: .5em; }
+  .pod { margin-bottom: var(--s3); }
+  .lamina { color: var(--sec); border: var(--border) solid var(--sec); padding: 2px 7px; margin-top: .5em; }
   .lead { margin: var(--s3) 0 0; }
   .cota { position: relative; height: 20px; margin-top: var(--s4); max-width: 520px; }
   .cota-linea { position: absolute; inset: 4px 0 auto; width: 100%; height: 12px; overflow: visible; }
-  .cota-linea line { stroke: var(--signal); stroke-width: var(--stroke-thin); }
-  .tope { position: absolute; top: 0; width: 1px; height: 20px; background: var(--signal); }
+  .cota-linea line { stroke: var(--sec); stroke-width: var(--stroke-thin); }
+  .tope { position: absolute; top: 0; width: 1px; height: 20px; background: var(--sec); }
   .tope::after {
-    content: ''; position: absolute; top: 6px; left: -4px; width: 9px; height: 1px; background: var(--signal);
+    content: ''; position: absolute; top: 6px; left: -4px; width: 9px; height: 1px; background: var(--sec);
     transform: rotate(-45deg);
   }
   .izq { left: 0; } .der { right: 0; }
-  .cota-texto { position: absolute; right: 0; top: -18px; color: var(--signal-ink); font-size: var(--fs-cota); }
+  .cota-texto { position: absolute; right: 0; top: -18px; color: var(--sec); font-size: var(--fs-cota); }
 
   /* Medición: la cota crece de izquierda a derecha una vez, al entrar en pantalla */
   :global(html.js) .cota-linea { transform-origin: left; transform: scaleX(0); transition: transform var(--t-cota) var(--ease-plano); }

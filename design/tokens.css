@@ -36,6 +36,13 @@
   --good-soft: #D5E9DC;
   --grid: rgba(11, 80, 158, .075); /* retícula de fondo */
 
+  /* Acentos de sección (guía §3.5): primitivos por tema; [data-seccion] los asigna a --sec */
+  --sec-proyectos: #8A5A00; --sec-proyectos-soft: #F5E7C2; --sec-proyectos-ink: #FFFFFF;
+  --sec-servicios: #006B80; --sec-servicios-soft: #CDE8EE; --sec-servicios-ink: #FFFFFF;
+  --sec-sectores: #5B3FA0;  --sec-sectores-soft: #E3DCF2;  --sec-sectores-ink: #FFFFFF;
+  --sec-hse: #1F6F3A;       --sec-hse-soft: #D3EBDA;       --sec-hse-ink: #FFFFFF;
+  --sec-noticias: #B13F12;  --sec-noticias-soft: #F9E6DE;  --sec-noticias-ink: #FFFFFF;
+
   color-scheme: light;
 
   /* ---- Tipografía ---- */
@@ -148,6 +155,11 @@
     --signal: #F2B42A; --signal-ink: #F2B42A; --signal-soft: #3A2F12;
     --bad: #E2816A; --bad-soft: #3A1E17; --good: #68B98A; --good-soft: #14291D;
     --grid: rgba(98, 160, 236, .08);
+    --sec-proyectos: #F2B42A; --sec-proyectos-soft: #3A2F12; --sec-proyectos-ink: #08131F;
+    --sec-servicios: #4FC3D9; --sec-servicios-soft: #0F2E35; --sec-servicios-ink: #08131F;
+    --sec-sectores: #A894E0;  --sec-sectores-soft: #261E3D;  --sec-sectores-ink: #08131F;
+    --sec-hse: #5CC27D;       --sec-hse-soft: #12291A;       --sec-hse-ink: #08131F;
+    --sec-noticias: #F08A5D;  --sec-noticias-soft: #3A1C12;  --sec-noticias-ink: #08131F;
     color-scheme: dark;
   }
 }
@@ -158,8 +170,23 @@
   --signal: #F2B42A; --signal-ink: #F2B42A; --signal-soft: #3A2F12;
   --bad: #E2816A; --bad-soft: #3A1E17; --good: #68B98A; --good-soft: #14291D;
   --grid: rgba(98, 160, 236, .08);
+  --sec-proyectos: #F2B42A; --sec-proyectos-soft: #3A2F12; --sec-proyectos-ink: #08131F;
+  --sec-servicios: #4FC3D9; --sec-servicios-soft: #0F2E35; --sec-servicios-ink: #08131F;
+  --sec-sectores: #A894E0;  --sec-sectores-soft: #261E3D;  --sec-sectores-ink: #08131F;
+  --sec-hse: #5CC27D;     --sec-hse-soft: #12291A;     --sec-hse-ink: #08131F;
+  --sec-noticias: #F08A5D;  --sec-noticias-soft: #3A1C12;  --sec-noticias-ink: #08131F;
   color-scheme: dark;
 }
+
+/* ---- Acento de sección (guía §3.5) ----
+   Cualquier elemento con data-seccion toma el acento de esa sección; sin valor conocido, el azul.
+   Se resuelve en el propio elemento, así que sigue al tema claro u oscuro. */
+:root, [data-seccion] { --sec: var(--accent); --sec-soft: var(--accent-soft); --sec-ink: var(--accent-ink); }
+[data-seccion="proyectos"] { --sec: var(--sec-proyectos); --sec-soft: var(--sec-proyectos-soft); --sec-ink: var(--sec-proyectos-ink); }
+[data-seccion="servicios"] { --sec: var(--sec-servicios); --sec-soft: var(--sec-servicios-soft); --sec-ink: var(--sec-servicios-ink); }
+[data-seccion="sectores"] { --sec: var(--sec-sectores); --sec-soft: var(--sec-sectores-soft); --sec-ink: var(--sec-sectores-ink); }
+[data-seccion="hse"] { --sec: var(--sec-hse); --sec-soft: var(--sec-hse-soft); --sec-ink: var(--sec-hse-ink); }
+[data-seccion="noticias"] { --sec: var(--sec-noticias); --sec-soft: var(--sec-noticias-soft); --sec-ink: var(--sec-noticias-ink); }
 
 /* ---- Movimiento reducido: duraciones a cero ---- */
 @media (prefers-reduced-motion: reduce) {

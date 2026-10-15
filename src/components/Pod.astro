@@ -1,0 +1,32 @@
+---
+// Pod de sección (guía §6). P1 rótulo identifica, P2 eje estructura, P3 señal llama la atención.
+// Con `seccion`, toma el acento de esa sección aunque esté dentro de otra página.
+interface Props {
+  forma: 'rotulo' | 'eje' | 'senal';
+  nombre: string;
+  codigo?: string;
+  letra?: string;
+  dato?: string;
+  seccion?: string;
+  class?: string;
+}
+const { forma, nombre, codigo, letra, dato, seccion, class: clase } = Astro.props;
+---
+{forma === 'rotulo' && (
+  <span class:list={['pod-rotulo voz-datos', clase]} data-seccion={seccion}>
+    {codigo && <span class="pod-cod">{codigo}</span>}<span class="pod-nom">{nombre}</span>
+  </span>
+)}
+{forma === 'eje' && (
+  <div class:list={['pod-eje', clase]} data-seccion={seccion}>
+    <span class="pod-bur" aria-hidden="true">{letra ?? nombre.charAt(0)}</span>
+    <span class="pod-nom">{nombre}</span>
+    <span class="pod-lin" aria-hidden="true"></span>
+    {dato && <span class="pod-dato voz-datos">{dato}</span>}
+  </div>
+)}
+{forma === 'senal' && (
+  <span class:list={['pod-senal voz-datos', clase]} data-seccion={seccion}>
+    <span class="pod-nom">{nombre}</span>{codigo && <span class="pod-cod">{codigo}</span>}
+  </span>
+)}

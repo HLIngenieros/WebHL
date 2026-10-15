@@ -18,7 +18,7 @@ const activa = seccionDe(Astro.url.pathname);
     <nav id="nav-principal" aria-label={t(lang, 'menu')}>
       <ul>
         {MENU.map((k) => (
-          <li><a href={ruta(k, lang)} aria-current={k === activa ? 'page' : undefined}>{t(lang, k)}</a></li>
+          <li><a href={ruta(k, lang)} data-seccion={k} aria-current={k === activa ? 'page' : undefined}>{t(lang, k)}</a></li>
         ))}
       </ul>
     </nav>
@@ -40,7 +40,7 @@ const activa = seccionDe(Astro.url.pathname);
     <ul>
       {MENU.map((k, i) => (
         <li style={`--i:${i}`}>
-          <a href={ruta(k, lang)} data-seccion data-astro-prefetch="viewport" aria-current={k === activa ? 'page' : undefined}>{t(lang, k)}</a>
+          <a href={ruta(k, lang)} data-seccion={k} data-astro-prefetch="viewport" aria-current={k === activa ? 'page' : undefined}>{t(lang, k)}</a>
         </li>
       ))}
     </ul>
@@ -121,7 +121,8 @@ const activa = seccionDe(Astro.url.pathname);
     transition: color var(--t-rapido) ease, border-color var(--t-rapido) ease;
   }
   #nav-principal a:hover, .idioma:hover, .boton-menu:hover { color: var(--ink); border-color: var(--line); }
-  #nav-principal a[aria-current='page'] { color: var(--ink); border-bottom-color: var(--accent); }
+  /* La sección activa lleva su acento (guía §3.5): cada enlace declara su sección. */
+  #nav-principal a[aria-current='page'] { color: var(--sec); border-bottom-color: var(--sec); box-shadow: inset 0 -2px var(--sec); }
 
   .herramientas { display: flex; align-items: center; gap: var(--s1); }
   .tema {
@@ -158,10 +159,11 @@ const activa = seccionDe(Astro.url.pathname);
   dialog ul { list-style: none; margin: 0; padding: var(--s4) var(--gutter); }
   dialog li { border-bottom: var(--border) solid var(--line-soft); }
   dialog li a {
-    display: block; padding: var(--s3) 0; color: var(--ink); text-decoration: none;
+    display: flex; align-items: center; gap: var(--s3); padding: var(--s3) 0; color: var(--ink); text-decoration: none;
     font-size: var(--fs-h2); font-stretch: var(--wdth-title); font-weight: var(--fw-title); line-height: var(--lh-title);
   }
-  dialog li a[aria-current='page'] { color: var(--accent); }
+  dialog li a::before { content: ''; width: 6px; height: 6px; background: var(--sec); flex: none; }
+  dialog li a[aria-current='page'] { color: var(--sec); }
   dialog[open] li { animation: izaje-menu var(--t-izaje) var(--ease-izaje) both; animation-delay: calc(var(--i) * 40ms); }
   @keyframes izaje-menu { from { opacity: 0; transform: translateY(12px); } }
   .menu-pie { display: flex; gap: var(--s3); padding: var(--s3) var(--gutter); }

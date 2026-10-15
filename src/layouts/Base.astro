@@ -4,7 +4,7 @@ import Barra from '../components/Barra.astro';
 import Pie from '../components/Pie.astro';
 import Contacto from '../components/Contacto.astro';
 import { ClientRouter } from 'astro:transitions';
-import { parExacto, type Lang } from '../i18n/rutas';
+import { parExacto, seccionDe, type Lang } from '../i18n/rutas';
 import { t } from '../i18n/ui';
 
 interface Props {
@@ -13,9 +13,15 @@ interface Props {
   lang: Lang;
   alterno?: string;
   noindex?: boolean;
+  /** Acento de sección (guía §3.5); por defecto, el de la sección de la URL. */
+  seccion?: string;
 }
 
 const { titulo, lang, alterno, noindex = false } = Astro.props;
+// Solo estas secciones tienen acento propio; el resto (inicio, nosotros, contacto, pie) usa el azul.
+const CON_ACENTO = ['proyectos', 'servicios', 'sectores', 'hse', 'noticias'];
+const deUrl = seccionDe(Astro.url.pathname);
+const seccion = Astro.props.seccion ?? (deUrl && CON_ACENTO.includes(deUrl) ? deUrl : undefined);
 const descripcion = Astro.props.descripcion ?? t(lang, 'descripcion');
 const aqui = Astro.url.pathname;
 // hreflang solo cuando existe la página equivalente; las páginas noindex no declaran canonical ni alternos.
@@ -32,7 +38,7 @@ const barrido = {
 };
 ---
 <!doctype html>
-<html lang={lang} transition:animate="none">
+<html lang={lang} data-seccion={seccion} transition:animate="none">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
