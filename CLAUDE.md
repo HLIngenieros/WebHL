@@ -41,7 +41,7 @@ HSE / PIENSA®, logotipo HL y el azul como ancla.
 ## Propuesta (resumen)
 
 ### Stack recomendado (Opción C)
-**Astro + islas Preact (API de React) + Tailwind, sin CMS** (contenido en el repo, ver D4). HTML estático por defecto; React solo en el
+**Astro + islas Preact (API de React) + Tailwind, sin CMS** (contenido en el repo, ver D4). HTML estático por defecto; Preact solo en el
 explorador de proyectos, el agente de chat y los formularios. Colecciones tipadas: Proyecto,
 Servicio, Sector, Sede, Certificación. i18n nativo (`/en/` espejo con hreflang). View Transitions.
 **Presupuesto de rendimiento (15-oct):** Lighthouse ≥ 95 en móvil en las 4 categorías, LCP < 2,0 s
