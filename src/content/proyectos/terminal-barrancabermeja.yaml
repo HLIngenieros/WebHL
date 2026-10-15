@@ -1,0 +1,20 @@
+# Fuente: ficha 13 de contenido/proyectos.md (sitio actual).
+slug: { es: terminal-barrancabermeja, en: barrancabermeja-terminal }
+cliente: Impala Terminals Barrancabermeja
+pais: CO
+ciudad: Barrancabermeja
+region: Santander
+coordenadas: [7.065, -73.854]
+meses: 14
+hh: 37000
+sector: infraestructura
+servicios: [montaje-mecanico, montaje-electrico]
+cifras:
+  - { valor: 37000, unidad: hh, etiqueta: { es: Horas hombre } }
+  - { valor: 14, unidad: meses, etiqueta: { es: Duración } }
+visibilidad: normal
+fuente: web
+es:
+  titulo: Terminal de Barrancabermeja
+  resumen: Montaje del sistema contra incendios y del alumbrado de la terminal de Impala en Barrancabermeja.
+  descripcion: Montaje de los equipos de bombeo, la estación de bombeo y la red principal de distribución de agua del sistema contra incendios, y suministro y montaje de postes, mástiles y luminarias.

@@ -1,0 +1,31 @@
+# Fuente: ficha 8 de contenido/proyectos.md (sitio actual).
+slug: { es: central-termonorte, en: termonorte-power-plant }
+cliente: Hyundai Heavy Industries
+pais: CO
+ciudad: Santa Marta
+region: Magdalena
+coordenadas: [11.241, -74.199]
+meses: 12
+hh: 210000
+sector: agua-y-energia
+servicios: [obras-civiles]
+cifras:
+  - { valor: 93, unidad: mw, etiqueta: { es: Capacidad de generación } }
+  - { valor: 4500, unidad: m3, etiqueta: { es: Concreto } }
+  - { valor: 475, unidad: t, etiqueta: { es: Estructura metálica } }
+  - { valor: 210000, unidad: hh, etiqueta: { es: Horas hombre } }
+cantidades:
+  - { valor: 13100, unidad: m3, concepto: { es: Excavaciones } }
+  - { valor: 8100, unidad: m3, concepto: { es: Rellenos } }
+  - { valor: 4500, unidad: m3, concepto: { es: Concreto } }
+  - { valor: 343000, unidad: kg, concepto: { es: Acero de refuerzo } }
+  - { valor: 6700, unidad: m, concepto: { es: Tubería de PVC } }
+  - { valor: 475, unidad: t, concepto: { es: Estructura metálica } }
+  - { valor: 7200, unidad: m2, concepto: { es: Paneles de techo y laterales } }
+  - { valor: 10, unidad: u, concepto: { es: Tanques de almacenamiento (peso total 250 t) } }
+visibilidad: normal
+fuente: web
+es:
+  titulo: Central térmica Termonorte
+  resumen: Obras civiles y construcción de una central de generación de 93 MW de combustible dual y ciclo abierto.
+  descripcion: Obras civiles y construcción del proyecto de generación de combustible dual y ciclo abierto Termonorte, de 93 MW.

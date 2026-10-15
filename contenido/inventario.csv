@@ -45,40 +45,40 @@ https://hlingenieros.com/trajectory/energy/,en,sector,Energy,12,2024-02-01,2024-
 https://hlingenieros.com/trajectory/water/,en,sector,Water,12,2024-02-01,2024-02-05,3.1 Servicios (sector),301
 https://hlingenieros.com/trajectory/mining/,en,sector,Mining,14,2024-02-01,2024-02-05,3.1 Servicios (sector),301
 https://hlingenieros.com/trajectory/cement/,en,sector,Cement,17,2024-02-01,2024-02-05,3.1 Servicios (sector),301
-https://hlingenieros.com/trajectory/cement/thyssenkrupp-industrial-solutions/,en,proyecto,Progrefa Project,83,2024-02-03,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trajectory/cement/the-cement-grinding-project/,en,proyecto,The Cement Grinding Project,124,2024-02-04,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trajectory/cement/columbus-project/,en,proyecto,Columbus Project,134,2024-02-02,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/the-chimborazo-slide-project/,en,proyecto,The Chimborazo Slide Project,84,2024-02-04,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trajectory/energy/termonorte-93mw-project/,en,proyecto,Termonorte 93MW Project,106,2024-02-02,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trajectory/energy/patio-de-carbon-project/,en,proyecto,Patio de Carbón Project,66,2024-02-02,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trajectory/industry/charlotte-project/,en,proyecto,Charlotte Project,104,2024-02-02,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trajectory/industry/civil-works-production-plant-project/,en,proyecto,Civil Works Production Plant Project,74,2024-02-02,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trajectory/infrastructure/chipiron-road-project/,en,proyecto,Chipirón Road Project,61,2024-02-02,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trajectory/infrastructure/barrancabermeja-terminal-project/,en,proyecto,Barrancabermeja Terminal Project,57,2024-02-02,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trajectory/mining/panama-tanks-project/,en,proyecto,Panama Tanks Project,66,2024-02-01,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trajectory/mining/minero-buritica-project/,en,proyecto,Minero Buriticá Project,116,2024-02-01,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trajectory/mining/marine-works-project/,en,proyecto,Marine Works project,136,2024-02-01,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trajectory/oil-gas/chevron-petroleum-company/,en,proyecto,Gace IV Project,69,2024-02-01,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trajectory/water/ovoid-digesters-project/,en,proyecto,Ovoid Digesters Project,81,2024-02-03,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trajectory/water/the-ptar-salitre-project-2/,en,proyecto,The PTAR Salitre Project,101,2024-02-03,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trayectoria/otros/diana-pet-food-colombia-s-a-s/,es,proyecto,Proyecto Obras Civiles Planta Producción,77,2020-01-20,2024-02-04,3 Proyectos (ficha),301
-https://hlingenieros.com/trayectoria/sector-agua/consorcio-ptar-salitre/,es,proyecto,Proyecto Ptar Salitre,103,2020-01-07,2024-02-03,3 Proyectos (ficha),301
-https://hlingenieros.com/trayectoria/sector-agua/consorcio-de-aguas-de-aburra-hha/,es,proyecto,Proyecto Digestores Ovoidales,88,2020-01-21,2024-02-03,3 Proyectos (ficha),301
+https://hlingenieros.com/trajectory/cement/thyssenkrupp-industrial-solutions/,en,proyecto,Progrefa Project,83,2024-02-03,2024-02-04,/en/projects/cementos-progreso-plant/,301
+https://hlingenieros.com/trajectory/cement/the-cement-grinding-project/,en,proyecto,The Cement Grinding Project,124,2024-02-04,2024-02-04,/en/projects/sonson-cement-grinding/,301
+https://hlingenieros.com/trajectory/cement/columbus-project/,en,proyecto,Columbus Project,134,2024-02-02,2024-02-04,/en/projects/columbus-plant/,301
+https://hlingenieros.com/the-chimborazo-slide-project/,en,proyecto,The Chimborazo Slide Project,84,2024-02-04,2024-02-04,/en/projects/chimborazo-plant/,301
+https://hlingenieros.com/trajectory/energy/termonorte-93mw-project/,en,proyecto,Termonorte 93MW Project,106,2024-02-02,2024-02-04,/en/projects/termonorte-power-plant/,301
+https://hlingenieros.com/trajectory/energy/patio-de-carbon-project/,en,proyecto,Patio de Carbón Project,66,2024-02-02,2024-02-04,/en/projects/estrella-coal-yard/,301
+https://hlingenieros.com/trajectory/industry/charlotte-project/,en,proyecto,Charlotte Project,104,2024-02-02,2024-02-04,/en/projects/charlotte-project/,301
+https://hlingenieros.com/trajectory/industry/civil-works-production-plant-project/,en,proyecto,Civil Works Production Plant Project,74,2024-02-02,2024-02-04,/en/projects/diana-pet-food-plant/,301
+https://hlingenieros.com/trajectory/infrastructure/chipiron-road-project/,en,proyecto,Chipirón Road Project,61,2024-02-02,2024-02-04,/en/projects/chipiron-access-road/,301
+https://hlingenieros.com/trajectory/infrastructure/barrancabermeja-terminal-project/,en,proyecto,Barrancabermeja Terminal Project,57,2024-02-02,2024-02-04,/en/projects/barrancabermeja-terminal/,301
+https://hlingenieros.com/trajectory/mining/panama-tanks-project/,en,proyecto,Panama Tanks Project,66,2024-02-01,2024-02-04,/en/projects/cobre-panama-tanks/,301
+https://hlingenieros.com/trajectory/mining/minero-buritica-project/,en,proyecto,Minero Buriticá Project,116,2024-02-01,2024-02-04,/en/projects/buritica-plant/,301
+https://hlingenieros.com/trajectory/mining/marine-works-project/,en,proyecto,Marine Works project,136,2024-02-01,2024-02-04,/en/projects/puerto-bolivar-marine-works/,301
+https://hlingenieros.com/trajectory/oil-gas/chevron-petroleum-company/,en,proyecto,Gace IV Project,69,2024-02-01,2024-02-04,/en/projects/gace-iv-ballenas/,301
+https://hlingenieros.com/trajectory/water/ovoid-digesters-project/,en,proyecto,Ovoid Digesters Project,81,2024-02-03,2024-02-04,/en/projects/bello-wwtp-digesters/,301
+https://hlingenieros.com/trajectory/water/the-ptar-salitre-project-2/,en,proyecto,The PTAR Salitre Project,101,2024-02-03,2024-02-04,/en/projects/salitre-wwtp/,301
+https://hlingenieros.com/trayectoria/otros/diana-pet-food-colombia-s-a-s/,es,proyecto,Proyecto Obras Civiles Planta Producción,77,2020-01-20,2024-02-04,/proyectos/planta-diana-pet-food/,301
+https://hlingenieros.com/trayectoria/sector-agua/consorcio-ptar-salitre/,es,proyecto,Proyecto Ptar Salitre,103,2020-01-07,2024-02-03,/proyectos/ptar-salitre/,301
+https://hlingenieros.com/trayectoria/sector-agua/consorcio-de-aguas-de-aburra-hha/,es,proyecto,Proyecto Digestores Ovoidales,88,2020-01-21,2024-02-03,/proyectos/digestores-ptar-bello/,301
 https://hlingenieros.com/work-with-us/,en,formulario,Work with Us,31,2024-02-01,2024-02-01,7.2 Trabaje con nosotros,301
 https://hlingenieros.com/buzon-etico/,es,formulario,Buzón ético,170,2020-01-22,2021-09-07,sin sección (pie),301
-https://hlingenieros.com/trayectoria/sector-energia/consorcio-odebrecht-tecnimont-estrella/,es,proyecto,Proyecto Patio de Carbón,70,2020-01-21,2020-02-20,3 Proyectos (ficha),301
-https://hlingenieros.com/trayectoria/sector-cementero/molienda-de-cemento/,es,proyecto,Proyecto Molienda de Cemento,142,2020-01-21,2020-02-20,3 Proyectos (ficha),301
-https://hlingenieros.com/trayectoria/sector-cementero/proyecto-columbus/,es,proyecto,Proyecto Columbus,147,2020-01-21,2020-02-20,3 Proyectos (ficha),301
-https://hlingenieros.com/trayectoria/unilever-colombia-scc-s-a-s/,es,proyecto,Proyecto Charlotte,108,2020-01-19,2020-02-20,3 Proyectos (ficha),301
-https://hlingenieros.com/trayectoria/sector-infraestructura/impala-terminals-barrancabermeja-s-a/,es,proyecto,Proyecto Terminal de Barrancabermeja,64,2020-01-30,2020-02-20,3 Proyectos (ficha),301
-https://hlingenieros.com/trayectoria/sector-infraestructura/estrumetal-occidental-de-colombia/,es,proyecto,Proyecto Vía Chipirón,70,2020-01-30,2020-02-20,3 Proyectos (ficha),301
-https://hlingenieros.com/trayectoria/sector-petroleo-gas/chevron-petroleum-company/,es,proyecto,Proyecto Gace IV,73,2020-01-28,2020-02-20,3 Proyectos (ficha),301
-https://hlingenieros.com/trayectoria/sector-energia/hyundai-heavy-industries-co-ltd/,es,proyecto,Proyecto Termonorte 93MW,107,2020-01-21,2020-02-20,3 Proyectos (ficha),301
-https://hlingenieros.com/trayectoria/sector-minero/continental-gold/,es,proyecto,Proyecto Minero Buriticá,124,2020-01-08,2020-02-20,3 Proyectos (ficha),301
-https://hlingenieros.com/trayectoria/sector-minero/minera-panama-s-a/,es,proyecto,Proyecto Tanques Panamá,73,2020-01-21,2020-02-20,3 Proyectos (ficha),301
-https://hlingenieros.com/trayectoria/sector-minero/carbones-del-cerrejon-limited/,es,proyecto,Proyecto Marine Works,146,2020-01-21,2020-02-20,3 Proyectos (ficha),301
-https://hlingenieros.com/trayectoria/sector-cementero/thyssenkrupp-industrial-solutions/,es,proyecto,Proyecto Progrefa,86,2020-01-21,2020-02-19,3 Proyectos (ficha),301
-https://hlingenieros.com/trayectoria/sector-cementero/ute-chimborazo-sacyr-imasa-polisyus/,es,proyecto,Proyecto Deslizado Chimborazo,91,2020-01-21,2020-02-19,3 Proyectos (ficha),301
+https://hlingenieros.com/trayectoria/sector-energia/consorcio-odebrecht-tecnimont-estrella/,es,proyecto,Proyecto Patio de Carbón,70,2020-01-21,2020-02-20,/proyectos/patio-de-carbon-estrella/,301
+https://hlingenieros.com/trayectoria/sector-cementero/molienda-de-cemento/,es,proyecto,Proyecto Molienda de Cemento,142,2020-01-21,2020-02-20,/proyectos/molienda-de-cemento-sonson/,301
+https://hlingenieros.com/trayectoria/sector-cementero/proyecto-columbus/,es,proyecto,Proyecto Columbus,147,2020-01-21,2020-02-20,/proyectos/planta-columbus/,301
+https://hlingenieros.com/trayectoria/unilever-colombia-scc-s-a-s/,es,proyecto,Proyecto Charlotte,108,2020-01-19,2020-02-20,/proyectos/proyecto-charlotte/,301
+https://hlingenieros.com/trayectoria/sector-infraestructura/impala-terminals-barrancabermeja-s-a/,es,proyecto,Proyecto Terminal de Barrancabermeja,64,2020-01-30,2020-02-20,/proyectos/terminal-barrancabermeja/,301
+https://hlingenieros.com/trayectoria/sector-infraestructura/estrumetal-occidental-de-colombia/,es,proyecto,Proyecto Vía Chipirón,70,2020-01-30,2020-02-20,/proyectos/via-chipiron/,301
+https://hlingenieros.com/trayectoria/sector-petroleo-gas/chevron-petroleum-company/,es,proyecto,Proyecto Gace IV,73,2020-01-28,2020-02-20,/proyectos/gace-iv-ballenas/,301
+https://hlingenieros.com/trayectoria/sector-energia/hyundai-heavy-industries-co-ltd/,es,proyecto,Proyecto Termonorte 93MW,107,2020-01-21,2020-02-20,/proyectos/central-termonorte/,301
+https://hlingenieros.com/trayectoria/sector-minero/continental-gold/,es,proyecto,Proyecto Minero Buriticá,124,2020-01-08,2020-02-20,/proyectos/planta-buritica/,301
+https://hlingenieros.com/trayectoria/sector-minero/minera-panama-s-a/,es,proyecto,Proyecto Tanques Panamá,73,2020-01-21,2020-02-20,/proyectos/tanques-cobre-panama/,301
+https://hlingenieros.com/trayectoria/sector-minero/carbones-del-cerrejon-limited/,es,proyecto,Proyecto Marine Works,146,2020-01-21,2020-02-20,/proyectos/puerto-bolivar/,301
+https://hlingenieros.com/trayectoria/sector-cementero/thyssenkrupp-industrial-solutions/,es,proyecto,Proyecto Progrefa,86,2020-01-21,2020-02-19,/proyectos/planta-cementos-progreso/,301
+https://hlingenieros.com/trayectoria/sector-cementero/ute-chimborazo-sacyr-imasa-polisyus/,es,proyecto,Proyecto Deslizado Chimborazo,91,2020-01-21,2020-02-19,/proyectos/planta-chimborazo/,301
 https://hlingenieros.com/trayectoria/sector-agua/,es,sector,Sector agua,12,2020-01-30,2020-01-30,3.1 Servicios (sector),301
 https://hlingenieros.com/error-404/,es,error,Error 404,21,2020-01-28,2020-01-28,—,410
 https://hlingenieros.com/trabaja-con-nosotros/,es,formulario,Trabaja con nosotros,42,2020-01-25,2020-01-27,7.2 Trabaje con nosotros,301

@@ -1,0 +1,32 @@
+# Fuente: ficha 15 de contenido/proyectos.md (sitio actual).
+slug: { es: proyecto-charlotte, en: charlotte-project }
+cliente: Unilever Colombia
+pais: CO
+ciudad: Palmira
+region: Valle del Cauca
+coordenadas: [3.539, -76.303]
+meses: 9
+hh: 95000
+sector: industria
+servicios: [montaje-mecanico, montaje-electrico]
+cifras:
+  - { valor: 290, unidad: u, etiqueta: { es: Equipos } }
+  - { valor: 900, unidad: u, etiqueta: { es: Instrumentos } }
+  - { valor: 15000, unidad: pd, etiqueta: { es: Tubería de acero al carbono e inoxidable } }
+  - { valor: 95000, unidad: hh, etiqueta: { es: Horas hombre } }
+cantidades:
+  - { valor: 38, unidad: t, concepto: { es: Estructura metálica } }
+  - { valor: 290, unidad: u, concepto: { es: Equipos } }
+  - { valor: 15000, unidad: pd, concepto: { es: Tubería de acero al carbono e inoxidable } }
+  - { valor: 9000, unidad: m, concepto: { es: Canalizaciones eléctricas (bandeja y conduit) } }
+  - { valor: 32000, unidad: m, concepto: { es: Cable de potencia } }
+  - { valor: 47000, unidad: m, concepto: { es: Cable de instrumentación } }
+  - { valor: 900, unidad: u, concepto: { es: Instrumentos } }
+visibilidad: normal
+fuente: web
+es:
+  titulo: Proyecto Charlotte
+  resumen: Montaje electromecánico de las líneas de proceso y empaque de cuidado personal y del hogar de Unilever en Palmira.
+  descripcion: Montaje mecánico de equipos de proceso; montaje eléctrico de tableros y CCM; fibra óptica y comunicaciones; instrumentación y control, y tuberías y accesorios.
+confirmar:
+  - "HPC se interpretó como 'cuidado personal y del hogar' (Home and Personal Care): confirmar."

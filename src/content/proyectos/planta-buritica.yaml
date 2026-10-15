@@ -1,0 +1,33 @@
+# Fuente: ficha 5 de contenido/proyectos.md (sitio actual).
+slug: { es: planta-buritica, en: buritica-plant }
+cliente: Continental Gold
+pais: CO
+ciudad: Buriticá
+region: Antioquia
+coordenadas: [6.720, -75.907]
+meses: 18
+hh: 750000
+sector: mineria
+servicios: [montaje-mecanico, montaje-electrico]
+cifras:
+  - { valor: 750000, unidad: hh, etiqueta: { es: Horas hombre } }
+  - { valor: 2900, unidad: t, etiqueta: { es: Equipos } }
+  - { valor: 2200, unidad: t, etiqueta: { es: Estructura metálica } }
+  - { valor: 2400, unidad: u, etiqueta: { es: Instrumentos } }
+cantidades:
+  - { valor: 2200, unidad: t, concepto: { es: Estructura metálica } }
+  - { valor: 2900, unidad: t, concepto: { es: Equipos, incluidos 2 molinos horizontales (550 t) y 1 filtro prensa (400 t) } }
+  - { valor: 10500, unidad: m, concepto: { es: Tuberías } }
+  - { valor: 160000, unidad: m, concepto: { es: Cables de potencia } }
+  - { valor: 25000, unidad: m, concepto: { es: Canalizaciones eléctricas (bandejas y conduit) } }
+  - { valor: 1100, unidad: u, concepto: { es: Luminarias } }
+  - { valor: 26000, unidad: m, concepto: { es: Cables de instrumentación } }
+  - { valor: 2400, unidad: u, concepto: { es: Instrumentos } }
+visibilidad: destacado
+fuente: web
+confirmar:
+  - "Dueño actual: Zijin Mining. ¿Se menciona en la ficha? (D6)"
+es:
+  titulo: Planta de proceso Buriticá
+  resumen: Montaje mecánico, eléctrico y de instrumentación de la planta de proceso del proyecto minero Buriticá.
+  descripcion: Montaje de equipos mecánicos, eléctricos y de instrumentación, y suministro de los materiales de tubería para la planta de procesos del proyecto minero Buriticá, además del montaje de los campamentos.

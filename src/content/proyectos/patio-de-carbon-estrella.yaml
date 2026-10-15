@@ -1,0 +1,28 @@
+# Fuente: ficha 9 de contenido/proyectos.md (sitio actual). Caso sensible (D6).
+slug: { es: patio-de-carbon-estrella, en: estrella-coal-yard }
+cliente: Consorcio Odebrecht Tecnimont Estrella
+meses: 12
+hh: 340000
+sector: agua-y-energia
+servicios: [montaje-mecanico]
+cifras:
+  - { valor: 6400, unidad: t, etiqueta: { es: Estructura metálica } }
+  - { valor: 61000, unidad: m2, etiqueta: { es: Paneles de techo y laterales } }
+  - { valor: 340000, unidad: hh, etiqueta: { es: Horas hombre } }
+cantidades:
+  - { valor: 6400, unidad: t, concepto: { es: Estructura metálica } }
+  - { valor: 61000, unidad: m2, concepto: { es: Paneles de techo y laterales } }
+fotos:
+  - archivo: ../../assets/proyectos/patio-de-carbon-estrella/1.jpg
+  - archivo: ../../assets/proyectos/patio-de-carbon-estrella/2.jpg
+  - archivo: ../../assets/proyectos/patio-de-carbon-estrella/3.jpg
+  - archivo: ../../assets/proyectos/patio-de-carbon-estrella/4.jpg
+  - archivo: ../../assets/proyectos/patio-de-carbon-estrella/5.jpg
+visibilidad: discreta
+fuente: web
+confirmar:
+  - "País y ciudad: el sitio solo dice 'Km 45 Carretera Sánchez' (probablemente República Dominicana)."
+es:
+  titulo: Patio de carbón
+  resumen: Montaje de la estructura metálica de un patio de carbón y de sus estructuras auxiliares.
+  descripcion: Montaje de la estructura metálica del patio de carbón y de las estructuras auxiliares.

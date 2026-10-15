@@ -1,0 +1,46 @@
+# Fuente: ficha 1 de contenido/proyectos.md (sitio actual).
+slug: { es: planta-columbus, en: columbus-plant }
+cliente: Cementos Argos
+duenoFinal: Cementos Argos
+rol: { tipo: consorcio }
+pais: CO
+ciudad: Cartagena
+region: Bolívar
+coordenadas: [10.391, -75.479]
+meses: 42
+hh: 9470000
+sector: cemento
+servicios: [epc-llave-en-mano, obras-civiles, montaje-mecanico, montaje-electrico]
+cifras:
+  - { valor: 9470000, unidad: hh, etiqueta: { es: Horas hombre } }
+  - { valor: 5250, unidad: tpd, etiqueta: { es: Capacidad de producción de cemento } }
+  - { valor: 95000, unidad: m3, etiqueta: { es: Concreto } }
+  - { valor: 8300, unidad: t, etiqueta: { es: Estructura metálica } }
+cantidades:
+  - { valor: 442000, unidad: m3, concepto: { es: Excavaciones } }
+  - { valor: 117000, unidad: m3, concepto: { es: Rellenos } }
+  - { valor: 95000, unidad: m3, concepto: { es: Concreto } }
+  - { valor: 12000, unidad: t, concepto: { es: Acero de refuerzo } }
+  - { valor: 8300, unidad: t, concepto: { es: Estructura metálica } }
+  - { valor: 23000, unidad: m2, concepto: { es: Aislamiento térmico } }
+  - { valor: 18600, unidad: t, concepto: { es: Equipos } }
+  - { valor: 36000, unidad: m, concepto: { es: Bandejas portacables } }
+  - { valor: 56000, unidad: m, concepto: { es: Tubería conduit } }
+  - { valor: 353000, unidad: m, concepto: { es: Cables de baja y media tensión y de control } }
+  - { valor: 3300, unidad: u, concepto: { es: Luminarias } }
+fotos:
+  - archivo: ../../assets/proyectos/planta-columbus/1.jpg
+  - archivo: ../../assets/proyectos/planta-columbus/2.jpg
+  - archivo: ../../assets/proyectos/planta-columbus/3.jpg
+  - archivo: ../../assets/proyectos/planta-columbus/4.jpg
+  - archivo: ../../assets/proyectos/planta-columbus/5.jpg
+visibilidad: destacado
+fuente: web
+confirmar:
+  - "Fabricación o proyecto completo: el PDF de ECOHL reporta 12.000 t de estructura y 10.500 t de equipos fabricados en 18 meses; la ficha web, 8.300 t y 18.600 t en 42 meses."
+  - "Nombre del consorcio y participación de HL."
+  - "Validar los 4 proyectos destacados: Columbus, Cementos Progreso, Buriticá y PTAR Salitre."
+es:
+  titulo: Planta Columbus
+  resumen: Diseño, construcción, montaje y puesta en marcha de una planta de cemento de 5.250 t/día en Cartagena.
+  descripcion: Diseño, construcción, montaje, pruebas y puesta en marcha de una nueva planta productora de cemento con una producción de 5.250 t/día y 1.764.000 t/año en Cartagena. Proyecto ejecutado en consorcio.

@@ -1,0 +1,17 @@
+# Fuente: PDF "Portafolio ECOHL" (2020), casos de éxito.
+slug: { es: cargador-de-buques-cerrejon, en: cerrejon-shiploader }
+cliente: Carbones del Cerrejón
+sector: mineria
+servicios: [mantenimiento]
+cifras:
+  - { valor: 3, unidad: dias, etiqueta: { es: Antes de lo previsto, se entregó } }
+visibilidad: normal
+fuente: ecohl
+confirmar:
+  - "Ubicación probable: Puerto Bolívar (La Guajira)."
+  - "Validar el servicio asignado (mantenimiento)."
+es:
+  titulo: Reparación del cargador de buques de Cerrejón
+  resumen: Reparación del cargador de buques, entregada 3 días antes.
+  descripcion: Reparación del cargador de buques de Cerrejón.
+  reto: El cargador se entregó 3 días antes de lo previsto.

@@ -1,0 +1,23 @@
+# Fuente: ficha 12 de contenido/proyectos.md (sitio actual).
+slug: { es: gace-iv-ballenas, en: gace-iv-ballenas }
+cliente: Chevron Petroleum Company
+pais: CO
+ciudad: Campo Ballenas
+region: La Guajira
+coordenadas: [11.775, -72.444]
+meses: 13
+hh: 253720
+sector: petroleo-y-gas
+servicios: [obras-civiles, montaje-mecanico, montaje-electrico]
+cifras:
+  - { valor: 253720, unidad: hh, etiqueta: { es: Horas hombre } }
+  - { valor: 13, unidad: meses, etiqueta: { es: Duración } }
+visibilidad: normal
+fuente: web
+confirmar:
+  - "¿El premio de excelencia de Chevron por más de un millón de HH sin incidentes (PDF de ECOHL, caso 4) corresponde a este proyecto?"
+  - "Coordenadas aproximadas (municipio de Manaure): confirmar la ubicación de Campo Ballenas."
+es:
+  titulo: Proyecto GACE IV
+  resumen: Construcción civil, mecánica, de tubería, eléctrica y de instrumentación del proyecto GACE IV de la Asociación Guajira.
+  descripcion: Construcción del proyecto GACE IV a 100 psi de la Asociación Guajira, que incluye las obras civiles, mecánicas, de tubería, eléctricas y de control e instrumentación.

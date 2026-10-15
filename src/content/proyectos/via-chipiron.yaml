@@ -1,0 +1,25 @@
+# Fuente: ficha 14 de contenido/proyectos.md (sitio actual) y caso 3 del PDF de ECOHL.
+slug: { es: via-chipiron, en: chipiron-access-road }
+cliente: Estrumetal
+duenoFinal: Occidental de Colombia
+pais: CO
+ciudad: Caño Limón
+region: Arauca
+coordenadas: [6.950, -71.100]
+meses: 15
+hh: 251006
+sector: infraestructura
+servicios: [obras-civiles]
+cifras:
+  - { valor: 251006, unidad: hh, etiqueta: { es: Horas hombre } }
+  - { valor: 15, unidad: meses, etiqueta: { es: Duración } }
+  - { valor: 0, etiqueta: { es: Incidentes ambientales } }
+visibilidad: normal
+fuente: web
+confirmar:
+  - "Coordenadas aproximadas del campo Caño Limón: confirmar."
+es:
+  titulo: Vía de acceso a la plataforma Chipirón
+  resumen: Construcción y montaje de la vía de acceso a la plataforma Chipirón T-B, sin incidentes ambientales.
+  descripcion: Construcción y montaje de la vía de acceso a la plataforma Chipirón T-B.
+  reto: Trabajos sobre un estero, terminados con cero incidentes ambientales.

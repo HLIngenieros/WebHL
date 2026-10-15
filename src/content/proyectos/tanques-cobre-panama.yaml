@@ -1,0 +1,31 @@
+# Fuente: ficha 7 de contenido/proyectos.md (sitio actual). Caso sensible (D6): mina cerrada desde 2023.
+slug: { es: tanques-cobre-panama, en: cobre-panama-tanks }
+cliente: Minera Panamá
+pais: PA
+ciudad: Colón
+coordenadas: [9.359, -79.901]
+meses: 7
+hh: 102481
+sector: mineria
+servicios: [montaje-mecanico]
+cifras:
+  - { valor: 16, unidad: u, etiqueta: { es: Tanques de almacenamiento } }
+  - { valor: 26000, unidad: m3, etiqueta: { es: Almacenamiento total } }
+  - { valor: 1000, unidad: t, etiqueta: { es: Peso total } }
+  - { valor: 102481, unidad: hh, etiqueta: { es: Horas hombre } }
+cantidades:
+  - { valor: 16, unidad: u, concepto: { es: Tanques de almacenamiento (API 650 y AWWA D-100) } }
+  - { valor: 26000, unidad: m3, concepto: { es: Almacenamiento total } }
+  - { valor: 1000, unidad: t, concepto: { es: Peso total } }
+fotos:
+  - archivo: ../../assets/proyectos/tanques-cobre-panama/1.jpg
+  - archivo: ../../assets/proyectos/tanques-cobre-panama/2.jpg
+  - archivo: ../../assets/proyectos/tanques-cobre-panama/3.jpg
+  - archivo: ../../assets/proyectos/tanques-cobre-panama/4.jpg
+  - archivo: ../../assets/proyectos/tanques-cobre-panama/5.jpg
+visibilidad: discreta
+fuente: web
+es:
+  titulo: Tanques de Cobre Panamá
+  resumen: Montaje de 16 tanques de almacenamiento para el proyecto Cobre Panamá.
+  descripcion: Montaje de 16 tanques de almacenamiento de distintos fluidos y capacidades para el proyecto Cobre Panamá.

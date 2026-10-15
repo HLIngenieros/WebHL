@@ -1,0 +1,17 @@
+# Fuente: PDF "Portafolio ECOHL" (2020), casos de éxito.
+slug: { es: filtro-de-mangas-caracolito, en: caracolito-baghouse-filter }
+cliente: Cemex
+sector: cemento
+servicios: [montaje-mecanico, mantenimiento]
+cifras:
+  - { valor: 1, unidad: dias, etiqueta: { es: Antes de lo previsto, se reinició la producción } }
+visibilidad: normal
+fuente: ecohl
+confirmar:
+  - "Ubicación probable: planta Caracolito, Ibagué (Tolima)."
+  - "Validar los servicios asignados (montaje mecánico y mantenimiento)."
+es:
+  titulo: Filtro de mangas en Caracolito
+  resumen: Conversión de un electrofiltro a filtro de mangas; la producción se reinició un día antes.
+  descripcion: Conversión del electrofiltro a filtro de mangas en la planta Caracolito de Cemex.
+  reto: La producción se reinició un día antes de lo previsto.

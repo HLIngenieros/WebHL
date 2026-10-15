@@ -1,0 +1,17 @@
+# Fuente: PDF "Portafolio ECOHL" (2020), casos de éxito. El PDF no nombra al cliente.
+slug: { es: torre-grua-maceo, en: maceo-tower-crane }
+sector: cemento
+servicios: [montaje-mecanico]
+cifras:
+  - { valor: 30, unidad: pct, etiqueta: { es: Menos tiempo de montaje } }
+visibilidad: normal
+fuente: ecohl
+confirmar:
+  - "Cliente y sector: el PDF solo dice 'nueva planta Maceo' (¿planta de cemento?)."
+  - "El PDF dice 'una reducción del 305 en el tiempo del montaje' (errata); se publica como 30 %."
+  - "Validar el servicio asignado (montaje mecánico)."
+es:
+  titulo: Torre grúa de la planta Maceo
+  resumen: Montaje de la torre grúa para la nueva planta Maceo, con un 30 % menos de tiempo.
+  descripcion: Montaje de la torre grúa para la nueva planta Maceo.
+  reto: El montaje tomó un 30 % menos de tiempo.

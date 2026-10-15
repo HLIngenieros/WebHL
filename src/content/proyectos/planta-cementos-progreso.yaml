@@ -1,0 +1,35 @@
+# Fuente: ficha 2 de contenido/proyectos.md (sitio actual).
+slug: { es: planta-cementos-progreso, en: cementos-progreso-plant }
+cliente: thyssenkrupp Industrial Solutions
+duenoFinal: Cementos Progreso
+pais: GT
+ciudad: San Juan Sacatepéquez
+region: Guatemala
+coordenadas: [14.719, -90.644]
+meses: 26
+hh: 1200000
+sector: cemento
+servicios: [montaje-mecanico]
+cifras:
+  - { valor: 1200000, unidad: hh, etiqueta: { es: Horas hombre } }
+  - { valor: 11700, unidad: t, etiqueta: { es: Equipos montados } }
+  - { valor: 4500, unidad: tpd, etiqueta: { es: Capacidad de la planta } }
+  - { valor: 26, unidad: meses, etiqueta: { es: Duración } }
+cantidades:
+  - { concepto: { es: Montaje de equipos y tuberías de las áreas de trituración, crudo y clínker } }
+  - { valor: 11700, unidad: t, concepto: { es: Equipos } }
+  - { valor: 100, unidad: t, concepto: { es: Tuberías } }
+fotos:
+  - archivo: ../../assets/proyectos/planta-cementos-progreso/1.jpg
+  - archivo: ../../assets/proyectos/planta-cementos-progreso/2.jpg
+  - archivo: ../../assets/proyectos/planta-cementos-progreso/3.jpg
+  - archivo: ../../assets/proyectos/planta-cementos-progreso/4.jpg
+  - archivo: ../../assets/proyectos/planta-cementos-progreso/5.jpg
+visibilidad: destacado
+fuente: web
+confirmar:
+  - "Nombre actual del cliente: ¿thyssenkrupp Polysius? (D6)"
+es:
+  titulo: Nueva planta de Cementos Progreso
+  resumen: Montaje de los equipos mecánicos del área de clinkerización de una planta de cemento de 4.500 t/día en Guatemala.
+  descripcion: Montaje de los equipos mecánicos del área de clinkerización en la construcción de la nueva planta de cemento de Cementos Progreso, con capacidad de 4.500 t/día.

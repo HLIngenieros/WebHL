@@ -106,13 +106,13 @@ test.describe('auditar()', () => {
     expect(periodo(incompleto.data)).toBeUndefined();
   });
 
-  test('rol, lugar, cifras, pies y dudas por confirmar', () => {
+  test('cliente, rol, lugar, cifras, pies y dudas por confirmar', () => {
     const x = p('x', {
-      rol: undefined, pais: undefined, ciudad: undefined, cifras: [],
+      cliente: undefined, rol: undefined, pais: undefined, ciudad: undefined, cifras: [],
       fotos: [{ archivo: {} }], confirmar: ['¿Silo de crudo o de cemento?'],
     });
     const ps = de(auditar({ proyectos: [x] }, { modo: 'desarrollo', hoy }), 'x');
-    for (const campo of ['rol', 'pais', 'ciudad', 'cifras', 'pies de foto']) {
+    for (const campo of ['cliente', 'rol', 'pais', 'ciudad', 'cifras', 'pies de foto']) {
       expect(ps.find((y) => y.campo === campo), campo).toMatchObject({ bloquea: true });
     }
     expect(ps.find((y) => y.tipo === 'confirmar')).toMatchObject({ detalle: '¿Silo de crudo o de cemento?' });
@@ -128,6 +128,15 @@ test.describe('auditar()', () => {
     const b = p('b', { slug: { es: 'b', en: 'igual' } });
     const ps = auditar({ proyectos: [a, b] }, { modo: 'desarrollo', hoy });
     expect(ps.filter((x) => x.campo === 'slug.en' && x.bloquea)).toHaveLength(1);
+  });
+
+  test('una referencia a un servicio o sector inexistente falla en cualquier modo', () => {
+    const servicios = [{ id: 'montaje-mecanico', data: { en: {} } }];
+    const sectores = [{ id: 'cemento', data: { en: {} } }];
+    const malo = p('malo', { servicios: [{ id: 'montaje-mecanicos' }], sector: { id: 'cementos' } });
+    expect(() => auditar({ proyectos: [malo], servicios, sectores }, { modo: 'desarrollo', hoy }))
+      .toThrow(/malo[\s\S]*montaje-mecanicos[\s\S]*malo[\s\S]*cementos/);
+    expect(() => auditar({ proyectos: [p('bueno')], servicios, sectores }, { modo: 'desarrollo', hoy })).not.toThrow();
   });
 
   test('en lanzamiento falla con todos los bloqueantes en el mensaje', () => {
@@ -189,5 +198,24 @@ test.describe('contenido migrado', () => {
     await expect(conteo(page, 'servicios')).toHaveText('7');
     await expect(conteo(page, 'sectores')).toHaveText('6');
     await expect(page.locator('tr[data-coleccion="servicios"][data-campo="buzon"]')).toHaveCount(7);
+  });
+
+  test('22 proyectos: 2 discretos (D6) y 4 destacados', async ({ page }) => {
+    await expect(conteo(page, 'proyectos')).toHaveText('22');
+    const discretos = page.locator('tr[data-visibilidad="discreta"]');
+    await expect(discretos).toHaveCount(2);
+    await expect(page.locator('tr[data-proyecto="patio-de-carbon-estrella"]')).toHaveAttribute('data-visibilidad', 'discreta');
+    await expect(page.locator('tr[data-proyecto="tanques-cobre-panama"]')).toHaveAttribute('data-visibilidad', 'discreta');
+    await expect(page.locator('tr[data-visibilidad="destacado"]')).toHaveCount(4);
+    await expect(page.locator('tr[data-proyecto][data-fuente="ecohl"]')).toHaveCount(6);
+  });
+
+  test('cada ficha actual del inventario apunta a una URL nueva de proyecto', () => {
+    const filas = fs.readFileSync(path.join(process.cwd(), 'contenido', 'inventario.csv'), 'utf8').split(/\r?\n/).filter((l) => l.includes(',proyecto,'));
+    expect(filas).toHaveLength(32);
+    for (const f of filas) {
+      const [, idioma, , , , , , destino] = f.split(',');
+      expect(destino, f).toMatch(idioma === 'es' ? /^\/proyectos\/[a-z0-9-]+\/$/ : /^\/en\/projects\/[a-z0-9-]+\/$/);
+    }
   });
 });

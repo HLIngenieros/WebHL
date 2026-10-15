@@ -7,7 +7,9 @@ import { z } from 'astro/zod';
 const texto = z.object({ es: z.string(), en: z.string().optional() });
 const slug = z.object({ es: z.string().regex(/^[a-z0-9-]+$/), en: z.string().regex(/^[a-z0-9-]+$/) });
 const confirmar = z.array(z.string()).optional();
-const coordenadas = z.tuple([z.number(), z.number()]);
+const coordenadas = z.tuple([z.number(), z.number()]); // [lat, lon] de la ciudad, nunca de la planta
+// Unidades cerradas: el texto de cada una por idioma se agrega en F2 (src/i18n/ui.ts).
+const unidad = z.enum(['t', 'kg', 'm', 'm2', 'm3', 'pd', 'u', 'tpd', 'tpa', 'hh', 'meses', 'dias', 'pct', 'mw']);
 // El id es el nombre del archivo: glob() usaría el campo slug, que aquí es un objeto { es, en }.
 const porArchivo = ({ entry }: { entry: string }) => entry.replace(/\.(yaml|md)$/, '');
 const yaml = (carpeta: string) => glob({ pattern: '*.yaml', base: `./src/content/${carpeta}`, generateId: porArchivo });
@@ -17,7 +19,7 @@ const proyectos = defineCollection({
   loader: yaml('proyectos'),
   schema: ({ image }) => z.object({
     slug,
-    cliente: z.string(),
+    cliente: z.string().optional(),
     duenoFinal: z.string().optional(),
     rol: z.object({ tipo: z.enum(['contratista', 'subcontratista', 'consorcio']), nombre: z.string().optional() }).optional(),
     pais: z.string().length(2).optional(),
@@ -30,8 +32,8 @@ const proyectos = defineCollection({
     hh: z.number().optional(),
     sector: reference('sectores'),
     servicios: z.array(reference('servicios')).min(1),
-    cifras: z.array(z.object({ valor: z.number(), unidad: z.string().optional(), etiqueta: texto })).default([]),
-    cantidades: z.array(z.object({ valor: z.number().optional(), unidad: z.string().optional(), concepto: texto })).default([]),
+    cifras: z.array(z.object({ valor: z.number(), unidad: unidad.optional(), etiqueta: texto })).default([]),
+    cantidades: z.array(z.object({ valor: z.number().optional(), unidad: unidad.optional(), concepto: texto })).default([]),
     fotos: z.array(z.object({ archivo: image(), pie: texto.optional() })).default([]),
     visibilidad: z.enum(['destacado', 'normal', 'discreta']),
     fuente: z.enum(['web', 'ecohl']),
@@ -124,7 +126,7 @@ const sitio = defineCollection({
   loader: file('src/content/sitio.yaml'),
   schema: ({ image }) => z.object({
     fundacion: z.number().int(),
-    cifras: z.array(z.object({ valor: z.number(), prefijo: z.string().optional(), unidad: z.string().optional(), etiqueta: texto })),
+    cifras: z.array(z.object({ valor: z.number(), prefijo: z.string().optional(), unidad: unidad.optional(), etiqueta: texto })),
     redes: z.array(z.object({ red: z.string(), url: z.url() })),
     asociadas: z.array(z.object({ nombre: z.string(), logo: image().optional() })).optional(),
     clientes: z.array(z.object({ nombre: z.string().optional(), logo: image() })).default([]),

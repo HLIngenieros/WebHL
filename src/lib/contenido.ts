@@ -8,7 +8,7 @@ type Ref = { id: string };
 
 export interface Proyecto {
   slug: { es: string; en: string };
-  cliente: string;
+  cliente?: string;
   rol?: { tipo: 'contratista' | 'subcontratista' | 'consorcio'; nombre?: string };
   pais?: string;
   ciudad?: string;
@@ -107,7 +107,17 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
     xs.forEach(({ id, data }) => { if (!data.en) add(coleccion, id, 'en', 'traduccion'); dudas(coleccion, id, data.confirmar); });
 
   const proyectos = datos.proyectos ?? [];
+  // Astro solo registra las referencias rotas, no detiene la compilación: aquí sí se detiene, en cualquier modo.
+  const rotas: string[] = [];
+  const existe = (xs: Entrada<unknown>[] | undefined, ref: Ref) => !xs || xs.some((x) => x.id === ref.id);
   for (const { id, data: p } of proyectos) {
+    for (const s of p.servicios) if (!existe(datos.servicios, s)) rotas.push(`- proyectos/${id}: servicio "${s.id}" no existe`);
+    if (!existe(datos.sectores, p.sector)) rotas.push(`- proyectos/${id}: sector "${p.sector.id}" no existe`);
+  }
+  if (rotas.length) throw new Error(`Referencias rotas en el contenido:\n${rotas.join('\n')}`);
+
+  for (const { id, data: p } of proyectos) {
+    if (!p.cliente) add('proyectos', id, 'cliente', 'insumo');
     if (!p.rol) add('proyectos', id, 'rol', 'insumo');
     if (!p.pais) add('proyectos', id, 'pais', 'insumo');
     if (!p.ciudad) add('proyectos', id, 'ciudad', 'insumo');

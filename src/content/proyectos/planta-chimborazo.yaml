@@ -1,0 +1,36 @@
+# Fuente: ficha 4 de contenido/proyectos.md (sitio actual).
+slug: { es: planta-chimborazo, en: chimborazo-plant }
+cliente: UTE Chimborazo (Sacyr, Imasa, Polysius)
+pais: EC
+ciudad: Riobamba
+region: Chimborazo
+coordenadas: [-1.664, -78.654]
+meses: 6
+hh: 390000
+sector: cemento
+servicios: [obras-civiles]
+cifras:
+  - { valor: 105, unidad: m, etiqueta: { es: Torre precalentadora deslizada } }
+  - { valor: 8100, unidad: m3, etiqueta: { es: Concreto } }
+  - { valor: 1900, unidad: t, etiqueta: { es: Acero de refuerzo } }
+  - { valor: 390000, unidad: hh, etiqueta: { es: Horas hombre } }
+cantidades:
+  - { concepto: { es: Deslizado de 105 m de torre precalentadora y 65 m de silo de cemento } }
+  - { valor: 1900, unidad: t, concepto: { es: Acero de refuerzo } }
+  - { valor: 8100, unidad: m3, concepto: { es: Concreto } }
+  - { valor: 16000, unidad: m2, concepto: { es: Encofrado } }
+fotos:
+  - archivo: ../../assets/proyectos/planta-chimborazo/1.jpg
+  - archivo: ../../assets/proyectos/planta-chimborazo/2.jpg
+  - archivo: ../../assets/proyectos/planta-chimborazo/3.jpg
+  - archivo: ../../assets/proyectos/planta-chimborazo/4.jpg
+  - archivo: ../../assets/proyectos/planta-chimborazo/5.jpg
+visibilidad: normal
+fuente: web
+confirmar:
+  - "La descripción dice silo de crudo y las cantidades, silo de cemento. ¿Cuál es?"
+  - "Nombre actual de Polysius: ¿thyssenkrupp Polysius? (D6)"
+es:
+  titulo: Planta de cemento Chimborazo
+  resumen: Construcción con formaleta deslizante de la torre precalentadora de 105 m y de un silo de 65 m.
+  descripcion: Construcción y montaje de la obra civil del paquete 2 de la planta de cemento Chimborazo, la torre precalentadora y el silo de crudo.

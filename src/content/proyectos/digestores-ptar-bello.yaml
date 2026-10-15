@@ -1,0 +1,33 @@
+# Fuente: ficha 11 de contenido/proyectos.md (sitio actual).
+slug: { es: digestores-ptar-bello, en: bello-wwtp-digesters }
+cliente: Consorcio de Aguas de Aburrá HHA
+pais: CO
+ciudad: Bello
+region: Antioquia
+coordenadas: [6.337, -75.558]
+meses: 12
+hh: 750000
+sector: agua-y-energia
+servicios: [montaje-mecanico]
+cifras:
+  - { valor: 6, unidad: u, etiqueta: { es: Digestores ovoidales } }
+  - { valor: 3000, unidad: t, etiqueta: { es: Láminas de tanques y equipos auxiliares } }
+  - { valor: 46000, unidad: pd, etiqueta: { es: Tuberías } }
+  - { valor: 750000, unidad: hh, etiqueta: { es: Horas hombre } }
+cantidades:
+  - { valor: 6, unidad: u, concepto: { es: Tanques ovoidales digestores y tuberías de interconexión } }
+  - { valor: 3000, unidad: t, concepto: { es: Láminas de tanques y equipos auxiliares } }
+  - { valor: 65, unidad: t, concepto: { es: Estructuras } }
+  - { valor: 46000, unidad: pd, concepto: { es: Tuberías } }
+fotos:
+  - archivo: ../../assets/proyectos/digestores-ptar-bello/1.jpg
+  - archivo: ../../assets/proyectos/digestores-ptar-bello/2.jpg
+  - archivo: ../../assets/proyectos/digestores-ptar-bello/3.jpg
+  - archivo: ../../assets/proyectos/digestores-ptar-bello/4.jpg
+  - archivo: ../../assets/proyectos/digestores-ptar-bello/5.jpg
+visibilidad: normal
+fuente: web
+es:
+  titulo: Digestores de la PTAR Bello
+  resumen: Montaje, pruebas y asistencia a la puesta en marcha de 6 digestores de lodos metálicos ovoidales.
+  descripcion: Montaje, pruebas y asistencia a la puesta en marcha de 6 digestores de lodos metálicos ovoidales para la planta de tratamiento de aguas residuales de Bello.

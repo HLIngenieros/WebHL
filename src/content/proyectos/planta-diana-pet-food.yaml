@@ -1,0 +1,33 @@
+# Fuente: ficha 16 de contenido/proyectos.md (sitio actual).
+slug: { es: planta-diana-pet-food, en: diana-pet-food-plant }
+cliente: Diana Pet Food Colombia
+pais: CO
+ciudad: Tocancipá
+region: Cundinamarca
+coordenadas: [4.965, -73.913]
+meses: 8
+hh: 90000
+sector: industria
+servicios: [obras-civiles]
+cifras:
+  - { valor: 2300, unidad: m3, etiqueta: { es: Concreto } }
+  - { valor: 5900, unidad: m3, etiqueta: { es: Excavaciones } }
+  - { valor: 357, unidad: t, etiqueta: { es: Estructura metálica } }
+  - { valor: 90000, unidad: hh, etiqueta: { es: Horas hombre } }
+cantidades:
+  - { valor: 5900, unidad: m3, concepto: { es: Excavaciones } }
+  - { valor: 3000, unidad: m3, concepto: { es: Rellenos } }
+  - { valor: 2300, unidad: m3, concepto: { es: Concreto } }
+  - { valor: 357, unidad: t, concepto: { es: Estructura metálica } }
+fotos:
+  - archivo: ../../assets/proyectos/planta-diana-pet-food/1.jpg
+  - archivo: ../../assets/proyectos/planta-diana-pet-food/2.jpg
+  - archivo: ../../assets/proyectos/planta-diana-pet-food/3.jpg
+  - archivo: ../../assets/proyectos/planta-diana-pet-food/4.jpg
+  - archivo: ../../assets/proyectos/planta-diana-pet-food/5.jpg
+visibilidad: normal
+fuente: web
+es:
+  titulo: Planta de producción Diana Pet Food
+  resumen: Obras civiles de la nueva planta industrial y de sus oficinas en Tocancipá.
+  descripcion: Obras civiles de la nueva planta industrial de Diana Pet Food y de sus oficinas.

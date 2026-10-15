@@ -1,0 +1,35 @@
+# Fuente: ficha 3 de contenido/proyectos.md (sitio actual).
+slug: { es: molienda-de-cemento-sonson, en: sonson-cement-grinding }
+cliente: OHL Industrial Colombia
+pais: CO
+ciudad: Sonsón
+region: Antioquia
+coordenadas: [5.711, -75.311]
+meses: 9
+hh: 225000
+sector: cemento
+servicios: [montaje-mecanico]
+cifras:
+  - { valor: 225000, unidad: hh, etiqueta: { es: Horas hombre } }
+  - { valor: 9, unidad: meses, etiqueta: { es: Duración } }
+  - { valor: 600, unidad: t, etiqueta: { es: Molino vertical de cemento } }
+cantidades:
+  - { valor: 409, unidad: t, concepto: { es: Equipos } }
+  - { valor: 293, unidad: t, concepto: { es: Estructura metálica } }
+  - { valor: 1400, unidad: t, concepto: { es: Equipos, incluidos el filtro de mangas (260 t) y el molino vertical de cemento (600 t) } }
+  - { valor: 20, unidad: t, concepto: { es: Estructura metálica } }
+fotos:
+  - archivo: ../../assets/proyectos/molienda-de-cemento-sonson/1.jpg
+  - archivo: ../../assets/proyectos/molienda-de-cemento-sonson/2.jpg
+  - archivo: ../../assets/proyectos/molienda-de-cemento-sonson/3.jpg
+  - archivo: ../../assets/proyectos/molienda-de-cemento-sonson/4.jpg
+  - archivo: ../../assets/proyectos/molienda-de-cemento-sonson/5.jpg
+visibilidad: normal
+fuente: web
+confirmar:
+  - "Cantidades duplicadas: 409 t y 1.400 t de equipos, 293 t y 20 t de estructura. ¿Son dos alcances o dos etapas?"
+  - "Nombre actual del cliente: ¿OHLA? (D6)"
+es:
+  titulo: Molienda de cemento en Sonsón
+  resumen: Montaje mecánico de las áreas de molienda de cemento, ensacado y paletizado.
+  descripcion: Montaje completo de los equipos del área de molienda de cemento y paletizado, que comprende el transporte de cemento a silos, un silo tricámara, un silo monocámara, el transporte de cemento a ensacado, el cargue a granel, la planta de ensacado, la planta de paletizado y la báscula de pesaje de camiones, además del montaje de estructura metálica y el suministro y montaje de soportes menores.

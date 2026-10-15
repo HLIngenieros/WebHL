@@ -48,7 +48,7 @@ const bloqueantes = pendientes.filter((x) => x.bloquea).length;
           <thead><tr><th>Proyecto</th><th>Sector</th><th>Fuente</th><th>Visibilidad</th><th class="num">Pendientes</th></tr></thead>
           <tbody>
             {datos.proyectos.map((p) => (
-              <tr data-proyecto={p.id} data-visibilidad={p.data.visibilidad}>
+              <tr data-proyecto={p.id} data-visibilidad={p.data.visibilidad} data-fuente={p.data.fuente}>
                 <td>{p.data.es.titulo}</td><td>{p.data.sector.id}</td><td>{p.data.fuente}</td><td>{p.data.visibilidad}</td>
                 <td class="num">{pendientes.filter((x) => x.coleccion === 'proyectos' && x.id === p.id).length}</td>
               </tr>

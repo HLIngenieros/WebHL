@@ -1,0 +1,32 @@
+# Fuente: ficha 10 de contenido/proyectos.md (sitio actual).
+slug: { es: ptar-salitre, en: salitre-wwtp }
+cliente: Consorcio PTAR Salitre
+pais: CO
+ciudad: Bogotá
+coordenadas: [4.711, -74.072]
+meses: 12
+hh: 305000
+sector: agua-y-energia
+servicios: [montaje-mecanico, fabricacion]
+cifras:
+  - { valor: 92000, unidad: pd, etiqueta: { es: Tubería de acero al carbono e inoxidable } }
+  - { valor: 770, unidad: t, etiqueta: { es: Equipos } }
+  - { valor: 183, unidad: u, etiqueta: { es: Compuertas } }
+  - { valor: 305000, unidad: hh, etiqueta: { es: Horas hombre } }
+cantidades:
+  - { valor: 92000, unidad: pd, concepto: { es: Tubería de acero al carbono e inoxidable } }
+  - { valor: 770, unidad: t, concepto: { es: Equipos, incluidos 183 compuertas, 99 bombas y 5 puentes desarenadores } }
+  - { valor: 67, unidad: t, concepto: { es: Soportes } }
+fotos:
+  - archivo: ../../assets/proyectos/ptar-salitre/1.jpg
+  - archivo: ../../assets/proyectos/ptar-salitre/2.jpg
+  - archivo: ../../assets/proyectos/ptar-salitre/3.jpg
+  - archivo: ../../assets/proyectos/ptar-salitre/4.jpg
+  - archivo: ../../assets/proyectos/ptar-salitre/5.jpg
+  - archivo: ../../assets/proyectos/ptar-salitre/6.jpg
+visibilidad: destacado
+fuente: web
+es:
+  titulo: PTAR Salitre, fases 1, 3 y 4
+  resumen: Montaje mecánico de tuberías y equipos de las fases 1, 3 y 4 de la planta de tratamiento de aguas residuales El Salitre.
+  descripcion: Montaje e instalación de las tuberías de alimentación y descarga de los decantadores, instalación de equipos mecánicos y suministro, fabricación y montaje de soportes de tubería, con pruebas hidrostáticas y pruebas en vacío de los equipos.
