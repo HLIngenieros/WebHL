@@ -280,3 +280,35 @@ test.describe('ficha de proyecto', () => {
     expect(total).toBe(51);
   });
 });
+
+test.describe('mapa de presencia', () => {
+  test('proyectar deja las ciudades dentro del lienzo y en su orden', async () => {
+    const { proyectar, ANCHO, ALTO } = await import('../src/lib/mapa');
+    const ciudades = { bogota: [4.711, -74.072], guatemala: [14.634, -90.506], riobamba: [-1.664, -78.654], santoDomingo: [18.486, -69.931] } as const;
+    for (const [lat, lon] of Object.values(ciudades)) {
+      const [x, y] = proyectar([lat, lon]);
+      expect(x).toBeGreaterThan(0); expect(x).toBeLessThan(ANCHO);
+      expect(y).toBeGreaterThan(0); expect(y).toBeLessThan(ALTO);
+    }
+    const [bx, by] = proyectar(ciudades.bogota);
+    const [gx, gy] = proyectar(ciudades.guatemala);
+    expect(bx).toBeGreaterThan(gx);
+    expect(by).toBeGreaterThan(gy);
+  });
+
+  test('el mapa marca los países con obra y un punto por ciudad', async ({ page }) => {
+    await page.goto('/muestra/');
+    const mapa = page.locator('#mapa .mapa');
+    for (const pais of ['co', 'gt', 'ec', 'pa']) await expect(mapa.locator(`path.con-obra[data-pais="${pais}"]`)).toHaveCount(1);
+    await expect(mapa.locator('.punto')).toHaveCount(15);
+    await expect(mapa.locator('.sede')).toHaveCount(4);
+  });
+
+  test('(foco 5) con reduced-motion las estacas no se mueven', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/muestra/');
+    const t = await page.locator('#mapa .estaca').evaluateAll((xs) => xs.map((x) => getComputedStyle(x).transform));
+    expect(t.length).toBeGreaterThan(0);
+    expect(t.filter((v) => v !== 'none')).toEqual([]);
+  });
+});

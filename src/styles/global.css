@@ -203,6 +203,35 @@
   .tarjeta-datos dd { margin: 0; font-weight: var(--fw-strong); min-width: 0; }
 }
 
+/* ---- Mapa de presencia (especificación §5): colores de la sección (ámbar en Proyectos) ---- */
+@layer components {
+  .mapa-cont {
+    margin: 0; display: grid; gap: var(--s2); background-color: var(--paper);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: var(--grid-cell) var(--grid-cell); border: var(--border) solid var(--line);
+  }
+  .mapa { display: block; width: 100%; height: auto; }
+  .mapa .pais { fill: var(--line-soft); stroke: var(--line); stroke-width: 1; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+  .mapa .pais.con-obra { fill: var(--sec-soft); stroke: var(--sec); }
+  .mapa .pais.elegible { cursor: pointer; transition: fill var(--t-rapido) ease; }
+  .mapa .pais.elegible:hover { fill: color-mix(in srgb, var(--sec) 30%, var(--sec-soft)); }
+  .mapa .pais.activo { stroke: var(--ink); stroke-width: 2.5; }
+  .mapa .sede { fill: var(--signal); stroke: var(--paper); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+  .mapa .estaca line { stroke: var(--sec); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+  .mapa .estaca circle { fill: var(--sec); stroke: var(--paper); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+  .mapa .estaca text { fill: var(--sec-ink); font-size: 11px; font-weight: var(--fw-display); text-anchor: middle; }
+  /* Firma de Proyectos: cada estaca cae a su sitio, una vez y escalonada (≤ .6 s en total) */
+  html.js .mapa.estacas .estaca { transition: transform var(--t-izaje) var(--ease-izaje), opacity var(--t-izaje) ease; transition-delay: calc(var(--i, 0) * 30ms); }
+  html.js .mapa.estacas:not(.visible) .estaca { transform: translateY(-30px); opacity: 0; }
+  html.sin-revela .mapa.estacas:not(.visible) .estaca { transform: none; opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { html.js .mapa.estacas:is(.visible, :not(.visible)) .estaca { transform: none; opacity: 1; transition: none; } }
+  @media print { html.js .mapa.estacas .estaca { transform: none !important; opacity: 1 !important; } }
+  .mapa-leyenda { display: flex; gap: var(--s4); padding: 0 var(--s3) var(--s2); color: var(--muted); }
+  .mapa-leyenda span { display: inline-flex; align-items: center; gap: var(--s2); }
+  .ley-punto::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--sec); }
+  .ley-sede::before { content: ''; width: 9px; height: 9px; background: var(--signal); }
+}
+
 /* ---- Movimiento (guía §9) ---- */
 @layer components {
   /* Aparece: texto de primera pantalla; solo CSS, arranca con el primer pintado y no depende del JS */
