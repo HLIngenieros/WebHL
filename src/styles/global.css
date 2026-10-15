@@ -114,7 +114,7 @@
   }
   @media print {
     .aparece, html.js .izaje { animation: none; opacity: 1; transform: none; transition: none; }
-    html.js .cota-linea { transform: none !important; }
+    html.js .cota-linea { transform: none !important; transition: none !important; }
   }
 }
 
