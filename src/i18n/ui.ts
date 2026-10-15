@@ -73,6 +73,7 @@ const es = {
   unProyecto: '1 proyecto',
   verTodos: 'Ver los {n} proyectos',
   verN: 'Ver {n} proyectos',
+  unVer: 'Ver 1 proyecto',
   filtrar: 'Filtrar',
   filtros: 'Filtros',
   todos: 'Todos',
@@ -165,6 +166,7 @@ const en: Record<keyof typeof es, string> = {
   unProyecto: '1 project',
   verTodos: 'See all {n} projects',
   verN: 'See {n} projects',
+  unVer: 'See 1 project',
   filtrar: 'Filter',
   filtros: 'Filters',
   todos: 'All',
@@ -190,9 +192,12 @@ export type ClaveUI = keyof typeof es;
 const UI: Record<Lang, Record<ClaveUI, string>> = { es, en };
 export const t = (lang: Lang, clave: ClaveUI): string => UI[lang][clave];
 
+// Claves con número que tienen forma singular propia.
+const SINGULARES: Partial<Record<ClaveUI, ClaveUI>> = { nProyectos: 'unProyecto', verN: 'unVer' };
+
 /** Texto con número: `tn('es', 'nProyectos', 3)` → "3 proyectos" (y "1 proyecto"). */
 export const tn = (lang: Lang, clave: ClaveUI, n: number): string =>
-  clave === 'nProyectos' && n === 1 ? t(lang, 'unProyecto') : t(lang, clave).replace('{n}', String(n));
+  n === 1 && SINGULARES[clave] ? t(lang, SINGULARES[clave]!) : t(lang, clave).replace('{n}', String(n));
 
 // Unidades cerradas del contenido (el esquema de content.config.ts las toma de aquí).
 export const UNIDADES = {

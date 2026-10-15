@@ -23,6 +23,8 @@ const tx = bloque(s, lang);
 const codigo = `${s.grupo}-${String(s.orden).padStart(2, '0')}`;
 const suyos = deServicio(proyectos, id);
 const muestra = await tarjetas(suyos.slice(0, 4), lang);
+// El explorador también lista las discretas (D6): el enlace cuenta lo que allí se verá.
+const enExplorador = proyectos.filter((p) => p.data.servicios.some((x) => x.id === id)).length;
 const sectores = sectoresDe(proyectos, id).map((sid) => datos.sectores.find((x) => x.id === sid)!);
 
 // Las secciones presentes se numeran en orden con su eje (P2).
@@ -84,9 +86,9 @@ const letra = (k: (typeof secciones)[number][0]) => String(presentes.indexOf(k) 
         <Pod forma="eje" letra={letra('proyectos')} nombre={t(lang, 'proyectosServicio')} dato={String(suyos.length)} />
         <h2 class="sr-only" id="s-proyectos">{t(lang, 'proyectosServicio')}</h2>
         <div class="tarjetas-cont"><div class="tarjetas">{muestra.map((x) => <Tarjeta t={x} lang={lang} />)}</div></div>
-        {suyos.length > 4 && (
+        {enExplorador > 4 && (
           <a class="ver-todos voz-datos" data-seccion="proyectos" href={RUTAS.proyectos[lang] + escribirFiltros({ servicio: s.slug[lang] })}>
-            {t(lang, 'verTodos').replace('{n}', String(suyos.length))} →
+            {t(lang, 'verTodos').replace('{n}', String(enExplorador))} →
           </a>
         )}
         {sectores.length > 0 && (

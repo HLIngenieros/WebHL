@@ -122,7 +122,7 @@ export default function Explorador({ lang, tarjetas, opciones, mapa }: Props) {
         {hoja && (
           <>
             {panel}
-            <button type="button" className="ver-n" onClick={() => setHoja(false)}>{t(lang, 'verN').replace('{n}', String(cumplen.length))}</button>
+            <button type="button" className="ver-n" onClick={() => setHoja(false)}>{tn(lang, 'verN', cumplen.length)}</button>
           </>
         )}
       </dialog>

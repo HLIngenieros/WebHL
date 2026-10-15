@@ -464,3 +464,21 @@ test.describe('accesibilidad de F2 (Lighthouse)', () => {
     expect(saltos).toEqual([]);
   });
 });
+
+test.describe('revisión final', () => {
+  test('"Ver los N proyectos" cuenta lo mismo que muestra el explorador', async ({ page }) => {
+    await page.goto('/servicios/montaje-mecanico/');
+    const enlace = page.locator('a.ver-todos');
+    const n = Number((await enlace.innerText()).match(/\d+/)![0]);
+    await enlace.click();
+    await page.waitForSelector('astro-island:not([ssr])', { state: 'attached' });
+    await expect(page.locator('.explorador .tarjeta:visible')).toHaveCount(n);
+  });
+
+  test('textos con número en singular', async () => {
+    const { tn } = await import('../src/i18n/ui');
+    expect(tn('es', 'verN', 1)).toBe('Ver 1 proyecto');
+    expect(tn('en', 'verN', 1)).toBe('See 1 project');
+    expect(tn('es', 'verN', 3)).toBe('Ver 3 proyectos');
+  });
+});
