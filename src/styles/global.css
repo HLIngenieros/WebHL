@@ -187,15 +187,16 @@
   }
   .tarjeta[hidden] { display: none; }
   .tarjeta .lamina { --proporcion: 4 / 3; max-width: none; }
-  .tarjeta-cuerpo { display: grid; gap: var(--s2); align-content: start; padding: var(--s4); }
-  .tarjeta-titulo { font-size: var(--fs-h3); }
+  .tarjeta-cuerpo { display: grid; gap: var(--s2); align-content: start; padding: var(--s4); min-width: 0; }
+  .tarjeta-titulo { font-size: var(--fs-h3); overflow-wrap: anywhere; }
   .tarjeta-titulo a { color: var(--ink); text-decoration: none; }
   .tarjeta-titulo a::after { content: ''; position: absolute; inset: 0; }
   .tarjeta:hover .tarjeta-titulo a { color: var(--sec); }
   .tarjeta-titulo a:focus-visible { outline: none; }
   .tarjeta:has(.tarjeta-titulo a:focus-visible) { outline: var(--focus-ring); outline-offset: 2px; z-index: 1; }
   .tarjeta-cifra { margin: 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: var(--s1) var(--s2); }
-  .tarjeta-cifra .cifra { color: var(--sec); font-size: var(--fs-h3); font-stretch: var(--wdth-display); font-weight: var(--fw-display); }
+  /* La cifra puede partirse en su unidad larga ("pulgadas-diámetro") para no ensanchar la tarjeta */
+  .tarjeta-cifra .cifra { white-space: normal; overflow-wrap: anywhere; color: var(--sec); font-size: var(--fs-h3); font-stretch: var(--wdth-display); font-weight: var(--fw-display); }
   .tarjeta-cifra .voz-datos { color: var(--muted); }
   .tarjeta-datos { margin: 0; display: grid; gap: var(--s1); }
   .tarjeta-datos > div { display: grid; grid-template-columns: 9ch 1fr; gap: var(--s2); }

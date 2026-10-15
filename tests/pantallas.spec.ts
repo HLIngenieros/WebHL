@@ -3,7 +3,11 @@ import AxeBuilder from '@axe-core/playwright';
 
 // Matriz de pantallas de la especificación §6 + móvil en horizontal.
 const PANTALLAS = [[360, 780], [390, 844], [768, 1024], [1024, 768], [1366, 768], [1920, 1080], [2560, 1440], [844, 390]];
-const PAGINAS = ['/', '/nosotros/', '/en/about/', '/muestra/', '/pendientes/', '/404.html'];
+const PAGINAS = [
+  '/', '/nosotros/', '/en/about/', '/muestra/', '/pendientes/', '/404.html',
+  '/proyectos/', '/en/projects/', '/proyectos/planta-columbus/', '/proyectos/torre-grua-maceo/',
+  '/servicios/', '/servicios/montaje-mecanico/', '/sectores/', '/sectores/mineria/',
+];
 
 for (const [w, h] of PANTALLAS) {
   for (const ruta of PAGINAS) {
