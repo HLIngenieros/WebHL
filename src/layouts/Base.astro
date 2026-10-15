@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Barra from '../components/Barra.astro';
 import { par, type Lang } from '../i18n/rutas';
 import { t } from '../i18n/ui';
 
@@ -31,9 +32,21 @@ const [es, en] = lang === 'es' ? [aqui, otra] : [otra, aqui];
     <link rel="alternate" hreflang="en" href={abs(en)} />
     <link rel="alternate" hreflang="x-default" href={abs(es)} />
     <link rel="preload" href="/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <script is:inline>
+      // Antes de pintar: marca que hay JS y aplica el tema guardado (también tras cada cambio de página).
+      (function () {
+        function aplicar(d) {
+          d.classList.add('js');
+          try { var t = localStorage.getItem('tema'); if (t === 'dark' || t === 'light') d.dataset.theme = t; } catch (e) {}
+        }
+        aplicar(document.documentElement);
+        document.addEventListener('astro:before-swap', function (e) { aplicar(e.newDocument.documentElement); });
+      })();
+    </script>
   </head>
   <body>
     <a class="saltar" href="#contenido">{t(lang, 'saltar')}</a>
+    <Barra lang={lang} alterno={alterno} />
     <main id="contenido">
       <slot />
     </main>

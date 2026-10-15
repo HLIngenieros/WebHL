@@ -1,0 +1,155 @@
+---
+// Barra superior (guía §7): logo, menú plano, idioma y tema. Bajo 1100 px, menú a pantalla completa.
+import { MENU, ruta, par, seccionDe, type Lang } from '../i18n/rutas';
+import { t } from '../i18n/ui';
+
+interface Props { lang: Lang; alterno?: string }
+const { lang, alterno } = Astro.props;
+const otro: Lang = lang === 'es' ? 'en' : 'es';
+const hrefOtro = alterno ?? par(Astro.url.pathname);
+const activa = seccionDe(Astro.url.pathname);
+---
+<header class="barra" transition:name="barra" transition:animate="none">
+  <div class="barra-in">
+    <a class="logo" href={ruta('inicio', lang)} aria-label="HL Ingenieros, inicio">
+      <span class="logo-hl" aria-hidden="true">HL</span><span class="logo-nombre">Ingenieros</span>
+    </a>
+
+    <nav id="nav-principal" aria-label={t(lang, 'menu')}>
+      <ul>
+        {MENU.map((k) => (
+          <li><a href={ruta(k, lang)} aria-current={k === activa ? 'page' : undefined}>{t(lang, k)}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="herramientas">
+      <a class="idioma" href={hrefOtro} hreflang={otro} lang={otro}>{otro.toUpperCase()}<span class="sr-only"> · {t(lang, 'idioma')}</span></a>
+      <button id="boton-tema" class="tema" type="button" aria-label={t(lang, 'tema')}>
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor" /></svg>
+      </button>
+      <a id="boton-menu" class="boton-menu" href="#navegacion-pie" aria-controls="menu-movil" aria-haspopup="dialog">{t(lang, 'menu')}</a>
+    </div>
+  </div>
+
+  <dialog id="menu-movil" aria-label={t(lang, 'menu')}>
+    <div class="menu-cab">
+      <span class="voz-datos">{t(lang, 'menu')}</span>
+      <button type="button" class="cerrar voz-datos" data-cerrar>{t(lang, 'cerrar')}</button>
+    </div>
+    <ul>
+      {MENU.map((k, i) => (
+        <li style={`--i:${i}`}>
+          <a href={ruta(k, lang)} data-seccion data-astro-prefetch="viewport" aria-current={k === activa ? 'page' : undefined}>{t(lang, k)}</a>
+        </li>
+      ))}
+    </ul>
+    <div class="menu-pie">
+      <a href={hrefOtro} hreflang={otro} lang={otro} class="voz-datos">{t(lang, 'idioma')}</a>
+      <button type="button" class="voz-datos" data-tema>{t(lang, 'tema')}</button>
+    </div>
+  </dialog>
+</header>
+
+<script>
+  const raiz = document.documentElement;
+  const temaActual = () =>
+    raiz.dataset.theme ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  function alternarTema() {
+    const nuevo = temaActual() === 'dark' ? 'light' : 'dark';
+    raiz.dataset.theme = nuevo;
+    try { localStorage.setItem('tema', nuevo); } catch { /* almacenamiento bloqueado: el tema dura la visita */ }
+  }
+
+  function iniciar() {
+    const menu = document.getElementById('menu-movil') as HTMLDialogElement | null;
+    const boton = document.getElementById('boton-menu');
+    if (!menu || !boton || menu.dataset.listo) return;
+    menu.dataset.listo = '1';
+    boton.setAttribute('role', 'button');
+    boton.addEventListener('click', (e) => { e.preventDefault(); menu.showModal(); });
+    menu.querySelector('[data-cerrar]')?.addEventListener('click', () => menu.close());
+    menu.addEventListener('close', () => boton.focus());
+    document.querySelectorAll('#boton-tema, [data-tema]').forEach((b) => b.addEventListener('click', alternarTema));
+  }
+
+  iniciar();
+  document.addEventListener('astro:page-load', iniciar);
+  document.addEventListener('astro:before-swap', () => {
+    (document.getElementById('menu-movil') as HTMLDialogElement | null)?.close();
+  });
+</script>
+
+<style>
+  .barra {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: var(--border) solid var(--line);
+  }
+  .barra-in {
+    max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); box-sizing: content-box;
+    height: var(--bar-h); display: flex; align-items: center; gap: var(--s4);
+  }
+  .logo { display: flex; align-items: center; gap: var(--s2); color: var(--ink); text-decoration: none; margin-right: auto; }
+  .logo-hl {
+    background: var(--accent); color: var(--accent-ink); padding: 2px 6px;
+    font-stretch: var(--wdth-display); font-weight: var(--fw-display); font-size: 18px; line-height: 1.2;
+  }
+  .logo-nombre { font-stretch: var(--wdth-title); font-weight: var(--fw-title); font-size: 17px; }
+
+  #nav-principal { display: none; }
+  #nav-principal ul { display: flex; gap: var(--s1); list-style: none; margin: 0; padding: 0; }
+  #nav-principal a, .idioma, .boton-menu {
+    font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: var(--fs-data);
+    letter-spacing: var(--ls-data); text-transform: uppercase; text-decoration: none; white-space: nowrap;
+    color: var(--muted); padding: 6px 9px; border: var(--border) solid transparent;
+    transition: color var(--t-rapido) ease, border-color var(--t-rapido) ease;
+  }
+  #nav-principal a:hover, .idioma:hover, .boton-menu:hover { color: var(--ink); border-color: var(--line); }
+  #nav-principal a[aria-current='page'] { color: var(--ink); border-bottom-color: var(--accent); }
+
+  .herramientas { display: flex; align-items: center; gap: var(--s1); }
+  .tema {
+    display: grid; place-items: center; width: 44px; height: 44px; padding: 0;
+    background: none; border: 0; color: var(--muted); cursor: pointer;
+    transition: color var(--t-rapido) ease;
+  }
+  .tema:hover { color: var(--ink); }
+  .idioma, .boton-menu { min-height: 44px; display: inline-flex; align-items: center; box-sizing: border-box; }
+  .boton-menu { color: var(--ink); border-color: var(--line); }
+
+  @media (min-width: 1100px) {
+    #nav-principal { display: block; }
+    .boton-menu { display: none; }
+  }
+
+  dialog {
+    width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0;
+    border: 0; background: var(--bg); color: var(--ink);
+    clip-path: inset(0 0 0 0);
+    transition: clip-path var(--t-aparece) var(--ease-barrido), display var(--t-aparece) allow-discrete, overlay var(--t-aparece) allow-discrete;
+  }
+  dialog:not([open]) { clip-path: inset(0 0 100% 0); }
+  @starting-style { dialog[open] { clip-path: inset(0 0 100% 0); } }
+  dialog::backdrop { background: transparent; }
+  .menu-cab {
+    height: var(--bar-h); display: flex; align-items: center; justify-content: space-between;
+    padding-inline: var(--gutter); border-bottom: var(--border) solid var(--line); color: var(--muted);
+  }
+  .cerrar, .menu-pie button {
+    min-height: 44px; background: none; border: var(--border) solid var(--line); color: var(--ink);
+    padding: 0 var(--s3); cursor: pointer; font-family: inherit;
+  }
+  dialog ul { list-style: none; margin: 0; padding: var(--s4) var(--gutter); }
+  dialog li { border-bottom: var(--border) solid var(--line-soft); }
+  dialog li a {
+    display: block; padding: var(--s3) 0; color: var(--ink); text-decoration: none;
+    font-size: var(--fs-h2); font-stretch: var(--wdth-title); font-weight: var(--fw-title); line-height: var(--lh-title);
+  }
+  dialog li a[aria-current='page'] { color: var(--accent); }
+  dialog[open] li { animation: izaje-menu var(--t-izaje) var(--ease-izaje) both; animation-delay: calc(var(--i) * 40ms); }
+  @keyframes izaje-menu { from { opacity: 0; transform: translateY(12px); } }
+  .menu-pie { display: flex; gap: var(--s3); padding: var(--s3) var(--gutter); }
+  .menu-pie a { min-height: 44px; display: inline-flex; align-items: center; color: var(--accent); }
+</style>
