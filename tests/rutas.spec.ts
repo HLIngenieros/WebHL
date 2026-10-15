@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { RUTAS, par, langDe } from '../src/i18n/rutas';
+import { RUTAS, par, parExacto, langDe } from '../src/i18n/rutas';
 
 const SITIO = 'https://hlingenieros.com';
 
@@ -46,4 +46,17 @@ test('la 404 es bilingüe, no se indexa y enlaza a ambos inicios', async ({ page
   await expect(page.locator('meta[name=robots]')).toHaveAttribute('content', /noindex/);
   await expect(page.locator('main a[href="/"]')).toHaveCount(1);
   await expect(page.locator('main a[href="/en/"]')).toHaveCount(1);
+});
+
+test('parExacto() no inventa pares', () => {
+  expect(parExacto('/nosotros/')).toBe('/en/about/');
+  expect(parExacto('/desconocida/')).toBeUndefined();
+  expect(parExacto('/404.html')).toBeUndefined();
+});
+
+test('la 404 no declara canonical ni hreflang', async ({ page }) => {
+  await page.goto('/404.html');
+  await expect(page.locator('link[rel=alternate]')).toHaveCount(0);
+  await expect(page.locator('link[rel=canonical]')).toHaveCount(0);
+  await expect(page.locator('.herramientas a[hreflang=en]')).toHaveAttribute('href', '/en/');
 });

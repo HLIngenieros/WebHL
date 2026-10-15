@@ -68,3 +68,15 @@ test('atrás tras navegar desde el menú móvil: menú cerrado, scroll restaurad
   await page.evaluate(() => window.scrollTo(0, 0));
   await expect(page.locator('h1.aparece')).toHaveCSS('opacity', '1');
 });
+
+test('el rescate del revelado se mantiene al navegar', async ({ page }) => {
+  await page.setViewportSize({ width: 1366, height: 800 });
+  await page.addInitScript(() => {
+    (window as any).IntersectionObserver = function () { throw new Error('sin IntersectionObserver'); };
+  });
+  await page.goto('/');
+  await expect(page.locator('html')).toHaveClass(/sin-revela/, { timeout: 4000 });
+  await page.locator('#nav-principal a[href="/nosotros/"]').click();
+  await expect(page).toHaveURL(/\/nosotros\/$/);
+  await expect(page.locator('h1.aparece')).toHaveCSS('opacity', '1');
+});

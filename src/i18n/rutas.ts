@@ -27,12 +27,16 @@ export const ruta = (clave: ClaveRuta, lang: Lang): string => RUTAS[clave][lang]
 
 export const langDe = (pathname: string): Lang => (pathname === '/en' || pathname.startsWith('/en/') ? 'en' : 'es');
 
-/** URL equivalente en el otro idioma; si la página no tiene par, el inicio del otro idioma. */
-export function par(pathname: string): string {
+/** URL equivalente en el otro idioma, o undefined si la página no tiene par (para hreflang). */
+export function parExacto(pathname: string): string | undefined {
   const lang = langDe(pathname);
   const otro: Lang = lang === 'es' ? 'en' : 'es';
-  const r = Object.values(RUTAS).find((x) => x[lang] === pathname);
-  return r ? r[otro] : RUTAS.inicio[otro];
+  return Object.values(RUTAS).find((x) => x[lang] === pathname)?.[otro];
+}
+
+/** Destino del selector de idioma: el par, o el inicio del otro idioma si no lo hay. */
+export function par(pathname: string): string {
+  return parExacto(pathname) ?? RUTAS.inicio[langDe(pathname) === 'es' ? 'en' : 'es'];
 }
 
 /** Sección a la que pertenece una URL (también sus subpáginas); el inicio no cuenta. */

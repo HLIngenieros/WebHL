@@ -92,3 +92,17 @@ test('si localStorage está bloqueado la página carga sin errores', async ({ pa
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   expect(errores).toEqual([]);
 });
+
+test('el botón Menú se abre con Espacio y anuncia su estado', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 800 });
+  await page.goto('/');
+  const boton = page.locator('#boton-menu');
+  await expect(boton).toHaveJSProperty('tagName', 'BUTTON');
+  await expect(boton).toHaveAttribute('aria-expanded', 'false');
+  await boton.focus();
+  await page.keyboard.press('Space');
+  await expect(page.locator('#menu-movil')).toBeVisible();
+  await expect(boton).toHaveAttribute('aria-expanded', 'true');
+  await page.keyboard.press('Escape');
+  await expect(boton).toHaveAttribute('aria-expanded', 'false');
+});

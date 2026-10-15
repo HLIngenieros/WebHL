@@ -28,7 +28,7 @@ const activa = seccionDe(Astro.url.pathname);
       <button id="boton-tema" class="tema" type="button" aria-label={t(lang, 'tema')}>
         <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor" /></svg>
       </button>
-      <a id="boton-menu" class="boton-menu" href="#navegacion-pie" aria-controls="menu-movil" aria-haspopup="dialog">{t(lang, 'menu')}</a>
+      <a id="boton-menu" class="boton-menu" href="#navegacion-pie">{t(lang, 'menu')}</a>
     </div>
   </div>
 
@@ -63,13 +63,21 @@ const activa = seccionDe(Astro.url.pathname);
 
   function iniciar() {
     const menu = document.getElementById('menu-movil') as HTMLDialogElement | null;
-    const boton = document.getElementById('boton-menu');
-    if (!menu || !boton || menu.dataset.listo) return;
+    const enlace = document.getElementById('boton-menu');
+    if (!menu || !enlace || menu.dataset.listo) return;
     menu.dataset.listo = '1';
-    boton.setAttribute('role', 'button');
-    boton.addEventListener('click', (e) => { e.preventDefault(); menu.showModal(); });
+    // Sin JS es un enlace al menú del pie; con JS pasa a ser un botón real que abre el diálogo.
+    const boton = document.createElement('button');
+    boton.type = 'button';
+    for (const { name, value } of enlace.attributes) if (name !== 'href') boton.setAttribute(name, value);
+    boton.textContent = enlace.textContent;
+    boton.setAttribute('aria-controls', 'menu-movil');
+    boton.setAttribute('aria-haspopup', 'dialog');
+    boton.setAttribute('aria-expanded', 'false');
+    enlace.replaceWith(boton);
+    boton.addEventListener('click', () => { menu.showModal(); boton.setAttribute('aria-expanded', 'true'); });
     menu.querySelector('[data-cerrar]')?.addEventListener('click', () => menu.close());
-    menu.addEventListener('close', () => boton.focus());
+    menu.addEventListener('close', () => { boton.setAttribute('aria-expanded', 'false'); boton.focus(); });
     document.querySelectorAll('#boton-tema, [data-tema]').forEach((b) => b.addEventListener('click', alternarTema));
   }
 
@@ -117,7 +125,7 @@ const activa = seccionDe(Astro.url.pathname);
   }
   .tema:hover { color: var(--ink); }
   .idioma, .boton-menu { min-height: 44px; display: inline-flex; align-items: center; box-sizing: border-box; }
-  .boton-menu { color: var(--ink); border-color: var(--line); }
+  .boton-menu { color: var(--ink); border-color: var(--line); background: none; font-family: inherit; cursor: pointer; }
 
   @media (min-width: 1100px) {
     #nav-principal { display: block; }
