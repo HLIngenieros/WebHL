@@ -26,13 +26,13 @@ export interface Proyecto {
   en?: { titulo: string; resumen: string; descripcion: string; reto?: string };
 }
 
-interface ConIdiomas { en?: unknown; confirmar?: string[] }
+interface ConIdiomas { es?: object; en?: object; confirmar?: string[] }
 interface Servicio extends ConIdiomas { buzon?: string }
 interface Sede { nombre: Texto; buzon?: string; confirmar?: string[] }
-interface Certificacion { norma: string; vence?: Date; pdf?: string; confirmar?: string[] }
+interface Certificacion { norma: Texto; vence?: Date; pdf?: string; confirmar?: string[] }
 interface Hito extends ConIdiomas { anio?: number }
 interface Testimonio { autorizado: boolean; cargo: Texto; cita: Texto }
-interface Sitio { asociadas?: unknown[]; clientes?: { nombre?: string }[]; confirmar?: string[] }
+interface Sitio { asociadas?: unknown[]; clientes?: { nombre?: string }[]; cifras?: { etiqueta: Texto }[]; confirmar?: string[] }
 interface Pagina { pagina: string; lang: Lang; revisionJuridica?: boolean; confirmar?: string[] }
 
 export interface Datos {
@@ -92,9 +92,13 @@ export const paraExplorador = (xs: P[]) => [...ordenar(visibles(xs)), ...ordenar
 
 // ── Auditoría: lo que falta para lanzar (especificación §4, validación en dos modos) ──
 
+/** Falta el bloque `en` o alguno de los campos que sí tiene el bloque `es` (p. ej. `reto`, `faq`). */
+const bloqueIncompleto = (d: { es?: object; en?: object }) =>
+  !d.en || Object.entries(d.es ?? {}).some(([k, v]) => v !== undefined && (d.en as Record<string, unknown>)[k] === undefined);
+
 function faltaIngles(p: Proyecto): boolean {
   const etiquetas = [...p.cifras.map((c) => c.etiqueta), ...p.cantidades.map((c) => c.concepto), ...p.fotos.flatMap((f) => (f.pie ? [f.pie] : []))];
-  return !p.en || etiquetas.some((t) => !t.en);
+  return bloqueIncompleto(p) || etiquetas.some((t) => !t.en);
 }
 
 export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamiento'; hoy?: Date }): Pendiente[] {
@@ -104,17 +108,27 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
     out.push({ coleccion, id, campo, tipo, bloquea, ...(detalle ? { detalle } : {}) });
   const dudas = (coleccion: string, id: string, xs?: string[]) => xs?.forEach((d) => add(coleccion, id, 'confirmar', 'confirmar', true, d));
   const ingles = (coleccion: string, xs: Entrada<ConIdiomas>[] = []) =>
-    xs.forEach(({ id, data }) => { if (!data.en) add(coleccion, id, 'en', 'traduccion'); dudas(coleccion, id, data.confirmar); });
+    xs.forEach(({ id, data }) => { if (bloqueIncompleto(data)) add(coleccion, id, 'en', 'traduccion'); dudas(coleccion, id, data.confirmar); });
 
   const proyectos = datos.proyectos ?? [];
-  // Astro solo registra las referencias rotas, no detiene la compilación: aquí sí se detiene, en cualquier modo.
-  const rotas: string[] = [];
+  // Errores que rompen rutas o relaciones: detienen la compilación en cualquier modo. Astro solo registra
+  // las referencias rotas, y un slug repetido haría que una ficha tapara a otra sin aviso.
+  const errores: string[] = [];
   const existe = (xs: Entrada<unknown>[] | undefined, ref: Ref) => !xs || xs.some((x) => x.id === ref.id);
   for (const { id, data: p } of proyectos) {
-    for (const s of p.servicios) if (!existe(datos.servicios, s)) rotas.push(`- proyectos/${id}: servicio "${s.id}" no existe`);
-    if (!existe(datos.sectores, p.sector)) rotas.push(`- proyectos/${id}: sector "${p.sector.id}" no existe`);
+    for (const s of p.servicios) if (!existe(datos.servicios, s)) errores.push(`- proyectos/${id}: servicio "${s.id}" no existe`);
+    if (!existe(datos.sectores, p.sector)) errores.push(`- proyectos/${id}: sector "${p.sector.id}" no existe`);
+    if (p.slug.es !== id) errores.push(`- proyectos/${id}: slug.es "${p.slug.es}" debe ser igual al nombre del archivo`);
   }
-  if (rotas.length) throw new Error(`Referencias rotas en el contenido:\n${rotas.join('\n')}`);
+  for (const lang of ['es', 'en'] as const) {
+    const vistos = new Map<string, string>();
+    for (const { id, data } of proyectos) {
+      const previo = vistos.get(data.slug[lang]);
+      if (previo) errores.push(`- proyectos/${id}: slug.${lang} "${data.slug[lang]}" repite el de ${previo}`);
+      else vistos.set(data.slug[lang], id);
+    }
+  }
+  if (errores.length) throw new Error(`Errores en el contenido:\n${errores.join('\n')}`);
 
   for (const { id, data: p } of proyectos) {
     if (!p.cliente) add('proyectos', id, 'cliente', 'insumo');
@@ -130,15 +144,6 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
     if (faltaIngles(p)) add('proyectos', id, 'en', 'traduccion');
     dudas('proyectos', id, p.confirmar);
   }
-  for (const lang of ['es', 'en'] as const) {
-    const vistos = new Map<string, string>();
-    for (const { id, data } of proyectos) {
-      const previo = vistos.get(data.slug[lang]);
-      if (previo) add('proyectos', id, `slug.${lang}`, 'confirmar', true, `repite el de ${previo}`);
-      else vistos.set(data.slug[lang], id);
-    }
-  }
-
   for (const { id, data } of datos.servicios ?? []) if (!data.buzon) add('servicios', id, 'buzon', 'insumo', true, 'D7');
   ingles('servicios', datos.servicios);
   ingles('sectores', datos.sectores);
@@ -151,6 +156,7 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
     if (!data.vence) add('certificaciones', id, 'vence', 'insumo');
     else if (data.vence < hoy) add('certificaciones', id, 'vence', 'aviso', true, `vencida desde ${data.vence.toISOString().slice(0, 10)}`);
     if (!data.pdf) add('certificaciones', id, 'pdf', 'insumo');
+    if (!data.norma.en) add('certificaciones', id, 'en', 'traduccion');
     dudas('certificaciones', id, data.confirmar);
   }
   for (const { id, data } of datos.historia ?? []) if (!data.anio) add('historia', id, 'anio', 'insumo');
@@ -163,6 +169,7 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
     if (!data.asociadas?.length) add('sitio', id, 'asociadas', 'insumo', true, 'D1');
     const sinNombre = data.clientes?.filter((c) => !c.nombre).length;
     if (sinNombre) add('sitio', id, 'clientes', 'insumo', true, `${sinNombre} logos sin nombre`);
+    if (data.cifras?.some((c) => !c.etiqueta.en)) add('sitio', id, 'en', 'traduccion');
     dudas('sitio', id, data.confirmar);
   }
   const paginas = datos.paginas ?? [];

@@ -92,7 +92,7 @@ const sedes = defineCollection({
 const certificaciones = defineCollection({
   loader: file('src/content/certificaciones.yaml'),
   schema: ({ image }) => z.object({
-    norma: z.string(),
+    norma: texto,
     ente: z.string(),
     codigo: z.string().optional(),
     vence: z.coerce.date().optional(),

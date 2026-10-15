@@ -190,12 +190,15 @@ en [contenido/README.md](contenido/README.md).
     4 testimonios sin autorizar, sitio y 5 páginas. Funciones puras en `src/lib/contenido.ts`
     (relaciones sin discretas, números por idioma, `auditar()`). 84 medios en `src/assets/` (51 fotos,
     18 logos de cliente sin First Quantum) y `Foto.astro` (AVIF/WebP). `/pendientes/` (se elimina en F6)
-    es la solicitud de insumos: 192 bloqueantes; `npm run build:lanzamiento` falla hasta resolverlos.
+    es la solicitud de insumos: 195 bloqueantes; `npm run build:lanzamiento` falla hasta resolverlos.
     `inventario.csv` ya trae la URL nueva de las 32 fichas. Pruebas en el puerto 4322 (convive con
-    `npm run dev`). 160 pruebas; Lighthouse móvil del inicio 100/100/100/100 (LCP 1,7 s).
+    `npm run dev`). 164 pruebas; Lighthouse móvil del inicio 100/100/100/100 (LCP 1,7 s).
   - **Siguiente paso:** escribir `docs/plan-f2.md` (F2 · Proyectos, especificación §5 y §7): ficha,
     explorador con isla React, mapa SVG, páginas de servicio y sector con relaciones derivadas, e
     ilustración de línea para fichas sin fotos. Textos de unidades y países en `src/i18n/ui.ts`.
+    Requisito: mover la carga de colecciones y `auditar()` a un módulo (`src/lib/datos.ts`) que usen
+    todas las páginas de contenido, para que la validación (referencias, slugs, modo lanzamiento) no
+    dependa de `/pendientes/`, que se borra en F6. La prueba de 200 KB debe cubrir todas las fotos.
 - No usar prettier.
 - Mantener pocos directorios y archivos: la información va primero, la estructura después.
 - El repo se gestiona con GitHub Desktop.

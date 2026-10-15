@@ -29,6 +29,7 @@ fuente: web
 confirmar:
   - "Cantidades duplicadas: 409 t y 1.400 t de equipos, 293 t y 20 t de estructura. ¿Son dos alcances o dos etapas?"
   - "Nombre actual del cliente: ¿OHLA? (D6)"
+  - "El original dice 'transporte de cemento a secado' y 'planta de ensecado'; se corrigió a 'ensacado' en ambos: confirmar."
 es:
   titulo: Molienda de cemento en Sonsón
   resumen: Montaje mecánico de las áreas de molienda de cemento, ensacado y paletizado.

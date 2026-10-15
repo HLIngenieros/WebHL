@@ -2,7 +2,7 @@
 pagina: nosotros
 lang: es
 titulo: Nosotros
-descripcion: HL Ingenieros construye, monta y fabrica para la industria desde 1968, con obras civiles y montajes electromecánicos bajo un solo responsable.
+descripcion: HL Ingenieros ofrece desde 1968 soluciones completas de construcción para la industria, que integran obras civiles y montajes electromecánicos.
 confirmar:
   - "Valores: hay dos listas (Transparencia, Desarrollo, Cumplimiento, Seguridad, Compromiso / Excelencia, Desarrollo, Compromiso, Transparencia, Innovación, Confianza). Definir una sola."
 ---

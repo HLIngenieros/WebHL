@@ -128,11 +128,32 @@ test.describe('auditar()', () => {
     expect(de(auditar({ proyectos: [x] }, { modo: 'desarrollo', hoy }), 'x')).toMatchObject([{ campo: 'en' }]);
   });
 
-  test('dos proyectos con el mismo slug en inglés bloquean', () => {
+  test('dos proyectos con el mismo slug en inglés fallan en cualquier modo', () => {
     const a = p('a', { slug: { es: 'a', en: 'igual' } });
     const b = p('b', { slug: { es: 'b', en: 'igual' } });
-    const ps = auditar({ proyectos: [a, b] }, { modo: 'desarrollo', hoy });
-    expect(ps.filter((x) => x.campo === 'slug.en' && x.bloquea)).toHaveLength(1);
+    expect(() => auditar({ proyectos: [a, b] }, { modo: 'desarrollo', hoy })).toThrow(/proyectos\/b[\s\S]*"igual"[\s\S]*a/);
+  });
+
+  test('el slug en español debe ser el nombre del archivo (carpeta de fotos e id)', () => {
+    const x = p('planta-x', { slug: { es: 'otra-planta', en: 'x-plant' } });
+    expect(() => auditar({ proyectos: [x] }, { modo: 'desarrollo', hoy })).toThrow(/proyectos\/planta-x[\s\S]*otra-planta/);
+  });
+
+  test('un campo opcional en español sin su par en inglés es traducción pendiente', () => {
+    const conReto = p('reto', {
+      es: { titulo: 'T', resumen: 'R', descripcion: 'D', reto: 'Entrega 3 días antes' },
+      en: { titulo: 'T', resumen: 'R', descripcion: 'D' },
+    });
+    expect(de(auditar({ proyectos: [conReto] }, { modo: 'desarrollo', hoy }), 'reto')).toMatchObject([{ campo: 'en', tipo: 'traduccion' }]);
+    const servicio = { id: 's', data: { buzon: 'b@x.co', es: { nombre: 'S', faq: [{ p: '?', r: '.' }] }, en: { nombre: 'S' } } };
+    expect(auditar({ servicios: [servicio] }, { modo: 'desarrollo', hoy })).toMatchObject([{ campo: 'en', tipo: 'traduccion' }]);
+  });
+
+  test('las cifras del sitio y la norma de una certificación también se traducen', () => {
+    const sitio = { id: 'hl', data: { asociadas: [{}], clientes: [], cifras: [{ valor: 530, etiqueta: { es: 'Proyectos' } }] } };
+    expect(auditar({ sitio: [sitio] }, { modo: 'desarrollo', hoy })).toMatchObject([{ campo: 'en', tipo: 'traduccion' }]);
+    const bpi = { id: 'bpi', data: { norma: { es: 'Buenas Prácticas de Innovación' }, ente: 'Icontec', vence: new Date(2030, 0, 1), pdf: 'x.pdf' } };
+    expect(auditar({ certificaciones: [bpi] }, { modo: 'desarrollo', hoy })).toMatchObject([{ campo: 'en', tipo: 'traduccion' }]);
   });
 
   test('una referencia a un servicio o sector inexistente falla en cualquier modo', () => {
@@ -151,7 +172,7 @@ test.describe('auditar()', () => {
   });
 
   test('certificación vencida: aviso que bloquea el lanzamiento', () => {
-    const c = { id: 'iso-9001', data: { norma: 'ISO 9001', ente: 'SGS', vence: new Date(2026, 0, 1), pdf: 'x.pdf' } };
+    const c = { id: 'iso-9001', data: { norma: { es: 'ISO 9001', en: 'ISO 9001' }, ente: 'SGS', vence: new Date(2026, 0, 1), pdf: 'x.pdf' } };
     const ps = auditar({ certificaciones: [c] }, { modo: 'desarrollo', hoy });
     expect(ps).toMatchObject([{ id: 'iso-9001', tipo: 'aviso', bloquea: true }]);
   });
@@ -230,6 +251,15 @@ test.describe('contenido migrado', () => {
     await expect(conteo(page, 'paginas')).toHaveText('5');
     await expect(page.locator('tr[data-coleccion="testimonios"] li[data-campo="autorizado"]')).toHaveCount(4);
     await expect(page.locator('tr[data-coleccion="paginas"] li[data-campo="revisión jurídica"]')).toHaveCount(3);
+  });
+
+  test('los testimonios son textuales: ninguna palabra que no esté en el original', () => {
+    const palabras = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().match(/[a-z0-9]+/g) ?? [];
+    const original = new Set(palabras(fs.readFileSync(path.join(process.cwd(), 'contenido', 'institucional.md'), 'utf8')));
+    const citas = fs.readFileSync(path.join(process.cwd(), 'src', 'content', 'testimonios.yaml'), 'utf8')
+      .split(/\r?\n/).filter((l) => /^ {4}es: /.test(l)).map((l) => l.replace(/^ {4}es: /, ''));
+    expect(citas).toHaveLength(4);
+    expect(citas.flatMap(palabras).filter((w) => !original.has(w))).toEqual([]);
   });
 
   test('el contenido no publica correos personales, solo buzones por función', () => {
