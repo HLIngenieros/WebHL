@@ -43,7 +43,7 @@ export default function Mapa({ lang, paises, puntos, sedes, activo, alElegir }: 
         <g className="mapa-puntos">
           {puntos.map((p, i) => (
             <g key={`${p.x}-${p.y}`} className="punto" transform={`translate(${p.x} ${p.y})`}>
-              <g className="estaca" style={{ '--i': i } as React.CSSProperties}>
+              <g className="estaca" style={`--i:${i}`}>
                 <line x1={0} y1={-26} x2={0} y2={0} />
                 <circle r={p.n > 1 ? 9 : 5} />
                 {p.n > 1 && <text y={4}>{p.n}</text>}

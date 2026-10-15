@@ -1,4 +1,4 @@
-// Datos y filtros del explorador de proyectos. Lo importa la isla de React: nada de Astro aquí.
+// Datos y filtros del explorador de proyectos. Lo importa la isla (Preact): nada de Astro aquí.
 
 /** Imagen ya resuelta al compilar (srcset por formato). */
 export type Imagen = { avif: string; webp: string; src: string; width: number; height: number; alt: string };

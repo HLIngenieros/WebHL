@@ -1,7 +1,7 @@
-// Explorador de proyectos (especificación §5): la única isla de React del sitio. Sin JS, el HTML ya trae
-// las 22 tarjetas y el mapa; los filtros solo aparecen con JS. Las tarjetas nunca se desmontan: las que
+// Explorador de proyectos (especificación §5): la única isla del sitio, en Preact (la API de React en ~10 KB).
+// Sin JS, el HTML ya trae las 22 tarjetas y el mapa; los filtros solo aparecen con JS. Las tarjetas nunca se desmontan: las que
 // no cumplen quedan ocultas y las demás se reacomodan con FLIP (Web Animations, solo transform/opacity).
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
 import Tarjeta from './Tarjeta';
 import Mapa from './Mapa';
 import { conteos, cumple, escribirFiltros, leerFiltros, type DatosTarjeta, type Filtros } from '../lib/explorador';
@@ -134,9 +134,11 @@ export default function Explorador({ lang, tarjetas, opciones, mapa }: Props) {
         </div>
       )}
 
+      <h2 className="sr-only">{t(lang, 'proyectos')}</h2>
       <div className="tarjetas-cont" ref={lista}>
         <div className="tarjetas">
-          {tarjetas.map((x, i) => <Tarjeta key={x.id} t={x} lang={lang} prioridad={i < 3} oculta={!cumple(x, filtros)} />)}
+          {/* Sin prioridad: las tarjetas quedan bajo el mapa y sus fotos competirían con la fuente del LCP */}
+          {tarjetas.map((x) => <Tarjeta key={x.id} t={x} lang={lang} oculta={!cumple(x, filtros)} />)}
         </div>
       </div>
     </div>

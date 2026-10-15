@@ -1,5 +1,5 @@
 // Línea estructural por sector (guía §6): lo que se ve mientras llega la fotografía, y el trazo que se
-// dibuja sobre la lámina. React sin estado: Astro la compila a HTML y la isla del explorador la reutiliza.
+// dibuja sobre la lámina. Componente sin estado: Astro lo compila a HTML y la isla del explorador lo reutiliza.
 // Tres capas para el paralaje de Sectores: estructura (--ink), ejes (--sec, punteados) y cotas (--signal).
 
 type Dibujo = { estructura: string[]; ejes: number[]; cotas: [number, number, number][] };
@@ -98,7 +98,7 @@ interface Props { sector: string; titulo?: string; clase?: string; tono?: 'linea
 
 export default function Ilustracion({ sector, titulo, clase, tono = 'linea' }: Props) {
   const d = DIBUJOS[sector] ?? DIBUJOS.industria;
-  const accesible = titulo ? { role: 'img', 'aria-label': titulo } : { 'aria-hidden': true as const };
+  const accesible = titulo ? { role: 'img' as const, 'aria-label': titulo } : { 'aria-hidden': 'true' as const };
   let i = 0;
   return (
     <svg viewBox="0 0 300 200" className={`ilustracion trazo tono-${tono}${clase ? ` ${clase}` : ''}`} preserveAspectRatio="xMidYMid meet" {...accesible}>
@@ -111,11 +111,11 @@ export default function Ilustracion({ sector, titulo, clase, tono = 'linea' }: P
         ))}
       </g>
       <g className="capa-estructura">
-        {d.estructura.map((p) => <path key={p} className="t" d={p} style={{ '--i': i++ } as React.CSSProperties} />)}
+        {d.estructura.map((p) => <path key={p} className="t" d={p} style={`--i:${i++}`} />)}
       </g>
       <g className="capa-cotas">
         {d.cotas.map(([x1, x2, y]) => (
-          <path key={`${x1}-${x2}-${y}`} className="t" style={{ '--i': i++ } as React.CSSProperties}
+          <path key={`${x1}-${x2}-${y}`} className="t" style={`--i:${i++}`}
             d={`M${x1} ${y} H${x2} M${x1} ${y - 5} V${y + 5} M${x2} ${y - 5} V${y + 5} M${x1 - 3} ${y + 3} L${x1 + 3} ${y - 3} M${x2 - 3} ${y + 3} L${x2 + 3} ${y - 3}`} />
         ))}
       </g>

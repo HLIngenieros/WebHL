@@ -17,7 +17,7 @@ const widths = [480, 800].filter((w) => w <= src.width);
   height={Math.round((Math.min(800, src.width) * src.height) / src.width)}
   formats={['avif', 'webp']}
   loading={prioridad ? 'eager' : 'lazy'}
-  decoding={prioridad ? 'sync' : 'async'}
+  decoding={prioridad ? 'auto' : 'async'}
   fetchpriority={prioridad ? 'high' : 'auto'}
   class:list={['foto', clase]}
 />

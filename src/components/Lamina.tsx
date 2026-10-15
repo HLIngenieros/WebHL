@@ -32,7 +32,7 @@ export default function Lamina({ imagen, sector, sizes, titulo, prioridad = fals
           height={imagen.height}
           alt={imagen.alt}
           loading={prioridad ? 'eager' : 'lazy'}
-          decoding={prioridad ? 'sync' : 'async'}
+          decoding={prioridad ? 'auto' : 'async'}
           fetchPriority={prioridad ? 'high' : 'auto'}
         />
       </picture>

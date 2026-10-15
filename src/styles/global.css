@@ -100,7 +100,7 @@
   .saltar:focus { top: var(--s3); }
 }
 
-/* ---- Pods de sección (guía §6): mismo marcado en Astro (Pod.astro) y en React ---- */
+/* ---- Pods de sección (guía §6): mismo marcado en Astro (Pod.astro) y en los .tsx ---- */
 @layer components {
   /* P1 · Rótulo: identifica la página o la sección a la que enlaza una tarjeta */
   .pod-rotulo {
@@ -186,6 +186,8 @@
     border-right: var(--border) solid var(--line); border-bottom: var(--border) solid var(--line);
   }
   .tarjeta[hidden] { display: none; }
+  /* Fuera de pantalla no se calcula su estilo ni su dibujo: el explorador tiene 22 con lámina y SVG */
+  .tarjeta { content-visibility: auto; contain-intrinsic-size: auto 520px; }
   .tarjeta .lamina { --proporcion: 4 / 3; max-width: none; }
   .tarjeta-cuerpo { display: grid; gap: var(--s2); align-content: start; padding: var(--s4); min-width: 0; }
   .tarjeta-titulo { font-size: var(--fs-h3); overflow-wrap: anywhere; }
@@ -233,7 +235,7 @@
   .ley-sede::before { content: ''; width: 9px; height: 9px; background: var(--signal); }
 }
 
-/* ---- Explorador de proyectos (isla de React: sus estilos viven aquí) ---- */
+/* ---- Explorador de proyectos (isla de Preact: sus estilos viven aquí) ---- */
 @layer components {
   .explorador > * + * { margin-top: var(--s5); }
   .explorador-cab { display: grid; gap: var(--s5); align-items: start; }

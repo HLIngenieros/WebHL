@@ -58,7 +58,7 @@ export async function rutasDeContenido(): Promise<{ params: { ruta: string }; pr
   return out;
 }
 
-// ── Imágenes y tarjetas: datos serializables para los componentes React ──
+// ── Imágenes y tarjetas: datos serializables para los componentes .tsx (Preact) ──
 
 /** AVIF y WebP a 480 y 800 px (nunca más: guía §8), con el respaldo a 800. */
 export async function imagen(src: ImageMetadata, alt: string): Promise<Imagen> {

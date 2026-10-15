@@ -145,6 +145,8 @@ const letra = (i: number) => String(pasos.slice(0, i + 1).filter(Boolean).length
     .ficha-cab-rejilla { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
   }
   .ficha-cuerpo { --pila: var(--s6); }
+  /* Bajo el pliegue: el navegador no lo maqueta hasta que se acerca (menos trabajo antes del LCP) */
+  .ficha-cuerpo > section + section, .relacionados { content-visibility: auto; contain-intrinsic-size: auto 600px; }
   .con-eje { --pila: var(--s5); }
   .relacionados { --pila: var(--s5); }
   .texto { display: grid; gap: var(--s3); }

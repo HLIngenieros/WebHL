@@ -448,3 +448,19 @@ test.describe('servicios y sectores', () => {
     expect(subs.filter(([t, o]) => t !== 'none' || o !== '1')).toEqual([]);
   });
 });
+
+test.describe('accesibilidad de F2 (Lighthouse)', () => {
+  test('el texto visible del logo está en su nombre accesible', async ({ page }) => {
+    await page.goto('/proyectos/');
+    const visible = ((await page.locator('a.logo').textContent()) ?? '').replace(/\s+/g, ' ').trim();
+    expect(visible).toBe('HL Ingenieros');
+    expect(await page.locator('a.logo').getAttribute('aria-label')).toContain(visible);
+  });
+
+  test('el explorador no salta de H1 a H3', async ({ page }) => {
+    await page.goto('/proyectos/');
+    const niveles = await page.locator('main :is(h1, h2, h3)').evaluateAll((xs) => xs.map((x) => Number(x.tagName[1])));
+    const saltos = niveles.filter((n, i) => i > 0 && n - niveles[i - 1] > 1);
+    expect(saltos).toEqual([]);
+  });
+});
