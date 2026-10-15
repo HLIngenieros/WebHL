@@ -1,0 +1,97 @@
+---
+// Pendientes de contenido (especificación §4): lo que falta para lanzar. Es la futura solicitud de insumos.
+// En `astro build --mode lanzamiento` auditar() lanza un error si queda algo bloqueante. Se elimina en F6.
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Encabezado from '../components/ui/Encabezado.astro';
+import Tabla from '../components/ui/Tabla.astro';
+import Chip from '../components/ui/Chip.astro';
+import { auditar, type Datos, type Pendiente } from '../lib/contenido';
+
+const nombres = ['proyectos', 'servicios', 'sectores', 'sedes', 'certificaciones', 'historia', 'testimonios', 'sitio', 'paginas'] as const;
+const datos = Object.fromEntries(await Promise.all(nombres.map(async (n) => [n, await getCollection(n)]))) as Required<Datos>;
+const modo = import.meta.env.MODE === 'lanzamiento' ? 'lanzamiento' : 'desarrollo';
+const pendientes = auditar(datos, { modo });
+
+for (const x of pendientes) {
+  if (x.coleccion === 'certificaciones' && x.tipo === 'aviso') console.warn(`[contenido] ${x.id}: ${x.detalle}`);
+}
+
+const grupos: { tipo: Pendiente['tipo']; titulo: string; entrada: string }[] = [
+  { tipo: 'insumo', titulo: 'Insumos que debe aportar HL', entrada: 'Datos que no existen en el sitio actual ni en el PDF de ECOHL.' },
+  { tipo: 'confirmar', titulo: 'Por confirmar o decidir', entrada: 'Dudas sobre datos existentes y decisiones abiertas.' },
+  { tipo: 'traduccion', titulo: 'Traducción al inglés', entrada: 'Se resuelve en F5 sobre los textos en español ya cerrados.' },
+  { tipo: 'aviso', titulo: 'Avisos', entrada: 'No impiden lanzar, salvo los marcados como bloqueantes.' },
+];
+const titulo = (id: string) => datos.proyectos.find((p) => p.id === id)?.data.es.titulo ?? id;
+const bloqueantes = pendientes.filter((x) => x.bloquea).length;
+---
+<Base titulo="Pendientes de contenido" lang="es" noindex>
+  <div class="wrap pendientes">
+    <Encabezado
+      nivel={1}
+      codigo="PND"
+      titulo="Pendientes de contenido"
+      entrada={`${bloqueantes} pendientes bloquean el lanzamiento y ${pendientes.length - bloqueantes} son avisos. Generado al compilar a partir de las colecciones.`}
+    />
+
+    <dl class="resumen">
+      {nombres.map((n) => (
+        <div data-conteo={n}><dt class="voz-datos">{n}</dt><dd class="cifra">{datos[n].length}</dd></div>
+      ))}
+    </dl>
+
+    {datos.proyectos.length > 0 && (
+      <section>
+        <Encabezado codigo="PND-0" titulo="Proyectos" />
+        <Tabla titulo="Resumen de proyectos">
+          <thead><tr><th>Proyecto</th><th>Sector</th><th>Fuente</th><th>Visibilidad</th><th class="num">Pendientes</th></tr></thead>
+          <tbody>
+            {datos.proyectos.map((p) => (
+              <tr data-proyecto={p.id} data-visibilidad={p.data.visibilidad}>
+                <td>{p.data.es.titulo}</td><td>{p.data.sector.id}</td><td>{p.data.fuente}</td><td>{p.data.visibilidad}</td>
+                <td class="num">{pendientes.filter((x) => x.coleccion === 'proyectos' && x.id === p.id).length}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Tabla>
+      </section>
+    )}
+
+    {grupos.map((g, i) => {
+      const xs = pendientes.filter((x) => x.tipo === g.tipo);
+      return xs.length > 0 && (
+        <section data-grupo={g.tipo}>
+          <Encabezado codigo={`PND-${i + 1}`} titulo={`${g.titulo} (${xs.length})`} entrada={g.entrada} />
+          <Tabla titulo={g.titulo}>
+            <thead><tr><th>Colección</th><th>Entrada</th><th>Campo</th><th>Detalle</th><th>Estado</th></tr></thead>
+            <tbody>
+              {xs.map((x) => (
+                <tr data-coleccion={x.coleccion} data-id={x.id} data-campo={x.campo}>
+                  <td>{x.coleccion}</td>
+                  <td>{x.coleccion === 'proyectos' ? titulo(x.id) : x.id}</td>
+                  <td>{x.campo}</td>
+                  <td>{x.detalle}</td>
+                  <td>{x.bloquea ? <Chip tipo="crit">Bloquea</Chip> : <Chip tipo="med">Aviso</Chip>}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Tabla>
+        </section>
+      );
+    })}
+  </div>
+</Base>
+
+<style>
+  .pendientes { display: grid; gap: var(--s6); padding-block: var(--s6); }
+  .resumen { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: var(--s3); margin: 0; }
+  .resumen div { border-top: var(--border-strong) solid var(--ink); padding-top: var(--s2); }
+  .resumen dt { color: var(--muted); }
+  .resumen dd { margin: 0; font-size: var(--fs-h3); }
+  section { display: grid; gap: var(--s4); }
+  @media print {
+    .pendientes { padding: 0; gap: var(--s4); }
+    section { break-inside: avoid-page; }
+  }
+</style>

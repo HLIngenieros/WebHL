@@ -28,7 +28,7 @@ test('el fondo sale de los tokens en oscuro', async ({ page }) => {
 test('no hay peticiones a dominios externos', async ({ page }) => {
   const externas: string[] = [];
   page.on('request', (r) => {
-    if (!r.url().startsWith('http://localhost:4321')) externas.push(r.url());
+    if (!r.url().startsWith('http://localhost:4322')) externas.push(r.url());
   });
   await page.goto('/');
   await page.waitForLoadState('networkidle');

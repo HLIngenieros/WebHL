@@ -1,0 +1,159 @@
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+import {
+  txt, numero, edad, periodo, deServicio, deSector, destacados, paraExplorador, auditar,
+  type Proyecto, type Entrada, type Pendiente,
+} from '../src/lib/contenido';
+
+// Proyecto completo de ejemplo; cada prueba cambia solo lo que necesita.
+function p(id: string, cambios: Partial<Proyecto> = {}): Entrada<Proyecto> {
+  return {
+    id,
+    data: {
+      slug: { es: id, en: `${id}-en` },
+      cliente: 'Cliente',
+      rol: { tipo: 'contratista' },
+      pais: 'CO',
+      ciudad: 'Bogotá',
+      inicio: 2015,
+      fin: 2017,
+      sector: { id: 'cemento' },
+      servicios: [{ id: 'montaje-mecanico' }],
+      cifras: [1, 2, 3].map((valor) => ({ valor, unidad: 't', etiqueta: { es: 'E', en: 'E' } })),
+      cantidades: [],
+      fotos: [{ archivo: {}, pie: { es: 'Pie', en: 'Caption' } }],
+      visibilidad: 'normal',
+      fuente: 'web',
+      es: { titulo: 'T', resumen: 'R', descripcion: 'D' },
+      en: { titulo: 'T', resumen: 'R', descripcion: 'D' },
+      ...cambios,
+    },
+  };
+}
+
+const ids = (xs: Entrada<Proyecto>[]) => xs.map((x) => x.id);
+const de = (ps: Pendiente[], id: string) => ps.filter((x) => x.id === id);
+
+test.describe('relaciones derivadas', () => {
+  const lista = [
+    p('normal'),
+    p('discreta', { visibilidad: 'discreta', fin: 2020 }),
+    p('destacado', { visibilidad: 'destacado', fin: 2010 }),
+    p('otro-sector', { sector: { id: 'mineria' }, servicios: [{ id: 'obras-civiles' }] }),
+  ];
+
+  test('una discreta nunca entra en servicio, sector ni destacados', () => {
+    expect(ids(deServicio(lista, 'montaje-mecanico'))).toEqual(['destacado', 'normal']);
+    expect(ids(deSector(lista, 'cemento'))).toEqual(['destacado', 'normal']);
+    expect(ids(destacados(lista))).toEqual(['destacado']);
+  });
+
+  test('el explorador muestra todas, con las discretas al final', () => {
+    expect(ids(paraExplorador(lista))).toEqual(['destacado', 'normal', 'otro-sector', 'discreta']);
+  });
+
+  test('orden: destacados, luego el más reciente, y sin año al final', () => {
+    const xs = [p('sin-anio', { fin: undefined }), p('viejo', { fin: 2001 }), p('nuevo', { fin: 2019 }),
+      p('estrella', { visibilidad: 'destacado', fin: 1999 })];
+    expect(ids(paraExplorador(xs))).toEqual(['estrella', 'nuevo', 'viejo', 'sin-anio']);
+  });
+});
+
+test.describe('textos y números', () => {
+  test('txt usa el idioma pedido y, si falta, el español', () => {
+    expect(txt({ es: 'Hola', en: 'Hello' }, 'en')).toBe('Hello');
+    expect(txt({ es: 'Hola' }, 'en')).toBe('Hola');
+    expect(txt(undefined, 'es')).toBeUndefined();
+  });
+
+  test('el mismo número se escribe según el idioma', () => {
+    expect(numero(5250, 'es')).toBe('5.250');
+    expect(numero(5250, 'en')).toBe('5,250');
+    expect(numero(9470000, 'es')).toBe('9.470.000');
+    expect(numero(9470000, 'en')).toBe('9,470,000');
+    expect(numero(2.5, 'es')).toBe('2,5');
+    expect(numero(2.5, 'en')).toBe('2.5');
+  });
+
+  test('la edad se calcula con el año en curso', () => {
+    expect(edad(1968, new Date(2026, 9, 15))).toBe(58);
+    expect(edad(1968, new Date(2027, 0, 1))).toBe(59);
+  });
+
+  test('periodo con uno, dos o ningún año', () => {
+    expect(periodo({ inicio: 2015, fin: 2018 })).toBe('2015–2018');
+    expect(periodo({ inicio: 2015, fin: 2015 })).toBe('2015');
+    expect(periodo({ fin: 2018 })).toBe('2018');
+    expect(periodo({})).toBeUndefined();
+  });
+});
+
+test.describe('auditar()', () => {
+  const hoy = new Date(2026, 9, 15);
+
+  test('un proyecto completo no deja pendientes', () => {
+    expect(auditar({ proyectos: [p('completo')] }, { modo: 'desarrollo', hoy })).toEqual([]);
+  });
+
+  test('lo faltante se reporta sin romper: años y traducción bloquean, fotos es aviso', () => {
+    const incompleto = p('incompleto', { inicio: undefined, fin: undefined, fotos: [], en: undefined });
+    const ps = de(auditar({ proyectos: [incompleto] }, { modo: 'desarrollo', hoy }), 'incompleto');
+    expect(ps.find((x) => x.campo === 'años')).toMatchObject({ tipo: 'insumo', bloquea: true });
+    expect(ps.find((x) => x.campo === 'en')).toMatchObject({ tipo: 'traduccion', bloquea: true });
+    expect(ps.find((x) => x.campo === 'fotos')).toMatchObject({ tipo: 'aviso', bloquea: false });
+    expect(periodo(incompleto.data)).toBeUndefined();
+  });
+
+  test('rol, lugar, cifras, pies y dudas por confirmar', () => {
+    const x = p('x', {
+      rol: undefined, pais: undefined, ciudad: undefined, cifras: [],
+      fotos: [{ archivo: {} }], confirmar: ['¿Silo de crudo o de cemento?'],
+    });
+    const ps = de(auditar({ proyectos: [x] }, { modo: 'desarrollo', hoy }), 'x');
+    for (const campo of ['rol', 'pais', 'ciudad', 'cifras', 'pies de foto']) {
+      expect(ps.find((y) => y.campo === campo), campo).toMatchObject({ bloquea: true });
+    }
+    expect(ps.find((y) => y.tipo === 'confirmar')).toMatchObject({ detalle: '¿Silo de crudo o de cemento?' });
+  });
+
+  test('una etiqueta sin inglés cuenta como traducción pendiente', () => {
+    const x = p('x', { cantidades: [{ valor: 3, unidad: 't', concepto: { es: 'Equipos' } }] });
+    expect(de(auditar({ proyectos: [x] }, { modo: 'desarrollo', hoy }), 'x')).toMatchObject([{ campo: 'en' }]);
+  });
+
+  test('dos proyectos con el mismo slug en inglés bloquean', () => {
+    const a = p('a', { slug: { es: 'a', en: 'igual' } });
+    const b = p('b', { slug: { es: 'b', en: 'igual' } });
+    const ps = auditar({ proyectos: [a, b] }, { modo: 'desarrollo', hoy });
+    expect(ps.filter((x) => x.campo === 'slug.en' && x.bloquea)).toHaveLength(1);
+  });
+
+  test('en lanzamiento falla con todos los bloqueantes en el mensaje', () => {
+    const datos = { proyectos: [p('uno', { rol: undefined }), p('dos', { ciudad: undefined, fotos: [] })] };
+    expect(() => auditar(datos, { modo: 'lanzamiento', hoy })).toThrow(/2 pendientes[\s\S]*uno[\s\S]*rol[\s\S]*dos[\s\S]*ciudad/);
+    expect(() => auditar({ proyectos: [p('ok', { fotos: [] })] }, { modo: 'lanzamiento', hoy })).not.toThrow();
+  });
+
+  test('certificación vencida: aviso que bloquea el lanzamiento', () => {
+    const c = { id: 'iso-9001', data: { norma: 'ISO 9001', ente: 'SGS', vence: new Date(2026, 0, 1), pdf: 'x.pdf' } };
+    const ps = auditar({ certificaciones: [c] }, { modo: 'desarrollo', hoy });
+    expect(ps).toMatchObject([{ id: 'iso-9001', tipo: 'aviso', bloquea: true }]);
+  });
+
+  test('testimonio sin autorizar: aviso que no bloquea', () => {
+    const t = { id: 'ana', data: { nombre: 'Ana', cargo: { es: 'Ingeniera' }, autorizado: false, cita: { es: 'Cita' } } };
+    expect(auditar({ testimonios: [t] }, { modo: 'desarrollo', hoy })).toMatchObject([{ tipo: 'aviso', bloquea: false }]);
+  });
+});
+
+test.describe('página de pendientes', () => {
+  test('responde, no se indexa y es accesible', async ({ page }) => {
+    const resp = await page.goto('/pendientes/');
+    expect(resp?.status()).toBe(200);
+    await expect(page.locator('meta[name=robots]')).toHaveAttribute('content', /noindex/);
+    await expect(page.locator('h1')).toHaveCount(1);
+    await expect(page.locator('[data-conteo="proyectos"]')).toHaveCount(1);
+    const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+    expect(violations).toEqual([]);
+  });
+});
