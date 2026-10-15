@@ -41,7 +41,7 @@ HSE / PIENSA®, logotipo HL y el azul como ancla.
 ## Propuesta (resumen)
 
 ### Stack recomendado (Opción C)
-**Astro + islas React + Tailwind, sin CMS** (contenido en el repo, ver D4). HTML estático por defecto; React solo en el
+**Astro + islas Preact (API de React) + Tailwind, sin CMS** (contenido en el repo, ver D4). HTML estático por defecto; React solo en el
 explorador de proyectos, el agente de chat y los formularios. Colecciones tipadas: Proyecto,
 Servicio, Sector, Sede, Certificación. i18n nativo (`/en/` espejo con hreflang). View Transitions.
 **Presupuesto de rendimiento (15-oct):** Lighthouse ≥ 95 en móvil en las 4 categorías, LCP < 2,0 s
@@ -196,12 +196,21 @@ en [contenido/README.md](contenido/README.md).
     es la solicitud de insumos: 195 bloqueantes; `npm run build:lanzamiento` falla hasta resolverlos.
     `inventario.csv` ya trae la URL nueva de las 32 fichas. Pruebas en el puerto 4322 (convive con
     `npm run dev`). 164 pruebas; Lighthouse móvil del inicio 100/100/100/100 (LCP 1,7 s).
-  - **Siguiente paso:** escribir `docs/plan-f2.md` (F2 · Proyectos, especificación §5 y §7): ficha,
-    explorador con isla React, mapa SVG, páginas de servicio y sector con relaciones derivadas, e
-    ilustración de línea para fichas sin fotos. Textos de unidades y países en `src/i18n/ui.ts`.
-    Requisito: mover la carga de colecciones y `auditar()` a un módulo (`src/lib/datos.ts`) que usen
-    todas las páginas de contenido, para que la validación (referencias, slugs, modo lanzamiento) no
-    dependa de `/pendientes/`, que se borra en F6. La prueba de 200 KB debe cubrir todas las fotos.
+  - Etapa 6 (2026-10-15): F2 · Proyectos ([docs/plan-f2.md](docs/plan-f2.md)) y guía visual v1.2
+    (acentos y pods por sección, lámina de foto, hoja de contactos, firmas de movimiento; decidida con
+    maquetas sobre fotos reales). `src/lib/datos.ts` carga el contenido y valida para todas las páginas;
+    enrutador único `[...ruta].astro` con plantillas en `src/plantillas/` (ficha, explorador, servicios,
+    sectores, ES/EN). Componentes `.tsx` en **Preact** (no React: el explorador pasó de 91,7 a 31,8 KB
+    gz); solo el explorador hidrata. Mapa propio desde Natural Earth (`node design/mapa.mjs <geojson>`).
+    Fotos a ≤ 800 px. 282 pruebas. Lighthouse móvil: explorador 98/100/100/100 (LCP 2,3 s), ficha
+    99/100/100/100 (LCP 2,0 s), servicio 100 (1,7 s), sector 99 (1,8 s); CLS 0. 195 bloqueantes.
+  - **Pendiente de decidir:** LCP del explorador y la ficha sobre la meta (< 2,0 s): es el repintado del
+    texto al llegar Archivo (88 KB, `font-display: swap`). Opciones: reducir más la fuente o cambiar la
+    estrategia de carga. Menores diferidos de la revisión: `{contratos?.length && …}` en Servicio, códigos
+    P-xx que se renumeran, fila de cifras con 1 o 3, medida repetida en la cabecera de sector, lectura
+    doble de la ilustración en tarjetas sin foto, unidad y etiqueta redundantes en la cifra de la tarjeta.
+  - **Siguiente paso:** `docs/plan-f3.md` (F3 · Institucional: inicio, Nosotros, HSE y calidad, noticias,
+    acreedores, legales; con las firmas de Nosotros, HSE y Noticias de la guía §9). Requiere D2 (lema).
 - No usar prettier.
 - Mantener pocos directorios y archivos: la información va primero, la estructura después.
 - El repo se gestiona con GitHub Desktop.
