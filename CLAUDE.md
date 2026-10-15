@@ -34,7 +34,7 @@ HSE / PIENSA®, logotipo HL y el azul como ancla.
 ## Propuesta (resumen)
 
 ### Stack recomendado (Opción C)
-**Astro + islas React + Tailwind + CMS headless**. HTML estático por defecto; React solo en el
+**Astro + islas React + Tailwind, sin CMS** (contenido en el repo, ver D4). HTML estático por defecto; React solo en el
 explorador de proyectos, el agente de chat y los formularios. Colecciones tipadas: Proyecto,
 Servicio, Sector, Sede, Certificación. i18n nativo (`/en/` espejo con hreflang). View Transitions.
 Meta: Lighthouse ≥ 90 en móvil. Descartadas: HTML+Tailwind a mano (no escala) y React SPA (mal SEO).
@@ -51,25 +51,43 @@ cotas, rótulo de plano, línea estructural). Un azul (`#0B509E`), un acento de 
 datos van en mayúsculas). Radio 0 y sin sombras. Modo claro y oscuro. Movimiento: Trazo, Izaje, Cota y
 Transición de vista; sin preloader, cifras escritas en el HTML, respeta reduced-motion y permite zoom.
 
-### Arquitectura de información
-- **En discusión (14-oct):** Juan David propuso esta jerarquía, que difiere de la propuesta y se
-  resolverá al armar el camino por fases: 1 Home · 2 Historia/Nosotros (línea del tiempo dinámica;
-  2.1 Visión, misión y valores; 2.2 Sistema de Gestión Integral) · 3 Proyectos (clientes, cifras; 3.1
-  Servicios/áreas de impacto; 3.2 Presencia) · 4 Contacto (4.1 Asistente virtual; 4.2 Redes) · 5 Datos
-  y políticas · 6 Empresas asociadas (ECOHL…) · 7 Noticias (7.1 Proyectos adjudicados; 7.2 Trabaje con
-  nosotros). [contenido/](contenido/) ya está ordenado según esta jerarquía.
-- Menú comercial: Inicio · Proyectos (explorador por sector/servicio/país + mapa) · Sectores ·
-  Servicios · HSE · Nosotros · Contacto.
+### Arquitectura de información (aprobada 15-oct)
+- **Público:** amplio e institucional (clientes, candidatos, proveedores, acreedores, comunidad), sin
+  descuidar al cliente que evalúa contratistas ni al que precalifica proveedores.
+- **Lanzamiento único, completo y bilingüe** (ES y EN desde el día 1). Las fases son de construcción en
+  staging; el sitio actual sigue en línea hasta el cambio.
+- **Menú plano, sin submenús:** Nosotros · Proyectos · Servicios · Sectores · HSE y calidad · Noticias ·
+  Contacto · ES/EN; logo → inicio; botón fijo "Hablar con HL".
+- La jerarquía de Juan David (14-oct) es el mapa del sitio; se reparte entre menú y pie.
+  [contenido/](contenido/) sigue ordenado según esa jerarquía.
+- Servicios y Sectores tienen página propia y se cruzan con Proyectos: cada ficha enlaza a su
+  servicio y sector, y cada página de servicio o sector lista sus proyectos.
+- **HSE y calidad** (`/hse`) en primer nivel: política SGI, ISO 9001/14001/45001, Reglas de Oro,
+  PIENSA®, prácticas e indicadores. Nosotros = historia + línea del tiempo, visión/misión/valores,
+  testimonios y empresas asociadas, en una sola página.
+- Slugs EN traducidos; cada página conoce su par para el selector de idioma y hreflang.
+
+| ES | EN | Contenido |
+|---|---|---|
+| `/` | `/en/` | Inicio |
+| `/nosotros` | `/en/about` | Una sola página |
+| `/proyectos`, `/proyectos/[slug]` | `/en/projects/...` | Explorador (servicio · sector · país) + mapa de presencia; ~22 fichas (16 + 6 del PDF ECOHL) |
+| `/servicios`, `/servicios/[s]` | `/en/services/...` | 7 líneas: `epc-llave-en-mano` (epc-turnkey), `gerencia-de-proyectos` (project-management), `obras-civiles` (civil-works), `montaje-mecanico` (mechanical-installation), `montaje-electrico` (electrical-installation), `fabricacion` (fabrication), `mantenimiento` (maintenance-shutdowns) |
+| `/sectores`, `/sectores/[s]` | `/en/sectors/...` | `cemento` (cement), `mineria` (mining), `agua-y-energia` (water-energy), `petroleo-y-gas` (oil-gas), `infraestructura` (infrastructure) |
+| `/hse` | `/en/hse` | HSE y calidad |
+| `/noticias`, `/noticias/[slug]` | `/en/news/...` | Incluye adjudicados; mínimo 3 entradas al lanzar o se oculta |
+| `/contacto` | `/en/contact` | Sedes, formulario de cotización, asistente, redes |
+| Pie: `/trabaje-con-nosotros`, `/proveedores`, `/buzon-etico`, `/acreedores`, `/legal/datos`, `/legal/terminos` | `/en/careers`, `/en/suppliers`, `/en/ethics-line`, `/en/creditors`, `/en/legal/privacy`, `/en/legal/terms` | Formularios por intención; ERP/BI/correo/campus salen al portal interno |
+
 - Servicios (de 9 a 7 líneas en 3 grupos):
-  - A · Gestión: EPC / Llave en mano; Gerencia de proyectos (PMC/EPCM, ECOHL).
+  - A · Gestión: EPC / Llave en mano (absorbe Ingeniería y diseños); Gerencia de proyectos (PMC/EPCM,
+    ECOHL; absorbe Asistencia en la ejecución = Owner's team support).
   - B · Construcción y montaje: Obras civiles industriales; Montaje mecánico y tubería; Montaje
     eléctrico e instrumentación.
   - C · Fabricación y mantenimiento: Fabricación metalmecánica; Mantenimiento y paradas de planta.
-- Pie (fuera del menú): Trabaja con nosotros, Proveedores, Buzón ético, Información para acreedores
-  (Ley 1116), Política de datos y Términos. ERP/BI/correo/campus salen al portal interno.
-- URLs nuevas: `/proyectos/[slug]`, `/sectores/[sector]`, `/servicios/[servicio]`, `/nosotros`,
-  `/hse`, `/contacto`, `/acreedores`, `/legal/terminos`, `/en/...`.
-- Migración: las ~95 URLs actuales → 301 a su equivalente, o 410 (`/error-404/`, `/tag/...`).
+- ~50 páginas por idioma + 404, `sitemap.xml`, `robots.txt` y `.htaccess` (301/410 según
+  [contenido/inventario.csv](contenido/inventario.csv)).
+- Pendiente de diseñar: contenido de cada plantilla, modelo de colecciones y fases de construcción.
 
 Plantilla de servicio: alcance por subcapacidad, recursos propios vs. aliados, normas (NSR-10, RETIE,
 ASME, API 650, AWS), capacidad, 2-4 proyectos de ese servicio, sectores, modelos de contrato, FAQ,
@@ -81,7 +99,7 @@ de 5+ fotos con pie.
 
 ### Contacto, agente y correo
 - Un solo botón "Hablar con HL" reemplaza las dos burbujas (Zoho SalesIQ + WhatsApp): asistente IA
-  24 h (responde con contenido del CMS y cita la fuente; no cotiza ni compromete plazos), asesor en
+  24 h (responde con contenido del sitio y cita la fuente; no cotiza ni compromete plazos), asesor en
   vivo por Zoho en horario de oficina, y WhatsApp.
 - Formularios por intención (Cotización, Proveedores, Trabaja con nosotros, Buzón ético) y país,
   con casilla obligatoria Ley 1581, enrutados a **buzones por función** (no correos personales).
@@ -99,16 +117,16 @@ de 5+ fotos con pie.
 5. Identidad visual (aprobada sem. 6) → 6. Construcción e integraciones (staging sem. 11) →
 7. Migración, QA y lanzamiento (sem. 16): 301, GA4, Search Console, línea base antes y después.
 
-## Decisiones pendientes (D1-D8)
+## Decisiones (D1-D8)
 
 | # | Decisión | Estado |
 |---|---|---|
-| D1 | ¿Sitio del grupo o de HL Ingenieros? Qué empresas se muestran (en EN aparecen Megacranes y Aktino, no en ES) | Pendiente |
+| D1 | ¿Sitio del grupo o de HL Ingenieros? Qué empresas se muestran (en EN aparecen Megacranes y Aktino, no en ES) | **Decidido (15-oct):** el sitio es de HL Ingenieros S.A. Falta definir qué empresas se muestran como asociadas (ECOHL…) |
 | D2 | Lema único. Candidatos: A "Construcción y montaje industrial desde 1968." · B "Obra civil, montaje y fabricación con un solo responsable." · C "Plantas completas para la industria de Latinoamérica." | Pendiente |
 | D3 | Agente: bot nativo de Zoho SalesIQ o agente propio con IA que entrega a Zoho | Pendiente |
-| D4 | CMS: Sanity, Decap o Payload | Pendiente |
-| D5 | Hosting: Vercel/Netlify o Azure Static Web Apps (tenant M365); Power Automate premium o Graph | Pendiente |
-| D6 | Casos sensibles: Odebrecht (Patio de Carbón), Minera Panamá (cerrada desde 2023); nombres actuales de clientes (Zijin Mining, thyssenkrupp Polysius, OHLA) | Pendiente |
+| D4 | CMS: Sanity, Decap o Payload | **Decidido (15-oct): sin CMS.** Sin terceros ni credenciales nuevas: el contenido vive en el repo como colecciones de Astro (Markdown/JSON con esquema validado al compilar). Despliegue manual (compilar y subir `dist/`). Salida futura si otros deben editar: Decap CMS sobre los mismos archivos |
+| D5 | Hosting: Vercel/Netlify o Azure Static Web Apps (tenant M365); Power Automate premium o Graph | **Hosting decidido (15-oct):** el actual (Apache + PHP 8.3, IP 107.180.21.17, al parecer GoDaddy; por confirmar), con despliegue estático que reemplaza a WordPress. Integración de correo: pendiente |
+| D6 | Casos sensibles: Odebrecht (Patio de Carbón), Minera Panamá (cerrada desde 2023); nombres actuales de clientes (Zijin Mining, thyssenkrupp Polysius, OHLA) | **Decidido (15-oct):** se mantienen con `visibilidad: discreta`: ficha propia y visible en el explorador, pero fuera de portada, destacados, páginas de servicio/sector y logos de clientes; sí se indexa. Nombres actuales de clientes: pendiente |
 | D7 | Buzones comerciales por sede/función | Pendiente |
 | D8 | Equipo de ejecución: interno, proveedor o mixto | Pendiente |
 
@@ -145,6 +163,8 @@ en [contenido/README.md](contenido/README.md).
     `design/contraste.py`.
   - Etapa 2 (2026-10-14): extracción del contenido del sitio actual en `contenido/` (16 fichas,
     textos institucionales, inventario de URLs con destino 301/410, medios, PDF de ECOHL).
+  - Etapa 3 (2026-10-15, en curso): decisiones D1, D4, D5 y D6; arquitectura de información y mapa
+    del sitio aprobados. Faltan plantillas, modelo de contenido y fases.
 - No usar prettier.
 - Mantener pocos directorios y archivos: la información va primero, la estructura después.
 - El repo se gestiona con GitHub Desktop.
