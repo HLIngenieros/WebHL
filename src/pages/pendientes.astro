@@ -23,8 +23,26 @@ const grupos: { tipo: Pendiente['tipo']; titulo: string; entrada: string }[] = [
   { tipo: 'traduccion', titulo: 'Traducción al inglés', entrada: 'Se resuelve en F5 sobre los textos en español ya cerrados.' },
   { tipo: 'aviso', titulo: 'Avisos', entrada: 'No impiden lanzar, salvo los marcados como bloqueantes.' },
 ];
+const etiquetas: Record<(typeof nombres)[number], string> = {
+  proyectos: 'Proyectos', servicios: 'Servicios', sectores: 'Sectores', sedes: 'Sedes', certificaciones: 'Certificaciones',
+  historia: 'Historia', testimonios: 'Testimonios', sitio: 'Sitio', paginas: 'Páginas',
+};
 const titulo = (id: string) => datos.proyectos.find((p) => p.id === id)?.data.es.titulo ?? id;
 const bloqueantes = pendientes.filter((x) => x.bloquea).length;
+const proyectos = [...datos.proyectos].sort((a, b) => a.data.es.titulo.localeCompare(b.data.es.titulo, 'es'));
+
+// Una fila por entrada, con todo lo que le falta: así se lee como solicitud de insumos.
+function porEntrada(xs: Pendiente[]) {
+  const filas = new Map<string, { coleccion: string; id: string; items: Pendiente[] }>();
+  for (const x of xs) {
+    const k = `${x.coleccion}/${x.id}`;
+    if (!filas.has(k)) filas.set(k, { coleccion: x.coleccion, id: x.id, items: [] });
+    filas.get(k)!.items.push(x);
+  }
+  const orden = (c: string) => nombres.indexOf(c as (typeof nombres)[number]);
+  return [...filas.values()].sort((a, b) => orden(a.coleccion) - orden(b.coleccion) || nombre(a).localeCompare(nombre(b), 'es'));
+}
+const nombre = (f: { coleccion: string; id: string }) => (f.coleccion === 'proyectos' ? titulo(f.id) : f.id);
 ---
 <Base titulo="Pendientes de contenido" lang="es" noindex>
   <div class="wrap pendientes">
@@ -37,7 +55,7 @@ const bloqueantes = pendientes.filter((x) => x.bloquea).length;
 
     <dl class="resumen">
       {nombres.map((n) => (
-        <div data-conteo={n}><dt class="voz-datos">{n}</dt><dd class="cifra">{datos[n].length}</dd></div>
+        <div data-conteo={n}><dt class="voz-datos">{etiquetas[n]}</dt><dd class="cifra">{datos[n].length}</dd></div>
       ))}
     </dl>
 
@@ -47,7 +65,7 @@ const bloqueantes = pendientes.filter((x) => x.bloquea).length;
         <Tabla titulo="Resumen de proyectos">
           <thead><tr><th>Proyecto</th><th>Sector</th><th>Fuente</th><th>Visibilidad</th><th class="num">Pendientes</th></tr></thead>
           <tbody>
-            {datos.proyectos.map((p) => (
+            {proyectos.map((p) => (
               <tr data-proyecto={p.id} data-visibilidad={p.data.visibilidad} data-fuente={p.data.fuente}>
                 <td>{p.data.es.titulo}</td><td>{p.data.sector.id}</td><td>{p.data.fuente}</td><td>{p.data.visibilidad}</td>
                 <td class="num">{pendientes.filter((x) => x.coleccion === 'proyectos' && x.id === p.id).length}</td>
@@ -64,15 +82,22 @@ const bloqueantes = pendientes.filter((x) => x.bloquea).length;
         <section data-grupo={g.tipo}>
           <Encabezado codigo={`PND-${i + 1}`} titulo={`${g.titulo} (${xs.length})`} entrada={g.entrada} />
           <Tabla titulo={g.titulo}>
-            <thead><tr><th>Colección</th><th>Entrada</th><th>Campo</th><th>Detalle</th><th>Estado</th></tr></thead>
+            <thead><tr><th>Colección</th><th>Entrada</th><th>Qué falta</th><th>Estado</th></tr></thead>
             <tbody>
-              {xs.map((x) => (
-                <tr data-coleccion={x.coleccion} data-id={x.id} data-campo={x.campo}>
-                  <td>{x.coleccion}</td>
-                  <td>{x.coleccion === 'proyectos' ? titulo(x.id) : x.id}</td>
-                  <td>{x.campo}</td>
-                  <td>{x.detalle}</td>
-                  <td>{x.bloquea ? <Chip tipo="crit">Bloquea</Chip> : <Chip tipo="med">Aviso</Chip>}</td>
+              {porEntrada(xs).map((f) => (
+                <tr data-coleccion={f.coleccion} data-id={f.id}>
+                  <td>{etiquetas[f.coleccion as (typeof nombres)[number]]}</td>
+                  <td>{nombre(f)}</td>
+                  <td>
+                    <ul class="falta">
+                      {f.items.map((x) => (
+                        <li data-campo={x.campo}>
+                          {x.tipo === 'confirmar' && x.detalle ? x.detalle : <>{x.campo}{x.detalle && <span class="detalle"> · {x.detalle}</span>}</>}
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td>{f.items.some((x) => x.bloquea) ? <Chip tipo="crit">Bloquea</Chip> : <Chip tipo="med">Aviso</Chip>}</td>
                 </tr>
               ))}
             </tbody>
@@ -85,7 +110,11 @@ const bloqueantes = pendientes.filter((x) => x.bloquea).length;
 
 <style>
   .pendientes { display: grid; gap: var(--s6); padding-block: var(--s6); }
-  .resumen { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: var(--s3); margin: 0; }
+  .resumen { display: grid; grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); gap: var(--s3); margin: 0; }
+  .falta { margin: 0; padding-left: 1.1em; }
+  .falta li + li { margin-top: var(--s1); }
+  .detalle { color: var(--muted); }
+  td { vertical-align: top; }
   .resumen div { border-top: var(--border-strong) solid var(--ink); padding-top: var(--s2); }
   .resumen dt { color: var(--muted); }
   .resumen dd { margin: 0; font-size: var(--fs-h3); }

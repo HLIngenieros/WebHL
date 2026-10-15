@@ -184,10 +184,18 @@ en [contenido/README.md](contenido/README.md).
     Cierre con los 8 menores de la revisión: tokens tipográficos de componentes, tema con estado
     (`aria-pressed`) y respaldo sin almacenamiento, foco sin sombra, breakpoints alineados, Aparece solo
     CSS, impresión y observador único (126 pruebas).
-  - **Siguiente paso:** escribir `docs/plan-f1.md` (F1 · Contenido, especificación §4 y §7) y ejecutarlo:
-    colecciones con esquema, migración de `contenido/` (~22 fichas, 7 servicios, 6 sectores, sedes,
-    historia, testimonios, certificaciones), descarga y optimización de las 51 fotos (~10 MB) y listado
-    de pendientes generado al compilar.
+  - Etapa 5 (2026-10-15): F1 · Contenido ([docs/plan-f1.md](docs/plan-f1.md)). 9 colecciones en
+    `src/content/` (YAML con textos `es`/`en`; el inglés queda para F5): 22 fichas (16 web + 6 ECOHL; 2
+    discretas, 4 destacadas por validar), 7 servicios, 6 sectores, 4 sedes, 4 certificaciones, 5 hitos,
+    4 testimonios sin autorizar, sitio y 5 páginas. Funciones puras en `src/lib/contenido.ts`
+    (relaciones sin discretas, números por idioma, `auditar()`). 84 medios en `src/assets/` (51 fotos,
+    18 logos de cliente sin First Quantum) y `Foto.astro` (AVIF/WebP). `/pendientes/` (se elimina en F6)
+    es la solicitud de insumos: 192 bloqueantes; `npm run build:lanzamiento` falla hasta resolverlos.
+    `inventario.csv` ya trae la URL nueva de las 32 fichas. Pruebas en el puerto 4322 (convive con
+    `npm run dev`). 160 pruebas; Lighthouse móvil del inicio 100/100/100/100 (LCP 1,7 s).
+  - **Siguiente paso:** escribir `docs/plan-f2.md` (F2 · Proyectos, especificación §5 y §7): ficha,
+    explorador con isla React, mapa SVG, páginas de servicio y sector con relaciones derivadas, e
+    ilustración de línea para fichas sin fotos. Textos de unidades y países en `src/i18n/ui.ts`.
 - No usar prettier.
 - Mantener pocos directorios y archivos: la información va primero, la estructura después.
 - El repo se gestiona con GitHub Desktop.

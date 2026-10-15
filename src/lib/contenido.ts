@@ -124,6 +124,7 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
     if (!p.inicio || !p.fin) add('proyectos', id, 'años', 'insumo');
     if (p.cifras.length < 3 || p.cifras.length > 4) add('proyectos', id, 'cifras', 'insumo', true, `tiene ${p.cifras.length}; se necesitan 3-4`);
     if (!p.fotos.length) add('proyectos', id, 'fotos', 'aviso', false, 'se muestra una ilustración de línea');
+    if (!p.cantidades.length) add('proyectos', id, 'cantidades', 'aviso', false, 'sin cantidades de obra');
     const sinPie = p.fotos.filter((f) => !f.pie).length;
     if (sinPie) add('proyectos', id, 'pies de foto', 'insumo', true, `${sinPie} de ${p.fotos.length}`);
     if (faltaIngles(p)) add('proyectos', id, 'en', 'traduccion');

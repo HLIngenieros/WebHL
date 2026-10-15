@@ -11,7 +11,9 @@ comentarios van marcados como **Nota**.
 | [inventario.csv](inventario.csv) | 101 URLs (85 páginas + 16 etiquetas): idioma, tipo, palabras propias, fechas, sección de destino y acción (301 o 410) |
 | [medios.csv](medios.csv) | 144 archivos útiles: fotos de proyecto, certificaciones, logos, testimonios, PDF |
 
-Las fotos no se descargaron: están enlazadas en `medios.csv` y se bajan cuando se defina la galería.
+**Desde F1 (2026-10-15)** este contenido vive en el sitio como colecciones (`src/content/`) y los medios en
+`src/assets/`. Esta carpeta queda como archivo de la extracción. La lista viva de lo que falta es la
+página `/pendientes/` (`npm run dev`), generada al compilar; la lista de abajo es la original.
 
 ## Hallazgos
 

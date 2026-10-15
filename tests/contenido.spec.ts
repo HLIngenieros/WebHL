@@ -22,7 +22,7 @@ function p(id: string, cambios: Partial<Proyecto> = {}): Entrada<Proyecto> {
       sector: { id: 'cemento' },
       servicios: [{ id: 'montaje-mecanico' }],
       cifras: [1, 2, 3].map((valor) => ({ valor, unidad: 't', etiqueta: { es: 'E', en: 'E' } })),
-      cantidades: [],
+      cantidades: [{ valor: 1, unidad: 't', concepto: { es: 'C', en: 'C' } }],
       fotos: [{ archivo: {}, pie: { es: 'Pie', en: 'Caption' } }],
       visibilidad: 'normal',
       fuente: 'web',
@@ -118,6 +118,11 @@ test.describe('auditar()', () => {
     expect(ps.find((y) => y.tipo === 'confirmar')).toMatchObject({ detalle: '¿Silo de crudo o de cemento?' });
   });
 
+  test('una ficha sin cantidades de obra da un aviso que no bloquea', () => {
+    const ps = de(auditar({ proyectos: [p('sin-cantidades', { cantidades: [] })] }, { modo: 'desarrollo', hoy }), 'sin-cantidades');
+    expect(ps).toMatchObject([{ campo: 'cantidades', tipo: 'aviso', bloquea: false }]);
+  });
+
   test('una etiqueta sin inglés cuenta como traducción pendiente', () => {
     const x = p('x', { cantidades: [{ valor: 3, unidad: 't', concepto: { es: 'Equipos' } }] });
     expect(de(auditar({ proyectos: [x] }, { modo: 'desarrollo', hoy }), 'x')).toMatchObject([{ campo: 'en' }]);
@@ -203,7 +208,7 @@ test.describe('contenido migrado', () => {
   test('7 servicios y 6 sectores; los servicios esperan su buzón (D7)', async ({ page }) => {
     await expect(conteo(page, 'servicios')).toHaveText('7');
     await expect(conteo(page, 'sectores')).toHaveText('6');
-    await expect(page.locator('tr[data-coleccion="servicios"][data-campo="buzon"]')).toHaveCount(7);
+    await expect(page.locator('tr[data-coleccion="servicios"] li[data-campo="buzon"]')).toHaveCount(7);
   });
 
   test('22 proyectos: 2 discretos (D6) y 4 destacados', async ({ page }) => {
@@ -223,8 +228,8 @@ test.describe('contenido migrado', () => {
     await expect(conteo(page, 'testimonios')).toHaveText('4');
     await expect(conteo(page, 'sitio')).toHaveText('1');
     await expect(conteo(page, 'paginas')).toHaveText('5');
-    await expect(page.locator('tr[data-coleccion="testimonios"][data-campo="autorizado"]')).toHaveCount(4);
-    await expect(page.locator('tr[data-coleccion="paginas"][data-campo="revisión jurídica"]')).toHaveCount(3);
+    await expect(page.locator('tr[data-coleccion="testimonios"] li[data-campo="autorizado"]')).toHaveCount(4);
+    await expect(page.locator('tr[data-coleccion="paginas"] li[data-campo="revisión jurídica"]')).toHaveCount(3);
   });
 
   test('el contenido no publica correos personales, solo buzones por función', () => {
