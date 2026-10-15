@@ -183,7 +183,7 @@ commit, Lighthouse y capturas en la matriz de pantallas (Playwright).
 | F3 · Institucional | Inicio, Nosotros (línea del tiempo), HSE y calidad, Noticias (oculta si falta contenido), Acreedores, legales | Sitio completo en español |
 | F4 · Contacto | 4 formularios + PHP + radicado; Hablar con HL | Contacto de punta a punta (probado con `php -S` de un PHP portátil; hoy no hay PHP instalado) |
 | F5 · Inglés | Traducción con el glosario, pares de páginas y `hreflang` | Sitio bilingüe |
-| F6 · Lanzamiento | En espera de la aprobación oficial: acceso al hosting, `.htaccess` 301/410, sitemap, GA4 y Search Console, control de calidad final, respaldo de WordPress, cambio y seguimiento por 2 semanas | Producción |
+| F6 · Lanzamiento | En espera de la aprobación oficial: acceso al hosting, `.htaccess` 301/410, sitemap, GA4 y Search Console, control de calidad final, respaldo de WordPress, cambio y seguimiento por 2 semanas. Recompilar y publicar después de cada 1 de enero (el año del pie se fija al compilar) | Producción |
 
 **En paralelo:** redacción en español durante F1-F3 a partir de lo extraído; el inglés se traduce sobre
 textos ya cerrados. Las decisiones abiertas tienen fecha límite: D2 antes de F3; D3 y D7 antes de F4.

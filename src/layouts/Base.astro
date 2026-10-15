@@ -51,7 +51,9 @@ const barrido = {
         function aplicar(d) {
           d.classList.add('js');
           if (document.documentElement.classList.contains('sin-revela')) d.classList.add('sin-revela');
-          try { var t = localStorage.getItem('tema'); if (t === 'dark' || t === 'light') d.dataset.theme = t; } catch (e) {}
+          var t = window.__tema;
+          try { t = localStorage.getItem('tema') || t; } catch (e) {}
+          if (t === 'dark' || t === 'light') d.dataset.theme = t;
         }
         aplicar(document.documentElement);
         document.addEventListener('astro:before-swap', function (e) { aplicar(e.newDocument.documentElement); });

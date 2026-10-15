@@ -47,6 +47,7 @@
   --wdth-subtitle: 108%;   /* h3 */
   --wdth-text: 100%;
   --wdth-data: 72%;        /* voz de datos: rótulos, cotas, etiquetas */
+  --wdth-stat: 125%;       /* cifras destacadas */
 
   /* tamaños */
   --fs-h1: clamp(36px, 5.6vw, 68px);
@@ -58,6 +59,13 @@
   --fs-sm: 14.5px;
   --fs-xs: 13px;
   --fs-data: 12.5px;
+  /* componentes (guía §7) */
+  --fs-marca: 18px;        /* bloque HL del logo provisional */
+  --fs-marca-nombre: 17px;
+  --fs-boton: 14px;
+  --fs-cta: 13.5px;        /* Hablar con HL */
+  --fs-chip: 11.5px;
+  --fs-cota: 11px;         /* texto sobre la cota */
 
   /* pesos */
   --fw-display: 850;
@@ -66,6 +74,7 @@
   --fw-strong: 600;
   --fw-text: 400;
   --fw-data: 600;
+  --fw-boton: 550;
 
   /* interlineado y tracking */
   --lh-display: .98;
@@ -124,7 +133,10 @@
   }
 }
 @media (min-width: 2200px) {
-  :root { --wrap: 1600px; --fs-lead: 21px; --fs-body: 18px; --fs-sm: 15.5px; --fs-data: 13.5px; }
+  :root {
+    --wrap: 1600px; --fs-lead: 21px; --fs-body: 18px; --fs-sm: 15.5px; --fs-data: 13.5px;
+    --fs-marca: 20px; --fs-marca-nombre: 19px; --fs-boton: 15px; --fs-cta: 14.5px; --fs-chip: 12.5px; --fs-cota: 12px;
+  }
 }
 
 /* ---- Roles de color · modo oscuro ---- */

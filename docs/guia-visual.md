@@ -238,6 +238,9 @@ La voz de datos es la firma del sistema: es como se escriben las cotas en un pla
   punto decimal.
 - Unidades con espacio fino o normal: "5.250 t/día", "105 m", "26.000 m³".
 - Nunca más de un H1 por página; jerarquía sin saltos (H2 → H3).
+- Los componentes también usan tokens: `--fs-marca`, `--fs-marca-nombre`, `--fs-boton` / `--fw-boton`,
+  `--fs-cta`, `--fs-chip`, `--fs-cota` y `--wdth-stat`. Crecen en pantallas de 2200 px o más. Una prueba
+  (`tests/menores.spec.ts`) impide escribir tamaños, pesos o anchos tipográficos a mano.
 
 ---
 
@@ -399,7 +402,7 @@ hay preloader**, y todo el contenido existe en el HTML aunque el JavaScript fall
 | **Izaje** | Bloques y tarjetas suben a su sitio y frenan, como una carga izada | `--ease-izaje` | `--t-izaje` .6 s, escalonado (total ≤ .6 s) | Rejillas de tarjetas, listas de proyectos |
 | **Cota** | La línea de cota se mide (`scaleX` de 0 a 1) y la cifra cuenta hasta su valor | `--ease-plano` | `--t-cota` 1.2 s | Divisores de sección, cifras destacadas |
 | **Transición de vista** | La página nueva entra por barrido lateral (`clip-path`) sin pantallazo en blanco; barra superior y botón de contacto quedan fijos | `--ease-barrido` | `--t-vista` .5 s | Navegación entre páginas (View Transitions de Astro) |
-| **Aparece** | Opacidad de 0 a 1 y desplazamiento de 6 px | `ease` | `--t-aparece` .5 s / `--t-rapido` .2 s (hover, filtros, menú) | Texto del hero, mensajes del chat |
+| **Aparece** | Opacidad de 0 a 1 y desplazamiento de 6 px; solo CSS, arranca con el primer pintado (no espera al JS) | `--ease-izaje` | `--t-aparece` .5 s / `--t-rapido` .2 s (hover, filtros, menú) | Texto del hero, mensajes del chat |
 
 **Reglas**
 

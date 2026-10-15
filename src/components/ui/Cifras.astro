@@ -21,7 +21,7 @@ const { items } = Astro.props;
   .cifras > div:nth-child(2n + 1) { border-left: 0; }
   dd {
     /* la cifra nunca se sale de su celda: se ajusta al ancho disponible, con el tamaño de la guía como tope */
-    margin: 0; color: var(--accent); font-size: min(var(--fs-stat), 17cqi); font-stretch: 125%;
+    margin: 0; color: var(--accent); font-size: min(var(--fs-stat), 17cqi); font-stretch: var(--wdth-stat);
     font-weight: var(--fw-title); line-height: 1;
   }
   dt { color: var(--muted); }

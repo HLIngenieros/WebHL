@@ -20,7 +20,7 @@ const id = `campo-${nombre}`;
     padding: 8px 12px; border: var(--border) solid var(--line); border-bottom: var(--border-strong) solid var(--ink);
     border-radius: 0; transition: border-color var(--t-rapido) ease;
   }
-  input:focus-visible, textarea:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  input:focus-visible, textarea:focus-visible { outline: var(--border) solid var(--accent); outline-offset: 0; border-color: var(--accent); }
   .con-error input, .con-error textarea { border-color: var(--bad); }
   .error { margin: 0; color: var(--bad); font-size: var(--fs-xs); }
 </style>

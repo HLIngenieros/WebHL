@@ -181,6 +181,9 @@ en [contenido/README.md](contenido/README.md).
     transiciones y revelado, componentes base y `/muestra/` (se elimina en F6). 113 pruebas Playwright
     (`npm test`), `npm run presupuesto` (JS del inicio 5,3 KB gz) y Lighthouse móvil 100/100/100/100
     (LCP 1,7 s, CLS 0, TBT 0). Comandos: `npm run dev`, `npm run build`, `npm test`, `npm run check`.
+    Cierre con los 8 menores de la revisión: tokens tipográficos de componentes, tema con estado
+    (`aria-pressed`) y respaldo sin almacenamiento, foco sin sombra, breakpoints alineados, Aparece solo
+    CSS, impresión y observador único (126 pruebas).
 - No usar prettier.
 - Mantener pocos directorios y archivos: la información va primero, la estructura después.
 - El repo se gestiona con GitHub Desktop.

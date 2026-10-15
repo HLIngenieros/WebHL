@@ -55,10 +55,15 @@ const activa = seccionDe(Astro.url.pathname);
   const raiz = document.documentElement;
   const temaActual = () =>
     raiz.dataset.theme ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const botonesTema = () => document.querySelectorAll('#boton-tema, [data-tema]');
+  const marcarTema = () =>
+    botonesTema().forEach((b) => b.setAttribute('aria-pressed', String(temaActual() === 'dark')));
   function alternarTema() {
     const nuevo = temaActual() === 'dark' ? 'light' : 'dark';
     raiz.dataset.theme = nuevo;
-    try { localStorage.setItem('tema', nuevo); } catch { /* almacenamiento bloqueado: el tema dura la visita */ }
+    (window as any).__tema = nuevo; // respaldo si el almacenamiento está bloqueado: dura la visita
+    try { localStorage.setItem('tema', nuevo); } catch { /* bloqueado */ }
+    marcarTema();
   }
 
   function iniciar() {
@@ -78,7 +83,8 @@ const activa = seccionDe(Astro.url.pathname);
     boton.addEventListener('click', () => { menu.showModal(); boton.setAttribute('aria-expanded', 'true'); });
     menu.querySelector('[data-cerrar]')?.addEventListener('click', () => menu.close());
     menu.addEventListener('close', () => { boton.setAttribute('aria-expanded', 'false'); boton.focus(); });
-    document.querySelectorAll('#boton-tema, [data-tema]').forEach((b) => b.addEventListener('click', alternarTema));
+    botonesTema().forEach((b) => b.addEventListener('click', alternarTema));
+    marcarTema();
   }
 
   iniciar();
@@ -102,9 +108,9 @@ const activa = seccionDe(Astro.url.pathname);
   .logo { display: flex; align-items: center; gap: var(--s2); color: var(--ink); text-decoration: none; margin-right: auto; }
   .logo-hl {
     background: var(--accent); color: var(--accent-ink); padding: 2px 6px;
-    font-stretch: var(--wdth-display); font-weight: var(--fw-display); font-size: 18px; line-height: 1.2;
+    font-stretch: var(--wdth-display); font-weight: var(--fw-display); font-size: var(--fs-marca); line-height: 1.2;
   }
-  .logo-nombre { font-stretch: var(--wdth-title); font-weight: var(--fw-title); font-size: 17px; }
+  .logo-nombre { font-stretch: var(--wdth-title); font-weight: var(--fw-title); font-size: var(--fs-marca-nombre); }
 
   #nav-principal { display: none; }
   #nav-principal ul { display: flex; gap: var(--s1); list-style: none; margin: 0; padding: 0; }

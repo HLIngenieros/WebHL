@@ -32,7 +32,7 @@ const H = nivel === 1 ? 'h1' : 'h2';
     transform: rotate(-45deg);
   }
   .izq { left: 0; } .der { right: 0; }
-  .cota-texto { position: absolute; right: 0; top: -18px; color: var(--signal-ink); font-size: 11px; }
+  .cota-texto { position: absolute; right: 0; top: -18px; color: var(--signal-ink); font-size: var(--fs-cota); }
 
   /* Medición: la cota crece de izquierda a derecha una vez, al entrar en pantalla */
   :global(html.js) .cota-linea { transform-origin: left; transform: scaleX(0); transition: transform var(--t-cota) var(--ease-plano); }

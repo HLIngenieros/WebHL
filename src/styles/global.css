@@ -56,8 +56,9 @@
   --breakpoint-md: 760px;
   --breakpoint-lg: 900px;
   --breakpoint-xl: 960px;
-  --breakpoint-2xl: 1280px;
-  --breakpoint-3xl: 1600px;
+  --breakpoint-menu: 1100px;
+  --breakpoint-2xl: 1600px;
+  --breakpoint-3xl: 2200px;
 }
 
 @layer base {
@@ -98,19 +99,26 @@
 
 /* ---- Movimiento (guía §9) ---- */
 @layer components {
+  /* Aparece: texto de primera pantalla; solo CSS, arranca con el primer pintado y no depende del JS */
+  .aparece { animation: aparece var(--t-aparece) var(--ease-izaje) both; animation-delay: calc(var(--i, 0) * 60ms); }
+  /* Izaje: rejillas bajo el pliegue; revela.ts las muestra una vez al entrar en pantalla */
   html.js .izaje:not(.visible) { opacity: 0; transform: translateY(24px); }
-  html.js .aparece:not(.visible) { opacity: 0; transform: translateY(6px); }
-  html.js .izaje, html.js .aparece {
+  html.js .izaje {
     transition: opacity var(--t-izaje) var(--ease-izaje), transform var(--t-izaje) var(--ease-izaje);
     transition-delay: calc(var(--i, 0) * 60ms);
   }
-  html.js .aparece { transition-duration: var(--t-aparece); }
-  html.sin-revela .izaje:not(.visible), html.sin-revela .aparece:not(.visible) { opacity: 1; transform: none; }
+  html.sin-revela .izaje:not(.visible) { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) {
-    html.js .izaje, html.js .aparece { opacity: 1; transform: none; transition: none; }
+    .aparece { animation: none; }
+    html.js .izaje { opacity: 1; transform: none; transition: none; }
+  }
+  @media print {
+    .aparece, html.js .izaje:not(.visible) { animation: none; opacity: 1; transform: none; }
+    html.js .cota-linea { transform: none !important; }
   }
 }
 
+@keyframes aparece { from { opacity: 0; transform: translateY(6px); } }
 @keyframes vista-entra { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0 0 0 0); } }
 @keyframes vista-sale { to { opacity: .4; transform: translateX(-32px); } }
 @keyframes vista-entra-atras { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
