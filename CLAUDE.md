@@ -136,7 +136,7 @@ de 5+ fotos con pie.
 | # | Decisión | Estado |
 |---|---|---|
 | D1 | ¿Sitio del grupo o de HL Ingenieros? Qué empresas se muestran (en EN aparecen Megacranes y Aktino, no en ES) | **Decidido (15-oct):** el sitio es de HL Ingenieros S.A. Falta definir qué empresas se muestran como asociadas (ECOHL…) |
-| D2 | Lema único. Candidatos: A "Construcción y montaje industrial desde 1968." · B "Obra civil, montaje y fabricación con un solo responsable." · C "Plantas completas para la industria de Latinoamérica." | Pendiente |
+| D2 | Lema único | **Decidido (19-oct):** "Construimos la industria con gente que cumple, desde 1968." (A ampliado: integral y humano). EN propuesto: "Building industry with people who deliver, since 1968." (se cierra en F5) |
 | D3 | Agente: bot nativo de Zoho SalesIQ o agente propio con IA que entrega a Zoho | Pendiente |
 | D4 | CMS: Sanity, Decap o Payload | **Decidido (15-oct): sin CMS.** Sin terceros ni credenciales nuevas: el contenido vive en el repo como colecciones de Astro (Markdown/JSON con esquema validado al compilar). Despliegue manual (compilar y subir `dist/`). Salida futura si otros deben editar: Decap CMS sobre los mismos archivos |
 | D5 | Hosting: Vercel/Netlify o Azure Static Web Apps (tenant M365); Power Automate premium o Graph | **Hosting decidido (15-oct):** el actual (Apache + PHP 8.3, IP 107.180.21.17, al parecer GoDaddy; por confirmar), con despliegue estático que reemplaza a WordPress. Integración de correo: pendiente |
@@ -145,7 +145,11 @@ de 5+ fotos con pie.
 | D8 | Equipo de ejecución: interno, proveedor o mixto | Pendiente |
 
 ## Insumos que debe aportar HL (pendientes)
-Manual de marca / logos vectoriales; proyectos 2020-2026 (cliente, año, alcance, cifras); año de los
+Logotipo completo vectorial de HL Ingenieros ("ingenieros s.a."; el monograma ya está en vector, sacado del
+manual de HL Infraestructura en `docs/manualmarcaold.pdf`); fotos de archivo histórico en alta resolución
+(una por década; las de `src/assets/historia/` son copias web de 2020) y una foto actual para "Hoy";
+autorización de los 4 testimonios y validación de sus fragmentos; qué empresas asociadas se muestran (D1);
+una sola lista de valores; proyectos 2020-2026 (cliente, año, alcance, cifras); año de los
 16 casos y confirmación de cifras de Columbus (web: 42 meses, 8.300 t estructura, 18.600 t equipos vs.
 PDF ECOHL: 18 meses, 12.000 t, 10.500 t; el PDF habla de *fabricación*, así que probablemente son
 alcances distintos); certificaciones vigentes en PDF; indicadores HSE de 3 años; fotos recientes de
@@ -153,8 +157,9 @@ obra; lista vigente de empresas del grupo; acceso a Zoho PageSense y Search Cons
 en [contenido/README.md](contenido/README.md).
 
 ## Datos de referencia
-- 58 años (desde 1968; calcular dinámicamente, nunca fijo), 7 países con obra, 4 sedes (Bogotá,
-  El Rosal, Panamá, República Dominicana).
+- 58 años (desde 1968; calcular dinámicamente, nunca fijo), 7 países con obra (CO, PA, CR, DO, GT, BO, EC,
+  del texto "Ejecutamos los proyectos de forma diferente" del inicio actual), 4 sedes (Bogotá, El Rosal,
+  Panamá, República Dominicana).
 - 16 casos publicados; destacado: Planta Columbus (Cementos Argos, Cartagena), 9.470.000 HH, 5.250 t/día.
 - Casos que solo están en el PDF de ECOHL y merecen ficha: Cementos Diamante (líneas 1 y 2), Cemex
   Caracolito (1 día antes), Cerrejón cargador de barcos (3 días antes), Maceo (30 % menos tiempo),
@@ -207,13 +212,34 @@ en [contenido/README.md](contenido/README.md).
   - Cierre de F2: corregidos los menores de la revisión (cifras con 1 o 3 sin tramo vacío, tarjeta sin
     foto con ilustración decorativa, HH no repetida en la tarjeta, token `--trazo-foto`, claves sin uso).
     285 pruebas. Los códigos P-xx son la posición en el explorador: se renumeran al agregar fichas.
-  - **Pendiente de decidir:** LCP del explorador (2,3 s) y la ficha (2,0 s) sobre la meta (< 2,0 s): es
-    el repintado del texto al llegar Archivo (88 KB, `font-display: swap`). Opciones: reducir más la
-    fuente o cambiar la estrategia de carga.
+  - **Etapa 7 (en curso, desde 2026-10-19): F3 · Institucional** ([docs/plan-f3.md](docs/plan-f3.md), rama
+    `f3`, sin merge todavía; tabla de estado al inicio del plan). Diseño decidido con maquetas: guía visual
+    v1.3 §12 y [design/maquetas/](design/maquetas/); especificación v1.1. Hecho:
+    - **F3.0 cerrada:** `design/fuente.py` reduce Archivo (88 → 73 KB) y calcula dos respaldos sobre Arial con
+      métricas (texto y voz expandida); sin precarga de la fuente. LCP explorador 2,3 → 1,8 s, ficha
+      2,0 → 1,8 s (Lighthouse móvil simulado). Resuelve el LCP que estaba pendiente.
+    - **F3.1, primera mitad:** marca provisional con el monograma (`src/assets/marca/`, `Marca.astro`,
+      favicon, 404); inicio con barra inmersa, H1 con el lema, botón de trazo, gemelo digital en canvas propio
+      (`src/lib/gemelo.ts` + `src/scripts/gemelo.ts`), franja P3 de sectores y "HL en cifras". JS del inicio
+      10 KB gz.
+    - **F3.2 cerrada:** Nosotros completo (mosaico, tira de negativos con las fotos reales de la historia,
+      misión y visión con indicadores, valores con pictogramas, presencia, testimonios y asociadas solo
+      publicables en lanzamiento, cierre). Tira probada también en Firefox (proyecto `firefox` de Playwright).
+    - 354 pruebas. Maquetas del resto del inicio **aprobadas** (guía §12.1-4).
+  - **Siguiente paso:** Tarea 8 del plan F3 (resto del inicio: destacados, servicios, sectores, franja HSE,
+    noticias ocultas, clientes); luego F3.3 (maquetas de HSE, Noticias, Acreedores y legales → aprobación →
+    páginas) y la Tarea 14 (cierre, Lighthouse, revisión y merge a `main`). Ejecución en modo nativo, sin
+    subagentes (pedido de Juan David).
+  - **Decisiones de F3 con efecto visible:** sin precarga de fuente (primera visita: un instante con el
+    respaldo); indicadores de la visión con reglas a ancho completo (mezclan días y %); logos de asociadas
+    sobre placa blanca (modo oscuro); sedes con su ciudad real (Santo Domingo).
   - **Ojo en desarrollo:** tras cambiar integraciones o dependencias, reiniciar `npm run dev` (Astro 7
-    admite un solo servidor de desarrollo y uno de vista previa a la vez; las pruebas usan la vista previa).
-  - **Siguiente paso:** `docs/plan-f3.md` (F3 · Institucional: inicio, Nosotros, HSE y calidad, noticias,
-    acreedores, legales; con las firmas de Nosotros, HSE y Noticias de la guía §9). Requiere D2 (lema).
+    admite un solo servidor de desarrollo y uno de vista previa a la vez; las pruebas usan la vista previa en
+    el 4322: si queda otra abierta, `npx astro preview stop`). La vista previa escucha en `[::1]`. No usar
+    clases `col-*` (Tailwind 4 las toma como `grid-column`). En YAML en línea (`{ … }`), un texto con comas
+    va entre comillas. Las reglas de `global.css` están en capas de Tailwind: un estilo sin capa (el de un
+    componente) les gana aunque sea menos específico. La colección `file()` se lee por id: el orden va en un
+    campo `orden`. Correr `npm run check` en cada tarea.
 - No usar prettier.
 - Mantener pocos directorios y archivos: la información va primero, la estructura después.
 - El repo se gestiona con GitHub Desktop.

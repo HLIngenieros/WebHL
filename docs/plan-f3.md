@@ -27,6 +27,26 @@ permitidos). [especificacion.md](especificacion.md) v1.1: §2 (D2), §4 (histori
 §5 (Inicio, Nosotros), §6 (presupuesto), §7 (F3 y F3.0). Maquetas de referencia en
 [design/maquetas/](../design/maquetas/): fijan composición y movimiento; los valores salen de los tokens.
 
+## Estado (2026-10-19, rama `f3`)
+
+| Tarea | Estado | Commit |
+|---|---|---|
+| 1 · Fuente y LCP (F3.0) | ✅ cerrada | `771bcda` |
+| 2 · Marca con el monograma | ✅ | `e49e467` |
+| 3 · Datos del inicio | ✅ | `1903d5d` |
+| 4 · Hero, barra inmersa, botón de trazo | ✅ | `92e05e7` |
+| 5 · Gemelo digital | ✅ | `495008b` |
+| 6 · Franja de sectores y HL en cifras | ✅ | `223cde0` |
+| 7 · Maquetas del resto del inicio | ✅ aprobadas (guía §12.1-4, `design/maquetas/inicio-resto.html`) | — |
+| **8 · Resto del inicio** | **siguiente** | — |
+| 9-11 · Nosotros (F3.2) | ✅ cerrada | `bda87aa`, `2a177e0`, `aba255a` |
+| 12-13 · F3.3 (maquetas → páginas) | pendiente | — |
+| 14 · Cierre de la fase | pendiente | — |
+
+Se hizo F3.2 antes de la puerta de la Tarea 7 para que Juan David aprobara maquetas una sola vez. El
+registro detallado (decisiones tomadas, pruebas por tarea) está en `.superpowers/sdd/plan-f3/progress.md`
+(local, no versionado); las decisiones con efecto visible están resumidas en `CLAUDE.md`.
+
 ## Restricciones globales
 
 - **No inventar datos.** Lo que falta no se muestra: queda en `/pendientes/`. Las décadas de la
@@ -288,8 +308,10 @@ provisional), `src/layouts/Base.astro` (prop `barra`), `src/components/Barra.ast
 
 ### Tarea 8: Resto del inicio
 
-**Archivos:** los que defina la Tarea 7 (en `src/components/inicio/`), `src/plantillas/Inicio.astro`,
-`tests/inicio.spec.ts`. Se detalla al aprobar la Tarea 7, con este mínimo:
+**Archivos:** `src/components/inicio/{Destacados,ServiciosInicio,SectoresInicio,FranjaHse,Clientes}.astro`,
+`src/plantillas/Inicio.astro`, `tests/inicio.spec.ts`. Diseño: guía §12.1-4 y
+`design/maquetas/inicio-resto.html`. Reutilizar de F2 `destacados()`, `tarjetas()`, `deSector()` e
+`Ilustracion`. Mínimo:
 
 - [ ] Destacados con `Tarjeta` de F2 (`tarjetas(destacados(...))`): (foco) ninguna discreta.
 - [ ] Logos de clientes de `sitio.clientes` con `alt` = nombre.

@@ -608,10 +608,31 @@ Acento azul (`data-seccion` sin valor). Orden:
      `contenido/institucional.md` §1).
    - C · Sedes: 4 · cuatro ejes con burbuja (Bogotá, El Rosal, Panamá, R. Dominicana).
    - D · Calidad: 3 normas ISO · tres sellos (9001, 14001, 45001).
-4. **Resto del inicio** (proyectos destacados, grupos de servicio, sectores, franja HSE, noticias,
-   logos de clientes; especificación §5): **se diseña con maquetas, con este mismo lenguaje, y Juan
-   David las aprueba antes de construirlo.** Por eso F3.1 tiene dos tiempos: primero se construye lo ya
-   aprobado (hero, franja P3, cifras) y luego, tras la aprobación de las maquetas, el resto.
+4. **Resto del inicio** (aprobado el 2026-10-19 con [inicio-resto.html](../design/maquetas/inicio-resto.html)).
+   Cada bloque toma el acento de la sección a la que lleva y abre con P1 (L-03…L-06) + H2 en dos pesos
+   ("Obras que / hablan por nosotros") + enlace "Ver…" con flecha que avanza al pasar.
+   - **Proyectos destacados** (ámbar): los de `destacados()` (hoy Columbus, Progreso, PTAR Salitre,
+     Buriticá; nunca discretas). Disposición editorial: el primero en grande (lámina alta, 7 col.) y los
+     otros tres en fichas horizontales (foto 160 px + cuerpo, 5 col.), compartiendo bordes bajo una
+     línea `--ink`. Cada ficha: código P-xx · sector · país, título, cliente · ciudad, su primera cifra
+     en grande. Sin foto: plano de respaldo (retícula + línea estructural). Sin año (las fichas no lo
+     tienen). Enlace "Ver los N proyectos" (N = todas las del explorador).
+   - **Servicios** (cian): "Un solo responsable, / de principio a fin". Los 3 grupos A/B/C en columnas
+     con burbuja de eje y nombre del grupo; cada línea es una fila con su código (A-01…) y flecha; al
+     pasar, un barrido de `--sec-soft` llena la fila.
+   - **Sectores** (violeta): "Industria / que conocemos por dentro". Rejilla 3×2 con código S-0n, número
+     real de proyectos visibles (`deSector().length`), la ilustración de línea estructural del sector
+     (la de F2, `Ilustracion`) y el nombre. Al pasar, la celda se llena de `--sec`, el dibujo pasa a blanco
+     y se traza otra vez.
+   - **Franja HSE** (verde, sobre grafito): rayas P3 a la izquierda, "Seguridad / que se mide" y tres
+     indicadores en grande que bajan como una barrera al entrar: −64 % frecuencia y −72 % severidad
+     (8 años, programa de cultura de seguridad, PDF ECOHL) y 0 incidentes en Chuchupa A y B (Chevron).
+     Bloque final verde "HSE y calidad →".
+   - **Últimas noticias**: no se renderiza con menos de 3 (especificación §3); con contenido, la firma
+     de Noticias (§9).
+   - **Clientes** (azul): "Confían / en nosotros". Los logos de `sitio.clientes` (sin First Quantum, D6)
+     en dos cintas que corren en sentidos contrarios, con fundido en los bordes; en gris, a color al
+     pasar; se detienen con hover, foco o movimiento reducido. `alt` = nombre del cliente.
 
 ### 12.2 Nosotros
 

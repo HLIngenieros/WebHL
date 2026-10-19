@@ -1,0 +1,181 @@
+<!-- Maqueta aprobada el 2026-10-19 (Tarea 7 del plan F3): bloques del inicio debajo de "HL en cifras". Referencia de composición y movimiento; los valores salen de design/tokens.css y la guía visual §12.1-4. -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inicio · resto de bloques</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<style>
+  :root { --azul:#0B509E; --g:#14181C; --c:#E7EAEB; --paper:#F6F7F7; --ac:#8A949B; --line:#C2C9CD; --sen:#F2B42A; --mut:#56606A;
+          --pro:#8A5A00; --pro-s:#F5E7C2; --ser:#006B80; --ser-s:#CDE8EE; --sec:#5B3FA0; --sec-s:#E3DCF2; --hse:#1F6F3A; --hse-s:#D3EBDA;
+          --ez:cubic-bezier(.2,.8,.2,1); --ep:cubic-bezier(.6,0,.2,1); }
+  * { box-sizing:border-box } html,body { margin:0; background:var(--c); color:var(--g); font-family:Archivo,sans-serif; }
+  .dat { font-stretch:72%; text-transform:uppercase; letter-spacing:.12em; font-weight:600; font-size:11.5px; }
+  .w { max-width:1240px; margin:0 auto; padding:0 40px; }
+  .nota { background:var(--g); color:#8A949B; font-size:12px; padding:12px 40px; }
+  .ya { height:90px; background:repeating-linear-gradient(-45deg,#D7DCDF 0 8px,#E7EAEB 8px 16px); display:grid; place-items:center; color:var(--mut); }
+  .sec { padding:72px 0; }
+  .cab { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:32px; }
+  .cab h2 { margin:0; font-stretch:122%; font-weight:850; font-size:44px; line-height:.95; letter-spacing:-.02em; }
+  .cab h2 span { font-weight:300; }
+  .pod { display:inline-flex; align-items:center; gap:0; border:1.5px solid var(--g); margin-bottom:14px; }
+  .pod i { width:6px; align-self:stretch; background:var(--k); } .pod b { padding:3px 8px; border-right:1px solid var(--g); color:var(--k); } .pod span { padding:3px 8px; }
+  .mas { display:inline-flex; align-items:center; gap:10px; color:var(--k); text-decoration:none; font-weight:700; font-stretch:108%; }
+  .mas::after { content:"→"; transition:transform .3s var(--ep); } .mas:hover::after { transform:translateX(6px); }
+
+  /* 1 · Destacados: editorial asimétrico */
+  .dest { --k:var(--pro); }
+  .dest-g { display:grid; grid-template-columns:7fr 5fr; gap:0; border-top:1.5px solid var(--g); }
+  .tj { position:relative; display:flex; flex-direction:column; background:var(--paper); border-right:1px solid var(--line); border-bottom:1px solid var(--line); text-decoration:none; color:inherit; }
+  .tj-grande { grid-row:span 3; }
+  .lam { position:relative; overflow:hidden; aspect-ratio:4/3; background:var(--g); }
+  .tj-grande .lam { aspect-ratio:auto; flex:1; min-height:420px; }
+  .lam img { width:100%; height:100%; object-fit:cover; display:block; filter:grayscale(1) contrast(1.15); transition:filter .4s, transform 1.2s var(--ez); }
+  .lam .tin { position:absolute; inset:0; background:var(--pro); mix-blend-mode:multiply; opacity:.85; transition:opacity .4s; }
+  .lam svg { position:absolute; inset:8%; width:84%; height:84%; } .lam svg path { fill:none; stroke:#fff; stroke-width:1.4; }
+  .tj:hover .lam img { filter:none; transform:scale(1.03); } .tj:hover .lam .tin, .tj:hover .lam svg { opacity:0; }
+  .tj-cuerpo { padding:18px 20px 20px; display:grid; gap:8px; }
+  .tj-cod { display:flex; gap:10px; color:var(--pro); }
+  .tj h3 { margin:0; font-stretch:115%; font-weight:800; font-size:21px; line-height:1.1; }
+  .tj-grande h3 { font-size:30px; }
+  .tj p { margin:0; color:var(--mut); font-size:14px; }
+  .tj-cifra { display:flex; align-items:baseline; gap:8px; color:var(--pro); }
+  .tj-cifra b { font-stretch:125%; font-weight:900; font-size:30px; letter-spacing:-.02em; }
+  .tj-chica { display:grid; grid-template-columns:160px 1fr; }
+  .tj-chica .lam { aspect-ratio:auto; height:100%; }
+  .sinfoto { position:absolute; inset:0; background-color:var(--paper); background-image:linear-gradient(rgba(11,80,158,.075) 1px,transparent 1px),linear-gradient(90deg,rgba(11,80,158,.075) 1px,transparent 1px); background-size:16px 16px; }
+  .sinfoto svg path { stroke:var(--g) !important; }
+
+  /* 2 · Servicios: tres grupos como ejes de plano */
+  .serv { --k:var(--ser); background:var(--paper); }
+  .serv-g { display:grid; grid-template-columns:repeat(3,1fr); border-top:1.5px solid var(--g); }
+  .grupo { padding:24px 24px 8px 0; position:relative; }
+  .grupo + .grupo { padding-left:24px; border-left:1px solid var(--line); }
+  .grupo-cab { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+  .bur { width:34px; height:34px; border-radius:50%; border:1.5px solid var(--ser); color:var(--ser); display:grid; place-items:center; font-weight:800; background:var(--paper); }
+  .grupo-cab b { font-stretch:115%; font-weight:800; font-size:21px; color:var(--ser); }
+  .grupo ul { list-style:none; margin:0; padding:0; }
+  .grupo li a { position:relative; display:flex; justify-content:space-between; align-items:center; padding:14px 12px 14px 0; border-bottom:1px solid var(--line); color:inherit; text-decoration:none; font-size:17px; overflow:hidden; }
+  .grupo li a::before { content:""; position:absolute; inset:0; background:var(--ser-s); transform:scaleX(0); transform-origin:left; transition:transform .35s var(--ep); z-index:0; }
+  .grupo li a > * { position:relative; z-index:1; }
+  .grupo li a:hover::before { transform:scaleX(1); }
+  .grupo li a i { font-style:normal; color:var(--ser); font-stretch:72%; font-weight:600; font-size:12px; letter-spacing:.1em; }
+  .grupo li a:hover i { transform:translateX(-4px); }
+
+  /* 3 · Sectores: escenarios en línea estructural */
+  .sect { --k:var(--sec); }
+  .sect-g { display:grid; grid-template-columns:repeat(3,1fr); border-top:1.5px solid var(--g); border-left:1px solid var(--line); }
+  .st { position:relative; display:grid; grid-template-rows:auto 1fr auto; min-height:260px; padding:18px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--paper); color:inherit; text-decoration:none; overflow:hidden; transition:background .35s, color .35s; }
+  .st-cab { display:flex; justify-content:space-between; color:var(--sec); }
+  .st svg { width:100%; height:130px; margin:8px 0; }
+  .st svg path, .st svg rect, .st svg circle { fill:none; stroke:var(--g); stroke-width:1.4; stroke-dasharray:600; stroke-dashoffset:0; transition:stroke .35s; }
+  .st svg .e { stroke:var(--sec); stroke-dasharray:3 4; }
+  .st:hover { background:var(--sec); color:#fff; } .st:hover .st-cab { color:#fff; } .st:hover svg path, .st:hover svg rect, .st:hover svg circle { stroke:#fff; }
+  .st:hover svg path, .st:hover svg rect, .st:hover svg circle { animation:retr 1s var(--ep); }
+  @keyframes retr { from { stroke-dashoffset:600 } }
+  .st h3 { margin:0; font-stretch:115%; font-weight:800; font-size:22px; }
+
+  /* 4 · Franja HSE: barrera de obra */
+  .hse { --k:var(--hse); background:var(--g); color:#fff; padding:0; }
+  .hse-band { display:grid; grid-template-columns:auto 1fr auto; align-items:stretch; }
+  .hse-rayas { width:72px; background:repeating-linear-gradient(-45deg,var(--hse) 0 10px,var(--g) 10px 20px); }
+  .hse-in { padding:44px 40px; display:grid; grid-template-columns:4fr 8fr; gap:40px; align-items:center; }
+  .hse-in h2 { margin:0; font-stretch:122%; font-weight:850; font-size:40px; line-height:.95; } .hse-in h2 span { font-weight:300; display:block; color:#9BD8AE; }
+  .ind { display:grid; grid-template-columns:repeat(3,1fr); }
+  .ind div { padding:0 24px; border-left:1px solid rgba(255,255,255,.18); transform:translateY(-30px); opacity:0; animation:barrera .7s var(--ez) forwards; }
+  .ind div:nth-child(2){animation-delay:.12s} .ind div:nth-child(3){animation-delay:.24s}
+  @keyframes barrera { to { transform:none; opacity:1 } }
+  .ind b { display:block; white-space:nowrap; font-stretch:125%; font-weight:900; font-size:44px; line-height:.9; color:#5CC27D; letter-spacing:-.02em; }
+  .ind span { display:block; margin-top:10px; font-size:14px; color:#C9D2DA; }
+  .ind small { display:block; margin-top:6px; color:#8A949B; }
+  .hse-cta { display:flex; align-items:center; padding:0 32px; background:var(--hse); color:#fff; text-decoration:none; font-weight:700; font-stretch:108%; }
+
+  /* 5 · Noticias */
+  .noti { padding:40px 0; }
+  .oculto { border:1.5px dashed var(--ac); padding:22px; color:var(--mut); font-size:14px; }
+
+  /* 6 · Clientes: dos cintas en sentidos contrarios */
+  .cli { background:var(--paper); overflow:hidden; }
+  .cinta { display:flex; gap:56px; width:max-content; animation:cinta 46s linear infinite; padding:18px 0; }
+  .cinta.inv { animation-direction:reverse; }
+  .cinta img { height:40px; width:auto; filter:grayscale(1); opacity:.7; transition:filter .3s, opacity .3s; }
+  .cinta img:hover { filter:none; opacity:1; }
+  .cli:hover .cinta { animation-play-state:paused; }
+  @keyframes cinta { to { transform:translateX(-50%) } }
+  .rail { border-block:1px solid var(--line); -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); }
+  .rail + .rail { border-top:0; }
+</style></head>
+<body>
+<div class="nota dat">Inicio · resto de bloques (continúa debajo de "HL en cifras") · datos y fotos reales · cada bloque toma el acento de la sección a la que lleva</div>
+<div class="ya dat">▲ Hero · franja de sectores · HL en cifras (ya construidos)</div>
+
+<!-- 1 · Proyectos destacados -->
+<section class="sec dest"><div class="w">
+  <div class="cab"><div><span class="pod dat"><i></i><b>L-03</b><span>Proyectos</span></span><h2>Obras que <span>hablan por nosotros</span></h2></div><a class="mas" href="#">Ver los 22 proyectos</a></div>
+  <div class="dest-g">
+    <a class="tj tj-grande" href="#">
+      <div class="lam"><img src="../../src/assets/proyectos/planta-columbus/2.jpg" alt=""><span class="tin"></span><svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M5 92H95M10 92V40H28V92M34 92V18H46V92M52 92V55H90V92"/></svg></div>
+      <div class="tj-cuerpo"><span class="tj-cod dat"><span>P-01</span><span>Cemento · Colombia</span></span><h3>Planta Columbus</h3><p>Cementos Argos · Cartagena</p>
+        <span class="tj-cifra"><b>9,47 M</b><span class="dat">horas hombre</span></span></div>
+    </a>
+    <a class="tj tj-chica" href="#"><div class="lam"><img src="../../src/assets/proyectos/planta-cementos-progreso/1.jpg" alt=""><span class="tin"></span></div>
+      <div class="tj-cuerpo"><span class="tj-cod dat"><span>P-02</span><span>Cemento · Guatemala</span></span><h3>Nueva planta de Cementos Progreso</h3><p>thyssenkrupp · San Juan Sacatepéquez</p><span class="tj-cifra"><b>11.700 t</b><span class="dat">equipos montados</span></span></div></a>
+    <a class="tj tj-chica" href="#"><div class="lam"><img src="../../src/assets/proyectos/ptar-salitre/1.jpg" alt=""><span class="tin"></span></div>
+      <div class="tj-cuerpo"><span class="tj-cod dat"><span>P-03</span><span>Agua y energía · Colombia</span></span><h3>PTAR Salitre, fases 1, 3 y 4</h3><p>Consorcio PTAR Salitre · Bogotá</p><span class="tj-cifra"><b>92.000</b><span class="dat">pulgadas diámetro de tubería</span></span></div></a>
+    <a class="tj tj-chica" href="#"><div class="lam"><div class="sinfoto"></div><svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M5 90H95M15 90V50L35 30L55 50V90M60 90V40H85V90M35 30V10"/></svg></div>
+      <div class="tj-cuerpo"><span class="tj-cod dat"><span>P-04</span><span>Minería · Colombia</span></span><h3>Planta de proceso Buriticá</h3><p>Continental Gold · Buriticá</p><span class="tj-cifra"><b>750.000</b><span class="dat">horas hombre</span></span></div></a>
+  </div>
+</div></section>
+
+<!-- 2 · Servicios -->
+<section class="sec serv"><div class="w">
+  <div class="cab"><div><span class="pod dat"><i></i><b>L-04</b><span>Servicios</span></span><h2>Un solo responsable, <span>de principio a fin</span></h2></div><a class="mas" href="#">Ver servicios</a></div>
+  <div class="serv-g">
+    <div class="grupo"><div class="grupo-cab"><span class="bur">A</span><b>Gestión</b></div><ul>
+      <li><a href="#"><span>EPC y llave en mano</span><i>A-01 →</i></a></li><li><a href="#"><span>Gerencia de proyectos</span><i>A-02 →</i></a></li></ul></div>
+    <div class="grupo"><div class="grupo-cab"><span class="bur">B</span><b>Construcción y montaje</b></div><ul>
+      <li><a href="#"><span>Obras civiles industriales</span><i>B-01 →</i></a></li><li><a href="#"><span>Montaje mecánico y tubería</span><i>B-02 →</i></a></li><li><a href="#"><span>Montaje eléctrico e instrumentación</span><i>B-03 →</i></a></li></ul></div>
+    <div class="grupo"><div class="grupo-cab"><span class="bur">C</span><b>Fabricación y mantenimiento</b></div><ul>
+      <li><a href="#"><span>Fabricación metalmecánica</span><i>C-01 →</i></a></li><li><a href="#"><span>Mantenimiento y paradas de planta</span><i>C-02 →</i></a></li></ul></div>
+  </div>
+</div></section>
+
+<!-- 3 · Sectores -->
+<section class="sec sect"><div class="w">
+  <div class="cab"><div><span class="pod dat"><i></i><b>L-05</b><span>Sectores</span></span><h2>Industria <span>que conocemos por dentro</span></h2></div><a class="mas" href="#">Ver sectores</a></div>
+  <div class="sect-g">
+    <a class="st" href="#"><span class="st-cab dat"><span>S-01</span><span>7 proyectos</span></span><svg viewBox="0 0 300 130"><path d="M10 120H290M40 120V40H70V120M80 120V20H110V120M130 120V70H260V120M180 70V40H210V70"/><path class="e" d="M95 0V130M195 0V130"/></svg><h3>Cemento</h3></a>
+    <a class="st" href="#"><span class="st-cab dat"><span>S-02</span><span>3 proyectos</span></span><svg viewBox="0 0 300 130"><path d="M10 120H290M30 120L90 50L150 120M150 120V60H220V120M220 80L280 40"/><path class="e" d="M90 0V130"/></svg><h3>Minería</h3></a>
+    <a class="st" href="#"><span class="st-cab dat"><span>S-03</span><span>3 proyectos</span></span><svg viewBox="0 0 300 130"><path d="M10 120H290"/><circle cx="80" cy="85" r="35"/><circle cx="190" cy="85" r="35"/><path class="e" d="M80 0V130M190 0V130"/></svg><h3>Agua y energía</h3></a>
+    <a class="st" href="#"><span class="st-cab dat"><span>S-04</span><span>2 proyectos</span></span><svg viewBox="0 0 300 130"><path d="M10 120H290M60 120V30H90V120M50 30H100M140 120V70H250V120M150 70L195 40L240 70"/><path class="e" d="M75 0V130"/></svg><h3>Petróleo y gas</h3></a>
+    <a class="st" href="#"><span class="st-cab dat"><span>S-05</span><span>2 proyectos</span></span><svg viewBox="0 0 300 130"><path d="M10 100H290M40 100V120M110 100V120M180 100V120M250 100V120M10 100Q150 30 290 100"/><path class="e" d="M150 0V130"/></svg><h3>Infraestructura</h3></a>
+    <a class="st" href="#"><span class="st-cab dat"><span>S-06</span><span>3 proyectos</span></span><svg viewBox="0 0 300 130"><path d="M10 120H290M30 120V60L90 30V60L150 30V60L210 30V120M230 120V50H260V120"/><path class="e" d="M245 0V130"/></svg><h3>Industria</h3></a>
+  </div>
+</div></section>
+
+<!-- 4 · HSE -->
+<section class="hse"><div class="hse-band">
+  <div class="hse-rayas"></div>
+  <div class="hse-in"><h2>Seguridad <span>que se mide</span></h2>
+    <div class="ind">
+      <div><b>−64 %</b><span>Frecuencia de accidentes incapacitantes en 8 años</span><small class="dat">Programa de cultura de seguridad · ECOHL</small></div>
+      <div><b>−72 %</b><span>Severidad de accidentes en 8 años</span><small class="dat">Programa de cultura de seguridad · ECOHL</small></div>
+      <div><b>0</b><span>Incidentes en las plataformas Chuchupa A y B (Chevron)</span><small class="dat">Gerencia con cadena crítica</small></div>
+    </div></div>
+  <a class="hse-cta" href="#">HSE y calidad →</a>
+</div></section>
+
+<!-- 5 · Noticias -->
+<section class="noti"><div class="w"><div class="oculto"><b class="dat">Últimas noticias · oculto</b><br>No hay noticias todavía: el bloque no se muestra hasta tener al menos 3 (especificación §3). Cuando las haya, va aquí con la firma de Noticias (fecha como sello de recibido; adjudicados con franja P3).</div></div></section>
+
+<!-- 6 · Clientes -->
+<section class="sec cli" style="padding:56px 0">
+  <div class="w"><div class="cab" style="margin-bottom:20px"><div><span class="pod dat" style="--k:var(--azul)"><i></i><b>L-06</b><span>Clientes</span></span><h2 style="font-size:34px">Confían <span>en nosotros</span></h2></div></div></div>
+  <div class="rail"><div class="cinta" id="c1"></div></div>
+  <div class="rail"><div class="cinta inv" id="c2"></div></div>
+</section>
+
+<script>
+  const L=['argos','cemex','cerrejon','chevron','colsubsidio','continental-gold','diana-pet-food','drummond','emgesa','hyundai','ladrillera-santafe','ohl-industrial','oxy','peldar','prodeco','unilever','vopak','bolsa-valores-rd'];
+  const fila=(xs)=>[...xs,...xs].map(n=>`<img src="../../src/assets/clientes/${n}.png" alt="">`).join('');
+  document.getElementById('c1').innerHTML=fila(L.slice(0,9)); document.getElementById('c2').innerHTML=fila(L.slice(9));
+</script>
+</body></html>
