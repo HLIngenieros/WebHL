@@ -266,6 +266,9 @@ en [contenido/README.md](contenido/README.md).
     va entre comillas. Las reglas de `global.css` están en capas de Tailwind: un estilo sin capa (el de un
     componente) les gana aunque sea menos específico. La colección `file()` se lee por id: el orden va en un
     campo `orden`. Correr `npm run check` en cada tarea.
+- **Pruebas por fase (19-oct, ahorro de tokens):** durante una fase solo `npm run check` y las pruebas del
+  archivo tocado; la suite completa, `npm run presupuesto` y Lighthouse se corren una vez al cerrar la fase.
+  Pruebas nuevas solo para riesgos reales; capturas solo para decisiones visuales.
 - No usar prettier.
 - Mantener pocos directorios y archivos: la información va primero, la estructura después.
 - El repo se gestiona con GitHub Desktop.
