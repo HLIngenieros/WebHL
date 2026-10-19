@@ -42,7 +42,7 @@ permitidos). [especificacion.md](especificacion.md) v1.2 (§3 menú y prevalenci
 | 8a · Menú con submenú de Proyectos | ✅ | `7d807f7` |
 | 8 · Resto del inicio (sectores con prevalencia) | ✅ (cierra F3.1) | `eb9a38d` |
 | 8b · Página de Sectores | ✅ | `e06664a` |
-| 8c · Explorador con mapa vivo | ✅ | (este) |
+| 8c · Explorador con mapa vivo | ✅ | `35fb75d` |
 | 9-11 · Nosotros (F3.2) | ✅ cerrada | `bda87aa`, `2a177e0`, `aba255a` |
 | 12-13 · F3.3 (maquetas → páginas) | pendiente | — |
 | 14 · Cierre de la fase | pendiente | — |
