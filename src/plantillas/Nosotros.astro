@@ -61,8 +61,9 @@ const numeros: Record<string, string> = Object.fromEntries(numerar(['mision', 'v
   <section class="cabecera wrap" aria-labelledby="nosotros-h1">
     <div class="cabecera-txt">
       <Pod forma="rotulo" codigo="L-01" nombre={t(lang, 'nosotros')} />
+      {/* El primer párrafo es el LCP: sin animación de entrada (Aparece parte de opacidad 0 y lo retrasa). */}
       <h1 id="nosotros-h1" class="aparece">{t(lang, 'nosotrosH1a')} <span>{t(lang, 'nosotrosH1b')}</span></h1>
-      {pagina.quienes?.map((q, i) => <p class:list={['aparece', i === 0 ? 'lead-1' : 'lead-2']} style={`--i:${i + 1}`}>{q}</p>)}
+      {pagina.quienes?.map((q, i) => <p class:list={i === 0 ? 'lead-1' : 'aparece lead-2'} style={`--i:${i + 1}`}>{q}</p>)}
     </div>
     {mosaico.length > 0 && <Mosaico fotos={mosaico} />}
   </section>

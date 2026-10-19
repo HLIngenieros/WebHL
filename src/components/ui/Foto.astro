@@ -4,9 +4,9 @@
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
-interface Props { src: ImageMetadata; alt: string; sizes: string; prioridad?: boolean; class?: string }
-const { src, alt, sizes, prioridad = false, class: clase } = Astro.props;
-const widths = [480, 800].filter((w) => w <= src.width);
+interface Props { src: ImageMetadata; alt: string; sizes: string; prioridad?: boolean; baja?: boolean; class?: string }
+const { src, alt, sizes, prioridad = false, baja = false, class: clase } = Astro.props;
+const widths = [320, 480, 800].filter((w) => w <= src.width);
 ---
 <Picture
   src={src}
@@ -18,7 +18,7 @@ const widths = [480, 800].filter((w) => w <= src.width);
   formats={['avif', 'webp']}
   loading={prioridad ? 'eager' : 'lazy'}
   decoding={prioridad ? 'auto' : 'async'}
-  fetchpriority={prioridad ? 'high' : 'auto'}
+  fetchpriority={prioridad ? 'high' : baja ? 'low' : 'auto'}
   class:list={['foto', clase]}
 />
 

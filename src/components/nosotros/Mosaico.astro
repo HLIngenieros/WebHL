@@ -14,7 +14,7 @@ const columnas = [0, 1, 2].map((c) => fotos.filter((_, i) => i % 3 === c));
     <div class={`mosaico-col mc-${c}`}>
       {col.map((f, k) => (
         <figure class="lamina mosaico-foto" style={`--i:${c + k * 3}`}>
-          <Foto src={f.src} alt="" sizes="(min-width: 900px) 18vw, 45vw" />
+          <Foto src={f.src} alt="" sizes="(min-width: 900px) 18vw, 45vw" baja />
           <span class="lamina-tinte"></span>
           <figcaption class="voz-datos">{f.codigo}</figcaption>
         </figure>

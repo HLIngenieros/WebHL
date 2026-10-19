@@ -216,46 +216,17 @@ en [contenido/README.md](contenido/README.md).
   - Cierre de F2: corregidos los menores de la revisión (cifras con 1 o 3 sin tramo vacío, tarjeta sin
     foto con ilustración decorativa, HH no repetida en la tarjeta, token `--trazo-foto`, claves sin uso).
     285 pruebas. Los códigos P-xx son la posición en el explorador: se renumeran al agregar fichas.
-  - **Etapa 7 (en curso, desde 2026-10-19): F3 · Institucional** ([docs/plan-f3.md](docs/plan-f3.md), rama
-    `f3`, sin merge todavía; tabla de estado al inicio del plan). Diseño decidido con maquetas: guía visual
-    v1.3 §12 y [design/maquetas/](design/maquetas/); especificación v1.1. Hecho:
-    - **F3.0 cerrada:** `design/fuente.py` reduce Archivo (88 → 73 KB) y calcula dos respaldos sobre Arial con
-      métricas (texto y voz expandida); sin precarga de la fuente. LCP explorador 2,3 → 1,8 s, ficha
-      2,0 → 1,8 s (Lighthouse móvil simulado). Resuelve el LCP que estaba pendiente.
-    - **F3.1, primera mitad:** marca provisional con el monograma (`src/assets/marca/`, `Marca.astro`,
-      favicon, 404); inicio con barra inmersa, H1 con el lema, botón de trazo, gemelo digital en canvas propio
-      (`src/lib/gemelo.ts` + `src/scripts/gemelo.ts`), franja P3 de sectores y "HL en cifras". JS del inicio
-      10 KB gz.
-    - **F3.2 cerrada:** Nosotros completo (mosaico, tira de negativos con las fotos reales de la historia,
-      misión y visión con indicadores, valores con pictogramas, presencia, testimonios y asociadas solo
-      publicables en lanzamiento, cierre). Tira probada también en Firefox (proyecto `firefox` de Playwright).
-    - 354 pruebas. Maquetas del resto del inicio **aprobadas** (guía §12.1-4).
-  - **Proyectos y Sectores (19-oct):** maquetas `design/maquetas/{sectores,explorador}.html` aprobadas;
-    especificación v1.2 y guía visual v1.4 (§13). Plan: Tareas 8a (menú con submenú), 8 (resto del inicio
-    con prevalencia de Cemento y Minería), 8b (página de Sectores) y 8c (explorador con mapa vivo).
-  - **8a cerrada** (menú con submenú, `7d807f7`) y **8 cerrada** (resto del inicio; cierra F3.1): destacados
-    (la grande es la obra con más HH), servicios, sectores con prevalencia, franja HSE (indicadores en
-    `paginas/hse.es.md`) y clientes. **Inicio y Nosotros salieron del enrutador único** (`src/pages/index.astro`,
-    `nosotros.astro`, `en/`): el CSS de `[...ruta]` lleva el de todas sus plantillas. Lighthouse móvil del inicio
-    98-99/100/100/100, LCP 1,8-1,98 s (margen corto: las fotos de destacados compiten con la fuente). Nosotros
-    queda en 3,2 s de LCP (anterior a esta tarea; anotado en la Tarea 14). 372 pruebas.
-  - **8b cerrada** (página de Sectores con escenarios) y **8c cerrada** (explorador con mapa vivo: placas,
-    servicios por grupo, países bajo el mapa, total con cota, pod de línea, lista compacta; mapa con acercar,
-    desplazar, Ctrl + rueda, pellizco, grupos por distancia en pantalla, ventana de la obra; funciones puras en
-    `src/lib/mapa.ts`). Sin JS el mapa es la lámina quieta (interactivo solo tras hidratar). La hoja de filtros
-    móvil desapareció: en móvil las placas se desplazan de lado. Explorador: 37 KB de JS, Lighthouse móvil
-    98/100/100/100, LCP 1,8-1,96 s. 389 pruebas. En SVG, Preact necesita `tabindex` en minúscula.
-  - **F3.3 cerrada (19-oct):** maquetas aprobadas en dos rondas (la segunda con movimiento en cada bloque,
-    guía v1.5 §12.5). HSE (`/hse/`) con indicadores que cuentan, certificaciones que se inclinan, política como
-    estructura 3D de alambre (canvas propio, `src/lib/estructura.ts` + `src/scripts/estructura.ts`; bucle permitido),
-    Reglas de Oro que caen y giran, PIENSA® y prácticas. Acreedores con los 3 PDF reales y Datos con el texto del
-    manual M-TI-001 (extraído del PDF; el correo personal se cambió por un buzón pendiente, D7) en
-    `public/documentos/`. Noticias: colección `noticias`, plantillas de índice y entrada, y la regla de
-    publicación: **la sección siempre está en el menú** (decisión del 19-oct); sin noticias, `/noticias/` dice que
-    pronto habrá; el bloque del inicio solo aparece con 3 o más (`src/lib/noticias.ts`). HSE, Acreedores, legales y Noticias tienen archivo propio en `src/pages/`. 444 pruebas;
-    Lighthouse móvil HSE 98 (LCP 1,97 s), Acreedores 99, Datos 99.
-  - **Siguiente paso:** Tarea 14 (cierre de F3: LCP de Nosotros, matriz de pantallas, modo oscuro, revisión de
-    código y merge a `main`). Ejecución en modo nativo, sin subagentes (pedido de Juan David).
+  - **Etapa 7 (2026-10-19): F3 · Institucional** ([docs/plan-f3.md](docs/plan-f3.md); guía visual v1.5,
+    especificación v1.2). Fuente reducida y LCP (F3.0); Inicio completo (F3.1); Nosotros (F3.2); menú con
+    submenú de Proyectos, prevalencia de Cemento y Minería, página de Sectores con escenarios y explorador con
+    mapa vivo (§13); HSE con estructura 3D, Acreedores, legales (texto del M-TI-001) y Noticias siempre en el
+    menú (F3.3). Inicio, Nosotros, HSE, Acreedores, legales y Noticias tienen archivo propio en `src/pages/`
+    (el enrutador único carga el CSS de todas sus plantillas). Cierre: 446 pruebas, presupuesto OK,
+    192 bloqueantes en `build:lanzamiento`. Lighthouse móvil: inicio 98 (LCP 1,98 s), HSE 98 (1,97 s),
+    explorador 98 (1,96 s), acreedores y datos 99; **Nosotros 94 (LCP 2,95 s): pendiente para F6** (el resto
+    es estilo y diseño de la página: ~940 ms con CPU simulada). Sin revisión de código con subagente (ahorro
+    de tokens).
+  - **Siguiente paso:** F4 · Contacto (formularios, "Hablar con HL"; requiere D3 y D7).
   - **Decisiones de F3 con efecto visible:** sin precarga de fuente (primera visita: un instante con el
     respaldo); indicadores de la visión con reglas a ancho completo (mezclan días y %); logos de asociadas
     sobre placa blanca (modo oscuro); sedes con su ciudad real (Santo Domingo).
