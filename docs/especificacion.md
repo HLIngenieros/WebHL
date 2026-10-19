@@ -1,6 +1,7 @@
 # Especificación del sitio nuevo de HL Ingenieros
 
-Versión 1.1 · 2026-10-19 · Aprobada por secciones con Juan David Urbina (1.1: D2, Inicio, Nosotros y F3).
+Versión 1.2 · 2026-10-19 · Aprobada por secciones con Juan David Urbina (1.1: D2, Inicio, Nosotros y F3;
+1.2: menú con submenú en Proyectos, prevalencia de Cemento y Minería, explorador con mapa vivo).
 Complementa a [guia-visual.md](guia-visual.md) (identidad), [../design/tokens.css](../design/tokens.css)
 (valores) y [../contenido/](../contenido/) (contenido extraído). Si algo aquí contradice la propuesta
 Rev. 0, manda este documento.
@@ -39,9 +40,17 @@ interno) y, de D1, qué empresas asociadas se muestran.
 
 ## 3. Arquitectura de información
 
-**Menú plano, sin submenús:** Nosotros · Proyectos · Servicios · Sectores · HSE y calidad · Noticias ·
-Contacto · ES/EN. El logo lleva al inicio y el botón "Hablar con HL" está siempre visible (en móvil, en
-una barra inferior).
+**Menú corto con un solo submenú** (cambio del 2026-10-19, por redundancia entre el explorador y las
+páginas de Servicios y Sectores): Nosotros · Proyectos ▾ · HSE y calidad · Noticias · Contacto · ES/EN.
+"Proyectos" lleva al explorador; un botón aparte (▾) abre el panel con **Sectores** (Cemento y Minería
+al frente, el resto en una línea) y **Servicios** (lista simple por grupo, sin prevalencia). Las páginas
+de Servicios y Sectores siguen publicadas e indexadas, y se enlazan desde ese panel, el pod de línea
+del explorador, el inicio, las fichas y el pie. El logo lleva al inicio y el botón "Hablar con HL" está
+siempre visible (en móvil, en una barra inferior).
+
+**Prevalencia de Cemento y Minería:** son los sectores principales de HL. Van primero y más grandes en
+el panel del menú, en la página de Sectores, en el bloque de sectores del inicio y en los filtros del
+explorador.
 
 | ES | EN | Contenido |
 |---|---|---|
@@ -120,16 +129,22 @@ Las colecciones de Astro se validan con esquema al compilar.
   - franja P3 de sectores;
   - "HL en cifras": años (calculados), 7 países, 4 sedes, 3 normas ISO, escritas en el HTML;
   - 3-4 proyectos destacados;
-  - los 3 grupos de servicio y los sectores;
+  - los 3 grupos de servicio y los sectores (Cemento y Minería al frente);
   - franja HSE con indicadores;
   - últimas noticias (si las hay);
   - logos de clientes.
   - Del cuarto punto en adelante se diseña con maquetas al empezar F3.1.
 - **Nosotros** (guía §12.2): cabecera con mosaico, línea del tiempo en tira de negativos, misión y
   visión con indicadores, valores, presencia, testimonios autorizados, empresas asociadas y cierre.
-- **Proyectos:** la lista completa se escribe en el HTML. Una isla React agrega los filtros (servicio,
-  sector, país), el reacomodo animado y el mapa SVG propio; sin JavaScript la lista funciona igual. En
-  móvil, los filtros van en una hoja inferior.
+- **Proyectos** (guía §13.2): la lista completa se escribe en el HTML. Una isla Preact agrega:
+  - filtros en placas (sector, con Cemento y Minería más anchas; servicio en grupos A/B/C; país), con
+    el número de obras que quedarían; el estado va en la URL (`?sector=cemento&servicio=…&pais=co`);
+  - el mapa vivo sobre el SVG propio: acercar y desplazar, grupos que se separan al acercar, puntos que
+    siguen a los filtros, clic en un país (filtra y encuadra), en un grupo (acerca) o en un punto
+    (ventana con la ficha);
+  - el pod de línea: con un sector o un servicio elegido, su resumen y el enlace a su página.
+
+  Sin JavaScript la lista funciona igual. En móvil, el mapa va arriba y los filtros se desplazan de lado.
 - **Ficha de proyecto:**
   - rótulo de plano con los datos y la foto principal en lámina (guía §8);
   - cifras destacadas, descripción, reto o resultado y cantidades;
@@ -142,6 +157,8 @@ Las colecciones de Astro se validan con esquema al compilar.
   - capacidad y modelos de contrato;
   - 2-4 proyectos y los sectores, derivados;
   - FAQ y contacto de la línea.
+- **Índice de sectores** (guía §13.3): Cemento y Minería como escenarios (lámina, cifras y 3 obras);
+  el resto en un índice en filas.
 - **Sector:** introducción, servicios aplicados, proyectos y clientes del sector (derivados) y llamada a
   contacto.
 - **HSE y calidad, Contacto:** texto más colecciones (certificaciones, sedes). HSE, Noticias,

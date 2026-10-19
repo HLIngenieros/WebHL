@@ -1,6 +1,6 @@
 # Guía visual base · Grupo HL
 
-Versión 1.3 · 2026-10-19
+Versión 1.4 · 2026-10-19
 
 Esta guía define cómo se ve y cómo se mueve el nuevo sitio de Grupo HL. Es la referencia obligatoria
 durante el desarrollo: si un componente nuevo no encaja en estas reglas, primero se ajusta la guía y
@@ -418,11 +418,12 @@ aclaraciones, supuestos y avisos no críticos.
 ### Barra superior
 
 Pegajosa, de `--bar-h` (52 px), fondo `--bg` al 90 % con desenfoque, línea inferior `--line`.
-Navegación en voz de datos `--muted`, con hover a `--ink` y borde `--line`.
+Navegación en voz de datos `--muted`, con hover a `--ink` y borde `--line`. Cinco entradas (Nosotros ·
+Proyectos ▾ · HSE y calidad · Noticias · Contacto) más ES/EN; el submenú de Proyectos está en §13.1.
 
 **Variante inmersa (solo el inicio).** Sin fondo, dentro del marco de lámina del hero, sobre grafito.
 Marca provisional con el monograma calado en blanco; menú en voz normal con el número de cada sección
-en voz de datos `--hl-senal` como superíndice (01 Nosotros … 07 Contacto) y subrayado de señal que se
+en voz de datos `--hl-senal` como superíndice (01 Nosotros … 05 Contacto) y subrayado de señal que se
 mide al pasar; ES/EN; "Hablar con HL" con borde de señal y un punto que titila (único bucle permitido
 además del hero). Debajo, una cota de 1 px que se mide al cargar. Al salir del hero con el scroll, la
 barra pasa a la variante normal pegajosa. En móvil: marca + botón de menú, con el mismo trato inmerso.
@@ -620,10 +621,12 @@ Acento azul (`data-seccion` sin valor). Orden:
    - **Servicios** (cian): "Un solo responsable, / de principio a fin". Los 3 grupos A/B/C en columnas
      con burbuja de eje y nombre del grupo; cada línea es una fila con su código (A-01…) y flecha; al
      pasar, un barrido de `--sec-soft` llena la fila.
-   - **Sectores** (violeta): "Industria / que conocemos por dentro". Rejilla 3×2 con código S-0n, número
-     real de proyectos visibles (`deSector().length`), la ilustración de línea estructural del sector
-     (la de F2, `Ilustracion`) y el nombre. Al pasar, la celda se llena de `--sec`, el dibujo pasa a blanco
-     y se traza otra vez.
+   - **Sectores** (violeta): "Industria / que conocemos por dentro". Rejilla de 4 columnas con
+     prevalencia (§13, [sectores.html](../design/maquetas/sectores.html) §3): Cemento y Minería en celdas
+     de 2 columnas (código S-0n, "Sector principal", ilustración grande, nombre en expandida 900, una
+     línea de texto y el número de proyectos en grande); los otros cuatro en celdas pequeñas (dibujo de
+     84 px, código y conteo, nombre). Número real de proyectos visibles (`deSector().length`). Al pasar,
+     la celda se llena de `--sec`, el dibujo pasa a blanco y se traza otra vez.
    - **Franja HSE** (verde, sobre grafito): rayas P3 a la izquierda, "Seguridad / que se mide" y tres
      indicadores en grande que bajan como una barrera al entrar: −64 % frecuencia y −72 % severidad
      (8 años, programa de cultura de seguridad, PDF ECOHL) y 0 incidentes en Chuchupa A y B (Chevron).
@@ -696,6 +699,78 @@ contenido, y los valida HL junto con la autorización.
 
 ---
 
+## 13. Proyectos y Sectores
+
+Decidido con maquetas el 2026-10-19: [sectores.html](../design/maquetas/sectores.html) y
+[explorador.html](../design/maquetas/explorador.html). Origen: una apreciación externa: los filtros del
+explorador y las páginas de Servicios y Sectores eran redundantes en el menú. **Cemento y Minería son
+los sectores principales** y van primero y más grandes donde aparezcan los sectores.
+
+### 13.1 Submenú de Proyectos
+
+- "Proyectos" es un enlace (al explorador) y a su lado va un **botón ▾** (`aria-expanded`,
+  `aria-controls`). Se abre con clic o teclado; se cierra con Esc, clic fuera o al salir el foco. **No se
+  abre al pasar el cursor.** Abierto: el botón y "Proyectos" en `--sec` de Proyectos (ámbar) y una cota
+  de 2 px que se mide bajo la entrada.
+- **Panel** a todo el ancho bajo la barra, fondo `--paper`, línea superior `--ink`; entra con barrido
+  (`clip-path`, `--t-izaje`). Dos columnas (8 + 4):
+  - **Sectores:** Cemento y Minería en dos celdas con la ilustración sobre retícula, nombre en
+    expandida 850 y una línea en voz de datos violeta (n proyectos · cifra de su obra mayor). Al pasar, la
+    celda se llena de violeta y el dibujo pasa a blanco y se traza. Debajo, los otros cuatro en una línea
+    con su conteo, separados por rombos violeta.
+  - **Servicios:** lista simple por grupo (burbuja A/B/C y nombre del grupo en voz de datos), sin dibujos
+    ni cifras.
+  - Pie: "Ver los N proyectos en el explorador →" (ámbar) y "Todos los sectores →" (violeta).
+- **Sin fotos en el panel** (está en todas las páginas): solo las ilustraciones de línea.
+- **Móvil** (menú inmerso): Proyectos lleva un botón ± que despliega dentro del menú Cemento y Minería
+  (dos recuadros con borde violeta), los otros cuatro como etiquetas y la lista de servicios.
+
+### 13.2 Explorador
+
+- **Filtros** bajo el encabezado, en filas con su rótulo en voz de datos:
+  - **Sector en placas:** columnas 2-2-1-1-1-1; Cemento y Minería con su dibujo. Placa elegida: se llena
+    de `--sec` (ámbar) de abajo arriba; el dibujo pasa a blanco con ejes en señal.
+  - **Servicio** en tres grupos (burbuja A/B/C) con chips; **País** en chips bajo el mapa.
+  - Cada opción muestra cuántas obras quedarían con los demás filtros; las que dejarían 0 se apagan.
+  - **Estado:** el total en expandida 900 (`--sec`) con una cota que se mide al cambiar; la URL del
+    estado (`/proyectos/?sector=cemento`) y "Quitar filtros".
+- **Escena:** mapa (7 col., fijo al hacer scroll, alto de la ventana menos la barra) y lista (5 col.).
+- **Mapa vivo** (SVG propio, sin teselas ni librerías):
+  - retícula de meridianos y paralelos cada 5° con sus rótulos; países con obra en `--sec-soft`, el
+    elegido con borde `--sec`; sedes como cuadros `--ink`; escala gráfica en km.
+  - **Acercar y desplazar:** botones +, − y encuadre; Ctrl/⌘ + rueda (la rueda sola muestra la pista y
+    no atrapa el scroll); arrastrar con el mouse; pellizcar con dos dedos (un dedo desplaza la página).
+    Acercamiento máximo ≈ 6×. Transiciones del encuadre de .65 s (`--ease-plano`).
+  - **Grupos:** los puntos a menos de 34 px en pantalla se juntan en un círculo `--ink` con borde `--sec`
+    y el número; al acercar se separan. Con mucho acercamiento aparece el nombre de la ciudad.
+  - Clic en un **grupo:** encuadra sus obras. Clic en un **punto:** ventana (foto en lámina, código,
+    sector, título, cliente · ciudad, "Ver ficha →") que entra con barrido. Clic en un **país con obra:**
+    filtra y lo encuadra. Al filtrar, el mapa encuadra lo que queda.
+  - Los puntos caen como estacas al aparecer y se encogen al salir (firma de Proyectos, §9).
+  - Pasar por una tarjeta resalta su punto (anillo que late) y pasar por un punto resalta sus tarjetas.
+  - Las fichas sin coordenadas salen en la lista con "Sin ubicación" y no en el mapa; la leyenda dice
+    cuántas son.
+- **Pod de línea** sobre la lista: con un sector elegido, recuadro con barra violeta (código S-0n,
+  nombre, introducción, "Ver el sector →"); con un servicio, el mismo en cian. Entra con barrido.
+- **Lista:** tarjetas horizontales (lámina de 120 px + cuerpo) que se reacomodan con FLIP.
+- **Móvil:** el mapa va arriba (cuadrado, no fijo); las placas se desplazan de lado.
+
+### 13.3 Página de Sectores
+
+- Encabezado con P1 (L-04) y H1 en dos pesos ("Industria que / conocemos por dentro").
+- **Escenarios** para Cemento y Minería, uno tras otro, alternando el lado de la foto (7 + 5 y 5 + 7):
+  - lámina violeta con la foto del sector y la ilustración en sus tres capas (ejes, estructura, cotas)
+    con paralaje distinto al hacer scroll (firma de Sectores, §9); código y "Sector principal" arriba,
+    pie con la obra de la foto;
+  - cuerpo: código y nombre, H2 en expandida 900, introducción, dos cifras (proyectos y la cifra de su
+    obra mayor), 3 obras en filas (título, cliente · ciudad, cifra en ámbar; barrido `--sec-soft` al
+    pasar) y los enlaces "Conocer el sector →" y "Ver los N proyectos →" (al explorador filtrado).
+- **Otros sectores:** índice en filas sin cajas (código, nombre, una línea, conteo); al pasar, la fila se
+  llena de violeta y aparece su dibujo a la derecha.
+- Solo obras publicables (sin discretas, D6).
+
+---
+
 ## Registro de cambios
 
 | Versión | Fecha | Cambio |
@@ -703,4 +778,5 @@ contenido, y los valida HL junto con la autorización.
 | 1.0 | 2026-10-13 | Primera versión a partir de la propuesta Rev. 0. Ajustes de contraste (`--signal`, `--bad`, `--good`) y nuevos tokens `--signal-ink` y `--steel`. |
 | 1.1 | 2026-10-15 | Movimiento más corto y fluido (`--t-vista` .5 s, `--t-izaje` .6 s, `--t-aparece` .5 s, `--t-rapido` .2 s), reglas de rendimiento y diseño por formato de pantalla (§5). |
 | 1.3 | 2026-10-19 | Inicio y Nosotros (§12), decididos con maquetas en `design/maquetas/`: lema D2 (§2.3), monograma vectorial y reglas del manual de marca (§2.2), barra inmersa y botón de trazo (§7), mosaico de cabecera y archivo histórico (§8), pictogramas de plano (§8), firmas de Inicio (gemelo digital) y Nosotros (tira de negativos) (§9). |
+| 1.4 | 2026-10-19 | Proyectos y Sectores (§13): menú con submenú en Proyectos (Sectores y Servicios), prevalencia de Cemento y Minería, explorador con mapa vivo y pod de línea, página de Sectores con escenarios; bloque de sectores del inicio con prevalencia (§12.1). |
 | 1.2 | 2026-10-15 | Ampliación controlada para dar personalidad a cada sección: acentos de sección (§3.5), pods P1/P2/P3 y lámina de foto (§6), fotos nunca mayores de 800 px con lámina y hoja de contactos (§8), firma de movimiento por sección (§9). Decidido con maquetas sobre fotos reales. |

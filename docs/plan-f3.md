@@ -20,10 +20,10 @@ quieto.
 con los tokens, Playwright Test, `fonttools` (Python, solo para F3.0, en `design/`). Sin GSAP, sin
 three.js, sin Motion.
 
-**Diseño que se implementa:** [guia-visual.md](guia-visual.md) v1.3: **§12 completa** (Inicio,
+**Diseño que se implementa:** [guia-visual.md](guia-visual.md) v1.4: **§12 completa y §13** (Inicio,
 Nosotros, tira de negativos, comportamiento común), §2.2 (monograma y reglas), §2.3 (lema), §7 (botón de
 trazo, barra inmersa), §8 (mosaico de cabecera, archivo histórico, pictogramas), §9 (firmas y bucles
-permitidos). [especificacion.md](especificacion.md) v1.1: §2 (D2), §4 (historia, testimonios, sitio),
+permitidos). [especificacion.md](especificacion.md) v1.2 (§3 menú y prevalencia, §5 Proyectos y Sectores): §2 (D2), §4 (historia, testimonios, sitio),
 §5 (Inicio, Nosotros), §6 (presupuesto), §7 (F3 y F3.0). Maquetas de referencia en
 [design/maquetas/](../design/maquetas/): fijan composición y movimiento; los valores salen de los tokens.
 
@@ -38,7 +38,11 @@ permitidos). [especificacion.md](especificacion.md) v1.1: §2 (D2), §4 (histori
 | 5 · Gemelo digital | ✅ | `495008b` |
 | 6 · Franja de sectores y HL en cifras | ✅ | `223cde0` |
 | 7 · Maquetas del resto del inicio | ✅ aprobadas (guía §12.1-4, `design/maquetas/inicio-resto.html`) | — |
-| **8 · Resto del inicio** | **siguiente** | — |
+| 7b · Maquetas de Proyectos y Sectores | ✅ aprobadas (guía §13, `design/maquetas/{sectores,explorador}.html`) | — |
+| **8a · Menú con submenú de Proyectos** | **siguiente** | — |
+| 8 · Resto del inicio (sectores con prevalencia) | pendiente | — |
+| 8b · Página de Sectores | pendiente | — |
+| 8c · Explorador con mapa vivo | pendiente | — |
 | 9-11 · Nosotros (F3.2) | ✅ cerrada | `bda87aa`, `2a177e0`, `aba255a` |
 | 12-13 · F3.3 (maquetas → páginas) | pendiente | — |
 | 14 · Cierre de la fase | pendiente | — |
@@ -306,6 +310,28 @@ provisional), `src/layouts/Base.astro` (prop `barra`), `src/components/Barra.ast
   si cambia algo de la especificación §5, también allí.
 - [ ] Commit: "F3.1: maquetas aprobadas del resto del inicio".
 
+### Tarea 8a: Menú con submenú de Proyectos
+
+**Archivos:** `src/i18n/rutas.ts` (`MENU` de 5 entradas; `NAVEGACION` de 7 para el pie), `src/i18n/ui.ts`,
+`src/components/Barra.astro` (panel y menú móvil), nuevo `src/components/PanelProyectos.astro`,
+`src/components/Pie.astro`, `src/lib/contenido.ts` (función pura para el panel), `tests/barra.spec.ts`.
+Diseño: guía §7 y §13.1, `design/maquetas/sectores.html` §1.
+
+- [ ] `MENU` = nosotros, proyectos, hse, noticias, contacto; el pie sigue con los 13 enlaces (agrega
+  servicios y sectores a su propia lista).
+- [ ] Datos del panel, calculados al compilar con una función pura: sectores por `orden` con su número
+  de proyectos visibles (`deSector`) y la cifra de la obra mayor de Cemento y Minería; servicios por grupo.
+  Prueba unitaria.
+- [ ] Botón ▾ junto a "Proyectos" (`aria-expanded`, `aria-controls`); el panel abre con clic/Enter/Espacio,
+  cierra con Esc (devuelve el foco al botón), clic fuera, salida del foco y `astro:before-swap`. Sin JS, el
+  botón no se muestra y "Proyectos" sigue siendo un enlace. Script en la barra, sin isla.
+- [ ] En `/servicios/…` y `/sectores/…`, "Proyectos" queda marcado (`aria-current="true"`).
+- [ ] Menú móvil: Proyectos con botón ± que despliega sectores y servicios; inmersa del inicio incluida.
+- [ ] Pruebas: 5 entradas en 1366 px sin desborde; panel por teclado (abre, Esc, foco); clic fuera
+  cierra; los 6 sectores y 7 servicios enlazan a su página; Cemento y Minería primero; sin JS no hay botón;
+  móvil despliega; pie con 13 enlaces. `npm run check`.
+- [ ] Commit: "F3: menú con submenú de Proyectos".
+
 ### Tarea 8: Resto del inicio
 
 **Archivos:** `src/components/inicio/{Destacados,ServiciosInicio,SectoresInicio,FranjaHse,Clientes}.astro`,
@@ -314,10 +340,43 @@ provisional), `src/layouts/Base.astro` (prop `barra`), `src/components/Barra.ast
 `Ilustracion`. Mínimo:
 
 - [ ] Destacados con `Tarjeta` de F2 (`tarjetas(destacados(...))`): (foco) ninguna discreta.
+- [ ] Sectores con prevalencia (guía §12.1, maqueta `sectores.html` §3): Cemento y Minería en celdas de 2
+  columnas; los otros cuatro pequeños. La franja P3 del hero también pone Cemento y Minería primero.
 - [ ] Logos de clientes de `sitio.clientes` con `alt` = nombre.
 - [ ] Noticias: el bloque no se renderiza si no hay noticias.
 - [ ] `presupuesto` ≤ 30 KB; axe sin violaciones; Lighthouse móvil de `/` ≥ 95, LCP < 2,0 s.
 - [ ] Commit: "F3.1 · Inicio" (cierra F3.1).
+
+### Tarea 8b: Página de Sectores
+
+**Archivos:** `src/plantillas/Sectores.astro`, `src/content/sectores/*.yaml` (foto y obra de la lámina
+de Cemento y Minería, si hace falta un campo `lamina`), `tests/proyectos.spec.ts` (o uno nuevo).
+Diseño: guía §13.3, `design/maquetas/sectores.html` §2.
+
+- [ ] Escenarios de Cemento y Minería (lámina con `Foto` ≤ 800 px, `Ilustracion` en tres capas con
+  paralaje por `animation-timeline: view()`, cifras, 3 obras sin discretas, enlaces al sector y al
+  explorador filtrado `?sector=`).
+- [ ] Índice en filas de los otros cuatro. Sin JS y con reduced-motion se ve completo y quieto.
+- [ ] Pruebas: orden Cemento → Minería → resto; ninguna discreta; enlaces; 360 px sin desborde; axe.
+- [ ] Commit: "F3: página de Sectores".
+
+### Tarea 8c: Explorador con mapa vivo
+
+**Archivos:** `src/components/{Explorador,Mapa}.tsx`, `src/lib/mapa.ts` (agrupación y encuadre, puros),
+`src/plantillas/Proyectos.astro`, `tests/proyectos.spec.ts`. Diseño: guía §13.2,
+`design/maquetas/explorador.html`.
+
+- [ ] Funciones puras con prueba unitaria: agrupar puntos por distancia en pantalla, encuadre de un
+  conjunto de puntos o de un país, límites de acercamiento.
+- [ ] Mapa: viewBox animado, botones, Ctrl + rueda (con pista), arrastre, pellizco; retícula, escala,
+  grupos, rótulos de ciudad, ventana de la obra; los puntos siguen a los filtros; clic en país filtra y
+  encuadra; resaltado cruzado tarjeta ↔ punto.
+- [ ] Filtros en placas (Cemento y Minería anchas), servicios por grupo, países bajo el mapa, conteos,
+  total con cota, URL (`?sector=&servicio=&pais=`; se lee al cargar), pod de línea con enlace.
+- [ ] Sin JS: la lista completa en el HTML, como hoy. Teclado: placas, chips, botones del mapa y puntos
+  enfocables (los puntos con `aria-label`); Esc cierra la ventana.
+- [ ] Presupuesto: explorador ≤ 100 KB gz (hoy 31,8); Lighthouse móvil ≥ 95; INP < 200 ms.
+- [ ] Commit: "F3: explorador con mapa vivo".
 
 ---
 

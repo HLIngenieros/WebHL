@@ -70,8 +70,12 @@ Transición de vista; sin preloader, cifras escritas en el HTML, respeta reduced
   descuidar al cliente que evalúa contratistas ni al que precalifica proveedores.
 - **Lanzamiento único, completo y bilingüe** (ES y EN desde el día 1). Las fases son de construcción en
   staging; el sitio actual sigue en línea hasta el cambio.
-- **Menú plano, sin submenús:** Nosotros · Proyectos · Servicios · Sectores · HSE y calidad · Noticias ·
-  Contacto · ES/EN; logo → inicio; botón fijo "Hablar con HL".
+- **Menú corto con un submenú (cambio 19-oct):** Nosotros · Proyectos ▾ · HSE y calidad · Noticias ·
+  Contacto · ES/EN; logo → inicio; botón fijo "Hablar con HL". "Proyectos" lleva al explorador y el ▾
+  abre un panel con Sectores y Servicios (eran redundantes con los filtros). Sus páginas siguen publicadas
+  y se enlazan desde el panel, el pod de línea del explorador, el inicio, las fichas y el pie (guía §13).
+- **Cemento y Minería tienen prevalencia** (sectores principales): primero y más grandes en el panel, la
+  página de Sectores, el bloque del inicio y los filtros. Servicios, sin prevalencia.
 - La jerarquía de Juan David (14-oct) es el mapa del sitio; se reparte entre menú y pie.
   [contenido/](contenido/) sigue ordenado según esa jerarquía.
 - Servicios y Sectores tienen página propia y se cruzan con Proyectos: cada ficha enlaza a su
@@ -85,7 +89,7 @@ Transición de vista; sin preloader, cifras escritas en el HTML, respeta reduced
 |---|---|---|
 | `/` | `/en/` | Inicio |
 | `/nosotros` | `/en/about` | Una sola página |
-| `/proyectos`, `/proyectos/[slug]` | `/en/projects/...` | Explorador (servicio · sector · país) + mapa de presencia; ~22 fichas (16 + 6 del PDF ECOHL) |
+| `/proyectos`, `/proyectos/[slug]` | `/en/projects/...` | Explorador (servicio · sector · país) + mapa vivo (acercar, grupos, filtros en la URL); ~22 fichas (16 + 6 del PDF ECOHL) |
 | `/servicios`, `/servicios/[s]` | `/en/services/...` | 7 líneas: `epc-llave-en-mano` (epc-turnkey), `gerencia-de-proyectos` (project-management), `obras-civiles` (civil-works), `montaje-mecanico` (mechanical-installation), `montaje-electrico` (electrical-installation), `fabricacion` (fabrication), `mantenimiento` (maintenance-shutdowns) |
 | `/sectores`, `/sectores/[s]` | `/en/sectors/...` | `cemento` (cement), `mineria` (mining), `agua-y-energia` (water-energy), `petroleo-y-gas` (oil-gas), `infraestructura` (infrastructure) |
 | `/hse` | `/en/hse` | HSE y calidad |
@@ -226,8 +230,11 @@ en [contenido/README.md](contenido/README.md).
       misión y visión con indicadores, valores con pictogramas, presencia, testimonios y asociadas solo
       publicables en lanzamiento, cierre). Tira probada también en Firefox (proyecto `firefox` de Playwright).
     - 354 pruebas. Maquetas del resto del inicio **aprobadas** (guía §12.1-4).
-  - **Siguiente paso:** Tarea 8 del plan F3 (resto del inicio: destacados, servicios, sectores, franja HSE,
-    noticias ocultas, clientes); luego F3.3 (maquetas de HSE, Noticias, Acreedores y legales → aprobación →
+  - **Proyectos y Sectores (19-oct):** maquetas `design/maquetas/{sectores,explorador}.html` aprobadas;
+    especificación v1.2 y guía visual v1.4 (§13). Plan: Tareas 8a (menú con submenú), 8 (resto del inicio
+    con prevalencia de Cemento y Minería), 8b (página de Sectores) y 8c (explorador con mapa vivo).
+  - **Siguiente paso:** Tarea 8a, luego 8 (resto del inicio: destacados, servicios, sectores, franja HSE,
+    noticias ocultas, clientes), 8b y 8c; luego F3.3 (maquetas de HSE, Noticias, Acreedores y legales → aprobación →
     páginas) y la Tarea 14 (cierre, Lighthouse, revisión y merge a `main`). Ejecución en modo nativo, sin
     subagentes (pedido de Juan David).
   - **Decisiones de F3 con efecto visible:** sin precarga de fuente (primera visita: un instante con el

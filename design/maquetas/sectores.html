@@ -1,0 +1,430 @@
+<!-- Maqueta aprobada el 2026-10-19 (F3, guía visual §13): submenú de Proyectos (Sectores y Servicios), página de Sectores con prevalencia de Cemento y Minería, y franja de sectores del inicio. Referencia de composición y movimiento; los valores salen de design/tokens.css. -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sectores · submenú y página</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<style>
+  :root { --azul:#0B509E; --g:#14181C; --c:#E7EAEB; --paper:#F6F7F7; --ac:#8A949B; --line:#C2C9CD; --sen:#F2B42A; --mut:#56606A; --grid:rgba(11,80,158,.075);
+          --pro:#8A5A00; --pro-s:#F5E7C2; --ser:#006B80; --ser-s:#CDE8EE; --sec:#5B3FA0; --sec-s:#E3DCF2;
+          --ez:cubic-bezier(.2,.8,.2,1); --ep:cubic-bezier(.6,0,.2,1); }
+  * { box-sizing:border-box } html,body { margin:0; background:var(--c); color:var(--g); font-family:Archivo,sans-serif; }
+  a { color:inherit; }
+  .dat { font-stretch:72%; text-transform:uppercase; letter-spacing:.12em; font-weight:600; font-size:11.5px; }
+  .w { max-width:1240px; margin:0 auto; padding:0 40px; }
+  .nota { background:var(--g); color:#AEB6BC; font-size:12.5px; padding:12px 40px; line-height:1.5; }
+  .nota b { color:var(--sen); font-weight:600; }
+  .rotulo { padding:36px 0 14px; display:flex; gap:14px; align-items:baseline; border-bottom:1px dashed var(--ac); margin-bottom:0; color:var(--mut); }
+  .rotulo b { color:var(--g); font-size:13px; }
+  .pod { display:inline-flex; align-items:center; border:1.5px solid var(--g); margin-bottom:14px; }
+  .pod i { width:6px; align-self:stretch; background:var(--k); } .pod b { padding:3px 8px; border-right:1px solid var(--g); color:var(--k); } .pod span { padding:3px 8px; }
+  .mas { display:inline-flex; align-items:center; gap:10px; color:var(--k); text-decoration:none; font-weight:700; font-stretch:108%; }
+  .mas::after { content:"→"; transition:transform .3s var(--ep); } .mas:hover::after { transform:translateX(6px); }
+
+  /* Ilustración de sector (la de F2): tres capas */
+  svg.ilu { display:block; width:100%; height:auto; overflow:visible; }
+  .ilu path, .ilu line, .ilu circle { fill:none; stroke-linecap:square; }
+  .ilu .est path { stroke:var(--g); stroke-width:1.6; }
+  .ilu .eje line { stroke:var(--sec); stroke-width:1; stroke-dasharray:6 4; } .ilu .eje circle { stroke:var(--sec); stroke-width:1.2; fill:var(--paper); }
+  .ilu .cot path { stroke:var(--sen); stroke-width:1.4; }
+  .ilu .t { stroke-dasharray:1; stroke-dashoffset:0; }
+  .trazar .ilu .t { animation:trazo 1.2s var(--ep) both; animation-delay:calc(var(--i) * 60ms); }
+  @keyframes trazo { from { stroke-dashoffset:1 } }
+
+  /* ───────── 1 · Barra con submenú ───────── */
+  .barra { position:relative; background:rgba(231,234,235,.92); border-bottom:1px solid var(--line); z-index:5; }
+  .barra > .w { height:52px; display:flex; align-items:center; gap:28px; }
+  .logo { display:flex; align-items:center; gap:10px; font-weight:900; font-stretch:122%; font-size:18px; text-decoration:none; color:var(--azul); }
+  .logo span { width:28px; height:28px; background:var(--azul); color:#fff; display:grid; place-items:center; font-size:13px; }
+  .nav { display:flex; align-items:center; gap:4px; margin-left:auto; }
+  .nav > a, .nav .grupo-nav > a { padding:8px 10px; text-decoration:none; color:var(--mut); border:1px solid transparent; }
+  .nav > a:hover, .nav .grupo-nav > a:hover { color:var(--g); border-color:var(--line); }
+  .grupo-nav { display:flex; align-items:stretch; }
+  .grupo-nav > a { padding-right:4px !important; }
+  .grupo-nav[data-abierto] > a { color:var(--pro); }
+  .desplegar { width:28px; border:1px solid transparent; background:none; cursor:pointer; color:var(--mut); display:grid; place-items:center; padding:0; }
+  .desplegar:hover { border-color:var(--line); color:var(--g); }
+  .desplegar svg { width:10px; transition:transform .25s var(--ep); }
+  .grupo-nav[data-abierto] .desplegar { color:var(--pro); border-color:var(--pro); }
+  .grupo-nav[data-abierto] .desplegar svg { transform:rotate(180deg); }
+  .grupo-nav[data-abierto]::after { content:""; position:absolute; bottom:-1px; height:2px; width:118px; background:var(--pro); transform-origin:left; animation:cota .4s var(--ep); margin-left:0; }
+  @keyframes cota { from { transform:scaleX(0) } }
+  .idioma { color:var(--mut); } .hablar { margin-left:10px; padding:8px 14px; background:var(--azul); color:#fff; text-decoration:none; font-weight:700; font-stretch:108%; font-size:14px; }
+
+  .panel { position:absolute; left:0; right:0; top:100%; background:var(--paper); border-top:1.5px solid var(--g); border-bottom:1px solid var(--line);
+           clip-path:inset(0 0 100% 0); visibility:hidden; transition:clip-path .45s var(--ep), visibility 0s .45s; }
+  .panel[data-abierto] { clip-path:inset(0 0 0 0); visibility:visible; transition:clip-path .45s var(--ep); }
+  .panel-g { display:grid; grid-template-columns:8fr 4fr; }
+  .panel-sec { padding:24px 32px 24px 0; border-right:1px solid var(--line); }
+  .panel-ser { padding:24px 0 24px 32px; }
+  .panel-tit { display:flex; justify-content:space-between; color:var(--mut); margin-bottom:14px; }
+  .panel-tit b { color:var(--g); }
+  .dos { display:grid; grid-template-columns:1fr 1fr; border-top:1.5px solid var(--g); }
+  .gran { position:relative; display:grid; grid-template-rows:auto 1fr; padding:18px 20px 20px; text-decoration:none; color:inherit; border-right:1px solid var(--line); border-bottom:1px solid var(--line); overflow:hidden; }
+  .gran + .gran { border-right:0; }
+  .gran::before { content:""; position:absolute; inset:0; background:var(--sec); transform:scaleY(0); transform-origin:bottom; transition:transform .4s var(--ep); }
+  .gran > * { position:relative; }
+  .gran .dib { background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px); background-size:16px 16px; padding:8px 20px 0; margin:0 -20px 14px; }
+  .gran .dib svg { max-height:120px; }
+  .gran h3 { margin:0; font-stretch:122%; font-weight:850; font-size:30px; letter-spacing:-.015em; line-height:1; }
+  .gran p { margin:6px 0 0; display:flex; gap:10px; color:var(--sec); }
+  .gran p span + span::before { content:"·"; margin-right:10px; color:var(--ac); }
+  .gran:hover::before { transform:scaleY(1); }
+  .gran:hover { color:#fff; } .gran:hover p { color:#E3DCF2; } .gran:hover .dib { background-image:none; }
+  .gran:hover .ilu .est path { stroke:#fff; } .gran:hover .ilu .eje line, .gran:hover .ilu .eje circle { stroke:#C9BCEE; fill:none; }
+  .otros { display:flex; flex-wrap:wrap; align-items:center; gap:4px 0; padding:14px 0 0; }
+  .otros a { display:inline-flex; gap:8px; align-items:baseline; padding:6px 0; text-decoration:none; font-size:16px; }
+  .otros a i { font-style:normal; color:var(--mut); font-size:11px; }
+  .otros a:hover { color:var(--sec); }
+  .otros .rombo { width:7px; height:7px; border:1.5px solid var(--sec); transform:rotate(45deg); margin:0 14px; }
+  .ser-g { border-top:1.5px solid var(--g); }
+  .ser-g .letra { display:flex; align-items:center; gap:8px; padding:10px 0 4px; color:var(--mut); }
+  .ser-g .letra b { width:20px; height:20px; border-radius:50%; border:1.2px solid var(--mut); display:grid; place-items:center; font-size:10px; letter-spacing:0; }
+  .ser-g a { display:block; padding:5px 0 5px 28px; text-decoration:none; font-size:15px; color:var(--g); }
+  .ser-g a:hover { color:var(--ser); }
+  .panel-pie { display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--line); padding:14px 0; }
+  .panel-pie .mas { --k:var(--pro); }
+  .velo { height:520px; background:linear-gradient(var(--c),#DCE0E2); display:grid; place-items:end center; padding-bottom:20px; color:var(--mut); }
+
+  /* Móvil */
+  .movil-fila { display:grid; grid-template-columns:390px 1fr; gap:48px; padding:40px 0 64px; align-items:start; }
+  .tel { width:390px; height:840px; border:1.5px solid var(--g); background:var(--g); color:#fff; overflow:hidden; display:flex; flex-direction:column; }
+  .tel-bar { height:52px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; border-bottom:1px solid #2B3238; }
+  .tel-bar .logo { color:#fff; } .tel-bar .logo span { background:#fff; color:var(--g); }
+  .tel nav { padding:8px 16px; overflow:auto; flex:1; }
+  .tel .fila { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #2B3238; }
+  .tel .fila a { flex:1; padding:16px 0; font-size:24px; font-stretch:118%; font-weight:750; text-decoration:none; color:#fff; }
+  .tel .fila a sup { color:var(--sen); font-size:11px; margin-right:8px; font-stretch:72%; letter-spacing:.1em; }
+  .tel .fila button { width:44px; height:44px; background:none; border:1px solid var(--sen); color:var(--sen); font-size:18px; }
+  .tel .sub { padding:6px 0 14px 24px; border-bottom:1px solid #2B3238; }
+  .tel .sub .dat { color:#8A949B; margin:12px 0 6px; display:block; }
+  .tel .sub .g2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .tel .sub .g2 a { border:1px solid #A894E0; padding:10px; text-decoration:none; color:#fff; }
+  .tel .sub .g2 a b { display:block; font-size:19px; font-stretch:118%; font-weight:800; }
+  .tel .sub .g2 a i { font-style:normal; color:#A894E0; }
+  .tel .sub .ch { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .tel .sub .ch a { color:#C7CDD1; text-decoration:none; font-size:14px; padding:6px 10px; border:1px solid #3A434A; }
+  .tel .sub .lis a { display:block; color:#C7CDD1; text-decoration:none; padding:6px 0; font-size:15px; }
+  .tel .sub .ir { display:block; margin-top:12px; color:var(--sen); text-decoration:none; font-weight:700; }
+  .expl { color:var(--mut); font-size:15px; line-height:1.55; max-width:560px; }
+  .expl h3 { color:var(--g); font-stretch:115%; margin:0 0 8px; font-size:20px; }
+  .expl li { margin-bottom:8px; }
+
+  /* ───────── 2 · Página de Sectores ───────── */
+  .pag { --k:var(--sec); background:var(--c); }
+  .encab { padding:56px 0 40px; display:grid; grid-template-columns:7fr 5fr; align-items:end; gap:40px; }
+  .encab h1 { margin:0; font-stretch:125%; font-weight:900; font-size:76px; line-height:.9; letter-spacing:-.025em; }
+  .encab h1 span { font-weight:300; display:block; }
+  .encab p { margin:0; color:var(--mut); font-size:18px; line-height:1.5; }
+  .encab .med { display:flex; gap:12px; align-items:center; margin-top:18px; color:var(--sec); }
+  .encab .med::before { content:""; width:80px; height:1.5px; background:var(--sec); }
+
+  .esc { display:grid; grid-template-columns:7fr 5fr; border-top:1.5px solid var(--g); min-height:560px; background:var(--paper); }
+  .esc.inv { grid-template-columns:5fr 7fr; } .esc.inv .lamina { order:2; }
+  .esc + .esc { border-top:0; }
+  .lamina { position:relative; overflow:hidden; background:var(--g); }
+  .lamina img { position:absolute; inset:-8% 0; width:100%; height:116%; object-fit:cover; filter:grayscale(1) contrast(1.15); }
+  .lamina .tin { position:absolute; inset:0; background:var(--sec); mix-blend-mode:multiply; opacity:.86; }
+  .lamina .capas { position:absolute; inset:9% 7% 4%; }
+  .lamina .capas svg { position:absolute; inset:0; width:100%; height:100%; }
+  .lamina .ilu .est path { stroke:#fff; stroke-width:1.5; }
+  .lamina .ilu .eje line { stroke:#C9BCEE; } .lamina .ilu .eje circle { stroke:#C9BCEE; fill:none; }
+  .lamina .cod { position:absolute; left:20px; top:18px; color:#fff; display:flex; gap:12px; }
+  .lamina .cod span:last-child { color:var(--sen); }
+  .lamina .pie { position:absolute; left:20px; bottom:16px; color:#E3DCF2; }
+  @supports (animation-timeline: view()) {
+    .capa-1 { animation:par1 linear both; animation-timeline:view(); }
+    .capa-2 { animation:par2 linear both; animation-timeline:view(); }
+    .capa-3 { animation:par3 linear both; animation-timeline:view(); }
+    .lamina img { animation:par0 linear both; animation-timeline:view(); }
+    @keyframes par0 { from { transform:translateY(-5%) } to { transform:translateY(5%) } }
+    @keyframes par1 { from { transform:translateY(18px) } to { transform:translateY(-18px) } }
+    @keyframes par2 { from { transform:translateY(36px) } to { transform:translateY(-36px) } }
+    @keyframes par3 { from { transform:translateY(60px) } to { transform:translateY(-60px) } }
+  }
+  .cuerpo { padding:40px 44px 36px; display:flex; flex-direction:column; gap:22px; }
+  .cuerpo .cab { display:flex; justify-content:space-between; color:var(--sec); }
+  .cuerpo h2 { margin:0; font-stretch:125%; font-weight:900; font-size:72px; line-height:.9; letter-spacing:-.025em; }
+  .cuerpo > p { margin:0; color:var(--mut); font-size:17px; line-height:1.55; max-width:44ch; }
+  .cifras { display:grid; grid-template-columns:auto 1fr; gap:0 28px; border-top:1px solid var(--line); padding-top:16px; }
+  .cifras div { display:grid; gap:4px; }
+  .cifras b { font-stretch:125%; font-weight:900; font-size:44px; letter-spacing:-.02em; color:var(--sec); line-height:1; }
+  .cifras span { color:var(--mut); }
+  .obras { list-style:none; margin:0; padding:0; border-top:1.5px solid var(--g); }
+  .obras a { position:relative; display:grid; grid-template-columns:1fr auto; gap:2px 16px; padding:12px 0; border-bottom:1px solid var(--line); text-decoration:none; overflow:hidden; }
+  .obras a::before { content:""; position:absolute; inset:0; background:var(--sec-s); transform:scaleX(0); transform-origin:left; transition:transform .35s var(--ep); }
+  .obras a > * { position:relative; }
+  .obras a:hover::before { transform:scaleX(1); }
+  .obras strong { font-stretch:110%; font-weight:750; font-size:17px; }
+  .obras small { grid-column:1; color:var(--mut); font-size:13.5px; }
+  .obras em { grid-row:1 / 3; grid-column:2; align-self:center; font-style:normal; color:var(--pro); text-align:right; }
+  .obras em b { display:block; font-stretch:122%; font-weight:850; font-size:20px; letter-spacing:-.01em; }
+  .enl { display:flex; gap:28px; flex-wrap:wrap; margin-top:auto; }
+  .enl .mas.pro { --k:var(--pro); }
+
+  .otros-sec { padding:64px 0 88px; }
+  .otros-sec .cab2 { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:18px; }
+  .otros-sec h2 { margin:0; font-stretch:122%; font-weight:850; font-size:36px; letter-spacing:-.02em; }
+  .otros-sec h2 span { font-weight:300; }
+  .indice { list-style:none; margin:0; padding:0; border-top:1.5px solid var(--g); }
+  .indice a { position:relative; display:grid; grid-template-columns:64px 280px 1fr 120px 180px; align-items:center; gap:24px; padding:20px 0; border-bottom:1px solid var(--line); text-decoration:none; overflow:hidden; }
+  .indice a::before { content:""; position:absolute; inset:0; background:var(--sec); transform:scaleX(0); transform-origin:left; transition:transform .45s var(--ep); }
+  .indice a > * { position:relative; }
+  .indice .cod { color:var(--sec); } .indice h3 { margin:0; font-stretch:118%; font-weight:800; font-size:26px; letter-spacing:-.01em; }
+  .indice p { margin:0; color:var(--mut); font-size:15px; line-height:1.45; }
+  .indice .n { color:var(--sec); text-align:right; }
+  .indice .mini { height:64px; opacity:0; transform:translateX(-12px); transition:opacity .3s, transform .45s var(--ep); }
+  .indice .mini svg { height:64px; width:auto; }
+  .indice a:hover::before { transform:scaleX(1); }
+  .indice a:hover { color:#fff; } .indice a:hover p, .indice a:hover .cod, .indice a:hover .n { color:#E3DCF2; }
+  .indice a:hover .mini { opacity:1; transform:none; }
+  .indice a:hover .ilu .est path { stroke:#fff; } .indice a:hover .ilu .eje line, .indice a:hover .ilu .eje circle { stroke:#C9BCEE; fill:none; }
+
+  /* ───────── 3 · Franja de sectores del inicio ───────── */
+  .ini { --k:var(--sec); padding:72px 0; background:var(--c); }
+  .ini .cab { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:32px; }
+  .ini .cab h2 { margin:0; font-stretch:122%; font-weight:850; font-size:44px; line-height:.95; letter-spacing:-.02em; }
+  .ini .cab h2 span { font-weight:300; }
+  .rej { display:grid; grid-template-columns:repeat(4,1fr); border-top:1.5px solid var(--g); border-left:1px solid var(--line); }
+  .st { position:relative; display:flex; flex-direction:column; gap:10px; padding:16px 18px 18px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--paper); text-decoration:none; overflow:hidden; }
+  .st::before { content:""; position:absolute; inset:0; background:var(--sec); transform:scaleY(0); transform-origin:bottom; transition:transform .4s var(--ep); }
+  .st > * { position:relative; }
+  .st-cab { display:flex; justify-content:space-between; color:var(--sec); }
+  .st h3 { margin:0; font-stretch:100%; font-weight:800; font-size:19px; }
+  .st.mayor { grid-column:span 2; padding:22px 26px 24px; }
+  .st.mayor .dib { padding:6px 10% 0; }
+  .st.mayor h3 { font-size:40px; font-stretch:125%; font-weight:900; letter-spacing:-.02em; }
+  .st.mayor .linea { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; }
+  .st.mayor .linea p { margin:0; color:var(--mut); max-width:36ch; font-size:15px; }
+  .st.mayor .grande { color:var(--sec); text-align:right; }
+  .st.mayor .grande b { display:block; font-stretch:125%; font-weight:900; font-size:48px; line-height:1; letter-spacing:-.02em; }
+  .st.menor { flex-direction:row; align-items:center; gap:14px; }
+  .st.menor .dib { width:84px; flex:none; }
+  .st.menor div { display:grid; gap:4px; }
+  .st:hover::before { transform:scaleY(1); }
+  .st:hover, .st:hover .st-cab, .st:hover .grande { color:#fff; } .st:hover p { color:#E3DCF2 !important; }
+  .st:hover .ilu .est path { stroke:#fff; } .st:hover .ilu .eje line, .st:hover .ilu .eje circle { stroke:#C9BCEE; fill:none; }
+  .st:hover .ilu .cot path { stroke:var(--sen); }
+
+  @media (max-width:900px) {
+    .w { padding:0 16px; } .nota { padding:12px 16px; }
+    .nav > a, .idioma { display:none; }
+    .panel-g, .dos, .encab, .esc, .esc.inv, .movil-fila { grid-template-columns:1fr; }
+    .esc.inv .lamina { order:0; } .lamina { min-height:320px; }
+    .panel-sec { padding-right:0; border-right:0; } .panel-ser { padding-left:0; }
+    .encab h1, .cuerpo h2 { font-size:52px; } .cuerpo { padding:28px 16px; }
+    .indice a { grid-template-columns:48px 1fr auto; } .indice p, .indice .mini { display:none; }
+    .rej { grid-template-columns:1fr 1fr; } .st.mayor { grid-column:span 2; } .st.menor { flex-direction:column; align-items:flex-start; }
+    .tel { width:100%; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation:none !important; transition:none !important; } }
+</style></head>
+<body>
+
+<div class="nota"><b>Maqueta para discusión · 19-oct-2026.</b> El menú pasa a <i>Nosotros · Proyectos ▾ · HSE y calidad · Noticias · Contacto</i>. "Proyectos" sigue llevando al explorador; el botón ▾ abre el panel con Sectores (Cemento y Minería al frente) y Servicios (lista simple, sin prevalencia). El panel no carga fotos: solo las ilustraciones de línea que ya tiene el sitio, así no pesa en cada página. Pasa el cursor por las celdas.</div>
+
+<!-- ───────── 1 ───────── -->
+<div class="w rotulo dat"><b>1</b> Barra con el panel de Proyectos abierto (escritorio)</div>
+<header class="barra">
+  <div class="w">
+    <a class="logo" href="#"><span>HL</span>HL Ingenieros</a>
+    <nav class="nav dat" aria-label="Principal">
+      <a href="#">Nosotros</a>
+      <div class="grupo-nav" data-abierto>
+        <a href="#">Proyectos</a>
+        <button class="desplegar" aria-expanded="true" aria-controls="panel" aria-label="Sectores y servicios"><svg viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+      </div>
+      <a href="#">HSE y calidad</a>
+      <a href="#">Noticias</a>
+      <a href="#">Contacto</a>
+      <span class="idioma">ES / EN</span>
+    </nav>
+    <a class="hablar" href="#">Hablar con HL</a>
+  </div>
+  <div class="panel" id="panel" data-abierto>
+    <div class="w">
+      <div class="panel-g">
+        <div class="panel-sec">
+          <div class="panel-tit dat"><b>Sectores</b><span>6 sectores · 20 proyectos</span></div>
+          <div class="dos">
+            <a class="gran" href="#"><div class="dib" data-ilu="cemento"></div><div><h3>Cemento</h3><p class="dat"><span>7 proyectos</span><span>Columbus · 5.250 t/día</span></p></div></a>
+            <a class="gran" href="#"><div class="dib" data-ilu="mineria"></div><div><h3>Minería</h3><p class="dat"><span>3 proyectos</span><span>Buriticá · 750.000 HH</span></p></div></a>
+          </div>
+          <div class="otros">
+            <a href="#">Agua y energía <i class="dat">3</i></a><span class="rombo"></span>
+            <a href="#">Petróleo y gas <i class="dat">2</i></a><span class="rombo"></span>
+            <a href="#">Infraestructura <i class="dat">2</i></a><span class="rombo"></span>
+            <a href="#">Industria <i class="dat">3</i></a>
+          </div>
+        </div>
+        <div class="panel-ser">
+          <div class="panel-tit dat"><b>Servicios</b><span>7 líneas</span></div>
+          <div class="ser-g" id="lista-servicios"></div>
+        </div>
+      </div>
+      <div class="panel-pie">
+        <a class="mas" href="#">Ver los 22 proyectos en el explorador</a>
+        <a class="mas" style="--k:var(--sec)" href="#">Todos los sectores</a>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="velo dat"><span>Página debajo · <button id="alternar" class="dat" style="background:none;border:1px solid var(--mut);padding:6px 10px;cursor:pointer">Cerrar / abrir el panel</button></span></div>
+
+<div class="w rotulo dat"><b>1b</b> Menú en móvil (inmerso, sobre grafito)</div>
+<div class="w movil-fila">
+  <div class="tel">
+    <div class="tel-bar"><a class="logo" href="#"><span>HL</span>HL</a><span class="dat" style="color:var(--sen)">Cerrar ✕</span></div>
+    <nav>
+      <div class="fila"><a href="#"><sup>01</sup>Nosotros</a></div>
+      <div class="fila"><a href="#"><sup>02</sup>Proyectos</a><button aria-expanded="true">−</button></div>
+      <div class="sub">
+        <span class="dat">Sectores</span>
+        <div class="g2"><a href="#"><b>Cemento</b><i class="dat">7 proyectos</i></a><a href="#"><b>Minería</b><i class="dat">3 proyectos</i></a></div>
+        <div class="ch"><a href="#">Agua y energía</a><a href="#">Petróleo y gas</a><a href="#">Infraestructura</a><a href="#">Industria</a></div>
+        <span class="dat">Servicios</span>
+        <div class="lis" id="lista-servicios-m"></div>
+        <a class="ir" href="#">Ver los 22 proyectos →</a>
+      </div>
+      <div class="fila"><a href="#"><sup>03</sup>HSE y calidad</a></div>
+      <div class="fila"><a href="#"><sup>04</sup>Noticias</a></div>
+      <div class="fila"><a href="#"><sup>05</sup>Contacto</a></div>
+    </nav>
+  </div>
+  <div class="expl">
+    <h3>Cómo se comporta</h3>
+    <ul>
+      <li><b>"Proyectos" es un enlace y ▾ es un botón aparte.</b> El panel se abre con clic o teclado (Enter, Espacio, flecha abajo) y se cierra con Esc, clic fuera o al salir del foco. No se abre al pasar el cursor: en tabletas fallaría.</li>
+      <li>Al abrirse, el panel baja como un barrido (clip-path, .45 s) y una cota ámbar se mide bajo "Proyectos".</li>
+      <li>Cemento y Minería se llevan dos celdas con su dibujo y una cifra; al pasar se llenan de violeta y el dibujo pasa a blanco. Los otros cuatro van en una línea, separados por rombos.</li>
+      <li>Servicios va en una lista simple por grupo (A, B, C), sin dibujos ni cifras.</li>
+      <li>En móvil, Proyectos se despliega dentro del menú; el resto de entradas no tiene submenú.</li>
+      <li>El número de proyectos por sector cuenta solo los publicables: Minería muestra 3 porque Cobre Panamá es discreta (D6).</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ───────── 2 ───────── -->
+<div class="w rotulo dat"><b>2</b> Página /sectores/: escenario para Cemento y Minería, índice para el resto</div>
+<main class="pag">
+  <div class="w">
+    <div class="encab">
+      <div><div class="pod dat"><i></i><b>L-04</b><span>Sectores</span></div>
+        <h1>Industria que<span>conocemos por dentro</span></h1></div>
+      <div><p>Desde 1968 construimos y montamos plantas de cemento y de proceso minero. También trabajamos en agua y energía, petróleo y gas, infraestructura e industria. <i style="font-size:13px">(Texto provisional.)</i></p>
+        <div class="med dat">6 sectores · 20 proyectos</div></div>
+    </div>
+  </div>
+
+  <section class="esc">
+    <div class="lamina">
+      <img src="../../src/assets/proyectos/planta-columbus/2.jpg" alt="">
+      <span class="tin"></span>
+      <div class="capas" data-capas="cemento"></div>
+      <div class="cod dat"><span>S-01</span><span>Sector principal</span></div>
+      <div class="pie dat">Planta Columbus · Cartagena</div>
+    </div>
+    <div class="cuerpo">
+      <div class="cab dat"><span>S-01 · Cemento</span><span>3 países</span></div>
+      <h2>Cemento</h2>
+      <p>Montaje electromecánico y obras civiles de líneas productoras de cemento, en Colombia y en el exterior.</p>
+      <div class="cifras"><div><b>7</b><span class="dat">Proyectos</span></div><div><b>9.470.000</b><span class="dat">HH en Columbus, la mayor</span></div></div>
+      <ul class="obras">
+        <li><a href="#"><strong>Planta Columbus</strong><small>Cementos Argos · Cartagena, CO</small><em class="dat"><b>5.250</b>t/día</em></a></li>
+        <li><a href="#"><strong>Nueva planta de Cementos Progreso</strong><small>thyssenkrupp · San Juan Sacatepéquez, GT</small><em class="dat"><b>1.200.000</b>HH</em></a></li>
+        <li><a href="#"><strong>Planta de cemento Chimborazo</strong><small>UTE Chimborazo · Riobamba, EC</small><em class="dat"><b>105 m</b>torre deslizada</em></a></li>
+      </ul>
+      <div class="enl"><a class="mas" href="#">Conocer el sector</a><a class="mas pro" href="#">Ver los 7 proyectos</a></div>
+    </div>
+  </section>
+
+  <section class="esc inv">
+    <div class="lamina">
+      <img src="../../src/assets/proyectos/puerto-bolivar/1.jpg" alt="">
+      <span class="tin"></span>
+      <div class="capas" data-capas="mineria"></div>
+      <div class="cod dat"><span>S-02</span><span>Sector principal</span></div>
+      <div class="pie dat">Obras marinas · Puerto Bolívar</div>
+    </div>
+    <div class="cuerpo">
+      <div class="cab dat"><span>S-02 · Minería</span><span>Puerto y planta</span></div>
+      <h2>Minería</h2>
+      <p>Obras de expansión de puertos y construcción de plantas de proceso para proyectos mineros.</p>
+      <div class="cifras"><div><b>3</b><span class="dat">Proyectos</span></div><div><b>750.000</b><span class="dat">HH en Buriticá</span></div></div>
+      <ul class="obras">
+        <li><a href="#"><strong>Planta de proceso Buriticá</strong><small>Continental Gold · Buriticá, CO</small><em class="dat"><b>750.000</b>HH</em></a></li>
+        <li><a href="#"><strong>Obras marinas en Puerto Bolívar</strong><small>Carbones del Cerrejón · La Guajira, CO</small><em class="dat"><b>1.100 m</b>banda</em></a></li>
+        <li><a href="#"><strong>Reparación del cargador de buques</strong><small>Carbones del Cerrejón</small><em class="dat"><b>3 días</b>antes</em></a></li>
+      </ul>
+      <div class="enl"><a class="mas" href="#">Conocer el sector</a><a class="mas pro" href="#">Ver los 3 proyectos</a></div>
+    </div>
+  </section>
+
+  <div class="w otros-sec">
+    <div class="cab2"><h2>Otros sectores <span>en los que trabajamos</span></h2><span class="dat" style="color:var(--mut)">S-03 a S-06</span></div>
+    <ul class="indice" id="indice"></ul>
+  </div>
+</main>
+
+<!-- ───────── 3 ───────── -->
+<div class="w rotulo dat"><b>3</b> Bloque de sectores del inicio, con la misma jerarquía (reemplaza la rejilla 3×2 aprobada)</div>
+<section class="ini">
+  <div class="w">
+    <div class="cab">
+      <div><div class="pod dat"><i></i><b>L-05</b><span>Sectores</span></div>
+        <h2>Industria<br><span>que conocemos por dentro</span></h2></div>
+      <a class="mas" href="#">Ver los sectores</a>
+    </div>
+    <div class="rej">
+      <a class="st mayor" href="#"><span class="st-cab dat"><span>S-01</span><span>Sector principal</span></span><div class="dib" data-ilu="cemento"></div>
+        <div class="linea"><div><h3>Cemento</h3><p>Plantas completas, molienda y torres, en Colombia y en el exterior.</p></div><div class="grande dat"><b>7</b>proyectos</div></div></a>
+      <a class="st mayor" href="#"><span class="st-cab dat"><span>S-02</span><span>Sector principal</span></span><div class="dib" data-ilu="mineria"></div>
+        <div class="linea"><div><h3>Minería</h3><p>Puertos de embarque y plantas de proceso para proyectos mineros.</p></div><div class="grande dat"><b>3</b>proyectos</div></div></a>
+      <a class="st menor" href="#"><div class="dib" data-ilu="agua-y-energia"></div><div><span class="dat" style="color:var(--sec)">S-03 · 3 proyectos</span><h3>Agua y energía</h3></div></a>
+      <a class="st menor" href="#"><div class="dib" data-ilu="petroleo-y-gas"></div><div><span class="dat" style="color:var(--sec)">S-04 · 2 proyectos</span><h3>Petróleo y gas</h3></div></a>
+      <a class="st menor" href="#"><div class="dib" data-ilu="infraestructura"></div><div><span class="dat" style="color:var(--sec)">S-05 · 2 proyectos</span><h3>Infraestructura</h3></div></a>
+      <a class="st menor" href="#"><div class="dib" data-ilu="industria"></div><div><span class="dat" style="color:var(--sec)">S-06 · 3 proyectos</span><h3>Industria</h3></div></a>
+    </div>
+  </div>
+</section>
+
+<script>
+const SUELO = 'M10 185 H290';
+const D = {
+  cemento: { e:[SUELO,'M60 185 V40 H112 V185','M60 70 H112 M60 100 H112 M60 130 H112 M60 160 H112','M60 40 L112 70 M112 70 L60 100 M60 100 L112 130 M112 130 L60 160','M74 48 h24 v10 l-12 10 l-12 -10 z M74 108 h24 v10 l-12 10 l-12 -10 z','M112 146 L232 166 M112 158 L232 178','M140 147 v14 M180 154 v14 M214 160 v14','M236 185 V82 H274 V185 M236 82 L255 62 L274 82'], x:[86,255], c:[[60,112,28],[236,274,52]] },
+  mineria: { e:[SUELO,'M30 185 V152 H150 V185','M24 152 H156 M90 152 V128 M40 140 H140','M150 176 L262 70 M156 184 L268 78','M162 170 L174 176 L186 150 L198 158 L210 128 L222 136 L234 106 L246 114 L258 84','M180 185 V158 M222 185 V132 M262 185 V96','M262 70 m-9 0 a9 9 0 1 0 18 0 a9 9 0 1 0 -18 0'], x:[90,222], c:[[30,150,194],[180,262,50]] },
+  'agua-y-energia': { e:[SUELO,'M40 185 V96 Q70 64 100 96 V185','M120 185 V96 Q150 64 180 96 V185','M40 120 H100 M120 120 H180','M100 150 H120 M100 160 H120','M200 185 V150 H260 V185 M210 150 V130 H250 V150','M268 185 V40 H278 V185'], x:[70,150,273], c:[[40,100,56],[120,180,56]] },
+  'petroleo-y-gas': { e:[SUELO,'M24 185 V112 H116 V185 M24 112 L70 96 L116 112','M24 136 H116 M24 160 H116','M136 185 V132 H196 V185 M136 132 L166 120 L196 132','M196 104 H290 M196 116 H290','M214 185 V104 M250 185 V104 M286 185 V104','M214 140 L250 116 M250 140 L286 116'], x:[70,166,250], c:[[24,116,86],[214,286,92]] },
+  infraestructura: { e:[SUELO,'M10 104 H290 M10 120 H290','M10 104 L30 120 L50 104 L70 120 L90 104 L110 120 L130 104 L150 120 L170 104 L190 120 L210 104 L230 120 L250 104 L270 120 L290 104','M74 120 V176 M86 120 V176 M64 176 H96 V185 H64 Z','M144 120 V176 M156 120 V176 M134 176 H166 V185 H134 Z','M214 120 V176 M226 120 V176 M204 176 H236 V185 H204 Z'], x:[80,150,220], c:[[80,150,92],[150,220,92]] },
+  industria: { e:[SUELO,'M40 185 V100 M260 185 V100 M40 100 H260','M40 100 L150 52 L260 100','M62 100 L62 90 M84 100 L84 81 M106 100 L106 71 M128 100 L128 62 M150 100 L150 52 M172 100 L172 62 M194 100 L194 71 M216 100 L216 81 M238 100 L238 90','M40 100 L84 81 M84 100 L128 62 M128 100 L150 52 M172 100 L150 52 M216 100 L172 62 M260 100 L216 81','M110 185 V140 H190 V185'], x:[40,150,260], c:[[40,260,40]] },
+};
+const cota = ([a,b,y]) => `M${a} ${y} H${b} M${a} ${y-5} V${y+5} M${b} ${y-5} V${y+5} M${a-3} ${y+3} L${a+3} ${y-3} M${b-3} ${y+3} L${b+3} ${y-3}`;
+const capa = (id, k) => { const d = D[id]; let i = 0;
+  if (k === 'eje') return d.x.map(x => `<line x1="${x}" y1="20" x2="${x}" y2="185"/><circle cx="${x}" cy="13" r="6"/>`).join('');
+  if (k === 'est') return d.e.map(p => `<path class="t" pathLength="1" style="--i:${i++}" d="${p}"/>`).join('');
+  return d.c.map(c => `<path class="t" pathLength="1" style="--i:${d.e.length + i++}" d="${cota(c)}"/>`).join(''); };
+const ilu = (id) => `<svg class="ilu" viewBox="0 0 300 200" aria-hidden="true"><g class="eje">${capa(id,'eje')}</g><g class="est">${capa(id,'est')}</g><g class="cot">${capa(id,'cot')}</g></svg>`;
+document.querySelectorAll('[data-ilu]').forEach(el => el.innerHTML = ilu(el.dataset.ilu));
+// Escenario: tres capas con paralaje distinto (firma de Sectores)
+document.querySelectorAll('[data-capas]').forEach(el => { const id = el.dataset.capas;
+  el.innerHTML = ['eje','est','cot'].map((k, n) => `<svg class="ilu capa-${n+1}" viewBox="0 0 300 200" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><g class="${k}">${capa(id,k)}</g></svg>`).join(''); });
+
+const SERV = [['A','Gestión',['EPC y llave en mano','Gerencia de proyectos']],['B','Construcción y montaje',['Obras civiles industriales','Montaje mecánico y tubería','Montaje eléctrico e instrumentación']],['C','Fabricación y mantenimiento',['Fabricación metalmecánica','Mantenimiento y paradas de planta']]];
+document.getElementById('lista-servicios').innerHTML = SERV.map(([l,g,xs]) => `<div class="letra dat"><b>${l}</b>${g}</div>` + xs.map(x => `<a href="#">${x}</a>`).join('')).join('');
+document.getElementById('lista-servicios-m').innerHTML = SERV.flatMap(([,,xs]) => xs).map(x => `<a href="#">${x}</a>`).join('');
+
+const OTROS = [['S-03','agua-y-energia','Agua y energía','Centrales térmicas y plantas de tratamiento de aguas residuales y de agua potable.',3],['S-04','petroleo-y-gas','Petróleo y gas','Obras civiles, prefabricación de tubería y líneas de flujo para pozos y plantas.',2],['S-05','infraestructura','Infraestructura','Terminales, vías de acceso y obras para los sectores siderúrgico y de infraestructura.',2],['S-06','industria','Industria','Plantas y ampliaciones para alimentos, consumo y manufactura.',3]];
+document.getElementById('indice').innerHTML = OTROS.map(([c,id,n,p,k]) => `<li><a href="#"><span class="cod dat">${c}</span><h3>${n}</h3><p>${p}</p><span class="n dat">${k} proyectos →</span><span class="mini">${ilu(id)}</span></a></li>`).join('');
+
+// Trazo al entrar y otra vez al pasar
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('trazar'); io.unobserve(e.target); } }), { threshold:.3 });
+document.querySelectorAll('.gran, .st, .lamina, .indice a').forEach(el => { io.observe(el);
+  el.addEventListener('mouseenter', () => { el.classList.remove('trazar'); void el.offsetWidth; el.classList.add('trazar'); }); });
+
+// Panel: abrir y cerrar
+const grupo = document.querySelector('.grupo-nav'), panel = document.getElementById('panel'), boton = document.querySelector('.desplegar');
+const poner = (v) => { grupo.toggleAttribute('data-abierto', v); panel.toggleAttribute('data-abierto', v); boton.setAttribute('aria-expanded', v); if (v) panel.querySelectorAll('.gran').forEach(g => { g.classList.remove('trazar'); void g.offsetWidth; g.classList.add('trazar'); }); };
+boton.addEventListener('click', () => poner(!panel.hasAttribute('data-abierto')));
+document.getElementById('alternar').addEventListener('click', () => poner(!panel.hasAttribute('data-abierto')));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') poner(false); });
+</script>
+</body></html>
