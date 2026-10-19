@@ -94,6 +94,11 @@ const es = {
   cifraCalidad: 'normas ISO',
   verProyectos: 'Ver proyectos',
   bajar: 'Bajar',
+  discCivil: 'Obra civil',
+  discMecanico: 'Montaje mecánico',
+  discElectrico: 'Montaje eléctrico',
+  discFabricacion: 'Fabricación',
+  discMantenimiento: 'Mantenimiento',
 };
 
 const en: Record<keyof typeof es, string> = {
@@ -188,6 +193,11 @@ const en: Record<keyof typeof es, string> = {
   cifraCalidad: 'ISO standards',
   verProyectos: 'View projects',
   bajar: 'Scroll',
+  discCivil: 'Civil works',
+  discMecanico: 'Mechanical installation',
+  discElectrico: 'Electrical installation',
+  discFabricacion: 'Fabrication',
+  discMantenimiento: 'Maintenance',
 };
 
 export type ClaveUI = keyof typeof es;

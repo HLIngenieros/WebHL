@@ -12,11 +12,16 @@ const [l1, l2, l3] = partirLema(lema);
 // El año del lema es texto (no se calcula): solo se le da su tinta de señal.
 const [antes, despues] = l3.split('1968');
 const ZONAS_X = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+// Textos de las etiquetas del gemelo (una por disciplina), para el script.
+const etiquetas = JSON.stringify({
+  civil: t(lang, 'discCivil'), mecanico: t(lang, 'discMecanico'), electrico: t(lang, 'discElectrico'),
+  fabricacion: t(lang, 'discFabricacion'), mantenimiento: t(lang, 'discMantenimiento'),
+});
 const ZONAS_Y = ['1', '2', '3', '4'];
 ---
 <section class="hero" aria-labelledby="lema">
   <div class="hero-reticula" aria-hidden="true"></div>
-  <div class="gemelo" data-estado="quieto" aria-hidden="true"><canvas></canvas></div>
+  <div class="gemelo" data-estado="quieto" data-etiquetas={etiquetas} aria-hidden="true"><canvas></canvas></div>
   <div class="hero-marco" aria-hidden="true">
     <div class="zonas-x voz-datos">{ZONAS_X.map((z) => <span>{z}</span>)}</div>
     <div class="zonas-y voz-datos">{ZONAS_Y.map((z) => <span>{z}</span>)}</div>
@@ -31,6 +36,8 @@ const ZONAS_Y = ['1', '2', '3', '4'];
   </div>
   <div class="hero-bajar voz-datos" aria-hidden="true"><i></i>{t(lang, 'bajar')}</div>
 </section>
+
+<script>import '../../scripts/gemelo.ts';</script>
 
 <style>
   .hero {

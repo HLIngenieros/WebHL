@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { cifrasInicio, partirLema } from '../src/lib/inicio';
+import { DISCIPLINAS, planta, proyectar, recortar } from '../src/lib/gemelo';
 import { auditar } from '../src/lib/contenido';
 
 // ── Datos del inicio (guía §12.1-3) ──
@@ -78,10 +79,10 @@ test.describe('hero del inicio', () => {
 });
 
 test.describe('barra inmersa', () => {
-  test.use({ viewport: { width: 1366, height: 800 } });
+  // Ventana baja: el hero mide al menos 600 px, así siempre hay hacia dónde bajar.
+  test.use({ viewport: { width: 1366, height: 300 } });
 
-  // Se activa en la Tarea 6: hoy el inicio no es más alto que el hero (no hay hacia dónde bajar).
-  test.fixme('está inmersa en el hero y pasa a la barra normal al bajar', async ({ page }) => {
+  test('está inmersa en el hero y pasa a la barra normal al bajar', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('header.barra')).toHaveClass(/inmersa/);
     await salirDelHero(page);
@@ -90,8 +91,7 @@ test.describe('barra inmersa', () => {
     await expect(page.locator('header.barra')).toHaveClass(/inmersa/);
   });
 
-  // Se activa en la Tarea 6: hoy el inicio no es más alto que el hero (no hay hacia dónde bajar).
-  test.fixme('en el hero, Hablar con HL va en la barra; al bajar, vuelve el botón flotante', async ({ page }) => {
+  test('en el hero, Hablar con HL va en la barra; al bajar, vuelve el botón flotante', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('header.barra .hablar-barra')).toBeVisible();
     await expect(page.locator('#hablar')).toBeHidden();
@@ -114,5 +114,68 @@ test.describe('barra inmersa', () => {
     await expect(page).toHaveURL(/\/$/);
     await expect(page.locator('header.barra')).toHaveClass(/inmersa/);
     expect(await page.evaluate(() => (window as any).__barraObs)).toBe(1);
+  });
+});
+
+// ── Gemelo digital (guía §9, §12.1-1) ──
+
+test.describe('geometría del gemelo', () => {
+  test('cada disciplina tiene piezas, además de grúa y suelo', () => {
+    const grupos = new Set(planta().map((s) => s[6]));
+    for (const d of DISCIPLINAS.filter((d) => d !== 'mantenimiento')) expect(grupos.has(d), d).toBe(true);
+    expect(grupos.has('grua')).toBe(true);
+    expect(grupos.has('suelo')).toBe(true);
+  });
+
+  test('el levantamiento recorta por niveles', () => {
+    expect(recortar([0, 0, 0, 0, 90, 0, 'mecanico'], 45)).toEqual([0, 0, 0, 0, 45, 0, 'mecanico']);
+    expect(recortar([0, 0, 0, 0, 90, 0, 'mecanico'], -1)).toBeNull();
+    expect(recortar([0, 50, 0, 0, 90, 0, 'mecanico'], 100)).toEqual([0, 50, 0, 0, 90, 0, 'mecanico']);
+    expect(recortar([-150, 0, 0, 150, 0, 0, 'suelo'], -1)).toEqual([-150, 0, 0, 150, 0, 0, 'suelo']);
+  });
+
+  test('el origen, sin giro, cae en el centro horizontal', () => {
+    const [x] = proyectar([0, 0, 0], { giro: 0, inclinacion: 0.3, ancho: 800, alto: 600 });
+    expect(x).toBeCloseTo(400, 5);
+  });
+
+  test('mantenimiento es la última disciplina', () => {
+    expect(DISCIPLINAS).toEqual(['civil', 'mecanico', 'electrico', 'fabricacion', 'mantenimiento']);
+  });
+});
+
+test.describe('gemelo en la página', () => {
+  test('el canvas es decorativo y arranca la animación', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('.gemelo')).toHaveAttribute('aria-hidden', 'true');
+    await expect(page.locator('.gemelo canvas')).toHaveCount(1);
+    await expect(page.locator('.gemelo')).toHaveAttribute('data-estado', 'animando', { timeout: 5000 });
+  });
+
+  test('se pausa fuera de pantalla', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 300 });
+    await page.goto('/');
+    await expect(page.locator('.gemelo')).toHaveAttribute('data-estado', 'animando', { timeout: 5000 });
+    await salirDelHero(page);
+    await expect(page.locator('.gemelo')).toHaveAttribute('data-estado', 'pausa');
+  });
+
+  test('con movimiento reducido queda quieto', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await page.waitForTimeout(1500);
+    await expect(page.locator('.gemelo')).toHaveAttribute('data-estado', 'quieto');
+  });
+
+  test('ir y volver con el router deja un solo bucle', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 800 });
+    await page.goto('/');
+    await expect(page.locator('.gemelo')).toHaveAttribute('data-estado', 'animando', { timeout: 5000 });
+    await page.locator('#nav-principal a[href="/nosotros/"]').click();
+    await expect(page).toHaveURL(/\/nosotros\/$/);
+    expect(await page.evaluate(() => (window as any).__gemeloBucles)).toBe(0);
+    await page.locator('header.barra a.logo').click();
+    await expect(page.locator('.gemelo')).toHaveAttribute('data-estado', 'animando', { timeout: 5000 });
+    expect(await page.evaluate(() => (window as any).__gemeloBucles)).toBe(1);
   });
 });
