@@ -1,0 +1,115 @@
+---
+// Soy parte de HL (guía §12.2-5): selector de nombres · lámina del retrato · fragmento de la cita. Todos
+// los testimonios están en el HTML (sin JS se leen en lista); con JS se ve uno y avanza cada 9 s hasta
+// que la persona elige. Solo los autorizados en lanzamiento; en desarrollo, marcados.
+import Foto from '../ui/Foto.astro';
+import Pod from '../Pod.astro';
+import Chip from '../ui/Chip.astro';
+import type { ImageMetadata } from 'astro';
+
+type T = { id: string; nombre: string; cargo: string; foto?: ImageMetadata; texto: string; anios?: number; aniosMas?: boolean; autorizado: boolean };
+interface Props { numero: string; titulo: string; etiquetaAnios: string; sinAutorizar: string; fuente: string; testimonios: T[] }
+const { numero, titulo, etiquetaAnios, sinAutorizar, fuente, testimonios } = Astro.props;
+---
+<section class="testimonios" aria-labelledby="testimonios-titulo" data-numero={numero}>
+  <div class="wrap">
+    <Pod forma="eje" letra={numero} nombre={titulo} />
+    <h2 id="testimonios-titulo" class="sr-only">{titulo}</h2>
+    {testimonios.some((x) => !x.autorizado) && <p class="aviso"><Chip tipo="high"><span class="chip-pendiente">{sinAutorizar}</span></Chip></p>}
+    <div class="testimonios-g">
+      <div class="testimonios-nombres" role="group" aria-label={titulo}>
+        {testimonios.map((x, i) => (
+          <button type="button" aria-pressed={i === 0 ? 'true' : 'false'} aria-controls={`testimonio-${x.id}`} data-i={i}>
+            <b>{x.nombre}</b><span class="voz-datos">{x.cargo}</span><i class="progreso" aria-hidden="true"></i>
+          </button>
+        ))}
+      </div>
+      <div class="testimonios-panel">
+        {testimonios.map((x, i) => (
+          <article id={`testimonio-${x.id}`} class:list={['testimonio', { activo: i === 0 }]}>
+            <figure class="lamina testimonio-foto">
+              {x.foto && <Foto src={x.foto} alt={x.nombre} sizes="(min-width: 900px) 30vw, 100vw" />}
+              <span class="lamina-tinte" aria-hidden="true"></span>
+              {x.anios && <figcaption class="testimonio-anios"><b>{x.aniosMas ? '+' : ''}{x.anios}</b> <span class="voz-datos">{etiquetaAnios}</span></figcaption>}
+            </figure>
+            <blockquote class="testimonio-cita">
+              <p>{x.texto}</p>
+              <footer class="voz-datos">{x.nombre} · {x.cargo}</footer>
+            </blockquote>
+          </article>
+        ))}
+      </div>
+    </div>
+    <p class="testimonios-fuente voz-datos">{fuente}</p>
+  </div>
+</section>
+
+<script>
+  // Avance automático cada 9 s; se detiene con hover, foco o al elegir. Sin él con movimiento reducido.
+  const PASO = 9000;
+  function iniciar() {
+    const sec = document.querySelector<HTMLElement>('.testimonios');
+    if (!sec || sec.dataset.listo) return;
+    sec.dataset.listo = '1';
+    const botones = [...sec.querySelectorAll<HTMLButtonElement>('.testimonios-nombres button')];
+    const articulos = [...sec.querySelectorAll<HTMLElement>('.testimonio')];
+    let actual = 0, temporizador = 0, detenido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const mostrar = (i: number) => {
+      actual = i;
+      botones.forEach((b, k) => b.setAttribute('aria-pressed', String(k === i)));
+      articulos.forEach((a, k) => a.classList.toggle('activo', k === i));
+      programar();
+    };
+    const programar = () => {
+      clearTimeout(temporizador);
+      sec.classList.toggle('detenido', detenido);
+      if (!detenido && botones.length > 1) temporizador = window.setTimeout(() => mostrar((actual + 1) % botones.length), PASO);
+    };
+    const parar = () => { detenido = true; programar(); };
+    botones.forEach((b, i) => b.addEventListener('click', () => { detenido = true; mostrar(i); }));
+    sec.addEventListener('pointerenter', parar);
+    sec.addEventListener('focusin', parar);
+    document.addEventListener('astro:before-swap', () => clearTimeout(temporizador), { once: true });
+    sec.classList.add('con-selector');
+    programar();
+  }
+  iniciar();
+  document.addEventListener('astro:page-load', iniciar);
+</script>
+
+<style>
+  .testimonios { padding-block: var(--s6); }
+  .aviso { margin: var(--s3) 0 0; }
+  .testimonios-g { display: grid; margin-top: var(--s4); border-block: var(--border) solid var(--line); }
+  @media (min-width: 900px) { .testimonios-g { grid-template-columns: 3fr 9fr; } }
+  .testimonios-nombres { display: grid; align-content: start; border-right: var(--border) solid var(--line); }
+  .testimonios-nombres button {
+    all: unset; position: relative; display: block; box-sizing: border-box; width: 100%; cursor: pointer;
+    padding: var(--s3) var(--s4) var(--s3) 0; border-bottom: var(--border) solid var(--line);
+  }
+  .testimonios-nombres button:last-child { border-bottom: 0; }
+  .testimonios-nombres button:focus-visible { outline: var(--focus-ring); outline-offset: -2px; }
+  .testimonios-nombres b { display: block; font-stretch: var(--wdth-subtitle); font-weight: var(--fw-subtitle); transition: color var(--t-rapido); }
+  .testimonios-nombres span { display: block; margin-top: var(--s1); color: var(--muted); }
+  .testimonios-nombres [aria-pressed='true'] b { color: var(--accent); }
+  .testimonios-nombres [aria-pressed='true']::before { content: ""; position: absolute; left: calc(-1 * var(--gutter)); top: 0; bottom: 0; width: 4px; background: var(--accent); }
+  .progreso { position: absolute; left: 0; right: var(--s4); bottom: -1px; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+  .con-selector:not(.detenido) [aria-pressed='true'] .progreso { animation: progreso 9s linear forwards; }
+  @keyframes progreso { to { transform: scaleX(1); } }
+  .testimonio { display: grid; }
+  @media (min-width: 900px) { .testimonio { grid-template-columns: 4fr 5fr; } }
+  :global(html.js) .con-selector .testimonio:not(.activo) { display: none; }
+  .testimonio + .testimonio { border-top: var(--border) solid var(--line); }
+  :global(html.js) .con-selector .testimonio + .testimonio { border-top: 0; }
+  .testimonio-foto { --proporcion: 4 / 5; --sec: var(--accent); margin: 0; max-width: none; }
+  .testimonio-anios { position: absolute; left: var(--s4); bottom: var(--s4); z-index: 1; color: var(--trazo-foto); }
+  .testimonio-anios b { display: block; font-stretch: var(--wdth-stat); font-family: var(--f-ancha); font-weight: var(--fw-negra); font-size: calc(var(--fs-stat) * 1.5); line-height: .85; }
+  .testimonio-cita { margin: 0; padding: var(--s5); display: flex; flex-direction: column; }
+  .testimonio-cita::before { content: "“"; display: block; height: var(--s5); color: var(--accent); font-stretch: var(--wdth-stat); font-family: var(--f-ancha); font-weight: var(--fw-negra); font-size: calc(var(--fs-stat) * 2.4); line-height: .8; }
+  .testimonio-cita p { margin: var(--s3) 0 0; font-size: var(--fs-lead); line-height: 1.6; }
+  .testimonio-cita footer { margin-top: auto; padding-top: var(--s4); color: var(--muted); }
+  .testimonios-fuente { margin: var(--s3) 0 0; color: var(--muted); }
+  :global(html.js) .testimonio.activo { animation: aparece-cita var(--t-aparece) var(--ease-izaje); }
+  @keyframes aparece-cita { from { opacity: 0; transform: translateY(6px); } }
+  @media (prefers-reduced-motion: reduce) { :global(html.js) .testimonio.activo { animation: none; } }
+</style>

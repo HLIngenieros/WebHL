@@ -6,7 +6,7 @@ test('navegar entre páginas no recarga el documento', async ({ page }) => {
   await page.evaluate(() => { (window as any).__marca = 1; });
   await page.locator('#nav-principal a[href="/nosotros/"]').click();
   await expect(page).toHaveURL(/\/nosotros\/$/);
-  await expect(page.locator('h1')).toHaveText('Nosotros');
+  await expect(page.locator('h1')).toHaveText(/Gente que cumple/);
   expect(await page.evaluate(() => (window as any).__marca)).toBe(1);
 });
 

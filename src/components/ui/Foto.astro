@@ -25,4 +25,6 @@ const widths = [480, 800].filter((w) => w <= src.width);
 <style>
   /* Global: Picture es otro componente y no recibe el atributo de alcance. */
   :global(img.foto) { display: block; width: 100%; max-width: 800px; height: auto; background: var(--line-soft); }
+  /* Dentro de una lámina la foto llena el cuadro (sin capa: las reglas de global.css están en capas). */
+  :global(.lamina img.foto) { height: 100%; }
 </style>

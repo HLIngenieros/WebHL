@@ -1,0 +1,69 @@
+---
+// Valores (guía §12.2-3): cinco ejes con burbuja A–E y un pictograma de plano por valor (guía §8). El eje
+// se pinta y la burbuja se llena al pasar; la frase siempre está visible.
+import Pod from '../Pod.astro';
+
+type Icono = 'ventana' | 'anillos' | 'calendario' | 'escalones' | 'casco';
+interface Props { numero: string; titulo: string; valores: { nombre: string; frase: string; icono: Icono }[] }
+const { numero, titulo, valores } = Astro.props;
+const LETRAS = ['A', 'B', 'C', 'D', 'E'];
+// Pictogramas en grilla de 64 (trazo en --sec, detalle .s en señal).
+const PICTO: Record<Icono, { d: string; s: string; c?: string }> = {
+  ventana: { d: 'M8 8H56V56H8ZM32 8V56M8 32H56', s: 'M14 26L26 14M38 50L50 38' },
+  anillos: { d: '', s: '', c: 'anillos' },
+  calendario: { d: 'M8 12H56V56H8ZM8 24H56M20 6V16M44 6V16', s: 'M20 40L28 48L46 32' },
+  escalones: { d: 'M6 58H58M10 58V46H22V58M26 58V34H38V58M42 58V22H54V58', s: 'M10 30L32 12L48 8M40 6L48 8L46 16' },
+  casco: { d: 'M10 42C10 24 20 14 32 14C44 14 54 24 54 42M4 42H60V48H4Z', s: 'M26 14V30M38 14V30M32 10V14' },
+};
+---
+<section class="valores-sec" aria-labelledby="valores-titulo" data-numero={numero}>
+  <div class="wrap">
+    <Pod forma="eje" letra={numero} nombre={titulo} />
+    <h2 id="valores-titulo" class="sr-only">{titulo}</h2>
+    <ul class="valores trazo">
+      {valores.map((v, i) => (
+        <li class="valor" style={`--i:${i}`}>
+          <span class="valor-eje" aria-hidden="true"></span>
+          <span class="valor-bur" aria-hidden="true">{LETRAS[i]}</span>
+          <svg class="valor-picto" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            {v.icono === 'anillos'
+              ? <><circle class="t" cx="24" cy="32" r="16" /><circle class="t s" style="--i:1" cx="40" cy="32" r="16" /></>
+              : <><path class="t" d={PICTO[v.icono].d} /><path class="t s" style="--i:1" d={PICTO[v.icono].s} /></>}
+          </svg>
+          <h3 class="valor-nombre">{v.nombre}</h3>
+          <p class="valor-frase">{v.frase}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .valores-sec { padding-block: var(--s6); }
+  .valores { list-style: none; margin: var(--s5) 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); border-top: var(--border) solid var(--line); }
+  @media (min-width: 520px) { .valores { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 900px) { .valores { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+  .valor { position: relative; padding: var(--s5) var(--s3) var(--s4) 0; }
+  .valor-eje { position: absolute; left: 14px; top: -14px; bottom: 0; width: 1px; background: var(--line); }
+  .valor-eje::after { content: ""; position: absolute; inset: 0; background: var(--accent); transform: scaleY(0); transform-origin: top; transition: transform .6s var(--ease-plano); }
+  .valor-bur {
+    position: absolute; left: 0; top: -14px; z-index: 1; width: 29px; height: 29px; border-radius: 50%; box-sizing: border-box;
+    border: 1.5px solid var(--accent); background: var(--bg); color: var(--accent); display: grid; place-items: center;
+    font-weight: var(--fw-title); font-size: var(--fs-chip); transition: background-color var(--t-rapido), color var(--t-rapido);
+  }
+  .valor-picto { display: block; width: 72px; height: 72px; margin: 0 0 var(--s4) 34px; overflow: visible; }
+  .valor-picto .t { fill: none; stroke: var(--accent); stroke-width: 1.6; }
+  .valor-picto .s { stroke: var(--signal); }
+  .valor-nombre {
+    margin: 0 0 0 34px; font-stretch: var(--wdth-data); font-family: var(--f); font-weight: var(--fw-title);
+    font-size: var(--fs-h3); letter-spacing: .06em; text-transform: uppercase; line-height: 1.1; transition: color var(--t-rapido);
+    overflow-wrap: anywhere;
+  }
+  .valor-frase { margin: var(--s3) 0 0 34px; color: var(--muted); font-size: var(--fs-sm); line-height: 1.5; max-width: 22ch; }
+  .valor:hover .valor-eje::after { transform: scaleY(1); }
+  .valor:hover .valor-bur { background: var(--accent); color: var(--accent-ink); }
+  .valor:hover .valor-nombre { color: var(--accent); }
+  :global(html.js) .valor:hover .valor-picto .t { animation: picto-retraza .9s var(--ease-plano); animation-delay: calc(var(--i, 0) * 90ms); }
+  @keyframes picto-retraza { from { clip-path: inset(0 100% 0 0); } }
+  @media (prefers-reduced-motion: reduce) { :global(html.js) .valor:hover .valor-picto .t { animation: none; } }
+</style>

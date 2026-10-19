@@ -1,0 +1,53 @@
+---
+// Mosaico de cabecera (guía §8): 6 fotos de obra 4:5 en tres columnas desfasadas, en lámina; las
+// columnas se desplazan a velocidades distintas con el scroll (CSS, sin JS). Ninguna obra discreta.
+// Clases mc-*: col-* son utilidades de Tailwind (grid-column).
+import Foto from '../ui/Foto.astro';
+import type { ImageMetadata } from 'astro';
+
+interface Props { fotos: { src: ImageMetadata; alt: string; codigo: string }[] }
+const { fotos } = Astro.props;
+const columnas = [0, 1, 2].map((c) => fotos.filter((_, i) => i % 3 === c));
+---
+<div class="mosaico" aria-hidden="true">
+  {columnas.map((col, c) => (
+    <div class={`mosaico-col mc-${c}`}>
+      {col.map((f, k) => (
+        <figure class="lamina mosaico-foto" style={`--i:${c + k * 3}`}>
+          <Foto src={f.src} alt="" sizes="(min-width: 900px) 18vw, 45vw" />
+          <span class="lamina-tinte"></span>
+          <figcaption class="voz-datos">{f.codigo}</figcaption>
+        </figure>
+      ))}
+    </div>
+  ))}
+</div>
+
+<style>
+  .mosaico { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s2); }
+  .mosaico-col { display: grid; gap: var(--s2); align-content: start; }
+  .mc-1 { margin-top: var(--s6); }
+  .mc-2 { margin-top: calc(-1 * var(--s4)); }
+  .mosaico-foto { --proporcion: 4 / 5; margin: 0; }
+  .mosaico-foto::after { content: ""; position: absolute; inset: var(--s2); border: var(--border) solid color-mix(in srgb, var(--trazo-foto) 35%, transparent); pointer-events: none; }
+  /* Placa grafito: el código se lee sobre cualquier tinte (en oscuro el acento es claro). */
+  figcaption { position: absolute; left: var(--s2); bottom: var(--s2); z-index: 1; padding: 1px 5px; background: color-mix(in srgb, var(--hl-grafito) 78%, transparent); color: var(--hl-blanco); font-size: var(--fs-chip); }
+  /* Entrada: las fotos suben escalonadas (Izaje). */
+  :global(html.js) .mosaico-foto { animation: mosaico-iza var(--t-izaje) var(--ease-izaje) both; animation-delay: calc(var(--i) * 70ms + 150ms); }
+  @keyframes mosaico-iza { from { opacity: 0; transform: translateY(var(--s5)); } }
+  /* Paralaje leve de columnas ligado al scroll (sin soporte: quieto). */
+  @supports (animation-timeline: scroll()) {
+    @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+      .mc-0 { animation: mosaico-sube linear both; animation-timeline: scroll(root); animation-range: 0 100vh; }
+      .mc-2 { animation: mosaico-baja linear both; animation-timeline: scroll(root); animation-range: 0 100vh; }
+      @keyframes mosaico-sube { to { transform: translateY(calc(-1 * var(--s6))); } }
+      @keyframes mosaico-baja { to { transform: translateY(var(--s5)); } }
+    }
+  }
+  @media (max-width: 899.98px) {
+    .mosaico { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .mosaico-col { display: contents; }
+    .mc-1, .mc-2 { margin-top: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { :global(html.js) .mosaico-foto { animation: none; } }
+</style>

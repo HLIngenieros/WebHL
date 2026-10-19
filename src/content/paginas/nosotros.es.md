@@ -23,8 +23,8 @@ indicadores:
 # Valores: la lista de los 5 íconos de la página Grupo HL; la frase de cada uno, del texto "Quiénes somos".
 valores:
   - { nombre: Transparencia, frase: En todos nuestros negocios., icono: ventana }
-  - { nombre: Compromiso, frase: Con clientes, proveedores y subcontratistas., icono: anillos }
-  - { nombre: Cumplimiento, frase: De cronogramas, especificaciones y presupuestos., icono: calendario }
+  - { nombre: Compromiso, frase: "Con clientes, proveedores y subcontratistas.", icono: anillos }
+  - { nombre: Cumplimiento, frase: "De cronogramas, especificaciones y presupuestos.", icono: calendario }
   - { nombre: Desarrollo, frase: Profesional y económico de nuestros trabajadores., icono: escalones }
   - { nombre: Seguridad, frase: Altos estándares de seguridad industrial en todos nuestros proyectos., icono: casco }
 # Presencia: texto "Ejecutamos los proyectos de forma diferente" del inicio actual (contenido/institucional.md §1).

@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { hitos, tratamiento, avance, publicables } from '../src/lib/nosotros';
+import AxeBuilder from '@axe-core/playwright';
+import { hitos, tratamiento, avance, publicables, numerar } from '../src/lib/nosotros';
 import { auditar, type Pendiente } from '../src/lib/contenido';
 
 // ── Contenido de Nosotros (guía §12.2-12.3) ──
@@ -68,5 +69,107 @@ test.describe('secciones que dependen de autorización', () => {
     const ps = auditar({ historia: HISTORIA } as never, { modo: 'desarrollo' });
     expect(ps.filter((p) => p.coleccion === 'historia' && p.campo === 'anio')).toEqual([]);
     expect(ps.find((p) => p.coleccion === 'historia' && p.campo === 'fotos')).toMatchObject({ tipo: 'aviso', bloquea: false });
+  });
+});
+
+test('numerar(): las secciones visibles se numeran sin saltos', () => {
+  const ids = ['mision', 'valores', 'presencia', 'testimonios', 'asociadas'];
+  expect(numerar(ids, { testimonios: false, asociadas: false })).toEqual([
+    { id: 'mision', n: '01' }, { id: 'valores', n: '02' }, { id: 'presencia', n: '03' },
+  ]);
+  expect(numerar(ids, {}).map((x) => x.n)).toEqual(['01', '02', '03', '04', '05']);
+});
+
+// ── Página Nosotros (guía §12.2) ──
+
+test.describe('página Nosotros', () => {
+  test('un solo h1, misión y visión de nosotros.es.md', async ({ page }) => {
+    await page.goto('/nosotros/');
+    await expect(page.locator('h1')).toHaveCount(1);
+    expect((await page.locator('h1').textContent())!.replace(/\s+/g, ' ').trim()).toBe('Gente que cumple desde 1968');
+    await expect(page.locator('.mision')).toContainText('Gestionar proyectos de construcción generando valor y confianza.');
+    await expect(page.locator('.vision')).toContainText('con la entrega anticipada de sus proyectos');
+  });
+
+  test('cuatro indicadores con su valor escrito', async ({ page }) => {
+    await page.goto('/nosotros/');
+    expect((await page.locator('.indicador-valor').allTextContents()).map((v) => v.trim())).toEqual(['1', '3', '−64', '−72']);
+  });
+
+  test('cinco valores, cada uno con su pictograma y su frase', async ({ page }) => {
+    await page.goto('/nosotros/');
+    const valores = page.locator('.valor');
+    await expect(valores).toHaveCount(5);
+    await expect(page.locator('.valor svg[aria-hidden="true"]')).toHaveCount(5);
+    await expect(valores.nth(0)).toContainText('Transparencia');
+    await expect(valores.nth(0)).toContainText('En todos nuestros negocios.');
+    // Frases con comas: no se cortan (YAML en línea).
+    await expect(valores.nth(1)).toContainText('Con clientes, proveedores y subcontratistas.');
+    await expect(valores.nth(2)).toContainText('De cronogramas, especificaciones y presupuestos.');
+  });
+
+  test('la descripción de ECOHL se lee completa', async ({ page }) => {
+    await page.goto('/nosotros/');
+    await expect(page.locator('.asociada').first()).toContainText('Servicios EPCM, gerencias de proyecto, interventoría, comisionamiento, administración de contratos y gerencia de riesgos.');
+  });
+
+  test('siete estacas con los nombres de país', async ({ page }) => {
+    await page.goto('/nosotros/');
+    expect(await page.locator('.presencia .estaca-pais').allTextContents()).toEqual(
+      ['Colombia', 'Panamá', 'Costa Rica', 'República Dominicana', 'Guatemala', 'Bolivia', 'Ecuador']);
+  });
+
+  test('las secciones numeradas van sin saltos', async ({ page }) => {
+    await page.goto('/nosotros/');
+    const ns = await page.locator('[data-numero]').evaluateAll((xs) => xs.map((x) => (x as HTMLElement).dataset.numero));
+    expect(ns).toEqual(ns.map((_, i) => String(i + 1).padStart(2, '0')));
+  });
+
+  test('en desarrollo se ven los 4 testimonios marcados sin autorizar y las 6 asociadas por confirmar', async ({ page }) => {
+    await page.goto('/nosotros/');
+    await expect(page.locator('.testimonios [aria-pressed]')).toHaveCount(4);
+    await expect(page.locator('.testimonios .chip-pendiente')).toContainText('sin autorizar');
+    await expect(page.locator('.asociada')).toHaveCount(6);
+    await expect(page.locator('.asociadas .chip-pendiente')).toContainText('por confirmar');
+  });
+
+  test('elegir un testimonio muestra su fragmento', async ({ page }) => {
+    await page.goto('/nosotros/');
+    const botones = page.locator('.testimonios [aria-pressed]');
+    await botones.nth(2).click();
+    await expect(botones.nth(2)).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.testimonio.activo .testimonio-cita')).toContainText('Han pasado más de 15 años');
+  });
+
+  test('el selector avanza solo cada 9 s', async ({ page }) => {
+    await page.clock.install();
+    await page.goto('/nosotros/');
+    const botones = page.locator('.testimonios [aria-pressed]');
+    await expect(botones.nth(0)).toHaveAttribute('aria-pressed', 'true');
+    await page.clock.fastForward(9500);
+    await expect(botones.nth(1)).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  test('con movimiento reducido el selector no avanza', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.clock.install();
+    await page.goto('/nosotros/');
+    await page.clock.fastForward(20000);
+    await expect(page.locator('.testimonios [aria-pressed]').nth(0)).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  for (const tema of ['light', 'dark'] as const) {
+    test(`sin violaciones de accesibilidad (${tema})`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
+      await page.goto('/nosotros/');
+      const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+      expect(r.violations.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);
+    });
+  }
+
+  test('a 360 px sin scroll horizontal', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 740 });
+    await page.goto('/nosotros/');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
   });
 });

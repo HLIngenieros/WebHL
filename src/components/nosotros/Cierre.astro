@@ -1,0 +1,39 @@
+---
+// Cierre de Nosotros (guía §12.2-7): dos bloques a todo el ancho con foto de fondo y barrido de señal.
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+
+type B = { href: string; dato: string; antes: string; clave: string; foto?: ImageMetadata };
+interface Props { bloques: [B, B] }
+const { bloques } = Astro.props;
+const fondos = await Promise.all(bloques.map((b) => (b.foto ? getImage({ src: b.foto, width: 800, format: 'webp' }) : undefined)));
+---
+<nav class="cierre" aria-label={bloques.map((b) => `${b.antes} ${b.clave}`).join(' · ')}>
+  {bloques.map((b, i) => (
+    <a href={b.href} class={`cierre-${i}`}>
+      {fondos[i] && <span class="cierre-foto" aria-hidden="true" style={`background-image:url(${fondos[i]!.src})`}></span>}
+      <span class="cierre-dato voz-datos">{b.dato}</span>
+      <span class="cierre-titulo">{b.antes} <span>{b.clave}</span></span>
+      <span class="cierre-flecha" aria-hidden="true">→</span>
+    </a>
+  ))}
+</nav>
+
+<style>
+  .cierre { display: grid; }
+  @media (min-width: 760px) { .cierre { grid-template-columns: 1fr 1fr; } }
+  a { position: relative; isolation: isolate; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: var(--s5); min-height: 280px; padding: var(--s6) var(--gutter); color: var(--hl-blanco); text-decoration: none; }
+  .cierre-0 { background: var(--hl-azul); }
+  .cierre-1 { background: var(--hl-grafito); }
+  .cierre-foto { position: absolute; inset: 0; z-index: -2; background-size: cover; background-position: center; filter: grayscale(1) contrast(1.1); opacity: .28; mix-blend-mode: luminosity; transition: transform 1.4s var(--ease-izaje), opacity var(--t-aparece); }
+  a::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--hl-senal); transform: translateY(101%); transition: transform .5s var(--ease-plano); }
+  a:is(:hover, :focus-visible)::before { transform: none; }
+  a:is(:hover, :focus-visible) { color: var(--hl-grafito); }
+  a:hover .cierre-foto { transform: scale(1.06); opacity: .12; }
+  a:focus-visible { outline: 2px solid var(--hl-senal); outline-offset: -6px; }
+  .cierre-dato { opacity: .85; }
+  .cierre-titulo { font-stretch: var(--wdth-stat); font-family: var(--f-ancha); font-weight: var(--fw-negra); font-size: var(--fs-h1); line-height: .95; letter-spacing: -.02em; }
+  .cierre-titulo span { display: block; font-weight: var(--fw-fina); }
+  .cierre-flecha { font-size: var(--fs-h2); transition: transform .45s var(--ease-plano); }
+  a:hover .cierre-flecha { transform: translateX(var(--s3)); }
+</style>

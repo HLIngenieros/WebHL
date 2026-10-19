@@ -1,0 +1,64 @@
+---
+// Presencia (guía §12.2-4, fondo grafito): siete estacas de topografía, una por país con obra, que caen
+// escalonadas al entrar; nombre del país inclinado arriba y código abajo.
+import Pod from '../Pod.astro';
+
+interface Props { numero: string; titulo: string; presencia: { titulo: string; clave: string; texto: string }; paises: { codigo: string; nombre: string }[] }
+const { numero, titulo, presencia, paises } = Astro.props;
+const ALTURAS = [210, 150, 120, 165, 110, 95, 130];
+---
+<section class="presencia" aria-labelledby="presencia-titulo" data-numero={numero}>
+  <div class="wrap">
+    <Pod forma="eje" letra={numero} nombre={titulo} />
+    <div class="presencia-g">
+      <div>
+        <h2 id="presencia-titulo" class="presencia-titulo">{presencia.titulo} <span>{presencia.clave}</span></h2>
+        <p class="presencia-texto">{presencia.texto}</p>
+      </div>
+      <ul class="estacas-paises izaje">
+        {paises.map((p, i) => (
+          <li style={`--i:${i}; --alto:${ALTURAS[i % ALTURAS.length]}px`}>
+            <span class="estaca-pais">{p.nombre}</span>
+            <span class="estaca-cabeza" aria-hidden="true"></span>
+            <span class="estaca-palo" aria-hidden="true"></span>
+            <span class="estaca-cod voz-datos" aria-hidden="true">{p.codigo}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .presencia { background: var(--hl-grafito); color: var(--hl-blanco); padding-block: var(--s6); overflow: hidden; }
+  .presencia :global(.pod-eje) { --sec: var(--hl-azul-claro); }
+  .presencia :global(.pod-bur) { background: var(--hl-grafito); }
+  .presencia-g { display: grid; gap: var(--s6); margin-top: var(--s5); align-items: end; }
+  @media (min-width: 900px) { .presencia-g { grid-template-columns: 5fr 7fr; } }
+  .presencia-titulo { margin: 0; color: var(--hl-blanco); font-size: var(--fs-h1); line-height: .95; }
+  .presencia-titulo span { font-weight: var(--fw-fina); }
+  .presencia-texto { margin: var(--s4) 0 0; color: var(--hl-concreto); opacity: .82; max-width: 44ch; font-size: var(--fs-lead); line-height: 1.6; }
+  .estacas-paises {
+    list-style: none; margin: 0; padding: var(--s7) var(--s2) 0; display: flex; justify-content: space-between; align-items: flex-end;
+    height: 300px; box-sizing: border-box; border-bottom: var(--border) solid color-mix(in srgb, var(--hl-acero) 40%, transparent);
+  }
+  .estacas-paises li { position: relative; display: flex; flex-direction: column; align-items: center; width: 12%; }
+  .estaca-pais {
+    position: absolute; bottom: calc(100% + var(--s2)); left: 50%; white-space: nowrap; transform: rotate(-40deg); transform-origin: left bottom;
+    color: var(--hl-concreto); font-size: var(--fs-sm); font-weight: var(--fw-strong);
+  }
+  .estaca-cabeza { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 13px solid var(--hl-senal); }
+  .estaca-palo { width: 1.5px; height: var(--alto); background: var(--hl-senal); }
+  .estaca-cod { position: absolute; top: calc(100% + var(--s2)); color: var(--hl-senal); }
+  /* Las estacas caen escalonadas (Izaje, revela.ts). */
+  :global(html.js) .estacas-paises li { transition: transform var(--t-izaje) var(--ease-izaje), opacity var(--t-izaje); transition-delay: calc(var(--i) * 80ms); }
+  :global(html.js) .estacas-paises:not(.visible) li { transform: translateY(-60px); opacity: 0; }
+  :global(html.js) .estacas-paises.izaje:not(.visible) { opacity: 1; transform: none; }
+  :global(html.sin-revela) .estacas-paises li { transform: none; opacity: 1; }
+  @media (max-width: 759.98px) {
+    .estacas-paises { height: 240px; }
+    .estaca-pais { font-size: var(--fs-xs); }
+    .estaca-palo { height: calc(var(--alto) * .6); }
+  }
+  @media (prefers-reduced-motion: reduce) { :global(html.js) .estacas-paises li { transform: none; opacity: 1; transition: none; } }
+</style>

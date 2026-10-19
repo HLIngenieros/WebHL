@@ -13,6 +13,7 @@ import Servicio from '../plantillas/Servicio.astro';
 import Sectores from '../plantillas/Sectores.astro';
 import Sector from '../plantillas/Sector.astro';
 import Inicio from '../plantillas/Inicio.astro';
+import Nosotros from '../plantillas/Nosotros.astro';
 
 export async function getStaticPaths() {
   // getStaticPaths corre aislado del resto del archivo: sus constantes van aquí dentro.
@@ -43,6 +44,8 @@ const titulo = 'clave' in props ? (props.clave === 'inicio' ? 'HL Ingenieros' : 
   : <Sector id={props.id!} lang={lang} alterno={props.alterno} />
 ) : props.clave === 'inicio' ? (
   <Inicio lang={lang} alterno={RUTAS.inicio[lang === 'es' ? 'en' : 'es']} />
+) : props.clave === 'nosotros' ? (
+  <Nosotros lang={lang} alterno={RUTAS.nosotros[lang === 'es' ? 'en' : 'es']} />
 ) : (
   <Base titulo={titulo} lang={lang}>
     <section class="wrap py-s7">

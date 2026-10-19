@@ -119,6 +119,7 @@ const historia = defineCollection({
 const testimonios = defineCollection({
   loader: file('src/content/testimonios.yaml'),
   schema: ({ image }) => z.object({
+    orden: z.number(), // la colección se lee por id: el orden de la página va aquí
     nombre: z.string(),
     cargo: texto,
     foto: image().optional(),

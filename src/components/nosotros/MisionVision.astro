@@ -1,0 +1,93 @@
+---
+// Misión y visión (guía §12.2-2): lámina con el equipo sobre el plano y su trazo, misión en grande,
+// cota "Visión", la visión con sus dos promesas marcadas y los indicadores que las respaldan.
+import Foto from '../ui/Foto.astro';
+import Pod from '../Pod.astro';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  numero: string; titulo: string; tituloVision: string; altFoto: string;
+  mision: { antes: string; clave: string }; vision: { texto: string; promesas: string[] };
+  foto?: ImageMetadata;
+  indicadores: { valor: number; signo?: string; unidad: string; etiqueta: string; fuente: string }[];
+}
+const { numero, titulo, tituloVision, altFoto, mision, vision, foto, indicadores } = Astro.props;
+// La visión con sus promesas marcadas (texto real; solo se envuelven las frases).
+const partes: { t: string; marca: boolean }[] = [];
+let resto = vision.texto;
+for (const p of vision.promesas) {
+  const i = resto.indexOf(p);
+  if (i < 0) continue;
+  partes.push({ t: resto.slice(0, i), marca: false }, { t: p, marca: true });
+  resto = resto.slice(i + p.length);
+}
+partes.push({ t: resto, marca: false });
+---
+<section class="mv" aria-labelledby="mv-titulo" data-numero={numero}>
+  <div class="wrap">
+    <Pod forma="eje" letra={numero} nombre={titulo} />
+    <h2 id="mv-titulo" class="sr-only">{titulo}</h2>
+    <div class="mv-g">
+      {foto && (
+        <figure class="lamina mv-lamina trazo">
+          <Foto src={foto} alt={altFoto} sizes="(min-width: 900px) 45vw, 100vw" />
+          <span class="lamina-tinte" aria-hidden="true"></span>
+          <svg class="mv-trazo" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <path class="t" d="M260 470L700 455L720 560L270 585Z" />
+            <path class="t" style="--i:2" d="M260 440V420M700 425V405M260 430H700" />
+            <path class="t" style="--i:1" d="M40 40H120M40 40V120M760 560H680M760 560V480" />
+          </svg>
+        </figure>
+      )}
+      <p class="mision"><span>{mision.antes}</span> <b>{mision.clave}</b></p>
+    </div>
+    <div class="mv-cota cota" aria-hidden="true"><span class="regla"></span><i class="voz-datos">{tituloVision}</i></div>
+    <p class="vision">{partes.map((x) => (x.marca ? <mark>{x.t}</mark> : x.t))}</p>
+    <ul class="indicadores cota">
+      {indicadores.map((x, i) => (
+        <li style={`--i:${i}`}>
+          <p class="indicador-num"><span class="indicador-valor">{x.signo ?? ''}{x.valor}</span> <span class="indicador-unidad">{x.unidad}</span></p>
+          <span class="regla indicador-regla" aria-hidden="true"></span>
+          <p class="indicador-etiqueta">{x.etiqueta}</p>
+          <p class="indicador-fuente voz-datos">{x.fuente}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .mv { background: var(--paper); padding-block: var(--s6); }
+  .mv-g { display: grid; gap: var(--s5); align-items: center; margin-top: var(--s5); }
+  @media (min-width: 900px) { .mv-g { grid-template-columns: 1fr 1fr; gap: var(--s6); } }
+  .mv-lamina { --proporcion: 4 / 3; margin: 0; --sec: var(--accent); }
+  .mv-trazo { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .mv-trazo .t { fill: none; stroke: var(--trazo-foto); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+  @media (hover: hover) { .mv-lamina:hover .mv-trazo { opacity: 0; transition: opacity var(--t-aparece); } }
+  .mision { margin: 0; font-stretch: var(--wdth-stat); font-family: var(--f-ancha); font-size: calc(var(--fs-lema) * .7); line-height: 1; letter-spacing: -.025em; text-wrap: balance; }
+  .mision span { font-weight: var(--fw-fina); }
+  .mision b { font-weight: var(--fw-negra); color: var(--accent); }
+  .mv-cota { position: relative; height: 12px; margin: var(--s6) 0 var(--s5); border-inline: 1px solid var(--accent); }
+  .mv-cota .regla { position: absolute; left: 0; right: 0; top: 5.5px; height: 1px; background: var(--accent); transform-origin: left; }
+  :global(html.js) .mv-cota:not(.visible) .regla { transform: scaleX(0); }
+  :global(html.js) .mv-cota .regla { transition: transform var(--t-cota) var(--ease-plano); }
+  :global(html.sin-revela) .mv-cota .regla { transform: none; }
+  .mv-cota i { position: absolute; left: 50%; top: -9px; transform: translateX(-50%); padding: 0 var(--s2); background: var(--paper); color: var(--accent); font-style: normal; }
+  .vision { margin: 0; max-width: 46ch; font-size: var(--fs-h3); line-height: 1.45; }
+  .vision mark { background: none; color: inherit; font-weight: var(--fw-strong); box-shadow: inset 0 -.38em 0 var(--signal-soft); }
+  .indicadores { list-style: none; margin: var(--s5) 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: var(--border) solid var(--line); }
+  @media (min-width: 900px) { .indicadores { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .indicadores li { position: relative; padding: var(--s4) var(--s4) 0 0; }
+  .indicadores li + li { padding-left: var(--s4); border-left: var(--border) solid var(--line); }
+  @media (max-width: 899.98px) { .indicadores li + li:nth-child(3) { padding-left: 0; border-left: 0; } }
+  .indicador-num { margin: 0; color: var(--accent); }
+  .indicador-valor { font-stretch: var(--wdth-stat); font-family: var(--f-ancha); font-weight: var(--fw-negra); font-size: var(--fs-stat); line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .indicador-unidad { font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: var(--fs-data); }
+  .indicador-regla { display: block; height: 1px; width: 100%; margin: var(--s3) 0 var(--s2); background: var(--accent); transform-origin: left; }
+  :global(html.js) .indicadores:not(.visible) .indicador-regla { transform: scaleX(0); }
+  :global(html.js) .indicador-regla { transition: transform var(--t-cota) var(--ease-plano); transition-delay: calc(var(--i) * 120ms); }
+  :global(html.sin-revela) .indicadores .indicador-regla { transform: none; }
+  .indicador-etiqueta { margin: 0; color: var(--muted); font-size: var(--fs-sm); line-height: 1.4; }
+  .indicador-fuente { margin: var(--s1) 0 0; color: var(--muted); }
+  @media (prefers-reduced-motion: reduce) { :global(html.js) :is(.mv-cota .regla, .indicador-regla) { transform: none; transition: none; } }
+</style>

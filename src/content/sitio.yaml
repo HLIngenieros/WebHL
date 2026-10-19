@@ -19,7 +19,7 @@
     - nombre: ECOHL
       logo: ../assets/grupo/ecohl.png
       area: { es: Gerencia · EPCM, en: Management · EPCM }
-      descripcion: { es: Servicios EPCM, gerencias de proyecto, interventoría, comisionamiento, administración de contratos y gerencia de riesgos. }
+      descripcion: { es: "Servicios EPCM, gerencias de proyecto, interventoría, comisionamiento, administración de contratos y gerencia de riesgos." }
       aprobada: false
     - { nombre: HL Infraestructura, logo: ../assets/grupo/hl-infraestructura.png, area: { es: Infraestructura, en: Infrastructure }, aprobada: false }
     - { nombre: HL Panamá, logo: ../assets/grupo/hl-panama.png, area: { es: Panamá, en: Panama }, aprobada: false }

@@ -1,0 +1,91 @@
+---
+// Nosotros (guía §12.2, especificación §5): cabecera con mosaico, línea del tiempo (Tarea 11), misión y
+// visión, valores, presencia, testimonios, empresas asociadas y cierre. Las secciones sin contenido
+// publicable se ocultan y la numeración se recalcula.
+import Base from '../layouts/Base.astro';
+import Pod from '../components/Pod.astro';
+import Mosaico from '../components/nosotros/Mosaico.astro';
+import MisionVision from '../components/nosotros/MisionVision.astro';
+import Valores from '../components/nosotros/Valores.astro';
+import Presencia from '../components/nosotros/Presencia.astro';
+import Testimonios from '../components/nosotros/Testimonios.astro';
+import Asociadas from '../components/nosotros/Asociadas.astro';
+import Cierre from '../components/nosotros/Cierre.astro';
+import { cargar } from '../lib/datos';
+import { txt } from '../lib/contenido';
+import { numerar, publicables } from '../lib/nosotros';
+import { ruta, type Lang } from '../i18n/rutas';
+import { PAISES, t } from '../i18n/ui';
+import type { ImageMetadata } from 'astro';
+
+interface Props { lang: Lang; alterno: string }
+const { lang, alterno } = Astro.props;
+const { datos } = await cargar();
+const modo = import.meta.env.MODE === 'lanzamiento' ? 'lanzamiento' : 'desarrollo';
+const pagina = (datos.paginas.find((p) => p.data.pagina === 'nosotros' && p.data.lang === lang)
+  ?? datos.paginas.find((p) => p.data.pagina === 'nosotros' && p.data.lang === 'es'))!.data;
+const sitio = datos.sitio[0].data;
+
+// Fotos de obra: proyecto y número de foto (ninguna discreta, D6).
+const fotoDe = (id: string, n: number) => {
+  const p = datos.proyectos.find((x) => x.id === id);
+  if (!p || p.data.visibilidad === 'discreta') return undefined;
+  return { src: p.data.fotos[n - 1]?.archivo as ImageMetadata | undefined, lugar: p.data.ciudad ?? p.data.region ?? '' };
+};
+const MOSAICO: [string, number][] = [
+  ['planta-chimborazo', 1], ['digestores-ptar-bello', 2], ['planta-diana-pet-food', 1],
+  ['molienda-de-cemento-sonson', 1], ['ptar-salitre', 3], ['planta-cementos-progreso', 2],
+];
+const mosaico = MOSAICO.map(([id, n]) => fotoDe(id, n)).filter((f): f is { src: ImageMetadata; lugar: string } => !!f?.src)
+  .map((f, i) => ({ src: f.src, alt: '', codigo: `HL-${String(i + 1).padStart(2, '0')} · ${f.lugar}` }));
+
+const testimonios = publicables([...datos.testimonios].sort((a, b) => a.data.orden - b.data.orden).map((x) => ({
+  id: x.id, nombre: x.data.nombre, cargo: txt(x.data.cargo, lang)!, foto: x.data.foto as ImageMetadata | undefined,
+  texto: txt(x.data.fragmento, lang) ?? txt(x.data.cita, lang)!, anios: x.data.anios, aniosMas: x.data.aniosMas,
+  autorizado: x.data.autorizado,
+})), modo);
+const asociadas = publicables((sitio.asociadas ?? []).map((a) => ({
+  nombre: a.nombre, logo: a.logo as ImageMetadata | undefined, area: txt(a.area, lang), descripcion: txt(a.descripcion, lang), aprobada: a.aprobada,
+})), modo);
+const paises = sitio.paises.map((c) => ({ codigo: c, nombre: PAISES[c][lang] }));
+
+const numeros: Record<string, string> = Object.fromEntries(numerar(['mision', 'valores', 'presencia', 'testimonios', 'asociadas'], {
+  mision: !!pagina.mision, valores: !!pagina.valores?.length, presencia: !!pagina.presencia,
+  testimonios: testimonios.length > 0, asociadas: asociadas.length > 0,
+}).map((x) => [x.id, x.n]));
+---
+<Base titulo={t(lang, 'nosotros')} descripcion={pagina.descripcion} lang={lang} alterno={alterno}>
+  <section class="cabecera wrap" aria-labelledby="nosotros-h1">
+    <div class="cabecera-txt">
+      <Pod forma="rotulo" codigo="L-01" nombre={t(lang, 'nosotros')} />
+      <h1 id="nosotros-h1" class="aparece">{t(lang, 'nosotrosH1a')} <span>{t(lang, 'nosotrosH1b')}</span></h1>
+      {pagina.quienes?.map((q, i) => <p class:list={['aparece', i === 0 ? 'lead-1' : 'lead-2']} style={`--i:${i + 1}`}>{q}</p>)}
+    </div>
+    {mosaico.length > 0 && <Mosaico fotos={mosaico} />}
+  </section>
+
+  {pagina.mision && pagina.vision && numeros.mision && (
+    <MisionVision numero={numeros.mision} titulo={t(lang, 'secMision')} tituloVision={t(lang, 'secVision')} altFoto={t(lang, 'altEquipo')}
+      mision={pagina.mision} vision={pagina.vision} foto={pagina.foto as ImageMetadata | undefined} indicadores={pagina.indicadores ?? []} />
+  )}
+  {pagina.valores && numeros.valores && <Valores numero={numeros.valores} titulo={t(lang, 'secValores')} valores={pagina.valores} />}
+  {pagina.presencia && numeros.presencia && <Presencia numero={numeros.presencia} titulo={t(lang, 'secPresencia')} presencia={pagina.presencia} paises={paises} />}
+  {numeros.testimonios && (
+    <Testimonios numero={numeros.testimonios} titulo={t(lang, 'secTestimonios')} etiquetaAnios={t(lang, 'aniosCasa')}
+      sinAutorizar={t(lang, 'sinAutorizar')} fuente={t(lang, 'fuenteTestimonios')} testimonios={testimonios} />
+  )}
+  {numeros.asociadas && <Asociadas numero={numeros.asociadas} titulo={t(lang, 'secAsociadas')} porConfirmar={t(lang, 'porConfirmar')} asociadas={asociadas} />}
+  <Cierre bloques={[
+    { href: ruta('trabaje', lang), dato: t(lang, 'cierreTrabajeDato'), antes: t(lang, 'cierreTrabajeA'), clave: t(lang, 'cierreTrabajeB'), foto: fotoDe('puerto-bolivar', 1)?.src },
+    { href: ruta('proyectos', lang), dato: t(lang, 'cierreProyectosDato'), antes: t(lang, 'cierreProyectosA'), clave: t(lang, 'cierreProyectosB'), foto: fotoDe('planta-cementos-progreso', 2)?.src },
+  ]} />
+</Base>
+
+<style>
+  .cabecera { display: grid; gap: var(--s6); align-items: center; padding-block: var(--s6); }
+  @media (min-width: 900px) { .cabecera { grid-template-columns: 5fr 6fr; } }
+  .cabecera h1 { margin: var(--s4) 0 0; font-size: calc(var(--fs-lema) * .82); line-height: .92; letter-spacing: -.03em; font-weight: var(--fw-negra); }
+  .cabecera h1 span { display: block; font-weight: var(--fw-fina); }
+  .lead-1 { margin: var(--s5) 0 0; font-size: var(--fs-lead); line-height: 1.6; max-width: 52ch; }
+  .lead-2 { margin: var(--s3) 0 0; color: var(--muted); max-width: 52ch; }
+</style>

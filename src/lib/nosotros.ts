@@ -52,3 +52,8 @@ export function avance(progreso: number, anios: number[]): { anio: number; indic
 export function publicables<T extends { autorizado?: boolean; aprobada?: boolean }>(xs: T[], modo: 'desarrollo' | 'lanzamiento'): T[] {
   return modo === 'lanzamiento' ? xs.filter((x) => x.autorizado === true || x.aprobada === true) : xs;
 }
+
+/** Numeración de las secciones que se muestran (01, 02…): una sección oculta no deja salto. */
+export function numerar(ids: string[], visibles: Record<string, boolean>): { id: string; n: string }[] {
+  return ids.filter((id) => visibles[id] !== false).map((id, i) => ({ id, n: String(i + 1).padStart(2, '0') }));
+}
