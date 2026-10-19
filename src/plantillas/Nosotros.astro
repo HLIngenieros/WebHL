@@ -11,9 +11,10 @@ import Presencia from '../components/nosotros/Presencia.astro';
 import Testimonios from '../components/nosotros/Testimonios.astro';
 import Asociadas from '../components/nosotros/Asociadas.astro';
 import Cierre from '../components/nosotros/Cierre.astro';
+import Tira from '../components/nosotros/Tira.astro';
 import { cargar } from '../lib/datos';
 import { txt } from '../lib/contenido';
-import { numerar, publicables } from '../lib/nosotros';
+import { hitos, numerar, publicables, type HistoriaData } from '../lib/nosotros';
 import { ruta, type Lang } from '../i18n/rutas';
 import { PAISES, t } from '../i18n/ui';
 import type { ImageMetadata } from 'astro';
@@ -47,6 +48,8 @@ const testimonios = publicables([...datos.testimonios].sort((a, b) => a.data.ord
 const asociadas = publicables((sitio.asociadas ?? []).map((a) => ({
   nombre: a.nombre, logo: a.logo as ImageMetadata | undefined, area: txt(a.area, lang), descripcion: txt(a.descripcion, lang), aprobada: a.aprobada,
 })), modo);
+// Línea del tiempo: los 5 hitos y "Hoy" (foto actual provisional: Planta Columbus, guía §12.2).
+const lineaTiempo = hitos(datos.historia as unknown as { id: string; data: HistoriaData }[], lang, new Date(), { foto: fotoDe('planta-columbus', 2)?.src });
 const paises = sitio.paises.map((c) => ({ codigo: c, nombre: PAISES[c][lang] }));
 
 const numeros: Record<string, string> = Object.fromEntries(numerar(['mision', 'valores', 'presencia', 'testimonios', 'asociadas'], {
@@ -63,6 +66,8 @@ const numeros: Record<string, string> = Object.fromEntries(numerar(['mision', 'v
     </div>
     {mosaico.length > 0 && <Mosaico fotos={mosaico} />}
   </section>
+
+  <Tira lang={lang} hitos={lineaTiempo} />
 
   {pagina.mision && pagina.vision && numeros.mision && (
     <MisionVision numero={numeros.mision} titulo={t(lang, 'secMision')} tituloVision={t(lang, 'secVision')} altFoto={t(lang, 'altEquipo')}

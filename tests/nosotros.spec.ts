@@ -173,3 +173,55 @@ test.describe('página Nosotros', () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
   });
 });
+
+// ── Tira de negativos (guía §12.3) ──
+
+const ANIO = new Date().getFullYear();
+const irA = (page: import('@playwright/test').Page, fraccion: number) =>
+  page.evaluate((f) => {
+    const s = document.querySelector<HTMLElement>('[data-tira]')!;
+    const top = s.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo(0, top + (s.offsetHeight - window.innerHeight) * f);
+  }, fraccion);
+
+test.describe('tira de negativos', () => {
+  test.describe('sin JavaScript', () => {
+    test.use({ javaScriptEnabled: false });
+    test('los 6 hitos se leen en lista con su foto y su década', async ({ page }) => {
+      await page.goto('/nosotros/');
+      const hitos = page.locator('.tira-lista > li');
+      await expect(hitos).toHaveCount(6);
+      await expect(page.locator('.tira-lista img')).toHaveCount(6);
+      await expect(hitos.nth(0)).toContainText('Década de los 60');
+      await expect(hitos.nth(5)).toContainText(String(ANIO));
+      await expect(page.locator('.tira-escena')).toBeHidden();
+    });
+  });
+
+  test('con movimiento reducido es la misma lista, sin escenario fijo', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/nosotros/');
+    await expect(page.locator('.tira-lista > li').nth(3)).toBeVisible();
+    await expect(page.locator('.tira-escena')).toBeHidden();
+  });
+
+  test('con el scroll, el año corre y cambian los hitos', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 800 });
+    await page.goto('/nosotros/');
+    await expect(page.locator('[data-tira]')).toHaveClass(/activa/);
+    await irA(page, 0.55);
+    await expect(page.locator('.escena-titulo')).toHaveText(/El desarrollo|Alianzas para crecer/);
+    await expect.poll(async () => Number(await page.locator('.escena-anio-texto').textContent())).toBeGreaterThanOrEqual(1990);
+    expect(Number(await page.locator('.escena-anio-texto').textContent())).toBeLessThanOrEqual(2000);
+    await irA(page, 1);
+    await expect(page.locator('.escena-titulo')).toHaveText('Hoy');
+    await expect(page.locator('.escena-anio-texto')).toHaveText(String(ANIO));
+  });
+
+  test('a 360 px el año no desborda', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 740 });
+    await page.goto('/nosotros/');
+    await irA(page, 0.3);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+  });
+});

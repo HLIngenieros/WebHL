@@ -66,6 +66,7 @@
   --fs-h1: clamp(36px, 5.6vw, 68px);
   --fs-lema: clamp(44px, 6.2vw, 92px);       /* H1 del inicio (guía §12.1) */
   --fs-lema-datos: clamp(15px, 1.9vw, 28px); /* su línea en voz de datos */
+  --fs-anio-tira: clamp(72px, 12vw, 190px);  /* año de la tira de negativos (guía §12.3) */
   --fs-h2: clamp(28px, 3.6vw, 44px);
   --fs-h3: 21px;
   --fs-stat: clamp(26px, 3.4vw, 40px);
