@@ -1,0 +1,126 @@
+---
+// HL en cifras · fichas de plano (guía §12.1-3). Cada ficha es una celda de cajetín con su cifra
+// (escrita en el HTML; cuenta al entrar) y un dibujo de plano que se traza al entrar y al pasar.
+import type { CifraInicio } from '../../lib/inicio';
+import type { Lang } from '../../i18n/rutas';
+import { t } from '../../i18n/ui';
+
+interface Props { lang: Lang; cifras: CifraInicio[]; paises: string[]; sedes: string[]; normas: string[] }
+const { lang, cifras, paises, sedes, normas } = Astro.props;
+const anio = new Date().getFullYear();
+const LETRAS = ['A', 'B', 'C', 'D'];
+const NOMBRE = { trayectoria: 'fichaTrayectoria', presencia: 'fichaPresencia', sedes: 'fichaSedes', calidad: 'fichaCalidad' } as const;
+const TEXTO = { trayectoria: 'fichaTrayectoriaTxt', presencia: 'fichaPresenciaTxt', sedes: 'fichaSedesTxt', calidad: 'fichaCalidadTxt' } as const;
+const PIE = { trayectoria: 'fichaTrayectoriaPie', presencia: 'fichaPresenciaPie', sedes: 'fichaSedesPie', calidad: 'fichaCalidadPie' } as const;
+// Alturas de las estacas (solo dibujo) y posiciones en el ancho del dibujo.
+const ALTURAS = [40, 30, 46, 34, 42, 26, 38];
+const xEstaca = (i: number) => 30 + i * (200 / Math.max(1, paises.length - 1));
+const xEje = (i: number) => 34 + i * (192 / Math.max(1, sedes.length - 1));
+const xSello = (i: number) => 60 + i * 70;
+const decadas = Array.from({ length: Math.floor((anio - 1970) / 10) + 1 }, (_, i) => 1970 + i * 10);
+const xAnio = (a: number) => 20 + ((a - 1968) / (anio - 1968)) * 220;
+---
+<section class="cifras-inicio" aria-labelledby="cifras-titulo">
+  <div class="wrap">
+    <h2 id="cifras-titulo" class="cifras-titulo">{t(lang, 'enCifras1')} <span>{t(lang, 'enCifras2')}</span></h2>
+    <ul class="fichas trazo">
+      {cifras.map((c, i) => (
+        <li class="ficha" style={`--i:${i}`}>
+          <div class="ficha-cab voz-datos"><span class="ficha-burbuja" aria-hidden="true">{LETRAS[i]}</span><span>{t(lang, NOMBRE[c.clave])}</span><span class="ficha-codigo">L-02.{i + 1}</span></div>
+          <p class="ficha-num"><span class="ficha-cifra" data-n={c.valor}>{c.valor}</span> <span class="ficha-unidad">{c.etiqueta}</span></p>
+          <p class="ficha-txt">{t(lang, TEXTO[c.clave])}</p>
+          <svg class="ficha-dibujo" viewBox="0 0 260 92" aria-hidden="true" focusable="false">
+            {c.clave === 'trayectoria' && <>
+              <path class="t" pathLength="1" d="M20 50H240" />
+              <path class="t s" pathLength="1" style="--i:1" d={`M20 40V60M240 40V60${decadas.map((a) => `M${xAnio(a).toFixed(1)} 46V54`).join('')}`} />
+              <circle class="t" pathLength="1" style="--i:2" cx="20" cy="22" r="9" /><circle class="t" pathLength="1" style="--i:3" cx="240" cy="22" r="9" />
+              <text x="20" y="80" text-anchor="middle">1968</text><text class="cota-fin" x="240" y="80" text-anchor="middle">{anio}</text>
+            </>}
+            {c.clave === 'presencia' && <>
+              <path class="t" pathLength="1" d="M10 70H250" />
+              {paises.map((p, k) => <path class="t s" pathLength="1" style={`--i:${k + 1}`} d={`M${xEstaca(k)} 70V${70 - ALTURAS[k % ALTURAS.length]}m-5 8l5 -8l5 8z`} />)}
+              {paises.map((p, k) => <text class="estaca-codigo" x={xEstaca(k)} y="86" text-anchor="middle">{p}</text>)}
+            </>}
+            {c.clave === 'sedes' && <>
+              <path class="t" pathLength="1" d={`M${xEje(0)} 40H${xEje(sedes.length - 1)}`} />
+              {sedes.map((s, k) => <circle class="t" pathLength="1" style={`--i:${k + 1}`} cx={xEje(k)} cy="40" r="12" />)}
+              {sedes.map((s, k) => <><text x={xEje(k)} y="44" text-anchor="middle">{k + 1}</text><text x={xEje(k)} y="76" text-anchor="middle">{s}</text></>)}
+            </>}
+            {c.clave === 'calidad' && <>
+              {normas.map((n, k) => <><circle class="t" pathLength="1" style={`--i:${k}`} cx={xSello(k)} cy="44" r="26" /><circle class="t s" pathLength="1" style={`--i:${k + 1}`} cx={xSello(k)} cy="44" r="20" /><text x={xSello(k)} y="47" text-anchor="middle">{n}</text></>)}
+            </>}
+          </svg>
+          <p class="ficha-pie voz-datos">{t(lang, PIE[c.clave])}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<script>
+  // Las cifras cuentan desde 0 hasta su valor al entrar (presentación: el valor ya está en el HTML).
+  function contar() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const lista = document.querySelector('.fichas');
+    if (!lista || (lista as HTMLElement).dataset.contado) return;
+    (lista as HTMLElement).dataset.contado = '1';
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      io.disconnect();
+      lista.querySelectorAll<HTMLElement>('.ficha-cifra').forEach((el, i) => {
+        const n = Number(el.dataset.n), inicio = performance.now() + i * 150;
+        const paso = (ahora: number) => {
+          const p = Math.max(0, Math.min(1, (ahora - inicio) / 1200));
+          el.textContent = String(Math.round(n * (1 - (1 - p) ** 3)));
+          if (p < 1) requestAnimationFrame(paso);
+        };
+        requestAnimationFrame(paso);
+      });
+    }, { threshold: 0.4 });
+    io.observe(lista);
+  }
+  contar();
+  document.addEventListener('astro:page-load', contar);
+</script>
+
+<style>
+  .cifras-inicio { background: var(--bg); padding-block: var(--s6) var(--s7); }
+  .cifras-titulo { margin: 0 0 var(--s5); }
+  .cifras-titulo span { font-weight: var(--fw-fina); }
+  .fichas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-left: var(--border) solid var(--line); border-top: var(--border) solid var(--line); }
+  @media (min-width: 900px) { .fichas { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .ficha {
+    position: relative; display: flex; flex-direction: column; background: var(--paper); color: var(--ink);
+    border-right: var(--border) solid var(--line); border-bottom: var(--border) solid var(--line);
+    transition: background-color var(--t-aparece) var(--ease-izaje), color var(--t-aparece);
+  }
+  .ficha-cab { display: flex; align-items: center; gap: var(--s2); padding: var(--s3); border-bottom: var(--border) solid var(--line-soft); }
+  .ficha-burbuja { width: 24px; height: 24px; border-radius: 50%; border: var(--border) solid currentColor; display: grid; place-items: center; }
+  .ficha-codigo { margin-left: auto; color: var(--muted); white-space: nowrap; }
+  .ficha-num { margin: 0; padding: var(--s4) var(--s3) 0; display: flex; align-items: baseline; gap: var(--s2); flex-wrap: wrap; }
+  .ficha-cifra {
+    font-stretch: var(--wdth-stat); font-family: var(--f-ancha); font-weight: var(--fw-negra); line-height: .9;
+    font-size: calc(var(--fs-stat) * 1.6); letter-spacing: -.03em; font-variant-numeric: tabular-nums;
+  }
+  .ficha-unidad { font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: var(--fs-lead); letter-spacing: .1em; text-transform: uppercase; }
+  .ficha-txt { margin: var(--s2) 0 0; padding: 0 var(--s3); color: var(--muted); font-size: var(--fs-sm); max-width: 26ch; }
+  .ficha-dibujo { display: block; width: 100%; height: auto; margin-top: auto; padding: var(--s3) var(--s2) 0; box-sizing: border-box; overflow: visible; }
+  .ficha-dibujo .t { fill: none; stroke: var(--accent); stroke-width: 1.4; vector-effect: non-scaling-stroke; }
+  .ficha-dibujo .s { stroke: var(--signal); }
+  .ficha-dibujo text { fill: var(--muted); font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: var(--fs-chip); letter-spacing: .08em; }
+  .ficha-pie { margin: 0; padding: var(--s2) var(--s3); border-top: var(--border) solid var(--line-soft); color: var(--muted); }
+  /* Hover y foco: la ficha se vuelve acento, el dibujo blanco y señal, y aparecen marcas de registro. */
+  .ficha:hover { background: var(--accent); color: var(--accent-ink); }
+  .ficha:hover :is(.ficha-codigo, .ficha-txt, .ficha-pie) { color: color-mix(in srgb, var(--accent-ink) 80%, transparent); }
+  .ficha:hover :is(.ficha-cab, .ficha-pie) { border-color: color-mix(in srgb, var(--accent-ink) 20%, transparent); }
+  .ficha:hover .ficha-dibujo .t { stroke: var(--accent-ink); }
+  .ficha:hover .ficha-dibujo .s { stroke: var(--hl-senal); }
+  .ficha:hover .ficha-dibujo text { fill: color-mix(in srgb, var(--accent-ink) 80%, transparent); }
+  :global(html.js) .ficha:hover .ficha-dibujo .t { animation: retraza 1s var(--ease-plano); animation-delay: calc(var(--i, 0) * 90ms); }
+  @keyframes retraza { from { clip-path: inset(0 100% 0 0); } }
+  .ficha::before, .ficha::after { content: ""; position: absolute; width: 10px; height: 10px; border: 0 solid var(--hl-senal); opacity: 0; transition: opacity var(--t-rapido); }
+  .ficha::before { top: 5px; right: 5px; border-width: 1.5px 1.5px 0 0; }
+  .ficha::after { bottom: 5px; left: 5px; border-width: 0 0 1.5px 1.5px; }
+  .ficha:hover::before, .ficha:hover::after { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { :global(html.js) .ficha:hover .ficha-dibujo .t { animation: none; } }
+</style>

@@ -1,8 +1,11 @@
 ---
-// Inicio (guía §12.1, especificación §5): hero con barra inmersa; el resto de bloques llega en las
-// Tareas 6 y 8 del plan F3.
+// Inicio (guía §12.1, especificación §5): hero con barra inmersa, franja de sectores y HL en cifras; el
+// resto de bloques llega con la Tarea 8 del plan F3, tras aprobar sus maquetas.
 import Base from '../layouts/Base.astro';
 import Hero from '../components/inicio/Hero.astro';
+import FranjaSectores from '../components/inicio/FranjaSectores.astro';
+import FichasCifras from '../components/inicio/FichasCifras.astro';
+import { cifrasInicio } from '../lib/inicio';
 import { cargar } from '../lib/datos';
 import { txt } from '../lib/contenido';
 import type { Lang } from '../i18n/rutas';
@@ -12,7 +15,12 @@ const { lang, alterno } = Astro.props;
 const { datos } = await cargar();
 const sitio = datos.sitio[0].data;
 const lema = txt(sitio.lema, lang)!;
+const numeroIso = (c: { data: { norma: { es: string } } }) => Number(c.data.norma.es.replace(/\D/g, ''));
+const iso = datos.certificaciones.filter((c) => c.data.norma.es.startsWith('ISO')).sort((a, b) => numeroIso(a) - numeroIso(b));
+const cifras = cifrasInicio({ fundacion: sitio.fundacion, paises: sitio.paises, sedes: datos.sedes.length, certificaciones: iso.length }, lang);
 ---
 <Base titulo="HL Ingenieros" descripcion={lema} lang={lang} alterno={alterno} barra="inmersa">
   <Hero lang={lang} lema={lema} />
+  <FranjaSectores lang={lang} />
+  <FichasCifras lang={lang} cifras={cifras} paises={sitio.paises} sedes={datos.sedes.map((s) => s.data.ciudad)} normas={iso.map((c) => c.data.norma.es.replace('ISO ', ''))} />
 </Base>

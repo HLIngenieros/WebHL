@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 import { cifrasInicio, partirLema } from '../src/lib/inicio';
 import { DISCIPLINAS, planta, proyectar, recortar } from '../src/lib/gemelo';
 import { auditar } from '../src/lib/contenido';
@@ -178,4 +179,68 @@ test.describe('gemelo en la página', () => {
     await expect(page.locator('.gemelo')).toHaveAttribute('data-estado', 'animando', { timeout: 5000 });
     expect(await page.evaluate(() => (window as any).__gemeloBucles)).toBe(1);
   });
+});
+
+// ── Franja de sectores y HL en cifras (guía §12.1-2 y 3) ──
+
+const SECTORES = ['cemento', 'mineria', 'agua-y-energia', 'petroleo-y-gas', 'infraestructura', 'industria'];
+
+test.describe('franja de sectores', () => {
+  test('enlaza a los 6 sectores con una sola copia accesible', async ({ page }) => {
+    await page.goto('/');
+    const lista = page.locator('.franja .cinta-lista a');
+    await expect(lista).toHaveCount(6);
+    for (const s of SECTORES) await expect(page.locator(`.franja .cinta-lista a[href="/sectores/${s}/"]`)).toHaveCount(1);
+    const copia = page.locator('.franja .cinta-copia');
+    await expect(copia).toHaveAttribute('aria-hidden', 'true');
+    await expect(copia).toHaveAttribute('inert', '');
+  });
+
+  test('en inglés enlaza a las rutas en inglés', async ({ page }) => {
+    await page.goto('/en/');
+    await expect(page.locator('.franja .cinta-lista a[href="/en/sectors/cement/"]')).toHaveCount(1);
+  });
+});
+
+test.describe('HL en cifras', () => {
+  test.describe('sin JavaScript', () => {
+    test.use({ javaScriptEnabled: false });
+    test('las cifras están escritas en su valor final y los dibujos se ven', async ({ page }) => {
+      await page.goto('/');
+      const valores = await page.locator('.fichas .ficha-cifra').allTextContents();
+      expect(valores.map((v) => v.trim())).toEqual([String(new Date().getFullYear() - 1968), '7', '4', '3']);
+      // Las líneas rectas miden 0 de alto (toBeVisible no sirve): ningún trazo queda recortado.
+      const recortes = await page.locator('.fichas svg .t').evaluateAll((xs) => xs.map((x) => getComputedStyle(x).clipPath));
+      expect(recortes.length).toBeGreaterThan(10);
+      expect(recortes.every((c) => c === 'none')).toBe(true);
+    });
+  });
+
+  test('las estacas llevan los 7 países', async ({ page }) => {
+    await page.goto('/');
+    const codigos = await page.locator('.fichas .estaca-codigo').allTextContents();
+    expect(codigos).toEqual(['CO', 'PA', 'CR', 'DO', 'GT', 'BO', 'EC']);
+  });
+
+  test('los sellos ISO van en orden', async ({ page }) => {
+    await page.goto('/');
+    const sellos = await page.locator('.ficha:nth-child(4) svg text').allTextContents();
+    expect(sellos).toEqual(['9001', '14001', '45001']);
+  });
+
+  test('la cota de trayectoria llega al año actual', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('.fichas .cota-fin')).toHaveText(String(new Date().getFullYear()));
+  });
+});
+
+test.describe('accesibilidad del inicio', () => {
+  for (const [ruta, tema] of [['/', 'light'], ['/en/', 'light'], ['/', 'dark']] as const) {
+    test(`${ruta} sin violaciones (${tema})`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
+      await page.goto(ruta);
+      const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+      expect(r.violations.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);
+    });
+  }
 });
