@@ -2,6 +2,7 @@
 // Barra superior (guía §7): logo, menú plano, idioma y tema. Bajo 1100 px, menú a pantalla completa.
 import { MENU, ruta, par, seccionDe, type Lang } from '../i18n/rutas';
 import { t } from '../i18n/ui';
+import Marca from './Marca.astro';
 
 interface Props { lang: Lang; alterno?: string }
 const { lang, alterno } = Astro.props;
@@ -12,7 +13,7 @@ const activa = seccionDe(Astro.url.pathname);
 <header class="barra" transition:name="barra" transition:animate="none">
   <div class="barra-in">
     <a class="logo" href={ruta('inicio', lang)} aria-label="HL Ingenieros, inicio">
-      <span class="logo-hl" aria-hidden="true">HL</span> <span class="logo-nombre">Ingenieros</span>
+      <Marca />
     </a>
 
     <nav id="nav-principal" aria-label={t(lang, 'menu')}>
@@ -106,11 +107,6 @@ const activa = seccionDe(Astro.url.pathname);
     height: var(--bar-h); display: flex; align-items: center; gap: var(--s4);
   }
   .logo { display: flex; align-items: center; gap: var(--s2); color: var(--ink); text-decoration: none; margin-right: auto; }
-  .logo-hl {
-    background: var(--accent); color: var(--accent-ink); padding: 2px 6px;
-    font-stretch: var(--wdth-display); font-family: var(--f-ancha); font-weight: var(--fw-display); font-size: var(--fs-marca); line-height: 1.2;
-  }
-  .logo-nombre { font-stretch: var(--wdth-title); font-family: var(--f-ancha); font-weight: var(--fw-title); font-size: var(--fs-marca-nombre); }
 
   #nav-principal { display: none; }
   #nav-principal ul { display: flex; gap: var(--s1); list-style: none; margin: 0; padding: 0; }

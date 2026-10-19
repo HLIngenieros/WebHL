@@ -1,0 +1,32 @@
+---
+// Marca provisional (guía §2.2): monograma vectorial + "HL INGENIEROS", hasta tener el logotipo completo.
+// Usa la versión calada (una tinta): en `acento` sigue al tema (azul en claro, azul claro en oscuro, con
+// las letras dejando ver el fondo); en `blanco`, sobre el grafito del hero del inicio.
+import calado from '../assets/marca/monograma-hl-calado.svg?raw';
+
+interface Props { tono?: 'acento' | 'blanco'; lema?: boolean }
+const { tono = 'acento', lema = false } = Astro.props;
+const svg = calado.replace(/<!--[\s\S]*?-->\s*/, '').replace(' role="img" aria-label="HL"', ' aria-hidden="true" focusable="false"');
+---
+<span class:list={['marca', `marca-${tono}`]}>
+  <span class="marca-mono" set:html={svg} />
+  <span class="marca-txt">
+    <span class="marca-nombre">HL Ingenieros</span>
+    {lema && <span class="marca-lema voz-datos">Desde 1968</span>}
+  </span>
+</span>
+
+<style>
+  /* Espacio libre = altura del monograma (guía §2.2): lo garantiza el margen de quien la contiene. */
+  .marca { display: inline-flex; align-items: center; gap: var(--s2); }
+  .marca-mono { display: block; width: var(--marca-mono); height: var(--marca-mono); flex: none; color: var(--accent); }
+  .marca-blanco .marca-mono { color: var(--hl-blanco); }
+  .marca-mono :global(svg) { display: block; width: 100%; height: 100%; }
+  .marca-txt { display: flex; flex-direction: column; line-height: 1.1; }
+  .marca-nombre {
+    font-stretch: var(--wdth-title); font-family: var(--f-ancha); font-weight: var(--fw-title);
+    font-size: var(--fs-marca-nombre); text-transform: uppercase;
+  }
+  .marca-lema { color: var(--muted); }
+  .marca-blanco .marca-lema { color: var(--hl-acero); }
+</style>
