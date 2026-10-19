@@ -251,8 +251,8 @@ en [contenido/README.md](contenido/README.md).
     Reglas de Oro que caen y giran, PIENSA® y prácticas. Acreedores con los 3 PDF reales y Datos con el texto del
     manual M-TI-001 (extraído del PDF; el correo personal se cambió por un buzón pendiente, D7) en
     `public/documentos/`. Noticias: colección `noticias`, plantillas de índice y entrada, y la regla de
-    publicación (`src/lib/noticias.ts`: con menos de 3 en español no hay página, ni menú, ni pie, ni bloque del
-    inicio; hoy no hay). HSE, Acreedores, legales y Noticias tienen archivo propio en `src/pages/`. 444 pruebas;
+    publicación: **la sección siempre está en el menú** (decisión del 19-oct); sin noticias, `/noticias/` dice que
+    pronto habrá; el bloque del inicio solo aparece con 3 o más (`src/lib/noticias.ts`). HSE, Acreedores, legales y Noticias tienen archivo propio en `src/pages/`. 444 pruebas;
     Lighthouse móvil HSE 98 (LCP 1,97 s), Acreedores 99, Datos 99.
   - **Siguiente paso:** Tarea 14 (cierre de F3: LCP de Nosotros, matriz de pantallas, modo oscuro, revisión de
     código y merge a `main`). Ejecución en modo nativo, sin subagentes (pedido de Juan David).

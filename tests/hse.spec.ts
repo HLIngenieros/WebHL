@@ -142,13 +142,13 @@ test.describe('acreedores y legales', () => {
 });
 
 test.describe('noticias con menos de 3 entradas', () => {
-  test('no hay página, ni entrada en el menú, ni en el pie, ni bloque en el inicio', async ({ page }) => {
+  test('la sección sigue en el menú y dice que pronto habrá; el inicio no muestra bloque', async ({ page }) => {
     await page.setViewportSize({ width: 1366, height: 900 });
     const r = await page.goto('/noticias/');
-    expect(r?.status()).toBe(404);
+    expect(r?.status()).toBe(200);
+    await expect(page.locator('.pronto')).toBeVisible();
+    await expect(page.locator('#nav-principal a[href="/noticias/"]')).toHaveCount(1);
     await page.goto('/');
-    await expect(page.locator('#nav-principal a[href="/noticias/"]')).toHaveCount(0);
-    await expect(page.locator('#navegacion-pie a[href="/noticias/"]')).toHaveCount(0);
     await expect(page.locator('.noticias-inicio')).toHaveCount(0);
   });
 

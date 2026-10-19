@@ -5,17 +5,13 @@ import { MENU, BAJO_PROYECTOS, ruta, par, seccionDe, type ClaveRuta, type Lang }
 import { t } from '../i18n/ui';
 import Marca from './Marca.astro';
 import PanelProyectos from './PanelProyectos.astro';
-import { cargar } from '../lib/datos';
-import { hayNoticias } from '../lib/noticias';
 
 interface Props { lang: Lang; alterno?: string; inmersa?: boolean }
 const { lang, alterno, inmersa = false } = Astro.props;
 const otro: Lang = lang === 'es' ? 'en' : 'es';
 const hrefOtro = alterno ?? par(Astro.url.pathname);
 const activa = seccionDe(Astro.url.pathname);
-// Noticias solo existe con 3 o más entradas (especificación §3).
-const { datos } = await cargar();
-const menu = MENU.filter((k) => k !== 'noticias' || hayNoticias(datos.noticias));
+const menu = MENU;
 // En Servicios y Sectores se marca Proyectos, de donde cuelgan (aria-current="true", no "page").
 const actual = (k: ClaveRuta) => (k === activa ? 'page' : k === 'proyectos' && activa && BAJO_PROYECTOS.includes(activa) ? 'true' : undefined);
 ---

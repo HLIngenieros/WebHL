@@ -117,10 +117,12 @@ export async function tarjetas(xs: ProyectoEntrada[], lang: Lang): Promise<Datos
 }
 
 /** Rutas de Noticias (guía §12.5): índice y entradas del idioma, o ninguna con menos de 3 noticias en español. */
-export async function rutasNoticias(lang: Lang) {
-  const { hayNoticias, noticiasDe } = await import('./noticias');
+export async function rutasNoticias(lang: Lang, soloConMinimo = false) {
+  const { hayNoticias } = await import('./noticias');
+  if (soloConMinimo && !hayNoticias((await cargar()).datos.noticias)) return [];
+  const { noticiasDe } = await import('./noticias');
   const { datos } = await cargar();
-  if (!hayNoticias(datos.noticias)) return [];
+  // La sección siempre existe (decisión del 19-oct); sin noticias, el índice dice que pronto habrá.
   const otro: Lang = lang === 'es' ? 'en' : 'es';
   const lista = noticiasDe(datos.noticias, lang);
   const codigo = (i: number) => `N-${String(lista.length - i).padStart(2, '0')}`;

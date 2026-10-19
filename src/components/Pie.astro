@@ -3,14 +3,11 @@
 // Datos tomados de contenido/institucional.md. Pendiente de confirmar con HL: NIT (no se publica aún).
 import { NAVEGACION, PIE, ruta, type Lang } from '../i18n/rutas';
 import { t } from '../i18n/ui';
-import { cargar } from '../lib/datos';
-import { hayNoticias } from '../lib/noticias';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const anio = new Date().getFullYear();
-const { datos } = await cargar();
-const navegacion = NAVEGACION.filter((k) => k !== 'noticias' || hayNoticias(datos.noticias));
+const navegacion = NAVEGACION;
 const celdas = [
   { etiqueta: t(lang, 'razonSocial'), valor: 'HL Ingenieros S.A.' },
   { etiqueta: t(lang, 'sede'), valor: 'Calle 127A # 53A-45, Torre 2, Of. 1002 · Bogotá, Colombia' },

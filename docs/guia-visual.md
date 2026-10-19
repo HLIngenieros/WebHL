@@ -713,7 +713,7 @@ donde hay mucho texto.
 7. **Prácticas:** 4 tarjetas que se levantan, se llenan de `--sec-soft` y redibujan su pictograma.
 8. **Cierre** verde con rayas que corren al pasar y "Hablar con HL".
 
-**Noticias** (acento óxido, solo con 3 o más entradas):
+**Noticias** (acento óxido; siempre en el menú; sin entradas, el índice muestra un sello y "pronto publicaremos"; el bloque del inicio solo con 3 o más):
 - Índice: H1 en dos líneas que suben; filtros (Todas · Noticias · Adjudicados) con una marca que corre y
   tarjetas que se reacomodan (FLIP); tarjetas con lámina óxido (a color al pasar), inclinación 3D, título
   subrayado que se mide, "Leer →" que entra; **sello de recibido** con la fecha que se estampa al entrar y

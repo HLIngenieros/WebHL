@@ -23,6 +23,9 @@ const FILTROS = [['todo', 'todas', cuenta()], ['noticia', 'noticias', cuenta('no
       </div>
       <p class="lead aparece" style="--i:2">{t(lang, 'noticiasEntrada')}</p>
     </header>
+    {items.length === 0 ? (
+      <p class="pronto"><span class="sello-vacio voz-datos" aria-hidden="true">{t(lang, 'recibido')}</span>{t(lang, 'noticiasPronto')}</p>
+    ) : (<>
     <div class="filtros voz-datos" role="group" aria-label={t(lang, 'filtrar')}>
       <span class="marca" aria-hidden="true"></span>
       {FILTROS.map(([f, clave, n], i) => <button type="button" data-f={f} aria-pressed={i === 0 ? 'true' : 'false'} disabled={!n}>{t(lang, clave)} · {n}</button>)}
@@ -30,6 +33,7 @@ const FILTROS = [['todo', 'todas', cuenta()], ['noticia', 'noticias', cuenta('no
     <div class="rejilla revela">
       {items.map((x, i) => <TarjetaNoticia lang={lang} {...x} grande={i === 0} i={i} />)}
     </div>
+    </>)}
   </section>
 </Base>
 
@@ -84,6 +88,10 @@ const FILTROS = [['todo', 'todas', cuenta()], ['noticia', 'noticias', cuenta('no
   .marca { position: absolute; top: 0; bottom: 0; left: 0; width: 0; background: var(--sec); transition: transform var(--t-aparece) var(--ease-plano), width var(--t-aparece) var(--ease-plano); }
   :global(html:not(.js)) .filtros { display: none; }
   .rejilla { display: grid; gap: var(--s3); }
+  .pronto { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s4); margin: 0; padding: var(--s6) var(--s5); background: var(--paper); border: var(--border-strong) dashed var(--sec); font-size: var(--fs-lead); }
+  .sello-vacio { padding: var(--s1) var(--s3); color: var(--sec); border: 2px solid currentColor; outline: 1px solid currentColor; outline-offset: 2px; transform: rotate(-4deg); animation: estampa .45s var(--ease-izaje) .3s both; }
+  @keyframes estampa { from { transform: rotate(-16deg) scale(1.7); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .sello-vacio { animation: none; } }
   @media (min-width: 900px) {
     .cab { grid-template-columns: 7fr 5fr; gap: var(--s5); }
     .rejilla { grid-template-columns: repeat(3, minmax(0, 1fr)); }

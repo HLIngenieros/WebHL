@@ -8,7 +8,7 @@ import { t } from '../../i18n/ui';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
-const indice = (await rutasNoticias(lang)).find((r) => r.props.tipo === 'indice');
+const indice = (await rutasNoticias(lang, true)).find((r) => r.props.tipo === 'indice');
 const items = indice && 'items' in indice.props ? indice.props.items.slice(0, 3) : [];
 ---
 {items.length > 0 && (

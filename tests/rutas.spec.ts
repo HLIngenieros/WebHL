@@ -23,8 +23,7 @@ test.describe('par() y langDe()', () => {
   });
 });
 
-// Noticias no se genera con menos de 3 entradas (tests/hse.spec.ts lo prueba aparte).
-for (const [clave, r] of Object.entries(RUTAS).filter(([k]) => k !== 'noticias')) {
+for (const [clave, r] of Object.entries(RUTAS)) {
   for (const lang of ['es', 'en'] as const) {
     test(`${clave} (${lang}) responde con idioma, H1 y hreflang correctos`, async ({ page }) => {
       const resp = await page.goto(r[lang]);

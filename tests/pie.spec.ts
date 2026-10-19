@@ -2,10 +2,10 @@ import { test, expect } from '@playwright/test';
 import { NAVEGACION, PIE, ruta } from '../src/i18n/rutas';
 
 for (const lang of ['es', 'en'] as const) {
-  test(`el pie (${lang}) enlaza las 12 secciones (sin Noticias)`, async ({ page }) => {
+  test(`el pie (${lang}) enlaza las 13 secciones`, async ({ page }) => {
     await page.goto(ruta('inicio', lang));
     const hrefs = await page.locator('#navegacion-pie a').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
-    expect(hrefs).toEqual([...NAVEGACION.filter((k) => k !== 'noticias'), ...PIE].map((k) => ruta(k, lang)));
+    expect(hrefs).toEqual([...NAVEGACION, ...PIE].map((k) => ruta(k, lang)));
   });
 }
 

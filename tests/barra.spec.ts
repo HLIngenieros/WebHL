@@ -3,10 +3,10 @@ import fs from 'node:fs';
 
 const sinDesborde = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
 
-test('a 1366 px se ven las 4 secciones (sin Noticias: hay menos de 3) sin desbordar', async ({ page }) => {
+test('a 1366 px se ven las 5 secciones sin desbordar', async ({ page }) => {
   await page.setViewportSize({ width: 1366, height: 800 });
   await page.goto('/');
-  await expect(page.locator('#nav-principal > ul > li > a')).toHaveCount(4);
+  await expect(page.locator('#nav-principal > ul > li > a')).toHaveCount(5);
   await expect(page.locator('#nav-principal')).toBeVisible();
   await expect(page.locator('#boton-menu')).toBeHidden();
   expect(await sinDesborde(page)).toBe(true);
@@ -20,7 +20,7 @@ for (const width of [1024, 390]) {
     const boton = page.locator('#boton-menu');
     await boton.click();
     await expect(page.locator('#menu-movil')).toBeVisible();
-    await expect(page.locator('#menu-movil .fila a[data-seccion]')).toHaveCount(4);
+    await expect(page.locator('#menu-movil .fila a[data-seccion]')).toHaveCount(5);
     await page.keyboard.press('Escape');
     await expect(page.locator('#menu-movil')).toBeHidden();
     await expect(boton).toBeFocused();
@@ -61,7 +61,7 @@ test.describe('sin JavaScript', () => {
     await page.setViewportSize({ width: 390, height: 800 });
     await page.goto('/');
     await expect(page.locator('#boton-menu')).toHaveAttribute('href', '#navegacion-pie');
-    await expect(page.locator('#navegacion-pie a')).toHaveCount(12);
+    await expect(page.locator('#navegacion-pie a')).toHaveCount(13);
   });
 });
 
