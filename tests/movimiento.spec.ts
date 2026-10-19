@@ -58,7 +58,7 @@ test('atrás tras navegar desde el menú móvil: menú cerrado, scroll restaurad
   await page.evaluate(() => window.scrollTo(0, 300));
   await page.waitForFunction(() => window.scrollY === 300);
   await page.locator('#boton-menu').click();
-  await page.locator('#menu-movil a[href="/proyectos/"]').click();
+  await page.locator('#menu-movil .fila a[href="/proyectos/"]').click();
   await expect(page).toHaveURL(/\/proyectos\/$/);
   await expect(page.locator('#menu-movil')).toBeHidden();
   await page.goBack();

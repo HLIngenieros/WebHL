@@ -1,11 +1,11 @@
 import { test, expect } from '@playwright/test';
-import { MENU, PIE, ruta } from '../src/i18n/rutas';
+import { NAVEGACION, PIE, ruta } from '../src/i18n/rutas';
 
 for (const lang of ['es', 'en'] as const) {
   test(`el pie (${lang}) enlaza las 13 secciones`, async ({ page }) => {
     await page.goto(ruta('inicio', lang));
     const hrefs = await page.locator('#navegacion-pie a').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
-    expect(hrefs).toEqual([...MENU, ...PIE].map((k) => ruta(k, lang)));
+    expect(hrefs).toEqual([...NAVEGACION, ...PIE].map((k) => ruta(k, lang)));
   });
 }
 

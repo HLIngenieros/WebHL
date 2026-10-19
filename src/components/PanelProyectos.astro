@@ -1,0 +1,171 @@
+---
+// Submenú de Proyectos (guía §13.1): Sectores con Cemento y Minería al frente y Servicios en lista simple.
+// `movil` lo pinta dentro del menú a pantalla completa. Sin fotos: está en todas las páginas.
+import Ilustracion from './Ilustracion';
+import { cargar } from '../lib/datos';
+import { bloque, medida, paraExplorador, resumenSectores, type Entrada, type Proyecto } from '../lib/contenido';
+import { ruta, urlDe, type Lang } from '../i18n/rutas';
+import { t, tn } from '../i18n/ui';
+
+interface Props { lang: Lang; id: string; movil?: boolean }
+const { lang, id, movil = false } = Astro.props;
+const { datos } = await cargar();
+const proyectos = datos.proyectos as unknown as Entrada<Proyecto>[];
+const sectores = resumenSectores(datos.sectores, proyectos).map(({ sector, principal, n, obra }) => {
+  const cifra = obra?.data.cifras[0];
+  return {
+    id: sector.id, principal, n,
+    nombre: bloque(sector.data, lang).nombre,
+    url: urlDe('sectores', sector.data.slug, lang),
+    obra: obra && cifra ? `${obra.data.ciudad ?? bloque(obra.data, lang).titulo} · ${medida(cifra.valor, cifra.unidad, lang)}` : undefined,
+  };
+});
+const principales = sectores.filter((s) => s.principal);
+const otros = sectores.filter((s) => !s.principal);
+const grupos = (['A', 'B', 'C'] as const).map((g) => ({
+  g,
+  nombre: t(lang, `grupo${g}`),
+  lineas: datos.servicios.filter((s) => s.data.grupo === g).sort((a, b) => a.data.orden - b.data.orden)
+    .map((s) => ({ nombre: bloque(s.data, lang).nombre, url: urlDe('servicios', s.data.slug, lang) })),
+}));
+const total = paraExplorador(proyectos).length;
+const enSectores = sectores.reduce((n, s) => n + s.n, 0);
+---
+{movil ? (
+  <div id={id} class="sub-movil" hidden>
+    <span class="voz-datos rotulo">{t(lang, 'sectores')}</span>
+    <div class="sub-principales" data-seccion="sectores">
+      {principales.map((s) => <a href={s.url}><b>{s.nombre}</b><span class="voz-datos">{tn(lang, 'nProyectos', s.n)}</span></a>)}
+    </div>
+    <div class="sub-otros">{otros.map((s) => <a href={s.url}>{s.nombre}</a>)}</div>
+    <span class="voz-datos rotulo">{t(lang, 'servicios')}</span>
+    <ul class="sub-servicios">{grupos.flatMap((g) => g.lineas).map((l) => <li><a href={l.url}>{l.nombre}</a></li>)}</ul>
+    <a class="sub-ir" href={ruta('proyectos', lang)}>{tn(lang, 'verExplorador', total)} →</a>
+  </div>
+) : (
+  <div id={id} class="panel-proyectos" hidden>
+    <div class="panel-in">
+      <section class="panel-sectores" data-seccion="sectores" aria-labelledby={`${id}-sec`}>
+        <p class="panel-tit voz-datos"><b id={`${id}-sec`}>{t(lang, 'sectores')}</b><span>{tn(lang, 'nSectores', sectores.length)} · {tn(lang, 'nProyectos', enSectores)}</span></p>
+        <ul class="principales">
+          {principales.map((s) => (
+            <li>
+              <a href={s.url}>
+                <span class="dibujo"><Ilustracion sector={s.id} clase="trazo" /></span>
+                <span class="nombre">{s.nombre}</span>
+                <span class="dato voz-datos"><span>{tn(lang, 'nProyectos', s.n)}</span>{s.obra && <span>{s.obra}</span>}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <ul class="otros">
+          {otros.map((s) => <li><a href={s.url}>{s.nombre} <span class="voz-datos">{s.n}</span></a></li>)}
+        </ul>
+      </section>
+      <section class="panel-servicios" data-seccion="servicios" aria-labelledby={`${id}-ser`}>
+        <p class="panel-tit voz-datos"><b id={`${id}-ser`}>{t(lang, 'servicios')}</b><span>{tn(lang, 'nLineas', 7)}</span></p>
+        {grupos.map((g) => (
+          <div class="grupo">
+            <p class="voz-datos grupo-nom"><span class="burbuja" aria-hidden="true">{g.g}</span>{g.nombre}</p>
+            <ul>{g.lineas.map((l) => <li><a href={l.url}>{l.nombre}</a></li>)}</ul>
+          </div>
+        ))}
+      </section>
+      <p class="panel-pie">
+        <a class="ir" data-seccion="proyectos" href={ruta('proyectos', lang)}>{tn(lang, 'verExplorador', total)}</a>
+        <a class="ir" data-seccion="sectores" href={ruta('sectores', lang)}>{t(lang, 'todosSectores')}</a>
+      </p>
+    </div>
+  </div>
+)}
+
+<style>
+  /* ── Panel de escritorio ── */
+  .panel-proyectos {
+    position: absolute; left: 0; right: 0; top: 100%; z-index: 1;
+    background: var(--paper); color: var(--ink); border-top: var(--border-strong) solid var(--ink); border-bottom: var(--border) solid var(--line);
+    clip-path: inset(0 0 100% 0); visibility: hidden;
+    transition: clip-path var(--t-izaje) var(--ease-plano), visibility 0s var(--t-izaje);
+  }
+  .panel-proyectos[data-abierto] { clip-path: inset(0 0 0 0); visibility: visible; transition: clip-path var(--t-izaje) var(--ease-plano); }
+  .panel-in {
+    max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); box-sizing: content-box;
+    display: grid; grid-template-columns: 8fr 4fr;
+  }
+  .panel-sectores { padding: var(--s4) var(--s5) var(--s4) 0; border-right: var(--border) solid var(--line); }
+  .panel-servicios { padding: var(--s4) 0 var(--s4) var(--s5); }
+  .panel-tit { display: flex; justify-content: space-between; gap: var(--s3); margin: 0 0 var(--s3); color: var(--muted); }
+  .panel-tit b { color: var(--ink); font-weight: inherit; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  p { max-width: none; }
+  a { text-decoration: none; color: inherit; }
+
+  .principales { display: grid; grid-template-columns: 1fr 1fr; border-top: var(--border-strong) solid var(--ink); }
+  .principales li + li a { border-left: var(--border) solid var(--line); }
+  .principales a {
+    position: relative; display: grid; gap: var(--s1); padding: var(--s3) var(--s4) var(--s4); overflow: hidden;
+    border-bottom: var(--border) solid var(--line);
+  }
+  .principales a::before {
+    content: ''; position: absolute; inset: 0; background: var(--sec);
+    transform: scaleY(0); transform-origin: bottom; transition: transform var(--t-aparece) var(--ease-plano);
+  }
+  .principales a > * { position: relative; }
+  .dibujo {
+    display: block; margin: calc(-1 * var(--s3)) calc(-1 * var(--s4)) var(--s2); padding: var(--s2) var(--s5) 0;
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: var(--grid-cell) var(--grid-cell);
+  }
+  .dibujo :global(svg) { max-height: 120px; }
+  .nombre { font-family: var(--f-ancha); font-stretch: var(--wdth-title); font-weight: var(--fw-title); font-size: var(--fs-h3); line-height: var(--lh-title); }
+  .dato { display: flex; flex-wrap: wrap; gap: 0 var(--s2); color: var(--sec); }
+  .dato span + span::before { content: '·'; margin-right: var(--s2); color: var(--muted); }
+  .principales a:hover::before, .principales a:focus-visible::before { transform: scaleY(1); }
+  .principales a:hover, .principales a:focus-visible { color: var(--sec-ink); }
+  .principales a:hover .dato, .principales a:hover .dato span::before { color: var(--sec-ink); }
+  .principales a:hover .dibujo { background-image: none; }
+  .principales a:hover :global(.capa-estructura path), .principales a:hover :global(.capa-ejes line),
+  .principales a:hover :global(.capa-ejes circle) { stroke: var(--sec-ink); fill: none; }
+
+  .otros { display: flex; flex-wrap: wrap; align-items: center; padding-top: var(--s3); }
+  .otros li { display: flex; align-items: center; }
+  .otros li + li::before {
+    content: ''; width: 7px; height: 7px; margin-inline: var(--s3); border: var(--border-strong) solid var(--sec); transform: rotate(45deg);
+  }
+  .otros a { display: inline-flex; align-items: baseline; gap: var(--s1); padding: var(--s1) 0; }
+  .otros a span { color: var(--muted); }
+  .otros a:hover { color: var(--sec); }
+
+  .grupo-nom { display: flex; align-items: center; gap: var(--s2); margin: var(--s2) 0 var(--s1); color: var(--muted); }
+  .grupo:first-of-type .grupo-nom { margin-top: 0; }
+  .panel-servicios { border-top: 0; }
+  .panel-servicios .panel-tit { padding-bottom: var(--s2); border-bottom: var(--border-strong) solid var(--ink); }
+  .burbuja { width: 20px; height: 20px; border-radius: 50%; border: var(--border) solid currentColor; display: grid; place-items: center; letter-spacing: 0; }
+  .grupo li a { display: block; padding: 5px 0 5px calc(20px + var(--s2)); }
+  .grupo li a:hover { color: var(--sec); }
+
+  .panel-pie { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: var(--s4); margin: 0; padding: var(--s3) 0; border-top: var(--border) solid var(--line); }
+  .ir { display: inline-flex; align-items: center; gap: var(--s2); color: var(--sec); font-weight: var(--fw-strong); font-stretch: var(--wdth-subtitle); }
+  .ir::after { content: '→'; transition: transform var(--t-rapido) var(--ease-plano); }
+  .ir:hover::after { transform: translateX(6px); }
+
+  /* ── Dentro del menú móvil ── */
+  .sub-movil { padding: 0 0 var(--s4) var(--s4); display: grid; gap: var(--s2); }
+  .sub-movil[hidden] { display: none; }
+  .rotulo { color: var(--muted); margin-top: var(--s2); }
+  .sub-principales { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); }
+  .sub-principales a { display: grid; gap: 2px; padding: var(--s2) var(--s3); border: var(--border) solid var(--sec); }
+  .sub-principales b { font-family: var(--f-ancha); font-stretch: var(--wdth-subtitle); font-weight: var(--fw-title); font-size: var(--fs-lead); }
+  .sub-principales span { color: var(--sec); }
+  .sub-otros { display: flex; flex-wrap: wrap; gap: var(--s1); }
+  .sub-otros a { padding: var(--s1) var(--s2); border: var(--border) solid var(--line); font-size: var(--fs-sm); min-height: 44px; display: inline-flex; align-items: center; box-sizing: border-box; }
+  .sub-servicios a { display: flex; align-items: center; min-height: 40px; color: var(--muted); }
+  .sub-ir { color: var(--accent); font-weight: var(--fw-strong); min-height: 44px; display: inline-flex; align-items: center; }
+
+  /* Solo escritorio: bajo 1100 px el submenú va dentro del menú a pantalla completa. */
+  @media (max-width: 1099.98px) { .panel-proyectos { display: none; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .panel-proyectos, .panel-proyectos[data-abierto], .principales a::before { transition: none; }
+  }
+</style>

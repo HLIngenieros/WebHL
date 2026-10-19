@@ -20,7 +20,12 @@ export const RUTAS = {
 
 export type ClaveRuta = keyof typeof RUTAS;
 
-export const MENU: ClaveRuta[] = ['nosotros', 'proyectos', 'servicios', 'sectores', 'hse', 'noticias', 'contacto'];
+/** Barra (especificación §3): Servicios y Sectores van en el submenú de Proyectos. */
+export const MENU: ClaveRuta[] = ['nosotros', 'proyectos', 'hse', 'noticias', 'contacto'];
+/** Navegación completa del pie, con Servicios y Sectores. */
+export const NAVEGACION: ClaveRuta[] = ['nosotros', 'proyectos', 'servicios', 'sectores', 'hse', 'noticias', 'contacto'];
+/** Secciones que cuelgan de Proyectos en la barra. */
+export const BAJO_PROYECTOS: ClaveRuta[] = ['servicios', 'sectores'];
 export const PIE: ClaveRuta[] = ['trabaje', 'proveedores', 'buzon', 'acreedores', 'datos', 'terminos'];
 
 export const ruta = (clave: ClaveRuta, lang: Lang): string => RUTAS[clave][lang];

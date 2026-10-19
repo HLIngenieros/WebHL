@@ -1,5 +1,6 @@
 # Fuente: texto de portada "Cementero" (contenido/institucional.md §3.1).
 orden: 1
+principal: true
 slug: { es: cemento, en: cement }
 es:
   nombre: Cemento

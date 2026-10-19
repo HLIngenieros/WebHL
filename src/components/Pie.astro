@@ -1,7 +1,7 @@
 ---
 // Pie (guía §7): navegación completa y rótulo de plano con los datos de la empresa.
 // Datos tomados de contenido/institucional.md. Pendiente de confirmar con HL: NIT (no se publica aún).
-import { MENU, PIE, ruta, type Lang } from '../i18n/rutas';
+import { NAVEGACION, PIE, ruta, type Lang } from '../i18n/rutas';
 import { t } from '../i18n/ui';
 
 interface Props { lang: Lang }
@@ -18,7 +18,7 @@ const celdas = [
 <footer class="pie">
   <div class="wrap pie-in">
     <nav id="navegacion-pie" aria-label={t(lang, 'navegacion')}>
-      <ul>{MENU.map((k) => <li><a href={ruta(k, lang)}>{t(lang, k)}</a></li>)}</ul>
+      <ul>{NAVEGACION.map((k) => <li><a href={ruta(k, lang)}>{t(lang, k)}</a></li>)}</ul>
       <ul aria-label={t(lang, 'legal')}>{PIE.map((k) => <li><a href={ruta(k, lang)}>{t(lang, k)}</a></li>)}</ul>
     </nav>
     <dl class="rotulo">

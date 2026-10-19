@@ -1,14 +1,18 @@
 ---
-// Barra superior (guía §7): logo, menú plano, idioma y tema. Bajo 1100 px, menú a pantalla completa.
-import { MENU, ruta, par, seccionDe, type Lang } from '../i18n/rutas';
+// Barra superior (guía §7 y §13.1): logo, menú con el submenú de Proyectos, idioma y tema. Bajo 1100 px,
+// menú a pantalla completa.
+import { MENU, BAJO_PROYECTOS, ruta, par, seccionDe, type ClaveRuta, type Lang } from '../i18n/rutas';
 import { t } from '../i18n/ui';
 import Marca from './Marca.astro';
+import PanelProyectos from './PanelProyectos.astro';
 
 interface Props { lang: Lang; alterno?: string; inmersa?: boolean }
 const { lang, alterno, inmersa = false } = Astro.props;
 const otro: Lang = lang === 'es' ? 'en' : 'es';
 const hrefOtro = alterno ?? par(Astro.url.pathname);
 const activa = seccionDe(Astro.url.pathname);
+// En Servicios y Sectores se marca Proyectos, de donde cuelgan (aria-current="true", no "page").
+const actual = (k: ClaveRuta) => (k === activa ? 'page' : k === 'proyectos' && activa && BAJO_PROYECTOS.includes(activa) ? 'true' : undefined);
 ---
 <header class:list={['barra', { inmersa }]} data-inmersa={inmersa ? '' : undefined} transition:name="barra" transition:animate="none">
   <div class="barra-in">
@@ -19,7 +23,14 @@ const activa = seccionDe(Astro.url.pathname);
     <nav id="nav-principal" aria-label={t(lang, 'menu')}>
       <ul>
         {MENU.map((k, i) => (
-          <li><a href={ruta(k, lang)} data-seccion={k} aria-current={k === activa ? 'page' : undefined}><span class="num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>{t(lang, k)}</a></li>
+          <li class:list={{ 'con-panel': k === 'proyectos' }}>
+            <a href={ruta(k, lang)} data-seccion={k} aria-current={actual(k)}><span class="num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>{t(lang, k)}</a>
+            {k === 'proyectos' && (
+              <button type="button" class="desplegar" data-seccion="proyectos" aria-expanded="false" aria-controls="panel-proyectos" aria-label={t(lang, 'sectoresYServicios')} hidden>
+                <svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+              </button>
+            )}
+          </li>
         ))}
       </ul>
     </nav>
@@ -34,6 +45,8 @@ const activa = seccionDe(Astro.url.pathname);
     </div>
   </div>
 
+  <PanelProyectos lang={lang} id="panel-proyectos" />
+
   <dialog id="menu-movil" aria-label={t(lang, 'menu')}>
     <div class="menu-cab">
       <span class="voz-datos">{t(lang, 'menu')}</span>
@@ -42,7 +55,13 @@ const activa = seccionDe(Astro.url.pathname);
     <ul>
       {MENU.map((k, i) => (
         <li style={`--i:${i}`}>
-          <a href={ruta(k, lang)} data-seccion={k} data-astro-prefetch="viewport" aria-current={k === activa ? 'page' : undefined}>{t(lang, k)}</a>
+          <div class="fila">
+            <a href={ruta(k, lang)} data-seccion={k} data-astro-prefetch="viewport" aria-current={actual(k)}>{t(lang, k)}</a>
+            {k === 'proyectos' && (
+              <button type="button" class="desplegar-movil" data-seccion="proyectos" aria-expanded="false" aria-controls="sub-proyectos" aria-label={t(lang, 'sectoresYServicios')}>+</button>
+            )}
+          </div>
+          {k === 'proyectos' && <PanelProyectos lang={lang} id="sub-proyectos" movil />}
         </li>
       ))}
     </ul>
@@ -89,6 +108,57 @@ const activa = seccionDe(Astro.url.pathname);
     marcarTema();
   }
 
+  // Submenú de Proyectos (guía §13.1): botón aparte, nunca al pasar el cursor. Sin JS el botón no existe y
+  // "Proyectos" sigue siendo un enlace; Servicios y Sectores quedan en el pie.
+  let cerrarPanel = () => {};
+  function panel() {
+    const boton = document.querySelector<HTMLButtonElement>('.desplegar');
+    const caja = document.getElementById('panel-proyectos');
+    if (!boton || !caja || caja.dataset.listo) return;
+    caja.dataset.listo = '1';
+    const grupo = boton.closest('li')!;
+    boton.hidden = false;
+    caja.hidden = false;
+    caja.inert = true;
+    const trazar = (el: Element) => { el.classList.remove('visible'); void (el as HTMLElement).offsetWidth; el.classList.add('visible'); };
+    const poner = (abierto: boolean, foco = false) => {
+      if (abierto === caja.hasAttribute('data-abierto')) return;
+      caja.toggleAttribute('data-abierto', abierto);
+      grupo.toggleAttribute('data-abierto', abierto);
+      boton.setAttribute('aria-expanded', String(abierto));
+      caja.inert = !abierto;
+      if (abierto) caja.querySelectorAll('.trazo').forEach(trazar);
+      else if (foco) boton.focus();
+    };
+    cerrarPanel = () => poner(false);
+    boton.addEventListener('click', () => poner(!caja.hasAttribute('data-abierto')));
+    boton.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowDown') return;
+      e.preventDefault();
+      poner(true);
+      caja.querySelector('a')?.focus();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && caja.hasAttribute('data-abierto')) poner(false, true); });
+    document.addEventListener('pointerdown', (e) => {
+      const en = e.target as Node;
+      if (!caja.contains(en) && !grupo.contains(en)) poner(false);
+    });
+    for (const el of [grupo, caja]) el.addEventListener('focusout', (e) => {
+      const destino = (e as FocusEvent).relatedTarget as Node | null;
+      if (destino && !caja.contains(destino) && !grupo.contains(destino)) poner(false);
+    });
+    caja.querySelectorAll('.principales a').forEach((a) => a.addEventListener('mouseenter', () => a.querySelectorAll('.trazo').forEach(trazar)));
+    // Menú móvil: Proyectos despliega sectores y servicios.
+    const mas = document.querySelector<HTMLButtonElement>('.desplegar-movil');
+    const sub = document.getElementById('sub-proyectos');
+    mas?.addEventListener('click', () => {
+      const abrir = mas.getAttribute('aria-expanded') !== 'true';
+      mas.setAttribute('aria-expanded', String(abrir));
+      mas.textContent = abrir ? '−' : '+';
+      if (sub) sub.hidden = !abrir;
+    });
+  }
+
   // Barra inmersa (guía §7): solo en el inicio. Mientras el hero está bajo la barra, va inmersa y lleva
   // "Hablar con HL"; al salir, pasa a la barra normal y vuelve el botón flotante.
   let observador: IntersectionObserver | null = null;
@@ -109,9 +179,11 @@ const activa = seccionDe(Astro.url.pathname);
   }
 
   iniciar();
+  panel();
   inmersa();
-  document.addEventListener('astro:page-load', () => { iniciar(); inmersa(); });
+  document.addEventListener('astro:page-load', () => { iniciar(); panel(); inmersa(); });
   document.addEventListener('astro:before-swap', () => {
+    cerrarPanel();
     (document.getElementById('menu-movil') as HTMLDialogElement | null)?.close();
     observador?.disconnect();
     observador = null;
@@ -143,6 +215,23 @@ const activa = seccionDe(Astro.url.pathname);
   #nav-principal a:hover, .idioma:hover, .boton-menu:hover { color: var(--ink); border-color: var(--line); }
   /* La sección activa lleva su acento (guía §3.5): cada enlace declara su sección. */
   #nav-principal a[aria-current='page'] { color: var(--sec); border-bottom-color: var(--sec); box-shadow: inset 0 -2px var(--sec); }
+
+  /* Submenú de Proyectos (guía §13.1) */
+  #nav-principal li { display: flex; align-items: stretch; }
+  #nav-principal .con-panel > a { padding-right: 4px; }
+  .desplegar {
+    display: grid; place-items: center; width: 28px; padding: 0; background: none; cursor: pointer;
+    color: var(--muted); border: var(--border) solid transparent; transition: color var(--t-rapido) ease, border-color var(--t-rapido) ease;
+  }
+  .desplegar[hidden] { display: none; }
+  .desplegar svg { transition: transform var(--t-rapido) var(--ease-plano); }
+  .desplegar:hover { color: var(--ink); border-color: var(--line); }
+  #nav-principal .con-panel[data-abierto] > a, .con-panel[data-abierto] .desplegar { color: var(--sec); }
+  .con-panel[data-abierto] .desplegar { border-color: var(--sec); }
+  .con-panel[data-abierto] .desplegar svg { transform: rotate(180deg); }
+  #nav-principal a[aria-current='true'] { color: var(--sec); border-bottom-color: var(--sec); box-shadow: inset 0 -2px var(--sec); }
+  .barra.inmersa .desplegar { color: var(--hl-concreto); }
+  .barra.inmersa .con-panel[data-abierto] .desplegar { color: var(--hl-senal); border-color: var(--hl-senal); }
 
   .herramientas { display: flex; align-items: center; gap: var(--s1); }
   #nav-principal .num, .hablar-barra { display: none; }
@@ -233,6 +322,13 @@ const activa = seccionDe(Astro.url.pathname);
     font-size: var(--fs-h2); font-stretch: var(--wdth-title); font-family: var(--f-ancha); font-weight: var(--fw-title); line-height: var(--lh-title);
   }
   dialog li a::before { content: ''; width: 6px; height: 6px; background: var(--sec); flex: none; }
+  dialog .fila { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); }
+  dialog .fila a { flex: 1; }
+  .desplegar-movil {
+    width: 44px; height: 44px; flex: none; background: none; cursor: pointer; font-family: inherit; font-size: var(--fs-lead);
+    color: var(--sec); border: var(--border) solid var(--sec);
+  }
+  dialog li a[aria-current='true'] { color: var(--sec); }
   dialog li a[aria-current='page'] { color: var(--sec); }
   dialog[open] li { animation: izaje-menu var(--t-izaje) var(--ease-izaje) both; animation-delay: calc(var(--i) * 40ms); }
   @keyframes izaje-menu { from { opacity: 0; transform: translateY(12px); } }

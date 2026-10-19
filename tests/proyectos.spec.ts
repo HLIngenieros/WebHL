@@ -130,10 +130,11 @@ test.describe('identidad por sección', () => {
     await page.setViewportSize({ width: 1366, height: 768 });
     const color = async (url: string) => {
       await page.goto(url);
-      return page.locator('#nav-principal a[aria-current=page]').evaluate((a) => getComputedStyle(a).borderBottomColor);
+      return page.locator('#nav-principal a[aria-current]').evaluate((a) => getComputedStyle(a).borderBottomColor);
     };
     expect(await color('/proyectos/')).toBe('rgb(138, 90, 0)');
-    expect(await color('/servicios/')).toBe('rgb(0, 107, 128)');
+    // Servicios cuelga de Proyectos en la barra (guía §13.1): se marca Proyectos, con su acento.
+    expect(await color('/servicios/')).toBe('rgb(138, 90, 0)');
   });
 
   test('un pod con otra sección toma su acento dentro de la página', async ({ page }) => {

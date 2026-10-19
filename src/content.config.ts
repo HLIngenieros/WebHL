@@ -69,6 +69,8 @@ const sectores = defineCollection({
   loader: yaml('sectores'),
   schema: z.object({
     orden: z.number(),
+    /** Sector principal de HL (Cemento y Minería): va primero y más grande (guía §13). */
+    principal: z.boolean().default(false),
     slug,
     confirmar,
     ...idiomas(z.object({ nombre: z.string(), intro: z.string(), serviciosTipicos: z.string().optional() })),

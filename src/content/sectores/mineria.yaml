@@ -1,5 +1,6 @@
 # Fuente: texto de portada "Minero" (contenido/institucional.md §3.1).
 orden: 2
+principal: true
 slug: { es: mineria, en: mining }
 es:
   nombre: Minería

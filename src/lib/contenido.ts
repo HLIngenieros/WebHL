@@ -103,6 +103,19 @@ export const deSector = (xs: P[], id: string) => ordenar(visibles(xs).filter((x)
 export const destacados = (xs: P[]) => ordenar(xs.filter((x) => x.data.visibilidad === 'destacado'));
 export const paraExplorador = (xs: P[]) => [...ordenar(visibles(xs)), ...ordenar(xs.filter((x) => x.data.visibilidad === 'discreta'))];
 
+/** Sectores para el submenú, el inicio y la página de Sectores (guía §13): los principales primero
+ * (Cemento y Minería), cada grupo por su orden, con sus proyectos visibles y la obra que los representa
+ * (la de más horas hombre; si ninguna las tiene, la primera). */
+export function resumenSectores<S extends { id: string; data: { orden: number; principal?: boolean } }>(sectores: S[], xs: P[]) {
+  return [...sectores]
+    .sort((a, b) => Number(!!b.data.principal) - Number(!!a.data.principal) || a.data.orden - b.data.orden)
+    .map((sector) => {
+      const ps = deSector(xs, sector.id);
+      const obra = ps.reduce<P | undefined>((m, x) => (!m || (x.data.hh ?? 0) > (m.data.hh ?? 0) ? x : m), undefined);
+      return { sector, principal: !!sector.data.principal, n: ps.length, obra };
+    });
+}
+
 /** Proyectos parecidos: 2 puntos por mismo sector y 1 por servicio compartido; sin la actual ni discretas. */
 export function relacionados(xs: P[], actual: P, n = 3): P[] {
   const mios = new Set(actual.data.servicios.map((s) => s.id));

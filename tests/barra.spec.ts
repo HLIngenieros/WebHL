@@ -3,10 +3,10 @@ import fs from 'node:fs';
 
 const sinDesborde = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
 
-test('a 1366 px se ven las 7 secciones sin desbordar', async ({ page }) => {
+test('a 1366 px se ven las 5 secciones sin desbordar', async ({ page }) => {
   await page.setViewportSize({ width: 1366, height: 800 });
   await page.goto('/');
-  await expect(page.locator('#nav-principal a')).toHaveCount(7);
+  await expect(page.locator('#nav-principal > ul > li > a')).toHaveCount(5);
   await expect(page.locator('#nav-principal')).toBeVisible();
   await expect(page.locator('#boton-menu')).toBeHidden();
   expect(await sinDesborde(page)).toBe(true);
@@ -20,7 +20,7 @@ for (const width of [1024, 390]) {
     const boton = page.locator('#boton-menu');
     await boton.click();
     await expect(page.locator('#menu-movil')).toBeVisible();
-    await expect(page.locator('#menu-movil a[data-seccion]')).toHaveCount(7);
+    await expect(page.locator('#menu-movil .fila a[data-seccion]')).toHaveCount(5);
     await page.keyboard.press('Escape');
     await expect(page.locator('#menu-movil')).toBeHidden();
     await expect(boton).toBeFocused();
@@ -138,5 +138,85 @@ test.describe('marca con el monograma', () => {
   test('la 404 usa el monograma como burbuja de eje', async ({ page }) => {
     await page.goto('/no-existe/');
     await expect(page.locator(`main .burbuja-marca svg[viewBox="${VIEWBOX}"]`)).toHaveCount(1);
+  });
+});
+
+// Guía §13.1 · Submenú de Proyectos: Sectores (Cemento y Minería al frente) y Servicios.
+test.describe('submenú de Proyectos', () => {
+  test.beforeEach(async ({ page }) => { await page.setViewportSize({ width: 1366, height: 800 }); });
+
+  test('"Proyectos" sigue siendo un enlace y el botón abre el panel', async ({ page }) => {
+    await page.goto('/nosotros/');
+    await expect(page.locator('#nav-principal a[data-seccion=proyectos]')).toHaveAttribute('href', '/proyectos/');
+    const boton = page.locator('.desplegar');
+    const panel = page.locator('#panel-proyectos');
+    await expect(panel).toBeHidden();
+    await boton.click();
+    await expect(boton).toHaveAttribute('aria-expanded', 'true');
+    await expect(panel).toBeVisible();
+    await page.mouse.click(10, 700);
+    await expect(boton).toHaveAttribute('aria-expanded', 'false');
+    await expect(panel).toBeHidden();
+  });
+
+  test('se abre con flecha abajo, Esc lo cierra y devuelve el foco', async ({ page }) => {
+    await page.goto('/nosotros/');
+    const boton = page.locator('.desplegar');
+    await boton.focus();
+    await page.keyboard.press('ArrowDown');
+    await expect(page.locator('#panel-proyectos a').first()).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#panel-proyectos')).toBeHidden();
+    await expect(boton).toBeFocused();
+  });
+
+  test('Cemento y Minería van primero; los 6 sectores y los 7 servicios enlazan a su página', async ({ page }) => {
+    await page.goto('/nosotros/');
+    await page.locator('.desplegar').click();
+    const panel = page.locator('#panel-proyectos');
+    await expect(panel.locator('.principales a')).toHaveCount(2);
+    await expect(panel.locator('.principales a').nth(0)).toHaveAttribute('href', '/sectores/cemento/');
+    await expect(panel.locator('.principales a').nth(1)).toHaveAttribute('href', '/sectores/mineria/');
+    await expect(panel.locator('.otros a')).toHaveCount(4);
+    await expect(panel.locator('.panel-servicios li a')).toHaveCount(7);
+    await expect(panel.locator('a[href="/proyectos/"]')).toHaveCount(1);
+    await expect(panel.locator('a[href="/sectores/"]')).toHaveCount(1);
+  });
+
+  test('en Servicios y Sectores se marca Proyectos', async ({ page }) => {
+    for (const url of ['/sectores/', '/servicios/obras-civiles/', '/en/sectors/']) {
+      await page.goto(url);
+      await expect(page.locator('#nav-principal a[data-seccion=proyectos]')).toHaveAttribute('aria-current', 'true');
+    }
+  });
+
+  test('sin desborde con el panel abierto y en la barra inmersa del inicio', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('.desplegar').click();
+    await expect(page.locator('#panel-proyectos')).toBeVisible();
+    expect(await sinDesborde(page)).toBe(true);
+  });
+
+  test('en el menú móvil, Proyectos despliega sectores y servicios', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 800 });
+    await page.goto('/');
+    await page.locator('#boton-menu').click();
+    const mas = page.locator('.desplegar-movil');
+    await expect(page.locator('#sub-proyectos')).toBeHidden();
+    await mas.click();
+    await expect(mas).toHaveAttribute('aria-expanded', 'true');
+    await expect(page.locator('#sub-proyectos .sub-principales a')).toHaveCount(2);
+    await expect(page.locator('#sub-proyectos .sub-servicios a')).toHaveCount(7);
+    expect(await sinDesborde(page)).toBe(true);
+  });
+
+  test.describe('sin JavaScript', () => {
+    test.use({ javaScriptEnabled: false });
+    test('no hay botón ni panel; Proyectos es un enlace', async ({ page }) => {
+      await page.goto('/nosotros/');
+      await expect(page.locator('.desplegar')).toBeHidden();
+      await expect(page.locator('#panel-proyectos')).toBeHidden();
+      await expect(page.locator('#nav-principal a[data-seccion=proyectos]')).toHaveAttribute('href', '/proyectos/');
+    });
   });
 });

@@ -3,12 +3,35 @@ import AxeBuilder from '@axe-core/playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 import {
-  txt, numero, edad, periodo, deServicio, deSector, destacados, paraExplorador, auditar,
+  txt, numero, edad, periodo, deServicio, deSector, destacados, paraExplorador, auditar, resumenSectores,
   type Pendiente,
 } from '../src/lib/contenido';
 import { p, ids } from './apoyo';
 
 const de = (ps: Pendiente[], id: string) => ps.filter((x) => x.id === id);
+
+test.describe('resumen de sectores (submenú, inicio y Sectores)', () => {
+  const sec = (id: string, orden: number, principal = false) => ({ id, data: { orden, principal } });
+  const sectores = [sec('agua', 1), sec('mineria', 3, true), sec('cemento', 2, true), sec('industria', 4)];
+  const proyectos = [
+    p('chica', { hh: 1000 }),
+    p('grande', { hh: 9000 }),
+    p('oculta', { hh: 99000, visibilidad: 'discreta' }),
+    p('mina', { sector: { id: 'mineria' } }),
+  ];
+  const r = resumenSectores(sectores, proyectos);
+  test('los principales van primero, cada grupo por su orden', () => {
+    expect(r.map((x) => x.sector.id)).toEqual(['cemento', 'mineria', 'agua', 'industria']);
+    expect(r.map((x) => x.principal)).toEqual([true, true, false, false]);
+  });
+  test('cuenta solo proyectos visibles y elige la obra con más horas hombre', () => {
+    expect(r[0].n).toBe(2);
+    expect(r[0].obra?.id).toBe('grande');
+    expect(r[1].obra?.id).toBe('mina');
+    expect(r[2].n).toBe(0);
+    expect(r[2].obra).toBeUndefined();
+  });
+});
 
 test.describe('relaciones derivadas', () => {
   const lista = [
