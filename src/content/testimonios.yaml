@@ -5,6 +5,11 @@
   cargo: { es: Director de Operaciones }
   foto: ../assets/testimonios/carlos-abel-leon-martinez.jpg
   autorizado: false
+  anios: 15
+  aniosMas: true
+  fragmento:
+    es: Han pasado más de 15 años desde que entré a la compañía […] Hoy entiendo que todo este recorrido ha valido la pena, he logrado una estabilidad económica y emocional gracias a las oportunidades laborales y profesionales que me ha brindado la compañía […]
+  confirmar: ["Fragmento y años en la casa: validar con la autorización"]
   cita:
     es: Han pasado más de 15 años desde que entré a la compañía, nunca he escrito un testimonio y a decir verdad hoy siento la necesidad de hacerlo y expresar la admiración que siento por quienes forjaron e inculcaron dentro de la organización unos inquebrantables valores corporativos. Hoy entiendo que todo este recorrido ha valido la pena, he logrado una estabilidad económica y emocional gracias a las oportunidades laborales y profesionales que me ha brindado la compañía, agradezco a los accionistas, directivos y a todos los conformantes de la organización por permitirme ser parte de ella.
 - id: jairo-armando-saenz
@@ -12,6 +17,9 @@
   cargo: { es: Coordinador de Compras }
   foto: ../assets/testimonios/jairo-armando-saenz.jpg
   autorizado: false
+  fragmento:
+    es: "[…] es un orgullo para mí hacer parte de esta importante organización en la cual he crecido y me he sentido en familia […] En el Grupo HL sí nos ven como seres humanos. Vamos para adelante."
+  confirmar: ["Fragmento: validar con la autorización"]
   cita:
     es: Durante el tiempo que llevo trabajando para el Grupo HL, considero que es la única organización de nuestro tipo que antes de pensar en su beneficio, piensa en el beneficio de sus empleados, de sus clientes y su buen nombre; por tal motivo es un orgullo para mí hacer parte de esta importante organización en la cual he crecido y me he sentido en familia, me ha dado múltiples oportunidades de desarrollarme como un gran ser humano, un gran profesional y el afianzar los principios y respetos por los demás. En el Grupo HL sí nos ven como seres humanos. Vamos para adelante.
 - id: carlos-humberto-triana-herrera
@@ -19,6 +27,10 @@
   cargo: { es: Gerente de ECOHL }
   foto: ../assets/testimonios/carlos-humberto-triana-herrera.jpg
   autorizado: false
+  anios: 28
+  fragmento:
+    es: "[…] Con más de 37 años de experiencia en el sector de la construcción pesada; 28 años en el Grupo HL, donde me he desempeñado como gerente de proyecto durante 11 años, gerente Colombia durante 3 años, vicepresidente de operaciones durante 10 años y ahora gerente de ECOHL […]"
+  confirmar: ["Fragmento y años en la casa: validar con la autorización"]
   cita:
     es: Ingeniero mecánico con maestría en administración con especialización en gerencia y dirección de proyectos. Con más de 37 años de experiencia en el sector de la construcción pesada; 28 años en el Grupo HL, donde me he desempeñado como gerente de proyecto durante 11 años, gerente Colombia durante 3 años, vicepresidente de operaciones durante 10 años y ahora gerente de ECOHL durante 4 años, empresa del grupo encargada de atender nuestros clientes en servicios EPCM, gerencias de proyecto, interventoría, comisionamiento, administración de contratos y gerencia de riesgos.
 - id: camilo-arturo-munoz-mosquera
@@ -26,5 +38,8 @@
   cargo: { es: Gerente General }
   foto: ../assets/testimonios/camilo-arturo-munoz-mosquera.jpg
   autorizado: false
+  fragmento:
+    es: En el Grupo HL nos apasiona lo que hacemos. A lo largo de nuestra trayectoria hemos desarrollado una amplia gama de proyectos, siempre con el compromiso de ofrecer a nuestros clientes soluciones integrales y de alta calidad; nos involucramos en cada proyecto desde el inicio […]
+  confirmar: ["Fragmento: validar con la autorización"]
   cita:
     es: En el Grupo HL nos apasiona lo que hacemos. A lo largo de nuestra trayectoria hemos desarrollado una amplia gama de proyectos, siempre con el compromiso de ofrecer a nuestros clientes soluciones integrales y de alta calidad; nos involucramos en cada proyecto desde el inicio, trabajando en estrecha colaboración con nuestros clientes para entender sus necesidades y expectativas.

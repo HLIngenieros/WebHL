@@ -124,7 +124,7 @@ test.describe('auditar()', () => {
   });
 
   test('las cifras del sitio y la norma de una certificación también se traducen', () => {
-    const sitio = { id: 'hl', data: { asociadas: [{}], clientes: [], cifras: [{ valor: 530, etiqueta: { es: 'Proyectos' } }] } };
+    const sitio = { id: 'hl', data: { asociadas: [{ aprobada: true }], clientes: [], cifras: [{ valor: 530, etiqueta: { es: 'Proyectos' } }] } };
     expect(auditar({ sitio: [sitio] }, { modo: 'desarrollo', hoy })).toMatchObject([{ campo: 'en', tipo: 'traduccion' }]);
     const bpi = { id: 'bpi', data: { norma: { es: 'Buenas Prácticas de Innovación' }, ente: 'Icontec', vence: new Date(2030, 0, 1), pdf: 'x.pdf' } };
     expect(auditar({ certificaciones: [bpi] }, { modo: 'desarrollo', hoy })).toMatchObject([{ campo: 'en', tipo: 'traduccion' }]);
@@ -232,8 +232,22 @@ test.describe('contenido migrado', () => {
     const original = new Set(palabras(fs.readFileSync(path.join(process.cwd(), 'contenido', 'institucional.md'), 'utf8')));
     const citas = fs.readFileSync(path.join(process.cwd(), 'src', 'content', 'testimonios.yaml'), 'utf8')
       .split(/\r?\n/).filter((l) => /^ {4}es: /.test(l)).map((l) => l.replace(/^ {4}es: /, ''));
-    expect(citas).toHaveLength(4);
+    expect(citas).toHaveLength(8); // 4 citas + 4 fragmentos
     expect(citas.flatMap(palabras).filter((w) => !original.has(w))).toEqual([]);
+  });
+
+  test('cada fragmento de testimonio es un recorte literal de su cita (omisiones con […])', () => {
+    const yaml = fs.readFileSync(path.join(process.cwd(), 'src', 'content', 'testimonios.yaml'), 'utf8');
+    const bloques = yaml.split(/^- id: /m).slice(1);
+    expect(bloques).toHaveLength(4);
+    for (const b of bloques) {
+      const linea = (campo: string) => (b.match(new RegExp(`^  ${campo}:\\r?\\n    es: (.*)$`, 'm'))?.[1] ?? '').replace(/^"|"$/g, '');
+      const cita = linea('cita'), fragmento = linea('fragmento');
+      expect(fragmento, b.slice(0, 40)).not.toBe('');
+      for (const trozo of fragmento.split('[…]').map((x) => x.trim().replace(/[;,]$/, '')).filter(Boolean)) {
+        expect(cita, trozo).toContain(trozo);
+      }
+    }
   });
 
   test('el contenido no publica correos personales, solo buzones por función', () => {

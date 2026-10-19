@@ -105,9 +105,12 @@ const certificaciones = defineCollection({
 
 const historia = defineCollection({
   loader: file('src/content/historia.yaml'),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     orden: z.number(),
-    anio: z.number().int().optional(),
+    anio: z.number().int(), // de la década si no hay año exacto (guía §12.3)
+    decada: texto,
+    foto: image().optional(),
+    pie: texto.optional(), // solo si es verificable
     confirmar,
     ...idiomas(z.object({ titulo: z.string(), texto: z.string() })),
   }),
@@ -121,6 +124,10 @@ const testimonios = defineCollection({
     foto: image().optional(),
     autorizado: z.boolean(),
     cita: texto,
+    fragmento: texto.optional(), // palabras textuales; omisiones con "[…]"
+    anios: z.number().optional(), // años en la casa, solo si la cita lo dice
+    aniosMas: z.boolean().optional(), // "más de N años"
+    confirmar,
   }),
 });
 
@@ -132,7 +139,7 @@ const sitio = defineCollection({
     paises: z.array(z.string().length(2)).min(1),
     cifras: z.array(z.object({ valor: z.number(), prefijo: z.string().optional(), unidad: unidad.optional(), etiqueta: texto })),
     redes: z.array(z.object({ red: z.string(), url: z.url() })),
-    asociadas: z.array(z.object({ nombre: z.string(), logo: image().optional() })).optional(),
+    asociadas: z.array(z.object({ nombre: z.string(), logo: image().optional(), area: texto.optional(), descripcion: texto.optional(), aprobada: z.boolean() })).optional(),
     clientes: z.array(z.object({ nombre: z.string().optional(), logo: image() })).default([]),
     confirmar,
   }),
@@ -140,13 +147,21 @@ const sitio = defineCollection({
 
 const paginas = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/paginas', generateId: porArchivo }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     pagina: z.enum(['nosotros', 'hse', 'datos', 'terminos', 'acreedores']),
     lang: z.enum(['es', 'en']),
     titulo: z.string(),
     descripcion: z.string(),
     revisionJuridica: z.boolean().optional(),
     confirmar,
+    // Solo Nosotros (guía §12.2): textos estructurados de cada sección.
+    quienes: z.array(z.string()).optional(),
+    mision: z.object({ antes: z.string(), clave: z.string() }).optional(),
+    vision: z.object({ texto: z.string(), promesas: z.array(z.string()) }).optional(),
+    foto: image().optional(),
+    indicadores: z.array(z.object({ valor: z.number(), signo: z.string().optional(), unidad: z.string(), etiqueta: z.string(), fuente: z.string() })).optional(),
+    valores: z.array(z.object({ nombre: z.string(), frase: z.string(), icono: z.enum(['ventana', 'anillos', 'calendario', 'escalones', 'casco']) })).optional(),
+    presencia: z.object({ titulo: z.string(), clave: z.string(), texto: z.string() }).optional(),
   }),
 });
 

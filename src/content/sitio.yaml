@@ -13,6 +13,19 @@
     - { valor: 4000000, prefijo: '+', unidad: hh, etiqueta: { es: Horas hombre al año } }
     - { valor: 7, etiqueta: { es: Países con obra } }
     - { valor: 4, etiqueta: { es: Sedes } }
+  # Empresas asociadas (D1: falta decidir cuáles se muestran). Ninguna se publica hasta `aprobada: true`.
+  # Logos del sitio actual; descripción solo si existe (la de ECOHL, del testimonio de su gerente).
+  asociadas:
+    - nombre: ECOHL
+      logo: ../assets/grupo/ecohl.png
+      area: { es: Gerencia · EPCM, en: Management · EPCM }
+      descripcion: { es: Servicios EPCM, gerencias de proyecto, interventoría, comisionamiento, administración de contratos y gerencia de riesgos. }
+      aprobada: false
+    - { nombre: HL Infraestructura, logo: ../assets/grupo/hl-infraestructura.png, area: { es: Infraestructura, en: Infrastructure }, aprobada: false }
+    - { nombre: HL Panamá, logo: ../assets/grupo/hl-panama.png, area: { es: Panamá, en: Panama }, aprobada: false }
+    - { nombre: HL Rental, logo: ../assets/grupo/hl-rental.png, aprobada: false }
+    - { nombre: Megacranes, logo: ../assets/grupo/megacranes.jpg, aprobada: false }
+    - { nombre: Aktino, logo: ../assets/grupo/aktino.png, aprobada: false }
   redes:
     - { red: LinkedIn, url: 'https://www.linkedin.com/company/hl-ingenieros-sa' }
   # Logos de la portada actual. Sin First Quantum / Cobre Panamá: es cliente de un caso discreto (D6).

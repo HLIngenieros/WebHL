@@ -19,8 +19,9 @@ function iniciar() {
   const caja = document.querySelector<HTMLElement>('.gemelo');
   const lienzo = caja?.querySelector('canvas');
   const hero = document.querySelector('.hero');
-  const ctx = lienzo?.getContext('2d');
-  if (!caja || !lienzo || !hero || !ctx) return;
+  const contexto = lienzo?.getContext('2d');
+  if (!caja || !lienzo || !hero || !contexto) return;
+  const ctx = contexto; // con tipo no nulo: lo usan funciones declaradas más abajo
 
   const css = getComputedStyle(document.documentElement);
   const color = { linea: css.getPropertyValue('--hl-azul-claro'), senal: css.getPropertyValue('--hl-senal'), acero: css.getPropertyValue('--hl-acero'), texto: css.getPropertyValue('--hl-concreto') };

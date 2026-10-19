@@ -35,9 +35,9 @@ interface ConIdiomas { es?: object; en?: object; confirmar?: string[] }
 interface Servicio extends ConIdiomas { buzon?: string }
 interface Sede { nombre: Texto; buzon?: string; confirmar?: string[] }
 interface Certificacion { norma: Texto; vence?: Date; pdf?: string; confirmar?: string[] }
-interface Hito extends ConIdiomas { anio?: number }
+interface Hito extends ConIdiomas { anio?: number; foto?: unknown }
 interface Testimonio { autorizado: boolean; cargo: Texto; cita: Texto }
-interface Sitio { paises?: string[]; asociadas?: unknown[]; clientes?: { nombre?: string }[]; cifras?: { etiqueta: Texto }[]; confirmar?: string[] }
+interface Sitio { paises?: string[]; asociadas?: { nombre?: string; aprobada?: boolean }[]; clientes?: { nombre?: string }[]; cifras?: { etiqueta: Texto }[]; confirmar?: string[] }
 interface Pagina { pagina: string; lang: Lang; revisionJuridica?: boolean; confirmar?: string[] }
 
 export interface Datos {
@@ -198,7 +198,8 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
     if (!data.norma.en) add('certificaciones', id, 'en', 'traduccion');
     dudas('certificaciones', id, data.confirmar);
   }
-  for (const { id, data } of datos.historia ?? []) if (!data.anio) add('historia', id, 'anio', 'insumo');
+  // La década es el dato real de cada hito (guía §12.3); lo que falta son las fotos en alta resolución.
+  if (datos.historia?.length) add('historia', 'todas', 'fotos', 'aviso', false, 'fotos de archivo en alta resolución (las actuales son copias web de 2020) y una foto actual para "Hoy"');
   ingles('historia', datos.historia);
   for (const { id, data } of datos.testimonios ?? []) {
     if (!data.autorizado) add('testimonios', id, 'autorizado', 'aviso', false, 'no se publica hasta tener la autorización');
@@ -206,6 +207,8 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
   }
   for (const { id, data } of datos.sitio ?? []) {
     if (!data.asociadas?.length) add('sitio', id, 'asociadas', 'insumo', true, 'D1');
+    const sinAprobar = data.asociadas?.filter((a) => !a.aprobada).map((a) => a.nombre ?? '?') ?? [];
+    if (sinAprobar.length) add('sitio', id, 'asociadas', 'aviso', false, `D1: sin aprobar (${sinAprobar.join(', ')}); no se publican`);
     const sinNombre = data.clientes?.filter((c) => !c.nombre).length;
     if (sinNombre) add('sitio', id, 'clientes', 'insumo', true, `${sinNombre} logos sin nombre`);
     if (data.cifras?.some((c) => !c.etiqueta.en)) add('sitio', id, 'en', 'traduccion');
