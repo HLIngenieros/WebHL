@@ -1,6 +1,7 @@
 ---
 // Enrutador único: páginas de contenido (proyectos, servicios, sectores) y provisionales del resto del
-// mapa. Cada fase cambia una provisional por su plantilla.
+// mapa. Cada fase cambia una provisional por su plantilla. Inicio y Nosotros tienen archivo propio
+// (src/pages/index.astro, nosotros.astro y en/) para cargar solo su CSS.
 import Base from '../layouts/Base.astro';
 import { RUTAS, type ClaveRuta, type Lang } from '../i18n/rutas';
 import { t } from '../i18n/ui';
@@ -12,14 +13,13 @@ import Servicios from '../plantillas/Servicios.astro';
 import Servicio from '../plantillas/Servicio.astro';
 import Sectores from '../plantillas/Sectores.astro';
 import Sector from '../plantillas/Sector.astro';
-import Inicio from '../plantillas/Inicio.astro';
-import Nosotros from '../plantillas/Nosotros.astro';
 
 export async function getStaticPaths() {
   // getStaticPaths corre aislado del resto del archivo: sus constantes van aquí dentro.
   const CONTENIDO: ClaveRuta[] = ['proyectos', 'servicios', 'sectores'];
+  const PROPIAS: ClaveRuta[] = ['inicio', 'nosotros'];
   const provisionales = (Object.keys(RUTAS) as ClaveRuta[])
-    .filter((clave) => !CONTENIDO.includes(clave))
+    .filter((clave) => !CONTENIDO.includes(clave) && !PROPIAS.includes(clave))
     .flatMap((clave) =>
       (['es', 'en'] as Lang[]).map((lang) => ({
         params: { ruta: RUTAS[clave][lang].replace(/^\/|\/$/g, '') || undefined },
@@ -33,7 +33,7 @@ type Props = { clave: ClaveRuta; lang: Lang } | PropsContenido;
 const props = Astro.props as Props;
 const { lang } = props;
 // Las páginas de contenido llevan su título en su plantilla; aquí solo el de las provisionales.
-const titulo = 'clave' in props ? (props.clave === 'inicio' ? 'HL Ingenieros' : t(lang, props.clave)) : '';
+const titulo = 'clave' in props ? t(lang, props.clave) : '';
 ---
 {'tipo' in props ? (
   props.tipo === 'ficha' ? <Ficha id={props.id!} lang={lang} alterno={props.alterno} />
@@ -42,10 +42,6 @@ const titulo = 'clave' in props ? (props.clave === 'inicio' ? 'HL Ingenieros' : 
   : props.tipo === 'servicio' ? <Servicio id={props.id!} lang={lang} alterno={props.alterno} />
   : props.tipo === 'sectores' ? <Sectores lang={lang} alterno={props.alterno} />
   : <Sector id={props.id!} lang={lang} alterno={props.alterno} />
-) : props.clave === 'inicio' ? (
-  <Inicio lang={lang} alterno={RUTAS.inicio[lang === 'es' ? 'en' : 'es']} />
-) : props.clave === 'nosotros' ? (
-  <Nosotros lang={lang} alterno={RUTAS.nosotros[lang === 'es' ? 'en' : 'es']} />
 ) : (
   <Base titulo={titulo} lang={lang}>
     <section class="wrap py-s7">

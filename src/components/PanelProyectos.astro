@@ -84,10 +84,13 @@ const enSectores = sectores.reduce((n, s) => n + s.n, 0);
   .panel-proyectos {
     position: absolute; left: 0; right: 0; top: 100%; z-index: 1;
     background: var(--paper); color: var(--ink); border-top: var(--border-strong) solid var(--ink); border-bottom: var(--border) solid var(--line);
-    clip-path: inset(0 0 100% 0); visibility: hidden;
-    transition: clip-path var(--t-izaje) var(--ease-plano), visibility 0s var(--t-izaje);
+    clip-path: inset(0 0 100% 0); visibility: hidden; content-visibility: hidden;
+    transition: clip-path var(--t-izaje) var(--ease-plano), visibility 0s var(--t-izaje), content-visibility 0s var(--t-izaje) allow-discrete;
   }
-  .panel-proyectos[data-abierto] { clip-path: inset(0 0 0 0); visibility: visible; transition: clip-path var(--t-izaje) var(--ease-plano); }
+  .panel-proyectos[data-abierto] {
+    clip-path: inset(0 0 0 0); visibility: visible; content-visibility: visible;
+    transition: clip-path var(--t-izaje) var(--ease-plano), content-visibility 0s allow-discrete;
+  }
   .panel-in {
     max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); box-sizing: content-box;
     display: grid; grid-template-columns: 8fr 4fr;

@@ -39,9 +39,9 @@ permitidos). [especificacion.md](especificacion.md) v1.2 (§3 menú y prevalenci
 | 6 · Franja de sectores y HL en cifras | ✅ | `223cde0` |
 | 7 · Maquetas del resto del inicio | ✅ aprobadas (guía §12.1-4, `design/maquetas/inicio-resto.html`) | — |
 | 7b · Maquetas de Proyectos y Sectores | ✅ aprobadas (guía §13, `design/maquetas/{sectores,explorador}.html`) | — |
-| 8a · Menú con submenú de Proyectos | ✅ | (este) |
-| **8 · Resto del inicio (sectores con prevalencia)** | **siguiente** | — |
-| 8b · Página de Sectores | pendiente | — |
+| 8a · Menú con submenú de Proyectos | ✅ | `7d807f7` |
+| 8 · Resto del inicio (sectores con prevalencia) | ✅ (cierra F3.1) | (este) |
+| **8b · Página de Sectores** | **siguiente** | — |
 | 8c · Explorador con mapa vivo | pendiente | — |
 | 9-11 · Nosotros (F3.2) | ✅ cerrada | `bda87aa`, `2a177e0`, `aba255a` |
 | 12-13 · F3.3 (maquetas → páginas) | pendiente | — |
@@ -519,6 +519,7 @@ Se detalla al aprobar la Tarea 12, con este mínimo:
 
 **Archivos:** modificar `tests/pantallas.spec.ts`, `CLAUDE.md`.
 
+- [ ] **LCP de Nosotros:** 3,2 s en Lighthouse móvil (medido el 2026-10-19 al cerrar la Tarea 8; ya estaba así antes). Revisar el elemento LCP (el párrafo de "Quiénes somos") y la carga de la cabecera con mosaico.
 - [ ] Matriz de `pantallas.spec.ts` con `/`, `/en/`, `/nosotros/`, `/en/about/` y las de F3.3; revisar
   360, 1366 y 2560 px (impacto equivalente, guía §5) y modo oscuro.
 - [ ] `npm run check`, `npm run build`, `npm test`, `npm run presupuesto` en verde.

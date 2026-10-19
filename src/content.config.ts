@@ -157,7 +157,7 @@ const paginas = defineCollection({
     descripcion: z.string(),
     revisionJuridica: z.boolean().optional(),
     confirmar,
-    // Solo Nosotros (guía §12.2): textos estructurados de cada sección.
+    // Nosotros (guía §12.2) y, de estos, `indicadores` también en HSE (franja del inicio, §12.1-4).
     quienes: z.array(z.string()).optional(),
     mision: z.object({ antes: z.string(), clave: z.string() }).optional(),
     vision: z.object({ texto: z.string(), promesas: z.array(z.string()) }).optional(),

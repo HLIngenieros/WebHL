@@ -1,0 +1,67 @@
+---
+// Franja HSE en el inicio (guía §12.1-4): grafito en los dos temas, rayas P3 verdes y tres indicadores
+// que bajan como una barrera al entrar (firma de HSE, §9). Los indicadores salen de la página HSE.
+import { cargar } from '../../lib/datos';
+import { ruta, type Lang } from '../../i18n/rutas';
+import { t } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const { datos } = await cargar();
+const hse = datos.paginas.find((p) => p.data.pagina === 'hse' && p.data.lang === lang) ?? datos.paginas.find((p) => p.data.pagina === 'hse');
+const indicadores = hse?.data.indicadores ?? [];
+---
+{indicadores.length > 0 && (
+  <section class="franja-hse" data-seccion="hse" aria-labelledby="hse-titulo">
+    <span class="rayas" aria-hidden="true"></span>
+    <div class="hse-in">
+      <h2 id="hse-titulo" class="hse-titulo">{t(lang, 'hseInicio1')} <span>{t(lang, 'hseInicio2')}</span></h2>
+      <ul class="indicadores barrera">
+        {indicadores.map((x, i) => (
+          <li style={`--i:${i}`}>
+            <span class="valor">{x.signo}{x.valor}{x.unidad && <span class="unidad">{x.unidad === '%' ? ' %' : ` ${x.unidad}`}</span>}</span>
+            <span class="etiqueta">{x.etiqueta}</span>
+            <span class="fuente voz-datos">{x.fuente}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <a class="hse-ir" href={ruta('hse', lang)}>{t(lang, 'hse')} <span aria-hidden="true">→</span></a>
+  </section>
+)}
+
+<style>
+  .franja-hse { display: grid; grid-template-columns: var(--s5) minmax(0, 1fr); background: var(--hl-grafito); color: var(--hl-blanco); }
+  .rayas { grid-row: span 2; background: repeating-linear-gradient(-45deg, var(--hl-verde) 0 10px, var(--hl-grafito) 10px 20px); }
+  .hse-in { display: grid; gap: var(--s5); padding: var(--s6) var(--gutter); }
+  .hse-titulo { margin: 0; color: var(--hl-blanco); }
+  .hse-titulo span { display: block; font-weight: var(--fw-fina); color: var(--hl-concreto); }
+  .indicadores { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s4); }
+  .indicadores li { display: grid; gap: var(--s1); padding-left: var(--s3); border-left: var(--border) solid color-mix(in srgb, var(--hl-blanco) 20%, transparent); }
+  .valor {
+    font-family: var(--f-ancha); font-stretch: var(--wdth-stat); font-weight: var(--fw-negra); font-size: var(--fs-stat);
+    line-height: .9; color: var(--hl-verde); white-space: nowrap; letter-spacing: -.02em;
+  }
+  .etiqueta { color: var(--hl-concreto); font-size: var(--fs-sm); }
+  .fuente { color: var(--hl-acero); }
+  .hse-ir {
+    grid-column: 2; display: flex; align-items: center; justify-content: space-between; gap: var(--s3); min-height: 56px; padding: 0 var(--gutter);
+    background: var(--hl-verde); color: var(--hl-grafito); text-decoration: none; font-weight: var(--fw-strong); font-stretch: var(--wdth-subtitle);
+  }
+  .hse-ir span { transition: transform var(--t-rapido) var(--ease-plano); }
+  .hse-ir:hover span { transform: translateX(6px); }
+  @media (min-width: 900px) {
+    .franja-hse { grid-template-columns: 72px minmax(0, 1fr) auto; }
+    .rayas { grid-row: auto; }
+    .hse-in { grid-template-columns: 4fr 8fr; align-items: center; padding-inline: var(--s5); }
+    .indicadores { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .hse-ir { grid-column: auto; padding: 0 var(--s5); }
+  }
+  /* Barrera: los indicadores bajan a su sitio al entrar (revela.ts) */
+  :global(html.js) .barrera:not(:global(.visible)) li { opacity: 0; transform: translateY(-30px); }
+  :global(html.js) .barrera li { transition: opacity var(--t-izaje) var(--ease-izaje), transform var(--t-izaje) var(--ease-izaje); transition-delay: calc(var(--i, 0) * 120ms); }
+  :global(html.sin-revela) .barrera li { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .barrera:is(:global(.visible), :not(:global(.visible))) li { opacity: 1; transform: none; transition: none; }
+  }
+</style>

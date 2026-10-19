@@ -1,0 +1,99 @@
+---
+// Sectores en el inicio (guía §12.1 y §13): Cemento y Minería en celdas anchas y el resto pequeño. Al pasar,
+// la celda se llena del acento, el dibujo pasa a blanco y se traza otra vez (solo CSS).
+import Cabecera from './Cabecera.astro';
+import Ilustracion from '../Ilustracion';
+import { cargar } from '../../lib/datos';
+import { bloque, resumenSectores, type Entrada, type Proyecto } from '../../lib/contenido';
+import { ruta, urlDe, type Lang } from '../../i18n/rutas';
+import { t, tn } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const { datos } = await cargar();
+const sectores = resumenSectores(datos.sectores, datos.proyectos as unknown as Entrada<Proyecto>[]).map(({ sector, principal, n }) => ({
+  id: sector.id, principal, n,
+  codigo: `S-${String(sector.data.orden).padStart(2, '0')}`,
+  nombre: bloque(sector.data, lang).nombre,
+  intro: bloque(sector.data, lang).intro,
+  url: urlDe('sectores', sector.data.slug, lang),
+}));
+---
+<section class="sectores-inicio" data-seccion="sectores" aria-labelledby="sectores-titulo">
+  <div class="wrap">
+    <Cabecera id="sectores-titulo" codigo="L-05" nombre={t(lang, 'sectores')} titulo={[t(lang, 'sectoresInicio1'), t(lang, 'sectoresInicio2')]}
+      enlace={{ href: ruta('sectores', lang), texto: t(lang, 'verSectores') }} />
+    <ul class="rejilla">
+      {sectores.map((s, i) => (
+        <li class:list={['celda trazo', s.principal ? 'mayor' : 'menor']} style={`--i:${i}`}>
+          {s.principal ? (
+            <>
+              <span class="cab voz-datos"><span>{s.codigo}</span><span>{t(lang, 'sectorPrincipal')}</span></span>
+              <span class="dibujo"><Ilustracion sector={s.id} /></span>
+              <span class="linea">
+                <span><h3><a href={s.url}>{s.nombre}</a></h3><span class="intro">{s.intro}</span></span>
+                <span class="grande voz-datos"><b>{s.n}</b>{tn(lang, 'nProyectos', s.n).replace(String(s.n), '').trim()}</span>
+              </span>
+            </>
+          ) : (
+            <>
+              <span class="dibujo"><Ilustracion sector={s.id} /></span>
+              <span class="texto"><span class="voz-datos dato">{s.codigo} · {tn(lang, 'nProyectos', s.n)}</span><h3><a href={s.url}>{s.nombre}</a></h3></span>
+            </>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .sectores-inicio { padding-block: var(--s7); background: var(--bg); }
+  .rejilla {
+    list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: var(--border-strong) solid var(--ink); border-left: var(--border) solid var(--line);
+  }
+  .celda {
+    position: relative; display: flex; flex-direction: column; gap: var(--s2); padding: var(--s3); overflow: hidden;
+    background: var(--paper); color: var(--ink); border-right: var(--border) solid var(--line); border-bottom: var(--border) solid var(--line);
+    transition: color var(--t-aparece) var(--ease-plano);
+  }
+  .celda::before {
+    content: ''; position: absolute; inset: 0; background: var(--sec);
+    transform: scaleY(0); transform-origin: bottom; transition: transform var(--t-aparece) var(--ease-plano);
+  }
+  .celda > * { position: relative; }
+  .celda h3 { margin: 0; font-size: var(--fs-lead); }
+  .celda h3 a { color: inherit; text-decoration: none; }
+  .celda h3 a::after { content: ''; position: absolute; inset: 0; }
+  .celda h3 a:focus-visible { outline: none; }
+  .celda:has(a:focus-visible) { outline: var(--focus-ring); outline-offset: 2px; z-index: 1; }
+  .cab, .dato, .grande { color: var(--sec); }
+  .cab { display: flex; justify-content: space-between; gap: var(--s2); }
+
+  .mayor { grid-column: span 2; padding: var(--s4); }
+  .mayor .dibujo { padding: var(--s1) 10% 0; }
+  .mayor h3 { font-family: var(--f-ancha); font-stretch: var(--wdth-display); font-weight: var(--fw-display); font-size: var(--fs-h2); line-height: var(--lh-title); }
+  .linea { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--s3); }
+  .intro { display: block; margin-top: var(--s1); color: var(--muted); font-size: var(--fs-sm); max-width: 40ch; }
+  .grande { text-align: right; flex: none; }
+  .grande b { display: block; font-family: var(--f-ancha); font-stretch: var(--wdth-stat); font-weight: var(--fw-negra); font-size: var(--fs-stat); line-height: .9; }
+  .menor .dibujo { width: 84px; }
+  .texto { display: grid; gap: var(--s1); }
+
+  .celda:hover::before { transform: scaleY(1); }
+  .celda:hover, .celda:hover :is(.cab, .dato, .grande, .intro) { color: var(--sec-ink); }
+  .celda:hover :global(.capa-estructura path), .celda:hover :global(.capa-ejes line), .celda:hover :global(.capa-ejes circle) { stroke: var(--sec-ink); fill: none; }
+  /* Se traza otra vez al pasar */
+  .celda:hover :global(.t) { animation: retrazo var(--t-trazo) var(--ease-plano) both; animation-delay: calc(var(--i, 0) * 60ms); }
+  @keyframes retrazo { from { clip-path: inset(0 100% 0 0); } }
+
+  @media (min-width: 900px) {
+    .rejilla { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .menor { flex-direction: row; align-items: center; gap: var(--s3); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .celda::before, .celda { transition: none; }
+    .celda:hover :global(.t) { animation: none; }
+  }
+</style>

@@ -1,0 +1,75 @@
+---
+// Proyectos destacados (guía §12.1-4): disposición editorial. El primero en grande (lámina alta) y los
+// demás en fichas horizontales que comparten bordes. Nunca una discreta (destacados() no las incluye).
+// La grande es la obra mayor (más horas hombre).
+import Cabecera from './Cabecera.astro';
+import Lamina from '../Lamina';
+import { cargar, tarjetas } from '../../lib/datos';
+import { destacados, paraExplorador, type Entrada, type Proyecto } from '../../lib/contenido';
+import { ruta, type Lang } from '../../i18n/rutas';
+import { t, tn } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const { datos } = await cargar();
+const proyectos = datos.proyectos as unknown as Entrada<Proyecto>[];
+const lista = await tarjetas([...destacados(proyectos)].sort((a, b) => (b.data.hh ?? 0) - (a.data.hh ?? 0)), lang);
+const total = paraExplorador(proyectos).length;
+---
+{lista.length > 0 && (
+  <section class="destacados" data-seccion="proyectos" aria-labelledby="destacados-titulo">
+    <div class="wrap">
+      <Cabecera id="destacados-titulo" codigo="L-03" nombre={t(lang, 'proyectos')} titulo={[t(lang, 'destacados1'), t(lang, 'destacados2')]}
+        enlace={{ href: ruta('proyectos', lang), texto: tn(lang, 'verTodos', total) }} />
+      <ul class="dest-rejilla">
+        {lista.map((d, i) => (
+          <li class:list={['dest con-lamina izaje', { 'dest-grande': i === 0 }]} style={`--i:${i}`} data-id={d.id}>
+            <Lamina imagen={d.imagen} sector={d.sector.id} sizes={i === 0 ? '(min-width: 1100px) 700px, 100vw' : '(min-width: 1100px) 160px, (min-width: 640px) 200px, 120px'} />
+            <div class="dest-cuerpo">
+              <span class="dest-cod voz-datos"><span>{d.codigo}</span><span>{d.sector.nombre}</span></span>
+              <h3 class="dest-titulo"><a href={d.url}>{d.titulo}</a></h3>
+              <p class="dest-lugar">{[d.cliente, d.lugar].filter(Boolean).join(' · ')}</p>
+              {d.cifra && <p class="dest-cifra"><span class="cifra">{d.cifra.valor}</span> <span class="voz-datos">{d.cifra.etiqueta}</span></p>}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+<style>
+  .destacados { padding-block: var(--s7); background: var(--bg); }
+  .dest-rejilla { list-style: none; margin: 0; padding: 0; display: grid; border-top: var(--border-strong) solid var(--ink); }
+  .dest { position: relative; display: grid; background: var(--paper); border-bottom: var(--border) solid var(--line); }
+  .dest :global(.lamina) { max-width: none; --proporcion: 4 / 3; }
+  .dest-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s1); align-content: start; padding: var(--s3) var(--s4) var(--s4); min-width: 0; }
+  .dest-cod { display: flex; flex-wrap: wrap; gap: 0 var(--s2); color: var(--sec); }
+  .dest-titulo { margin: 0; font-size: var(--fs-h3); overflow-wrap: anywhere; }
+  .dest-titulo a { color: var(--ink); text-decoration: none; }
+  .dest-titulo a::after { content: ''; position: absolute; inset: 0; }
+  .dest:hover .dest-titulo a { color: var(--sec); }
+  .dest-titulo a:focus-visible { outline: none; }
+  .dest:has(.dest-titulo a:focus-visible) { outline: var(--focus-ring); outline-offset: 2px; z-index: 1; }
+  .dest-lugar { margin: 0; color: var(--muted); font-size: var(--fs-sm); }
+  .dest-cifra { margin: var(--s1) 0 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: var(--s1) var(--s2); color: var(--sec); }
+  .dest-cifra .cifra { font-family: var(--f-ancha); font-stretch: var(--wdth-display); font-weight: var(--fw-display); font-size: var(--fs-h3); }
+  .dest-cifra .voz-datos { color: var(--muted); }
+  .dest-cifra .cifra { white-space: normal; min-width: 0; overflow-wrap: anywhere; }
+  .dest:not(.dest-grande) .dest-cifra .cifra { font-size: var(--fs-lead); }
+
+  /* Las fichas chicas son horizontales en todos los anchos: miniatura pequeña, foto pequeña (LCP). */
+  .dest:not(.dest-grande) { grid-template-columns: 120px minmax(0, 1fr); }
+  .dest:not(.dest-grande) :global(.lamina) { aspect-ratio: auto; height: 100%; min-height: 120px; }
+  @media (min-width: 640px) {
+    .dest:not(.dest-grande) { grid-template-columns: 200px minmax(0, 1fr); }
+    .dest:not(.dest-grande) :global(.lamina) { min-height: 160px; }
+  }
+  @media (min-width: 1100px) {
+    .dest-rejilla { grid-template-columns: 7fr 5fr; }
+    .dest-grande { grid-row: span 3; border-right: var(--border) solid var(--line); grid-template-rows: 1fr auto; }
+    .dest-grande :global(.lamina) { aspect-ratio: auto; height: 100%; min-height: 420px; }
+    .dest-grande .dest-titulo { font-size: var(--fs-h2); }
+    .dest:not(.dest-grande) { grid-template-columns: 160px minmax(0, 1fr); }
+  }
+</style>

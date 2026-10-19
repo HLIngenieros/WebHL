@@ -3,6 +3,11 @@ pagina: hse
 lang: es
 titulo: HSE y calidad
 descripcion: Sistema de gestión integral de HL Ingenieros, certificado en ISO 9001, ISO 14001 e ISO 45001, con Reglas de Oro HSE, PIENSA® y una cultura de seguridad medible.
+# Indicadores de la franja HSE del inicio (guía §12.1-4). Fuente: PDF de ECOHL, casos 1, 2 y 5.
+indicadores:
+  - { valor: 64, signo: "−", unidad: "%", etiqueta: Frecuencia de accidentes incapacitantes en 8 años, fuente: Programa de cultura de seguridad · ECOHL }
+  - { valor: 72, signo: "−", unidad: "%", etiqueta: Severidad de accidentes en 8 años, fuente: Programa de cultura de seguridad · ECOHL }
+  - { valor: 0, unidad: "", etiqueta: Incidentes en las plataformas Chuchupa A y B (Chevron), fuente: Gerencia con cadena crítica · ECOHL }
 confirmar:
   - "Indicadores HSE de los últimos 3 años (los publicados son del programa de 8 años del PDF de ECOHL, de 2020)."
   - "Autoridad para detener trabajos (ADT): el sitio actual la lista pero no tiene texto."

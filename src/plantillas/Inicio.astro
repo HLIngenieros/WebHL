@@ -1,10 +1,16 @@
 ---
-// Inicio (guía §12.1, especificación §5): hero con barra inmersa, franja de sectores y HL en cifras; el
-// resto de bloques llega con la Tarea 8 del plan F3, tras aprobar sus maquetas.
+// Inicio (guía §12.1, especificación §5): hero con barra inmersa, franja de sectores, HL en cifras,
+// destacados, servicios, sectores (Cemento y Minería al frente), franja HSE y clientes. Noticias: el
+// bloque no existe hasta que haya al menos 3 (especificación §3); hoy no hay colección.
 import Base from '../layouts/Base.astro';
 import Hero from '../components/inicio/Hero.astro';
 import FranjaSectores from '../components/inicio/FranjaSectores.astro';
 import FichasCifras from '../components/inicio/FichasCifras.astro';
+import Destacados from '../components/inicio/Destacados.astro';
+import ServiciosInicio from '../components/inicio/ServiciosInicio.astro';
+import SectoresInicio from '../components/inicio/SectoresInicio.astro';
+import FranjaHse from '../components/inicio/FranjaHse.astro';
+import Clientes from '../components/inicio/Clientes.astro';
 import { cifrasInicio } from '../lib/inicio';
 import { cargar } from '../lib/datos';
 import { txt } from '../lib/contenido';
@@ -23,4 +29,9 @@ const cifras = cifrasInicio({ fundacion: sitio.fundacion, paises: sitio.paises, 
   <Hero lang={lang} lema={lema} />
   <FranjaSectores lang={lang} />
   <FichasCifras lang={lang} cifras={cifras} paises={sitio.paises} sedes={datos.sedes.map((s) => s.data.ciudad)} normas={iso.map((c) => c.data.norma.es.replace('ISO ', ''))} />
+  <Destacados lang={lang} />
+  <ServiciosInicio lang={lang} />
+  <SectoresInicio lang={lang} />
+  <FranjaHse lang={lang} />
+  <Clientes lang={lang} />
 </Base>

@@ -17,6 +17,7 @@
   --hl-senal: #F2B42A;
   --hl-azul-claro: #62A0EC; /* azul de líneas sobre grafito (el --accent oscuro): gemelo y retícula del hero */
   --hl-blanco: #FFFFFF;    /* monograma y texto sobre el grafito del hero (igual en los dos temas) */
+  --hl-verde: #5CC27D;     /* verde HSE sobre grafito (franja HSE del inicio, igual en los dos temas) */
 
   /* ---- Roles de color · modo claro ---- */
   --bg: #E7EAEB;           /* concreto: fondo base */

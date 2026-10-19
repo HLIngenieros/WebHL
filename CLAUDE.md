@@ -233,8 +233,13 @@ en [contenido/README.md](contenido/README.md).
   - **Proyectos y Sectores (19-oct):** maquetas `design/maquetas/{sectores,explorador}.html` aprobadas;
     especificación v1.2 y guía visual v1.4 (§13). Plan: Tareas 8a (menú con submenú), 8 (resto del inicio
     con prevalencia de Cemento y Minería), 8b (página de Sectores) y 8c (explorador con mapa vivo).
-  - **Siguiente paso:** Tarea 8a, luego 8 (resto del inicio: destacados, servicios, sectores, franja HSE,
-    noticias ocultas, clientes), 8b y 8c; luego F3.3 (maquetas de HSE, Noticias, Acreedores y legales → aprobación →
+  - **8a cerrada** (menú con submenú, `7d807f7`) y **8 cerrada** (resto del inicio; cierra F3.1): destacados
+    (la grande es la obra con más HH), servicios, sectores con prevalencia, franja HSE (indicadores en
+    `paginas/hse.es.md`) y clientes. **Inicio y Nosotros salieron del enrutador único** (`src/pages/index.astro`,
+    `nosotros.astro`, `en/`): el CSS de `[...ruta]` lleva el de todas sus plantillas. Lighthouse móvil del inicio
+    98-99/100/100/100, LCP 1,8-1,98 s (margen corto: las fotos de destacados compiten con la fuente). Nosotros
+    queda en 3,2 s de LCP (anterior a esta tarea; anotado en la Tarea 14). 372 pruebas.
+  - **Siguiente paso:** 8b (página de Sectores) y 8c (explorador con mapa vivo); luego F3.3 (maquetas de HSE, Noticias, Acreedores y legales → aprobación →
     páginas) y la Tarea 14 (cierre, Lighthouse, revisión y merge a `main`). Ejecución en modo nativo, sin
     subagentes (pedido de Juan David).
   - **Decisiones de F3 con efecto visible:** sin precarga de fuente (primera visita: un instante con el

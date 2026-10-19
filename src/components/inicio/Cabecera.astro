@@ -1,0 +1,27 @@
+---
+// Cabecera de los bloques del inicio (guía §12.1-4): P1 con el código de lámina, H2 en dos pesos y el
+// enlace "Ver…" con flecha que avanza al pasar. Toma el acento de la sección a la que lleva.
+import Pod from '../Pod.astro';
+
+interface Props { id: string; codigo: string; nombre: string; titulo: [string, string]; enlace?: { href: string; texto: string } }
+const { id, codigo, nombre, titulo, enlace } = Astro.props;
+---
+<div class="cabecera">
+  <div>
+    <Pod forma="rotulo" codigo={codigo} nombre={nombre} />
+    <h2 id={id} class="cabecera-titulo">{titulo[0]} <span>{titulo[1]}</span></h2>
+  </div>
+  {enlace && <a class="ver-mas" href={enlace.href}>{enlace.texto}</a>}
+</div>
+
+<style>
+  .cabecera { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--s3) var(--s4); margin-bottom: var(--s5); }
+  .cabecera-titulo { margin: var(--s3) 0 0; }
+  .cabecera-titulo span { display: block; font-weight: var(--fw-fina); }
+  .ver-mas {
+    display: inline-flex; align-items: center; gap: var(--s2); min-height: 44px; color: var(--sec); text-decoration: none;
+    font-weight: var(--fw-strong); font-stretch: var(--wdth-subtitle);
+  }
+  .ver-mas::after { content: '→'; transition: transform var(--t-rapido) var(--ease-plano); }
+  .ver-mas:hover::after { transform: translateX(6px); }
+</style>

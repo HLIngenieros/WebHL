@@ -244,3 +244,79 @@ test.describe('accesibilidad del inicio', () => {
     });
   }
 });
+
+// ── Resto del inicio (Tarea 8, guía §12.1-4 y §13) ──
+
+test.describe('resto del inicio', () => {
+  test('destacados: 4 obras, la grande es Columbus y ninguna es discreta', async ({ page }) => {
+    await page.goto('/');
+    const fichas = page.locator('.destacados .dest');
+    await expect(fichas).toHaveCount(4);
+    await expect(fichas.first()).toHaveAttribute('data-id', 'planta-columbus');
+    const ids = await fichas.evaluateAll((xs) => xs.map((x) => x.getAttribute('data-id')));
+    expect(ids).not.toContain('patio-de-carbon-estrella');
+    expect(ids).not.toContain('tanques-cobre-panama');
+    await expect(page.locator('.destacados .ver-mas')).toHaveAttribute('href', '/proyectos/');
+  });
+
+  test('servicios: los 3 grupos con las 7 líneas enlazadas', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('.servicios-inicio .grupo')).toHaveCount(3);
+    await expect(page.locator('.servicios-inicio li a[href^="/servicios/"]')).toHaveCount(7);
+  });
+
+  test('sectores: Cemento y Minería al frente y en grande, los otros 4 pequeños', async ({ page }) => {
+    await page.goto('/');
+    const mayores = page.locator('.sectores-inicio .mayor a');
+    await expect(mayores).toHaveCount(2);
+    await expect(mayores.nth(0)).toHaveAttribute('href', '/sectores/cemento/');
+    await expect(mayores.nth(1)).toHaveAttribute('href', '/sectores/mineria/');
+    await expect(page.locator('.sectores-inicio .menor')).toHaveCount(4);
+    // Minería cuenta solo las visibles: Cobre Panamá es discreta.
+    await expect(page.locator('.sectores-inicio .mayor').nth(1).locator('.grande b')).toHaveText('3');
+  });
+
+  test('la franja HSE lleva los 3 indicadores y enlaza a HSE', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('.franja-hse .indicadores li')).toHaveCount(3);
+    await expect(page.locator('.franja-hse .valor').first()).toHaveText('−64 %');
+    await expect(page.locator('.franja-hse .hse-ir')).toHaveAttribute('href', '/hse/');
+  });
+
+  test('clientes: cada logo con su nombre y una sola copia accesible', async ({ page }) => {
+    await page.goto('/');
+    const leibles = page.locator('.clientes .cinta ul:not([aria-hidden]) img');
+    const n = await leibles.count();
+    expect(n).toBeGreaterThan(10);
+    const alts = await leibles.evaluateAll((xs) => xs.map((x) => x.getAttribute('alt')));
+    expect(alts.every(Boolean)).toBe(true);
+    await expect(page.locator('.clientes ul[aria-hidden] img[alt=""]')).toHaveCount(n);
+  });
+
+  test('sin noticias no hay bloque de noticias', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('main .noticias')).toHaveCount(0);
+  });
+
+  test.describe('sin JavaScript', () => {
+    test.use({ javaScriptEnabled: false });
+    test('los bloques nuevos se ven completos', async ({ page }) => {
+      await page.goto('/');
+      await expect(page.locator('.franja-hse .indicadores li').first()).toHaveCSS('opacity', '1');
+      await expect(page.locator('.destacados .dest').first()).toHaveCSS('opacity', '1');
+    });
+  });
+
+  test('con movimiento reducido las cintas de clientes no corren', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await expect(page.locator('.clientes .cinta').first()).toHaveCSS('animation-name', 'none');
+    await expect(page.locator('.franja-hse .indicadores li').first()).toHaveCSS('opacity', '1');
+  });
+
+  test('en inglés los enlaces van a las rutas EN', async ({ page }) => {
+    await page.goto('/en/');
+    await expect(page.locator('.sectores-inicio .mayor a').first()).toHaveAttribute('href', '/en/sectors/cement/');
+    await expect(page.locator('.franja-hse .hse-ir')).toHaveAttribute('href', '/en/hse/');
+  });
+});

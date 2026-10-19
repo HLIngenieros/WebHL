@@ -1,0 +1,69 @@
+---
+// Clientes (guía §12.1-4): los logos de sitio.clientes en dos cintas que corren en sentidos contrarios,
+// en gris y a color al pasar. Se detienen con hover, foco, movimiento reducido o fuera de pantalla.
+// La segunda copia de cada cinta solo cierra el bucle: no se lee ni se enfoca.
+import { Image } from 'astro:assets';
+import Cabecera from './Cabecera.astro';
+import { cargar } from '../../lib/datos';
+import type { Lang } from '../../i18n/rutas';
+import { t } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const { datos } = await cargar();
+const clientes = datos.sitio[0].data.clientes;
+const mitad = Math.ceil(clientes.length / 2);
+const cintas = [clientes.slice(0, mitad), clientes.slice(mitad)];
+---
+{clientes.length > 0 && (
+  <section class="clientes" aria-labelledby="clientes-titulo">
+    <div class="wrap">
+      <Cabecera id="clientes-titulo" codigo="L-06" nombre={t(lang, 'clientes')} titulo={[t(lang, 'clientesInicio1'), t(lang, 'clientesInicio2')]} />
+    </div>
+    {cintas.map((cinta, k) => (
+      <div class="riel">
+        <div class:list={['cinta', { inversa: k === 1 }]}>
+          <ul>{cinta.map((c) => <li><Image src={c.logo} alt={c.nombre ?? ''} height={40} class="logo" /></li>)}</ul>
+          <ul aria-hidden="true">{cinta.map((c) => <li><Image src={c.logo} alt="" height={40} class="logo" /></li>)}</ul>
+        </div>
+      </div>
+    ))}
+  </section>
+)}
+
+<script>
+  // Fuera de pantalla las cintas se detienen (guía §9: todo bucle).
+  function vigilar() {
+    const caja = document.querySelector<HTMLElement>('.clientes');
+    if (!caja || caja.dataset.vigilada) return;
+    caja.dataset.vigilada = '1';
+    new IntersectionObserver(([e]) => caja.classList.toggle('quieta', !e.isIntersecting)).observe(caja);
+  }
+  vigilar();
+  document.addEventListener('astro:page-load', vigilar);
+</script>
+
+<style>
+  .clientes { padding-block: var(--s6); background: var(--paper); overflow: hidden; }
+  .riel {
+    border-block: var(--border) solid var(--line); overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .riel + .riel { border-top: 0; }
+  .cinta { display: flex; width: max-content; animation: cinta 46s linear infinite; }
+  .cinta.inversa { animation-direction: reverse; }
+  .clientes:is(:hover, :focus-within, .quieta) .cinta { animation-play-state: paused; }
+  @keyframes cinta { to { transform: translateX(-50%); } }
+  ul { display: flex; align-items: center; gap: var(--s6); margin: 0; padding: var(--s3) var(--s6) var(--s3) 0; list-style: none; }
+  /* Placa blanca: los logos se leen igual en los dos temas (como las asociadas de Nosotros). */
+  .logo { display: block; height: 40px; width: auto; padding: var(--s2); box-sizing: content-box; background: var(--hl-blanco); filter: grayscale(1); opacity: .7; transition: filter var(--t-rapido) ease, opacity var(--t-rapido) ease; }
+  li:hover .logo { filter: none; opacity: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    .cinta { animation: none; }
+    .cinta ul[aria-hidden] { display: none; }
+    /* Quietas: los logos se reparten en filas, sin desplazamiento lateral. */
+    .riel { mask-image: none; }
+    .cinta { width: auto; }
+    .cinta ul { flex-wrap: wrap; justify-content: center; padding-inline: var(--gutter); gap: var(--s4); }
+  }
+</style>

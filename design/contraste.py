@@ -29,6 +29,10 @@ PARES = [
     ("signal", "bg", 3.0, "cotas y marcas (no texto)"),
     ("accent", "bg", 3.0, "anillo de foco (no texto)"),
     ("ink", "bg", 3.0, "borde inferior de campos (no texto)"),
+    ("hl-verde", "hl-grafito", 4.5, "cifras HSE sobre grafito"),
+    ("hl-grafito", "hl-verde", 4.5, "botón HSE sobre grafito"),
+    ("hl-concreto", "hl-grafito", 4.5, "texto sobre grafito"),
+    ("hl-acero", "hl-grafito", 4.5, "fuente sobre grafito"),
 ]
 
 # Acentos de sección (guía §3.5): texto sobre fondo y papel, texto sobre el acento y chip.
