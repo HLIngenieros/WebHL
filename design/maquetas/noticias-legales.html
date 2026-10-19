@@ -1,0 +1,312 @@
+<!-- Maqueta aprobada el 2026-10-19 (guía §12.5; F3.3 · Tarea 12, ronda 2): Noticias (índice y entrada), Información para acreedores y páginas legales, con movimiento en cada bloque. Noticias no tiene contenido real: las entradas son EJEMPLOS. Referencia de composición y movimiento; los valores salen de design/tokens.css. -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Noticias y legales · maqueta</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<style>
+  :root { --azul:#0B509E; --azul-s:#DCE8F7; --g:#14181C; --c:#E7EAEB; --paper:#F6F7F7; --ac:#8A949B; --line:#C2C9CD; --sen:#F2B42A; --mut:#56606A;
+          --not:#B13F12; --not-s:#F9E6DE; --pro:#8A5A00;
+          --ez:cubic-bezier(.2,.8,.2,1); --ep:cubic-bezier(.6,0,.2,1); --k:var(--not); }
+  * { box-sizing:border-box } html,body { margin:0; background:var(--c); color:var(--g); font-family:Archivo,sans-serif; }
+  a { color:inherit; } button { font:inherit; color:inherit; }
+  .dat { font-stretch:72%; text-transform:uppercase; letter-spacing:.12em; font-weight:600; font-size:11.5px; }
+  .w { max-width:1240px; margin:0 auto; padding:0 40px; }
+  .nota { background:var(--g); color:#AEB6BC; font-size:12.5px; padding:12px 40px; line-height:1.5; }
+  .nota b { color:var(--sen); font-weight:600; }
+  .rotulo { padding:36px 0 14px; display:flex; gap:14px; align-items:baseline; border-bottom:1px dashed var(--ac); color:var(--mut); }
+  .rotulo b { color:var(--g); font-size:13px; }
+  .pod { display:inline-flex; align-items:center; border:1.5px solid var(--g); }
+  .pod i { width:6px; align-self:stretch; background:var(--k); } .pod b { padding:3px 8px; border-right:1px solid var(--g); color:var(--k); } .pod span { padding:3px 8px; }
+  .ej { display:inline-block; background:var(--sen); color:var(--g); padding:2px 6px; vertical-align:middle; }
+  .encab { padding:48px 0 32px; display:grid; grid-template-columns:7fr 5fr; gap:40px; align-items:end; }
+  .encab h1 { margin:14px 0 0; font-stretch:125%; font-weight:900; font-size:76px; line-height:.9; letter-spacing:-.025em; }
+  .encab h1 .l { display:block; overflow:hidden; } .encab h1 .l > span { display:block; transform:translateY(105%); transition:transform .9s var(--ez); }
+  .encab h1 .l:nth-child(2) > span { font-weight:300; transition-delay:.12s; }
+  .vis.encab h1 .l > span { transform:none; }
+  .encab p { margin:0; color:var(--mut); font-size:17px; line-height:1.5; }
+  .sube { opacity:0; transform:translateY(28px); transition:opacity .7s var(--ez), transform .7s var(--ez); transition-delay:calc(var(--i, 0) * 90ms); }
+  .vis .sube, .sube.vis { opacity:1; transform:none; }
+
+  /* Sello de recibido: se estampa al entrar y otra vez al pasar */
+  .sello { display:inline-grid; justify-items:center; gap:2px; padding:6px 12px; border:2px solid var(--not); outline:1px solid var(--not); outline-offset:2px; color:var(--not); background:rgba(246,247,247,.92); transform:rotate(-4deg); opacity:0; }
+  .sello b { font-stretch:118%; font-weight:900; font-size:21px; letter-spacing:-.01em; line-height:1; white-space:nowrap; }
+  .sello small { font-size:9.5px; }
+  .vis .sello, .sello.vis { animation:estampa .45s var(--ez) both; animation-delay:var(--d, 0s); }
+  @keyframes estampa { from { transform:rotate(-16deg) scale(1.7); opacity:0; } 60% { opacity:1; } 80% { transform:rotate(-3deg) scale(.96); } to { transform:rotate(-4deg) scale(1); opacity:1; } }
+
+  /* ───── 1 · Índice: filtros que reacomodan y tarjetas vivas ───── */
+  .filtros { position:relative; display:inline-flex; border:1.5px solid var(--g); margin-bottom:22px; background:var(--paper); }
+  .filtros button { position:relative; z-index:1; padding:10px 16px; background:none; border:0; cursor:pointer; transition:color .3s; }
+  .filtros button[aria-pressed=true] { color:#fff; }
+  .filtros .marca { position:absolute; top:0; bottom:0; left:0; background:var(--not); transition:transform .45s var(--ep), width .45s var(--ep); }
+  .rejilla { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; perspective:1000px; }
+  .card { position:relative; display:flex; flex-direction:column; background:var(--paper); border:1.5px solid var(--g); text-decoration:none; transition:transform .25s var(--ez); transform-style:preserve-3d; }
+  .card.grande { grid-column:span 2; grid-row:span 2; }
+  .card[hidden] { display:none; }
+  .card .lam { position:relative; overflow:hidden; background:var(--g); aspect-ratio:16/10; }
+  .card.grande .lam { aspect-ratio:auto; flex:1; min-height:340px; }
+  .card .lam img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:grayscale(1) contrast(1.1); transform:scale(1.04); transition:filter .5s, transform 1.2s var(--ez); }
+  .card .lam .tin { position:absolute; inset:0; background:var(--not); mix-blend-mode:multiply; opacity:.82; transition:opacity .5s; }
+  .card:hover .lam img { filter:none; transform:scale(1.1); } .card:hover .lam .tin { opacity:0; }
+  .card .sello { position:absolute; right:16px; top:16px; z-index:2; }
+  .card .p3 { position:absolute; left:0; right:0; bottom:0; z-index:2; display:flex; height:30px; background:var(--sen); border-top:1px solid var(--g); color:var(--g); transform:translateY(100%); transition:transform .5s var(--ep); transition-delay:.4s; }
+  .vis .card .p3 { transform:none; }
+  .card .p3 i { width:56px; background:repeating-linear-gradient(-45deg,var(--g) 0 6px,var(--sen) 6px 12px); background-size:16.97px 16.97px; border-right:1px solid var(--g); }
+  .card:hover .p3 i { animation:rayas .6s linear infinite; }
+  @keyframes rayas { to { background-position:16.97px 0; } }
+  .card .p3 span { display:flex; align-items:center; padding:0 12px; }
+  .card .cu { padding:18px 20px 20px; display:grid; gap:8px; }
+  .card .cod { display:flex; gap:10px; color:var(--not); flex-wrap:wrap; align-items:center; }
+  .card h2, .card h3 { margin:0; font-stretch:115%; font-weight:800; font-size:20px; line-height:1.15; background:linear-gradient(var(--not),var(--not)) left bottom / 0 2px no-repeat; transition:background-size .45s var(--ep); width:fit-content; }
+  .card.grande h2 { font-size:34px; font-weight:850; letter-spacing:-.01em; }
+  .card:hover h2, .card:hover h3 { background-size:100% 2px; }
+  .card p { margin:0; color:var(--mut); font-size:15px; line-height:1.45; }
+  .card .leer { display:inline-flex; gap:8px; color:var(--not); font-weight:700; opacity:0; transform:translateX(-10px); transition:opacity .3s, transform .35s var(--ez); }
+  .card:hover .leer { opacity:1; transform:none; }
+  .oculta { margin-top:22px; border:1.5px dashed var(--ac); padding:16px 18px; color:var(--mut); font-size:14px; }
+
+  /* ───── 2 · Entrada: barra de lectura, cabecera en paralaje ───── */
+  .lectura { position:sticky; top:0; z-index:5; height:4px; background:transparent; }
+  .lectura i { display:block; height:100%; background:var(--not); transform-origin:left; transform:scaleX(0); }
+  .entrada { background:var(--paper); padding:0 0 72px; }
+  .ent-hero { position:relative; height:420px; overflow:hidden; background:var(--g); }
+  .ent-hero img { position:absolute; left:0; right:0; top:-15%; width:100%; height:130%; object-fit:cover; filter:grayscale(1) contrast(1.1); }
+  .ent-hero .tin { position:absolute; inset:0; background:var(--not); mix-blend-mode:multiply; opacity:.8; }
+  .ent-hero .w { position:relative; height:100%; display:flex; flex-direction:column; justify-content:flex-end; padding-bottom:36px; color:#fff; }
+  .ent-hero h1 { margin:10px 0 0; font-stretch:122%; font-weight:900; font-size:56px; line-height:.95; letter-spacing:-.02em; max-width:18ch; }
+  .ent-hero .sello { position:absolute; right:40px; top:40px; background:rgba(246,247,247,.95); }
+  .ent-g { display:grid; grid-template-columns:3fr 7fr 2fr; gap:40px; padding-top:48px; }
+  .ent-meta { display:grid; gap:18px; align-content:start; position:sticky; top:24px; }
+  .ent-meta .dat { color:var(--mut); }
+  .ent-meta .volver { color:var(--not); text-decoration:none; font-weight:700; display:inline-flex; gap:8px; }
+  .ent-meta .volver i { font-style:normal; transition:transform .3s var(--ez); } .ent-meta .volver:hover i { transform:translateX(-5px); }
+  .ent .lead { font-size:21px; line-height:1.5; margin:0 0 28px; max-width:60ch; }
+  .ent p { font-size:17.5px; line-height:1.7; max-width:66ch; margin:0 0 18px; color:#2B3238; }
+  .ent h2 { font-stretch:115%; font-size:24px; margin:36px 0 12px; }
+  .cita { margin:32px 0; padding:4px 0 4px 22px; border-left:4px solid var(--not); font-stretch:115%; font-weight:700; font-size:24px; line-height:1.3; max-width:52ch; clip-path:inset(0 100% 0 0); transition:clip-path 1s var(--ep); }
+  .cita.vis { clip-path:inset(0 0 0 0); }
+  .rel { margin-top:40px; display:grid; grid-template-columns:160px 1fr; border:1.5px solid var(--g); background:#fff; text-decoration:none; transition:transform .25s var(--ez); }
+  .rel .lam { position:relative; overflow:hidden; background:var(--g); }
+  .rel .lam img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:grayscale(1); transition:filter .4s; }
+  .rel .lam .tin { position:absolute; inset:0; background:var(--pro); mix-blend-mode:multiply; opacity:.85; transition:opacity .4s; }
+  .rel:hover .lam img { filter:none; } .rel:hover .lam .tin { opacity:0; }
+  .rel div:last-child { padding:16px 18px; display:grid; gap:6px; }
+  .rel .dat { color:var(--pro); } .rel b { font-stretch:112%; font-size:19px; }
+  .comp { display:grid; gap:8px; align-content:start; position:sticky; top:24px; }
+  .comp button { position:relative; text-align:left; border:1.5px solid var(--g); background:#fff; padding:10px 12px; cursor:pointer; overflow:hidden; }
+  .comp button::before { content:""; position:absolute; inset:0; background:var(--not); transform:scaleX(0); transform-origin:left; transition:transform .35s var(--ep); }
+  .comp button span { position:relative; transition:color .3s; }
+  .comp button:hover::before { transform:scaleX(1); } .comp button:hover span { color:#fff; }
+
+  /* ───── 3 · Acreedores: documentos que se abren ───── */
+  .acr { --k:var(--azul); padding:24px 0 72px; }
+  .acr .encab h1 .l:nth-child(2) > span { color:var(--azul); }
+  .linea { position:relative; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; padding-top:38px; }
+  .linea::before { content:""; position:absolute; left:0; right:0; top:12px; height:1.5px; background:var(--azul); transform-origin:left; transform:scaleX(0); transition:transform 1.2s var(--ep); }
+  .linea.vis::before { transform:scaleX(1); }
+  .doc { position:relative; display:grid; gap:14px; padding:22px 20px 20px; background:#fff; border:1.5px solid var(--g); text-decoration:none; clip-path:polygon(0 0, calc(100% - 34px) 0, 100% 34px, 100% 100%, 0 100%); transition:clip-path .4s var(--ep), transform .3s var(--ez); }
+  .doc::before { content:""; position:absolute; right:0; top:0; width:34px; height:34px; background:linear-gradient(225deg, transparent 50%, var(--azul-s) 50%); border-left:1.5px solid var(--g); border-bottom:1.5px solid var(--g); transition:opacity .3s; }
+  .doc:hover { clip-path:polygon(0 0, 100% 0, 100% 0, 100% 100%, 0 100%); transform:translateY(-6px); } .doc:hover::before { opacity:0; }
+  .doc .hito { position:absolute; top:-33px; left:20px; width:14px; height:14px; border-radius:50%; background:var(--paper); border:2px solid var(--azul); }
+  .doc .ano { position:absolute; top:-34px; left:44px; color:var(--azul); }
+  .doc .n { font-stretch:125%; font-weight:900; font-size:52px; line-height:.85; color:var(--azul); letter-spacing:-.02em; }
+  .doc b { font-stretch:110%; font-size:18px; line-height:1.25; }
+  .doc .pie { display:flex; justify-content:space-between; align-items:center; border-top:1px dashed var(--line); padding-top:12px; color:var(--mut); }
+  .doc .baja { display:inline-flex; gap:8px; align-items:center; color:var(--g); font-weight:700; text-transform:none; letter-spacing:0; font-stretch:100%; font-size:14px; }
+  .doc .baja i { font-style:normal; display:inline-block; }
+  .doc:hover .baja i { animation:rebota .6s var(--ez) 2; }
+  @keyframes rebota { 50% { transform:translateY(4px); } }
+  .chip { display:inline-block; padding:3px 8px; border:1px solid currentColor; }
+  .chip.vig { color:#1F6F3A; background:#D3EBDA; }
+  .chip.ant { color:var(--mut); }
+  .aviso { display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:center; margin-top:28px; padding:18px 20px; border:1.5px solid var(--g); background:#fff; }
+  .aviso .ic { width:40px; height:40px; color:var(--azul); }
+  .aviso .ic * { fill:none; stroke:currentColor; stroke-width:1.8; }
+  .aviso p { margin:0; color:var(--mut); line-height:1.5; }
+
+  /* ───── 4 · Legales: índice que se llena al leer ───── */
+  .legal { --k:var(--azul); background:var(--paper); padding:24px 0 80px; }
+  .leg-g { display:grid; grid-template-columns:3fr 9fr; gap:56px; }
+  .indice { position:sticky; top:24px; align-self:start; display:grid; gap:2px; border-top:1.5px solid var(--g); padding-top:10px; }
+  .indice a { position:relative; display:flex; gap:10px; padding:9px 10px; text-decoration:none; color:var(--mut); overflow:hidden; }
+  .indice a::before { content:""; position:absolute; left:0; top:0; bottom:0; width:100%; background:var(--azul-s); transform:scaleX(var(--p, 0)); transform-origin:left; }
+  .indice a::after { content:""; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--azul); transform:scaleY(0); transition:transform .3s var(--ep); }
+  .indice a > * { position:relative; }
+  .indice a.act { color:var(--azul); font-weight:700; } .indice a.act::after { transform:scaleY(1); }
+  .indice a span { font-stretch:72%; font-weight:600; letter-spacing:.1em; }
+  .cajetin { display:grid; grid-template-columns:repeat(4,auto) 1fr; border:1.5px solid var(--g); background:#fff; margin-bottom:32px; }
+  .cajetin div { padding:10px 14px; border-right:1px solid var(--line); display:grid; gap:3px; }
+  .cajetin div:last-child { border-right:0; justify-items:end; align-content:center; }
+  .cajetin .dat { color:var(--mut); } .cajetin b { font-size:15px; }
+  .cajetin a { padding:8px 12px; border:1.5px solid var(--g); text-decoration:none; font-weight:700; transition:background .25s, color .25s; }
+  .cajetin a:hover { background:var(--g); color:#fff; }
+  .juridica { display:flex; gap:12px; align-items:center; margin-bottom:28px; padding:12px 16px; background:#FDF1D8; border:1.5px solid var(--sen); }
+  .art { max-width:68ch; }
+  .art section { opacity:.35; transition:opacity .5s; } .art section.vis { opacity:1; }
+  .art h2 { display:flex; gap:14px; align-items:baseline; font-stretch:115%; font-size:24px; margin:40px 0 12px; scroll-margin-top:24px; }
+  .art h2 span { color:var(--azul); font-stretch:72%; font-size:13px; letter-spacing:.12em; font-weight:600; }
+  .art h2 a { margin-left:auto; color:var(--ac); text-decoration:none; font-size:16px; opacity:0; transition:opacity .2s; }
+  .art h2:hover a { opacity:1; }
+  .art p { font-size:17.5px; line-height:1.7; margin:0 0 14px; color:#2B3238; }
+  .ph { display:block; height:12px; background:#DDE2E4; margin:10px 0; } .ph.c { width:72%; } .ph.m { width:88%; }
+
+  @media (max-width:900px) {
+    .w { padding:0 16px; } .nota { padding:12px 16px; }
+    .encab, .ent-g, .leg-g { grid-template-columns:1fr; } .encab h1 { font-size:50px; } .ent-hero h1 { font-size:36px; }
+    .rejilla, .linea { grid-template-columns:1fr; } .card.grande { grid-column:auto; grid-row:auto; }
+    .indice, .ent-meta, .comp { position:static; } .cajetin { grid-template-columns:1fr 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration:0s !important; animation-delay:0s !important; transition-duration:0s !important; transition-delay:0s !important; }
+  }
+</style></head>
+<body>
+<div class="nota"><b>Maqueta Noticias, Acreedores y legales · ronda 2 · 19-oct-2026.</b> Prueba los filtros (las tarjetas se reacomodan), pasa el cursor por las tarjetas (foto a color, sello que se estampa otra vez, franja de adjudicado que corre), baja por la entrada (barra de lectura) y por la política (el índice se llena al leer). El sitio no tiene noticias: todas las entradas son <b>ejemplos</b>; con menos de 3 reales, la sección no se publica.</div>
+
+<!-- 1 -->
+<div class="w rotulo dat"><b>1</b> /noticias/ · índice (acento óxido)</div>
+<section class="w">
+  <div class="encab" id="enc1">
+    <div><span class="pod dat"><i></i><b>L-06</b><span>Noticias</span></span><h1><span class="l"><span>Lo que pasa</span></span><span class="l"><span>en obra</span></span></h1></div>
+    <p>Proyectos adjudicados, entregas, certificaciones y la vida de HL. Cada entrada lleva su fecha como sello de recibido de plano.</p>
+  </div>
+  <div class="filtros dat" id="filtros"><span class="marca"></span><button aria-pressed="true" data-f="todo">Todas · 5</button><button aria-pressed="false" data-f="noticia">Noticias · 3</button><button aria-pressed="false" data-f="adjudicado">Adjudicados · 2</button></div>
+  <div class="rejilla" id="rejilla">
+    <a class="card grande sube" data-t="noticia" href="#" style="--i:0">
+      <div class="lam"><img src="../../src/assets/proyectos/planta-columbus/4.jpg" alt=""><span class="tin"></span><span class="sello" style="--d:.3s"><small class="dat">Recibido</small><b>14 OCT 2026</b><small class="dat">HL · Bogotá</small></span></div>
+      <div class="cu"><span class="cod dat"><span>N-05</span><span>Noticia</span><span class="ej dat">Ejemplo</span></span><h2>Recertificamos el sistema de gestión integral con SGS</h2><p>ISO 9001, ISO 14001 e ISO 45001: la auditoría de seguimiento confirmó el sistema en todos los frentes de obra.</p><span class="leer">Leer la noticia →</span></div>
+    </a>
+    <a class="card sube" data-t="adjudicado" href="#" style="--i:1">
+      <div class="lam"><img src="../../src/assets/proyectos/molienda-de-cemento-sonson/2.jpg" alt=""><span class="tin"></span><span class="sello" style="--d:.45s"><small class="dat">Recibido</small><b>02 OCT 2026</b></span><div class="p3"><i></i><span class="dat">Adjudicado</span></div></div>
+      <div class="cu"><span class="cod dat"><span>N-04</span><span>Cemento · Colombia</span><span class="ej dat">Ejemplo</span></span><h3>Montaje electromecánico de una nueva línea de molienda</h3><span class="leer">Ver →</span></div>
+    </a>
+    <a class="card sube" data-t="noticia" href="#" style="--i:2">
+      <div class="lam"><img src="../../src/assets/historia/1-la-idea-de-servicio.jpg" alt=""><span class="tin"></span><span class="sello" style="--d:.6s"><small class="dat">Recibido</small><b>15 SEP 2026</b></span></div>
+      <div class="cu"><span class="cod dat"><span>N-03</span><span>Noticia</span><span class="ej dat">Ejemplo</span></span><h3>58 años construyendo la industria</h3><span class="leer">Leer →</span></div>
+    </a>
+    <a class="card sube" data-t="adjudicado" href="#" style="--i:3">
+      <div class="lam"><img src="../../src/assets/proyectos/planta-chimborazo/3.jpg" alt=""><span class="tin"></span><span class="sello" style="--d:.75s"><small class="dat">Recibido</small><b>28 AGO 2026</b></span><div class="p3"><i></i><span class="dat">Adjudicado</span></div></div>
+      <div class="cu"><span class="cod dat"><span>N-02</span><span>Mantenimiento · Ecuador</span><span class="ej dat">Ejemplo</span></span><h3>Parada de planta para cambio de equipos</h3><span class="leer">Ver →</span></div>
+    </a>
+    <a class="card sube" data-t="noticia" href="#" style="--i:4">
+      <div class="lam"><img src="../../src/assets/proyectos/digestores-ptar-bello/2.jpg" alt=""><span class="tin"></span><span class="sello" style="--d:.9s"><small class="dat">Recibido</small><b>10 AGO 2026</b></span></div>
+      <div class="cu"><span class="cod dat"><span>N-01</span><span>Noticia</span><span class="ej dat">Ejemplo</span></span><h3>Un millón de horas hombre sin incidentes</h3><span class="leer">Leer →</span></div>
+    </a>
+  </div>
+  <p class="oculta"><b class="dat">Regla de publicación</b> · Con menos de 3 entradas reales, /noticias/ no se genera, "Noticias" sale del menú y del pie, y el inicio no muestra el bloque. Los adjudicados enlazan a su ficha de proyecto cuando exista.</p>
+</section>
+
+<!-- 2 -->
+<div class="w rotulo dat"><b>2</b> /noticias/[slug]/ · entrada (barra de lectura, cabecera en paralaje, texto a 66 caracteres)</div>
+<div class="lectura" aria-hidden="true"><i id="barra-lectura"></i></div>
+<section class="entrada" id="entrada">
+  <div class="ent-hero" id="ent-hero">
+    <img src="../../src/assets/proyectos/planta-columbus/4.jpg" alt="" id="ent-img"><span class="tin"></span>
+    <div class="w"><span class="dat" style="color:#F9E6DE">N-05 · Noticia · <span class="ej dat">Ejemplo</span></span><h1>Recertificamos el sistema de gestión integral con SGS</h1></div>
+    <span class="sello" id="sello-ent"><small class="dat">Recibido</small><b>14 OCT 2026</b><small class="dat">HL · Bogotá</small></span>
+  </div>
+  <div class="w ent-g">
+    <aside class="ent-meta"><div><span class="dat">Tipo</span><br>Noticia</div><div><span class="dat">Lectura</span><br>3 min</div><a class="volver" href="#"><i>←</i> Todas las noticias</a></aside>
+    <article class="ent">
+      <p class="lead">La auditoría de seguimiento confirmó la certificación en ISO 9001, ISO 14001 e ISO 45001 para todos los frentes de obra de HL Ingenieros.</p>
+      <p>Texto de ejemplo para ver la medida de línea y el ritmo de lectura. Cada párrafo va a 17,5 px con interlineado amplio, y la columna no pasa de 66 caracteres para que el texto largo se lea sin esfuerzo en pantallas grandes y en el teléfono.</p>
+      <p>Las entradas pueden llevar subtítulos, una cita destacada que se revela al llegar, fotos de la obra con su pie y, al final, el proyecto relacionado con su ficha.</p>
+      <blockquote class="cita" id="cita">"La seguridad no se improvisa: se planifica, se mide y se audita." <span class="ej dat">Ejemplo</span></blockquote>
+      <h2>Qué se auditó</h2>
+      <p>Subtítulo en peso normal expandido; el cuerpo sigue en la voz de lectura. Al terminar, la barra de lectura llega al final y aparece el proyecto relacionado.</p>
+      <p>Más texto de ejemplo para alargar la entrada y ver cómo avanza la barra de lectura mientras se baja por la página.</p>
+      <a class="rel" href="#"><div class="lam"><img src="../../src/assets/proyectos/planta-columbus/2.jpg" alt=""><span class="tin"></span></div><div><span class="dat">P-03 · Proyecto relacionado</span><b>Planta Columbus</b><span style="color:var(--pro);font-weight:700">Ver la ficha →</span></div></a>
+    </article>
+    <aside class="comp"><span class="dat" style="color:var(--mut)">Compartir</span><button><span>LinkedIn</span></button><button id="copiar"><span>Copiar enlace</span></button></aside>
+  </div>
+</section>
+
+<!-- 3 -->
+<div class="w rotulo dat"><b>3</b> /acreedores/ · Información para acreedores (acento azul)</div>
+<section class="acr"><div class="w">
+  <div class="encab" id="enc3">
+    <div><span class="pod dat"><i></i><b>P-04</b><span>Acreedores</span></span><h1><span class="l"><span>Información</span></span><span class="l"><span>para acreedores</span></span></h1></div>
+    <p>Convocatorias y avisos de HL Ingenieros para sus acreedores, en el marco de la Ley 1116 de 2006.</p>
+  </div>
+  <div class="linea" id="linea">
+    <a class="doc sube" href="#" style="--i:2"><span class="hito"></span><span class="ano dat">Abril 2025</span><span class="n">04</span><b>Convocatoria a la reunión anual de acreedores N.º 04</b><div class="pie dat"><span class="chip vig">Vigente · por confirmar</span><span class="baja">PDF <i>↓</i></span></div></a>
+    <a class="doc sube" href="#" style="--i:1"><span class="hito"></span><span class="ano dat">11 marzo 2024</span><span class="n">03</span><b>Convocatoria a la reunión anual de acreedores N.º 03</b><div class="pie dat"><span class="chip ant">Anterior</span><span class="baja">PDF <i>↓</i></span></div></a>
+    <a class="doc sube" href="#" style="--i:0"><span class="hito"></span><span class="ano dat">6 marzo 2024</span><span class="n">03</span><b>Convocatoria a la reunión anual de acreedores N.º 03 · primera versión</b><div class="pie dat"><span class="chip ant">Anterior</span><span class="baja">PDF <i>↓</i></span></div></a>
+  </div>
+  <div class="aviso"><svg class="ic" viewBox="0 0 40 40"><rect x="6" y="10" width="28" height="22"/><path d="M6 16h28M14 24h12"/><path d="M28 4l6 6"/></svg><p><b>Los accesos internos ya no están aquí.</b> ERP, BI, correo y campus de capacitación pasan al portal interno de HL. Esta página solo publica avisos para acreedores. Contacto para acreedores: buzón por definir (D7).</p></div>
+</div></section>
+
+<!-- 4 -->
+<div class="w rotulo dat"><b>4</b> /legal/datos/ y /legal/terminos/ · texto largo con índice que se llena al leer (misma plantilla)</div>
+<section class="legal"><div class="w">
+  <div class="encab" id="enc4">
+    <div><span class="pod dat"><i></i><b>P-05</b><span>Legal</span></span><h1><span class="l"><span>Tratamiento</span></span><span class="l"><span>de datos personales</span></span></h1></div>
+    <p>Política y procedimientos de protección de datos personales de HL Ingenieros (Ley 1581 de 2012).</p>
+  </div>
+  <div class="leg-g">
+    <nav class="indice dat" aria-label="Contenido" id="indice">
+      <a href="#s1"><span>01</span>Responsable</a><a href="#s2"><span>02</span>Finalidades</a><a href="#s3"><span>03</span>Derechos</a>
+      <a href="#s4"><span>04</span>Autorización</a><a href="#s5"><span>05</span>Consultas y reclamos</a><a href="#s6"><span>06</span>Vigencia</a>
+    </nav>
+    <div>
+      <div class="cajetin"><div><span class="dat">Documento</span><b>M-TI-001</b></div><div><span class="dat">Actualización</span><b>2</b></div><div><span class="dat">Fecha</span><b>10-oct-2025</b></div><div><span class="dat">Ley</span><b>1581 de 2012</b></div><div><a href="#">PDF ↓</a></div></div>
+      <div class="juridica"><span class="chip dat" style="color:var(--pro)">Revisión jurídica pendiente</span><span style="font-size:14px;color:var(--mut)">El texto sale del documento vigente M-TI-001 y lo valida el área jurídica antes del lanzamiento.</span></div>
+      <div class="art" id="art">
+        <section id="s1"><h2><span>01</span>Responsable del tratamiento<a href="#s1" aria-label="Enlace a esta sección">#</a></h2><p>HL Ingenieros S.A. · Calle 127A # 53A-45, Torre 2, Of. 1002, Bogotá · hlisa@hlingenieros.com</p><span class="ph m"></span></section>
+        <section id="s2"><h2><span>02</span>Finalidades<a href="#s2" aria-label="Enlace a esta sección">#</a></h2><span class="ph m"></span><span class="ph"></span><span class="ph c"></span><span class="ph"></span><span class="ph m"></span></section>
+        <section id="s3"><h2><span>03</span>Derechos de los titulares<a href="#s3" aria-label="Enlace a esta sección">#</a></h2><span class="ph"></span><span class="ph m"></span><span class="ph c"></span><span class="ph"></span></section>
+        <section id="s4"><h2><span>04</span>Autorización<a href="#s4" aria-label="Enlace a esta sección">#</a></h2><span class="ph m"></span><span class="ph c"></span><span class="ph"></span></section>
+        <section id="s5"><h2><span>05</span>Consultas y reclamos<a href="#s5" aria-label="Enlace a esta sección">#</a></h2><span class="ph"></span><span class="ph m"></span><span class="ph c"></span></section>
+        <section id="s6"><h2><span>06</span>Vigencia<a href="#s6" aria-label="Enlace a esta sección">#</a></h2><span class="ph c"></span><span class="ph m"></span></section>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<script>
+const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const una = (el, fn, th = .25) => { const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); fn(el); } }, { threshold:th }); io.observe(el); };
+['enc1', 'enc3', 'enc4'].forEach(id => una(document.getElementById(id), el => el.classList.add('vis')));
+
+// 1 · Tarjetas: entran, se inclinan con el cursor y el sello se estampa otra vez
+const rejilla = document.getElementById('rejilla');
+una(rejilla, el => el.classList.add('vis'), .15);
+rejilla.querySelectorAll('.card').forEach(c => {
+  c.addEventListener('mousemove', e => { if (quieto) return; const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+    c.style.transform = `rotateY(${x * 8}deg) rotateX(${-y * 6}deg) translateY(-4px)`; });
+  c.addEventListener('mouseleave', () => c.style.transform = '');
+  c.addEventListener('mouseenter', () => { const s = c.querySelector('.sello'); s.style.setProperty('--d', '0s'); s.classList.remove('vis'); s.style.animation = 'none'; void s.offsetWidth; s.style.animation = ''; s.classList.add('vis'); });
+});
+// Filtros: la marca corre al botón elegido y las tarjetas se reacomodan (FLIP)
+const filtros = document.getElementById('filtros'), marca = filtros.querySelector('.marca'), bs = [...filtros.querySelectorAll('button')];
+const moverMarca = b => { marca.style.width = b.offsetWidth + 'px'; marca.style.transform = `translateX(${b.offsetLeft}px)`; };
+moverMarca(bs[0]);
+bs.forEach(b => b.addEventListener('click', () => {
+  bs.forEach(x => x.setAttribute('aria-pressed', x === b)); moverMarca(b);
+  const cards = [...rejilla.children], antes = new Map(cards.filter(c => !c.hidden).map(c => [c, c.getBoundingClientRect()]));
+  cards.forEach(c => { c.hidden = b.dataset.f !== 'todo' && c.dataset.t !== b.dataset.f; c.classList.toggle('grande', !c.hidden && c === cards.find(x => !x.hidden)); });
+  cards.filter(c => !c.hidden).forEach((c, i) => { const a = antes.get(c), d = c.getBoundingClientRect();
+    if (quieto) return;
+    if (a) c.animate([{ transform:`translate(${a.left - d.left}px, ${a.top - d.top}px) scale(${a.width / d.width})`, transformOrigin:'top left' }, { transform:'none', transformOrigin:'top left' }], { duration:500, easing:'cubic-bezier(.6,0,.2,1)' });
+    else c.animate([{ opacity:0, transform:'translateY(20px)' }, { opacity:1, transform:'none' }], { duration:450, delay:i * 60, easing:'cubic-bezier(.2,.8,.2,1)', fill:'backwards' }); });
+}));
+
+// 2 · Entrada: barra de lectura, cabecera en paralaje, sello y cita
+const entrada = document.getElementById('entrada'), barra = document.getElementById('barra-lectura'), img = document.getElementById('ent-img'), hero = document.getElementById('ent-hero');
+addEventListener('scroll', () => { const r = entrada.getBoundingClientRect(), p = Math.max(0, Math.min(1, -r.top / (r.height - innerHeight))); barra.style.transform = `scaleX(${p})`;
+  const h = hero.getBoundingClientRect(); if (!quieto && h.bottom > 0 && h.top < innerHeight) img.style.transform = `translateY(${(h.top / innerHeight) * -60}px)`; }, { passive:true });
+una(hero, () => document.getElementById('sello-ent').classList.add('vis'));
+una(document.getElementById('cita'), el => el.classList.add('vis'), .6);
+document.getElementById('copiar').addEventListener('click', e => { const s = e.currentTarget.querySelector('span'); s.textContent = 'Enlace copiado ✓'; setTimeout(() => s.textContent = 'Copiar enlace', 1600); });
+
+// 3 · Acreedores: la línea del tiempo se mide y los documentos suben
+una(document.getElementById('linea'), el => el.classList.add('vis'));
+
+// 4 · Legales: el índice se llena con lo leído y marca la sección actual
+const secciones = [...document.querySelectorAll('#art section')], enlaces = [...document.querySelectorAll('#indice a')];
+const leer = () => { let actual = 0;
+  secciones.forEach((s, i) => { const r = s.getBoundingClientRect(), p = Math.max(0, Math.min(1, (innerHeight * .5 - r.top) / r.height)); enlaces[i].style.setProperty('--p', p); if (r.top < innerHeight * .5) actual = i; if (r.top < innerHeight * .8) s.classList.add('vis'); });
+  enlaces.forEach((a, i) => a.classList.toggle('act', i === actual)); };
+addEventListener('scroll', leer, { passive:true }); leer();
+</script>
+</body></html>

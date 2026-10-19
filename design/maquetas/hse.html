@@ -1,0 +1,445 @@
+<!-- Maqueta aprobada el 2026-10-19 (guía §12.5; F3.3 · Tarea 12, ronda 2): página HSE y calidad con movimiento en cada bloque. Contenido real de src/content/paginas/hse.es.md, certificaciones.yaml y el PDF de ECOHL. Referencia de composición y movimiento; los valores salen de design/tokens.css. -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HSE y calidad · maqueta</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<style>
+  :root { --azul:#0B509E; --g:#14181C; --c:#E7EAEB; --paper:#F6F7F7; --ac:#8A949B; --line:#C2C9CD; --sen:#F2B42A; --mut:#56606A; --grid:rgba(11,80,158,.075);
+          --hse:#1F6F3A; --hse-s:#D3EBDA; --verde:#5CC27D;
+          --ez:cubic-bezier(.2,.8,.2,1); --ep:cubic-bezier(.6,0,.2,1); --k:var(--hse); }
+  * { box-sizing:border-box } html,body { margin:0; background:var(--c); color:var(--g); font-family:Archivo,sans-serif; }
+  a { color:inherit; } button { font:inherit; color:inherit; }
+  .dat { font-stretch:72%; text-transform:uppercase; letter-spacing:.12em; font-weight:600; font-size:11.5px; }
+  .w { max-width:1240px; margin:0 auto; padding:0 40px; }
+  .nota { background:var(--g); color:#AEB6BC; font-size:12.5px; padding:12px 40px; line-height:1.5; }
+  .nota b { color:var(--sen); font-weight:600; }
+  .pod { display:inline-flex; align-items:center; border:1.5px solid var(--g); }
+  .pod i { width:6px; align-self:stretch; background:var(--k); } .pod b { padding:3px 8px; border-right:1px solid var(--g); color:var(--k); } .pod span { padding:3px 8px; }
+  .barra { height:52px; border-bottom:1px solid var(--line); background:rgba(231,234,235,.92); backdrop-filter:blur(8px); position:sticky; top:0; z-index:9; }
+  .barra .w { height:52px; display:flex; align-items:center; gap:28px; }
+  .logo { font-weight:900; font-stretch:122%; font-size:18px; color:var(--azul); text-decoration:none; }
+  .nav { margin-left:auto; display:flex; gap:20px; color:var(--mut); }
+  .nav .act { color:var(--hse); box-shadow:inset 0 -2px var(--hse); padding-bottom:4px; }
+  .sec { padding:88px 0; }
+  .cab { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:32px; }
+  .cab .dat { color:var(--mut); }
+  .tit { margin:0; font-stretch:122%; font-weight:850; font-size:44px; line-height:.95; letter-spacing:-.02em; }
+  .tit span { font-weight:300; display:block; }
+  /* Entrada genérica: sube y aparece, escalonada */
+  .sube { opacity:0; transform:translateY(28px); transition:opacity .7s var(--ez), transform .7s var(--ez); transition-delay:calc(var(--i, 0) * 90ms); }
+  .vis .sube, .sube.vis { opacity:1; transform:none; }
+  /* Trazo de pictogramas */
+  .pic path, .pic circle, .pic rect, .pic line { fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1; stroke-dashoffset:1; }
+  .dibuja .pic * { animation:trazo 1s var(--ep) forwards; animation-delay:calc(var(--j, 0) * 120ms + var(--d, 0s)); }
+  @keyframes trazo { to { stroke-dashoffset:0; } }
+
+  /* ───── 1 · Cabecera viva ───── */
+  .encab { display:grid; grid-template-columns:6fr 6fr; min-height:560px; }
+  .encab-txt { padding:64px 48px 48px 0; display:flex; flex-direction:column; gap:22px; justify-content:center; }
+  .encab h1 { margin:0; font-stretch:125%; font-weight:900; font-size:84px; line-height:.88; letter-spacing:-.03em; }
+  .encab h1 .l { display:block; overflow:hidden; }
+  .encab h1 .l > span { display:block; transform:translateY(105%); animation:linea .9s var(--ez) forwards; }
+  .encab h1 .l:nth-child(2) > span { animation-delay:.12s; font-weight:300; color:var(--hse); }
+  @keyframes linea { to { transform:none; } }
+  .encab p { margin:0; color:var(--mut); font-size:18px; line-height:1.5; max-width:46ch; opacity:0; animation:aparece .8s .35s var(--ez) forwards; }
+  @keyframes aparece { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+  .chips { display:flex; gap:8px; }
+  .chips span { border:1.5px solid var(--g); padding:6px 10px; opacity:0; animation:aparece .5s var(--ez) forwards; animation-delay:calc(.5s + var(--i) * 90ms); transition:background .25s, color .25s; }
+  .chips span:hover { background:var(--hse); color:#fff; border-color:var(--hse); }
+  .lam { position:relative; overflow:hidden; background:var(--g); clip-path:inset(0 0 0 100%); animation:barrido 1.1s .1s var(--ep) forwards; }
+  @keyframes barrido { to { clip-path:inset(0 0 0 0); } }
+  .lam img { position:absolute; inset:-4%; width:108%; height:108%; object-fit:cover; filter:grayscale(1) contrast(1.1); transform:scale(1.15); animation:acerca 1.6s .1s var(--ez) forwards; transition:translate .4s var(--ez); }
+  @keyframes acerca { to { transform:scale(1); } }
+  .lam .tin { position:absolute; inset:0; background:var(--hse); mix-blend-mode:multiply; opacity:.85; }
+  .lam svg.ejes { position:absolute; inset:0; width:100%; height:100%; }
+  .lam .ejes line { stroke:rgba(255,255,255,.55); stroke-width:1; stroke-dasharray:4 6; vector-effect:non-scaling-stroke; }
+  .lam .ejes .m { stroke-dasharray:none; stroke:var(--sen); stroke-width:1.5; transform-origin:left; transform:scaleX(0); animation:mide 1.2s 1s var(--ep) forwards; }
+  @keyframes mide { to { transform:scaleX(1); } }
+  .cruz { position:absolute; right:28px; top:28px; width:88px; height:88px; border:2px solid #fff; display:grid; place-items:center; transform:rotate(-90deg) scale(.4); opacity:0; animation:cruz .8s .9s var(--ez) forwards; transition:transform .5s var(--ez); }
+  .cruz::before, .cruz::after { content:""; position:absolute; background:#fff; }
+  .cruz::before { width:46px; height:12px; } .cruz::after { width:12px; height:46px; }
+  @keyframes cruz { to { transform:none; opacity:1; } }
+  .lam:hover .cruz { transform:rotate(90deg); }
+  .lam .pie { position:absolute; left:20px; bottom:16px; color:#D3EBDA; }
+
+  /* ───── 2 · Indicadores: barrera que baja y cifras que cuentan ───── */
+  .barrera { background:var(--g); color:#fff; display:grid; grid-template-columns:72px 1fr; }
+  .rayas { background:repeating-linear-gradient(-45deg,var(--verde) 0 10px,var(--g) 10px 20px); }
+  .ind-in { padding:64px 48px; }
+  .ind-in .cab .dat { color:#8A949B; }
+  .ind-in .tit { color:#fff; } .ind-in .tit span { color:#E7EAEB; }
+  .ind { display:grid; grid-template-columns:repeat(4,1fr); }
+  .ind > div { position:relative; padding:18px 24px 6px; border-left:1px solid rgba(255,255,255,.18); transform:translateY(-48px); opacity:0; transition:transform .8s var(--ez), opacity .8s, background .3s; transition-delay:calc(var(--i) * 130ms), calc(var(--i) * 130ms), 0s; cursor:default; }
+  .ind > div::before { content:""; position:absolute; left:-1px; right:0; top:0; height:3px; background:var(--verde); transform:scaleX(0); transform-origin:left; transition:transform .4s var(--ep); }
+  .ind > div:hover { background:rgba(92,194,125,.08); } .ind > div:hover::before { transform:scaleX(1); }
+  .ind.vis > div { transform:none; opacity:1; }
+  .ind b { display:block; white-space:nowrap; font-stretch:125%; font-weight:900; font-size:60px; line-height:.9; color:var(--verde); letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+  .ind span { display:block; margin-top:12px; color:#C9D2DA; font-size:15px; line-height:1.4; }
+  .ind small { display:block; margin-top:10px; color:#8A949B; }
+  .pend { margin-top:28px; color:#8A949B; font-size:13px; display:flex; gap:10px; align-items:center; }
+  .pend::before { content:""; width:10px; height:10px; border:1.5px dashed var(--sen); }
+
+  /* ───── 3 · Certificaciones: tarjetas que se inclinan ───── */
+  .cert { display:grid; grid-template-columns:repeat(3,1fr) .8fr; gap:16px; perspective:900px; }
+  .cc { position:relative; display:grid; grid-template-rows:auto 1fr auto; gap:14px; padding:22px; background:var(--paper); border:1.5px solid var(--g); transition:transform .25s var(--ez), opacity .7s var(--ez); overflow:hidden; }
+  .cc::after { content:""; position:absolute; inset:0; background:radial-gradient(240px circle at var(--mx, 50%) var(--my, 0%), rgba(92,194,125,.22), transparent 60%); opacity:0; transition:opacity .3s; pointer-events:none; }
+  .cc:hover::after { opacity:1; }
+  .cc .c1 { display:flex; justify-content:space-between; color:var(--hse); }
+  .cc h3 { margin:0; font-stretch:125%; font-weight:900; font-size:36px; letter-spacing:-.02em; }
+  .cc p { margin:4px 0 0; color:var(--mut); }
+  .cc img { height:80px; width:auto; justify-self:start; background:#fff; padding:6px; transform:rotate(-25deg) scale(.6); opacity:0; transition:transform .7s var(--ez), opacity .5s; transition-delay:calc(.25s + var(--i) * 120ms); }
+  .vis .cc img { transform:none; opacity:1; }
+  .vis .cc:hover img { transform:rotate(8deg) scale(1.06); transition-delay:0s; }
+  .cc .c3 { display:flex; justify-content:space-between; align-items:center; border-top:1px dashed var(--line); padding-top:12px; color:var(--mut); }
+  .cc .c3 a { color:var(--hse); text-decoration:none; font-weight:700; text-transform:none; letter-spacing:0; font-stretch:100%; font-size:14px; display:inline-flex; gap:6px; }
+  .cc .c3 a i { font-style:normal; display:inline-block; transition:transform .3s var(--ez); }
+  .cc .c3 a:hover i { transform:translateY(3px); }
+  .cc.bpi { border-style:dashed; background:transparent; } .cc.bpi h3 { font-size:22px; }
+
+  /* ───── 4 · Política en 3D: los 4 compromisos son las columnas de la estructura ───── */
+  .pol { background:var(--g); color:#fff; }
+  .pol .tit { color:#fff; } .pol .tit span { color:#C9D2DA; } .pol .cab .dat { color:#8A949B; }
+  .pol-g { display:grid; grid-template-columns:7fr 5fr; gap:40px; align-items:center; }
+  .lienzo { position:relative; aspect-ratio:1 / .86; background-image:linear-gradient(rgba(98,160,236,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(98,160,236,.08) 1px,transparent 1px); background-size:24px 24px; border:1px solid rgba(255,255,255,.12); cursor:grab; touch-action:pan-y; }
+  .lienzo canvas { position:absolute; inset:0; width:100%; height:100%; }
+  .lienzo .ayuda { position:absolute; left:14px; bottom:12px; color:#8A949B; }
+  .comp { display:grid; gap:8px; }
+  .comp button { position:relative; display:grid; grid-template-columns:40px 1fr; gap:14px; align-items:center; padding:14px 16px; background:transparent; border:1px solid rgba(255,255,255,.16); color:#C9D2DA; text-align:left; cursor:pointer; overflow:hidden; transition:border-color .3s, color .3s; }
+  .comp button::before { content:""; position:absolute; inset:0; background:var(--hse); transform:scaleX(0); transform-origin:left; transition:transform .45s var(--ep); }
+  .comp button > * { position:relative; }
+  .comp .bur { width:36px; height:36px; border-radius:50%; border:1.5px solid currentColor; display:grid; place-items:center; font-weight:800; }
+  .comp b { display:block; font-stretch:112%; font-size:19px; color:#fff; }
+  .comp .txt { display:grid; grid-template-rows:0fr; transition:grid-template-rows .45s var(--ep); }
+  .comp .txt > span { overflow:hidden; font-size:14.5px; line-height:1.45; }
+  .comp button[aria-pressed=true]::before { transform:scaleX(1); }
+  .comp button[aria-pressed=true] { color:#fff; border-color:var(--hse); }
+  .comp button[aria-pressed=true] .txt { grid-template-rows:1fr; }
+  .comp button[aria-pressed=true] .txt > span { padding-top:6px; }
+  .comp button:hover:not([aria-pressed=true]) { border-color:var(--verde); color:#fff; }
+  .base-txt { margin-top:18px; color:#8A949B; font-size:13.5px; line-height:1.5; }
+  .base-txt b { color:var(--verde); }
+
+  /* ───── 5 · Reglas de Oro: señales que caen, se dibujan y giran ───── */
+  .reglas { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; perspective:1200px; }
+  .regla { position:relative; height:260px; cursor:pointer; outline:none; transform-origin:top center; transform:rotateX(-95deg); opacity:0; transition:transform .8s var(--ez), opacity .4s; transition-delay:calc(var(--i) * 110ms); }
+  .vis .regla { transform:none; opacity:1; }
+  .giro { position:absolute; inset:0; transform-style:preserve-3d; transition:transform .7s var(--ep); }
+  .regla:hover .giro, .regla:focus-visible .giro, .regla.girada .giro { transform:rotateY(180deg); }
+  .regla:focus-visible .cara { outline:3px solid var(--azul); outline-offset:2px; }
+  .cara { position:absolute; inset:0; backface-visibility:hidden; padding:18px; display:flex; flex-direction:column; border:1.5px solid var(--g); }
+  .frente { background:var(--paper); }
+  .frente .n { font-stretch:125%; font-weight:900; font-size:50px; line-height:.85; color:var(--ac); letter-spacing:-.02em; transition:color .5s; transition-delay:calc(var(--i) * 110ms + .5s); }
+  .vis .frente .n { color:var(--hse); }
+  .frente .pic { width:64px; height:64px; margin:auto 0 14px; color:var(--hse); }
+  .frente h3 { margin:0; font-stretch:112%; font-size:18px; line-height:1.15; }
+  .frente .gira { position:absolute; right:14px; top:16px; color:var(--ac); transition:transform .5s var(--ez); }
+  .regla:hover .frente .gira { transform:rotate(180deg); }
+  .frente::after { content:""; position:absolute; left:0; right:0; bottom:0; height:5px; background:var(--hse); transform:scaleX(0); transform-origin:left; transition:transform .6s var(--ep); transition-delay:calc(var(--i) * 110ms + .6s); }
+  .vis .frente::after { transform:scaleX(1); }
+  .dorso { background:var(--hse); color:#fff; transform:rotateY(180deg); justify-content:space-between; border-color:var(--hse); }
+  .dorso .n { font-stretch:72%; font-weight:600; letter-spacing:.12em; font-size:12px; color:#D3EBDA; text-transform:uppercase; }
+  .dorso p { margin:0; font-size:15.5px; line-height:1.45; }
+  .dorso .ok { width:34px; height:34px; border-radius:50%; background:#fff; display:grid; place-items:center; color:var(--hse); font-weight:900; }
+  .aviso { margin-top:14px; color:var(--mut); font-size:13px; }
+
+  /* ───── 6 · PIENSA® ───── */
+  .piensa { display:grid; grid-template-columns:5fr 7fr; gap:56px; align-items:center; }
+  .piensa h2 sup { font-size:20px; vertical-align:top; color:var(--hse); }
+  .piensa > div > p { color:var(--mut); font-size:17px; line-height:1.6; margin:18px 0 0; }
+  .eje { position:relative; display:grid; grid-template-columns:repeat(3,1fr); padding-top:12px; }
+  .eje::before { content:""; position:absolute; left:21px; right:21px; top:33px; height:1.5px; background:var(--hse); transform-origin:left; transform:scaleX(0); transition:transform 1.4s var(--ep); }
+  .eje .pulso { position:absolute; top:28px; left:16px; width:12px; height:12px; border-radius:50%; background:var(--sen); opacity:0; z-index:1; }
+  .eje.vis::before { transform:scaleX(1); }
+  .eje.vis .pulso { animation:pulso 1.6s .3s var(--ep) forwards; }
+  @keyframes pulso { 0% { opacity:1; left:16px; } 95% { opacity:1; } 100% { opacity:0; left:calc(100% - 28px); } }
+  .paso { position:relative; padding-right:20px; }
+  .paso .bur { width:42px; height:42px; border-radius:50%; background:var(--paper); border:1.5px solid var(--hse); color:var(--hse); display:grid; place-items:center; font-weight:800; margin-bottom:16px; position:relative; transition:background .3s, color .3s, transform .4s var(--ez); }
+  .paso:hover .bur { background:var(--hse); color:#fff; transform:scale(1.12); }
+  .paso h3 { margin:0 0 6px; font-stretch:112%; font-size:20px; }
+  .paso p { margin:0; color:var(--mut); font-size:14.5px; line-height:1.5; }
+  .persona { margin-top:28px; padding:16px 18px; border:1.5px solid var(--g); display:flex; gap:14px; align-items:center; background:var(--paper); }
+  .persona .pic { width:40px; height:40px; color:var(--hse); flex:none; }
+  .persona b { color:var(--hse); }
+
+  /* ───── 7 · Prácticas: tarjetas que se levantan y se dibujan ───── */
+  .prac { background:var(--paper); }
+  .prac-g { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .pr { position:relative; padding:24px 22px 26px; border:1.5px solid var(--g); background:#fff; overflow:hidden; }
+  .pr.vis { transition:opacity .7s var(--ez), transform .35s var(--ez); }
+  .pr::before { content:""; position:absolute; inset:0; background:var(--hse-s); transform:scaleY(0); transform-origin:bottom; transition:transform .45s var(--ep); }
+  .pr > * { position:relative; }
+  .pr.vis:hover { transform:translateY(-6px); } .pr:hover::before { transform:scaleY(1); }
+  .pr .pic { width:56px; height:56px; color:var(--hse); margin-bottom:14px; }
+  .pr h3 { margin:0 0 8px; font-stretch:112%; font-size:19px; }
+  .pr p { margin:0; color:var(--mut); font-size:14.5px; line-height:1.5; }
+  .pr .dat { display:block; margin-top:14px; color:var(--hse); }
+
+  /* ───── 8 · Cierre ───── */
+  .cierre { position:relative; background:var(--hse); color:#fff; overflow:hidden; }
+  .cierre::before { content:""; position:absolute; inset:0 -60px 0 -60px; background:repeating-linear-gradient(-45deg,rgba(255,255,255,.07) 0 14px,transparent 14px 28px); transform:translateX(-40px); transition:transform 1.2s linear; }
+  .cierre:hover::before { transform:translateX(0); }
+  .cierre .w { position:relative; display:flex; justify-content:space-between; align-items:center; gap:24px; padding-top:52px; padding-bottom:52px; }
+  .cierre h2 { margin:0; font-stretch:122%; font-weight:850; font-size:36px; }
+  .cierre h2 span { font-weight:300; }
+  .cierre a { position:relative; display:inline-flex; gap:12px; color:var(--g); background:#fff; padding:16px 22px; text-decoration:none; font-weight:700; overflow:hidden; }
+  .cierre a i { font-style:normal; transition:transform .3s var(--ez); } .cierre a:hover i { transform:translateX(6px); }
+
+  @media (max-width:900px) {
+    .w { padding:0 16px; } .nota { padding:12px 16px; } .nav { display:none; }
+    .encab, .pol-g, .piensa { grid-template-columns:1fr; } .encab-txt { padding:40px 0 28px; } .encab h1 { font-size:56px; } .lam { min-height:300px; }
+    .ind, .cert { grid-template-columns:1fr 1fr; } .reglas { grid-template-columns:1fr 1fr; } .prac-g { grid-template-columns:1fr; }
+    .barrera { grid-template-columns:24px 1fr; } .ind-in { padding:44px 16px; } .ind b { font-size:42px; } .tit { font-size:34px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration:0s !important; animation-delay:0s !important; transition-duration:0s !important; transition-delay:0s !important; }
+  }
+</style></head>
+<body>
+<div class="nota"><b>Maqueta HSE · ronda 2 · 19-oct-2026.</b> Movimiento en cada bloque: la cabecera entra con barrido, las cifras cuentan, los sellos giran y las tarjetas se inclinan con el cursor. La política es un diagrama 3D: los 4 compromisos son las columnas (pasa el cursor sobre una o elige a la derecha; arrastra para girarlo). Las Reglas de Oro caen como señales, dibujan su pictograma y giran para mostrar la regla completa.</div>
+<header class="barra"><div class="w"><a class="logo" href="#">HL Ingenieros</a><nav class="nav dat"><span>Nosotros</span><span>Proyectos ▾</span><span class="act">HSE y calidad</span><span>Noticias</span><span>Contacto</span></nav></div></header>
+
+<!-- 1 · Cabecera -->
+<section class="w encab">
+  <div class="encab-txt">
+    <div><span class="pod dat"><i></i><b>L-05</b><span>HSE y calidad</span></span></div>
+    <h1><span class="l"><span>Seguridad</span></span><span class="l"><span>que se mide</span></span></h1>
+    <p>Sistema de gestión integral certificado en ISO 9001, ISO 14001 e ISO 45001, con Reglas de Oro HSE, PIENSA® y una cultura de seguridad medible.</p>
+    <div class="chips dat"><span style="--i:0">ISO 9001</span><span style="--i:1">ISO 14001</span><span style="--i:2">ISO 45001</span></div>
+  </div>
+  <div class="lam" id="lam">
+    <img src="../../src/assets/generales/mejor-gente.jpg" alt="">
+    <span class="tin"></span>
+    <svg class="ejes" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="25" y1="0" x2="25" y2="100"/><line x1="75" y1="0" x2="75" y2="100"/><line x1="0" y1="72" x2="100" y2="72"/><line class="m" x1="25" y1="88" x2="75" y2="88"/></svg>
+    <span class="cruz" aria-hidden="true"></span>
+    <span class="pie dat">Nuestra gente extraordinaria</span>
+  </div>
+</section>
+
+<!-- 2 · Indicadores -->
+<section class="barrera">
+  <span class="rayas"></span>
+  <div class="ind-in">
+    <div class="cab"><h2 class="tit">Indicadores <span>que respaldan la cultura</span></h2><span class="dat">Fuente: PDF de ECOHL</span></div>
+    <div class="ind" id="ind">
+      <div style="--i:0"><b data-n="-64" data-suf=" %">−64 %</b><span>Frecuencia de accidentes incapacitantes en 8 años</span><small class="dat">Programa de cultura de seguridad</small></div>
+      <div style="--i:1"><b data-n="-72" data-suf=" %">−72 %</b><span>Severidad de accidentes en 8 años</span><small class="dat">Programa de cultura de seguridad</small></div>
+      <div style="--i:2"><b>+1 M</b><span>Horas hombre sin incidentes: premio categoría excelencia de Chevron</span><small class="dat">Reconocimiento del cliente</small></div>
+      <div style="--i:3"><b>0</b><span>Incidentes ambientales en la vía a la plataforma Chipirón, sobre un estero (Occidental)</span><small class="dat">Arauca, Colombia</small></div>
+    </div>
+    <p class="pend">Indicadores de los últimos 3 años: pendientes de HL (se publican aquí cuando lleguen).</p>
+  </div>
+</section>
+
+<!-- 3 · Certificaciones -->
+<section class="sec"><div class="w">
+  <div class="cab"><h2 class="tit">Certificaciones <span>vigentes</span></h2><span class="dat">Sistema de gestión integral · SGS</span></div>
+  <div class="cert" id="cert">
+    <div class="cc sube" style="--i:0"><div class="c1 dat"><span>C-01</span><span>Calidad</span></div><div><h3>ISO 9001</h3><p>Gestión de la calidad</p></div>
+      <div><img style="--i:0" src="../../src/assets/certificaciones/sgs-iso-9001.png" alt="Sello SGS ISO 9001"><div class="c3 dat"><span>CO24/00000108</span><a href="#">Certificado (PDF) <i>↓</i></a></div></div></div>
+    <div class="cc sube" style="--i:1"><div class="c1 dat"><span>C-02</span><span>Ambiente</span></div><div><h3>ISO 14001</h3><p>Gestión ambiental</p></div>
+      <div><img style="--i:1" src="../../src/assets/certificaciones/sgs-iso-14001.png" alt="Sello SGS ISO 14001"><div class="c3 dat"><span>CO24/00000109</span><a href="#">Certificado (PDF) <i>↓</i></a></div></div></div>
+    <div class="cc sube" style="--i:2"><div class="c1 dat"><span>C-03</span><span>Seguridad y salud</span></div><div><h3>ISO 45001</h3><p>Seguridad y salud en el trabajo</p></div>
+      <div><img style="--i:2" src="../../src/assets/certificaciones/sgs-iso-45001.png" alt="Sello SGS ISO 45001"><div class="c3 dat"><span>CO24/00000107</span><a href="#">Certificado (PDF) <i>↓</i></a></div></div></div>
+    <div class="cc bpi sube" style="--i:3"><div class="c1 dat"><span>C-04</span><span>Por confirmar</span></div><div><h3>Buenas Prácticas de Innovación</h3><p>Icontec · CCB (2022)</p></div>
+      <div><img style="--i:3" src="../../src/assets/certificaciones/bpi-icontec.png" alt="Sello BPI"></div></div>
+  </div>
+</div></section>
+
+<!-- 4 · Política en 3D -->
+<section class="sec pol"><div class="w">
+  <div class="cab"><h2 class="tit">Política de gestión integral <span>sobre cuatro columnas</span></h2><span class="dat">Generamos valor para</span></div>
+  <div class="pol-g">
+    <div class="lienzo" id="lienzo"><canvas id="estructura" aria-hidden="true"></canvas><span class="ayuda dat">Arrastra para girar · pasa sobre una columna</span></div>
+    <div>
+      <div class="comp" id="comp" role="group" aria-label="Compromisos de la política">
+        <button aria-pressed="true"><span class="bur">1</span><span><b>Nuestros clientes</b><span class="txt"><span>Superando sus expectativas en el acompañamiento técnico, en la gestión de riesgos y en la gestión del plazo.</span></span></span></button>
+        <button aria-pressed="false"><span class="bur">2</span><span><b>Nuestra gente extraordinaria</b><span class="txt"><span>Consulta y participación, desarrollo, condiciones justas, y un ambiente y una cultura de trabajo seguros.</span></span></span></button>
+        <button aria-pressed="false"><span class="bur">3</span><span><b>Las comunidades</b><span class="txt"><span>Mejorando sus condiciones económicas y minimizando el impacto en el medio ambiente.</span></span></span></button>
+        <button aria-pressed="false"><span class="bur">4</span><span><b>Nuestro grupo</b><span class="txt"><span>Asegurando su trascendencia en el tiempo.</span></span></span></button>
+      </div>
+      <p class="base-txt"><b>Cimiento:</b> los valores (excelencia, desarrollo, compromiso, transparencia, innovación y confianza) y el cumplimiento de los requisitos legales. <b>Cubierta:</b> el sistema de gestión integral, con objetivos medidos, socios alineados, recursos adecuados y mejora continua.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- 5 · Reglas de Oro -->
+<section class="sec"><div class="w">
+  <div class="cab"><h2 class="tit">10 Reglas <span>de Oro HSE</span></h2><span class="dat">De obligatorio cumplimiento · pasa el cursor para leer cada una</span></div>
+  <div class="reglas" id="reglas"></div>
+  <p class="aviso">Títulos cortos propuestos a partir de cada regla (validar con HSE); al girar, el texto completo.</p>
+</div></section>
+
+<!-- 6 · PIENSA -->
+<section class="sec" style="padding-top:0"><div class="w piensa">
+  <div class="sube" id="piensa-t"><span class="pod dat"><i></i><b>M-01</b><span>Metodología</span></span>
+    <h2 class="tit" style="margin-top:14px">PIENSA<sup>®</sup></h2>
+    <p>Transmite el conocimiento poniendo a la persona en el centro, para que interiorice las buenas prácticas de seguridad y cambie la cultura. La lidera el personal HSE.</p></div>
+  <div>
+    <div class="eje" id="eje"><span class="pulso"></span>
+      <div class="paso"><span class="bur">1</span><h3>Planificación</h3><p>Siempre empieza por planificar.</p></div>
+      <div class="paso"><span class="bur">2</span><h3>Tema</h3><p>Se define qué práctica tratar.</p></div>
+      <div class="paso"><span class="bur">3</span><h3>Herramienta</h3><p>Se elige la más adecuada.</p></div>
+    </div>
+    <div class="persona" id="persona"><svg class="pic" viewBox="0 0 40 40"><circle pathLength="1" cx="20" cy="12" r="6"/><path pathLength="1" d="M8 36c0-7 5-12 12-12s12 5 12 12"/><circle pathLength="1" cx="20" cy="20" r="18" style="--j:2"/></svg><span><b class="dat">En el centro</b> la persona: aprendizaje humano, no solo instrucción.</span></div>
+  </div>
+</div></section>
+
+<!-- 7 · Prácticas -->
+<section class="sec prac"><div class="w">
+  <div class="cab"><h2 class="tit">Prácticas <span>en cada frente de obra</span></h2><span class="dat">4 programas</span></div>
+  <div class="prac-g" id="prac">
+    <div class="pr sube" style="--i:0"><svg class="pic" viewBox="0 0 56 56"><path pathLength="1" d="M6 28c6-9 14-13 22-13s16 4 22 13c-6 9-14 13-22 13S12 37 6 28z"/><circle pathLength="1" cx="28" cy="28" r="7" style="--j:1"/></svg><h3>Observadores de comportamiento</h3><p>Se planea, se observa, se interviene y se registra, con retroalimentación constante.</p><span class="dat">Equipo de cada proyecto</span></div>
+    <div class="pr sube" style="--i:1"><svg class="pic" viewBox="0 0 56 56"><path pathLength="1" d="M20 6h16l14 14v16L36 50H20L6 36V20z"/><line pathLength="1" x1="18" y1="28" x2="38" y2="28" style="--j:1"/></svg><h3>Pare y asegure</h3><p>La mano de obra directa reporta condiciones inseguras, con premio mensual a quien más reporta.</p><span class="dat">Antes "Reporto y aporto"</span></div>
+    <div class="pr sube" style="--i:2"><svg class="pic" viewBox="0 0 56 56"><rect pathLength="1" x="12" y="6" width="32" height="44"/><circle pathLength="1" cx="28" cy="22" r="7" style="--j:1"/><path pathLength="1" d="M18 38h20M18 44h12" style="--j:2"/></svg><h3>Pasaportes de seguridad</h3><p>Cada trabajador tiene el suyo: fija las sanciones por incumplir las normas.</p><span class="dat">Todos los trabajadores</span></div>
+    <div class="pr sube" style="--i:3"><svg class="pic" viewBox="0 0 56 56"><path pathLength="1" d="M8 46V30h10v16M23 46V18h10v28M38 46V8h10v38"/><line pathLength="1" x1="4" y1="46" x2="52" y2="46" style="--j:1"/></svg><h3>Reuniones de liderazgo</h3><p>La alta dirección visita la obra: momento de seguridad, indicadores e inspección de campo.</p><span class="dat">Presidencia y Dirección HSE</span></div>
+  </div>
+</div></section>
+
+<!-- 8 · Cierre -->
+<section class="cierre"><div class="w"><h2>¿Precalifica contratistas? <span>Hablemos de su proyecto.</span></h2><a href="#">Hablar con HL <i>→</i></a></div></section>
+
+<script>
+const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const una = (el, fn, th = .3) => { const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); fn(el); } }, { threshold:th }); io.observe(el); };
+
+// 1 · La foto sigue al cursor (paralaje leve)
+const lam = document.getElementById('lam'), img = lam.querySelector('img');
+lam.addEventListener('mousemove', e => { const r = lam.getBoundingClientRect(); img.style.translate = `${((e.clientX - r.left) / r.width - .5) * -16}px ${((e.clientY - r.top) / r.height - .5) * -16}px`; });
+lam.addEventListener('mouseleave', () => img.style.translate = '0 0');
+
+// 2 · Barrera y cifras que cuentan
+una(document.getElementById('ind'), el => { el.classList.add('vis');
+  if (quieto) return;
+  el.querySelectorAll('b[data-n]').forEach((b, i) => { const n = +b.dataset.n, suf = b.dataset.suf || '', t0 = performance.now() + i * 130 + 250;
+    const paso = t => { const p = Math.max(0, Math.min(1, (t - t0) / 1100)), v = Math.round(n * (1 - (1 - p) ** 3)); b.textContent = `${v < 0 ? '−' + Math.abs(v) : v}${suf}`; if (p < 1) requestAnimationFrame(paso); };
+    requestAnimationFrame(paso); }); });
+
+// 3 · Certificaciones: entran y se inclinan con el cursor
+una(document.getElementById('cert'), el => el.classList.add('vis'));
+document.querySelectorAll('.cc').forEach(c => {
+  c.addEventListener('mousemove', e => { if (quieto) return; const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    c.style.transform = `rotateY(${(x - .5) * 14}deg) rotateX(${(.5 - y) * 12}deg)`; c.style.setProperty('--mx', x * 100 + '%'); c.style.setProperty('--my', y * 100 + '%'); });
+  c.addEventListener('mouseleave', () => c.style.transform = '');
+});
+
+// 4 · Estructura 3D de alambre (canvas propio, sin librerías): cimiento, 4 columnas, arriostramiento y cubierta.
+(() => {
+  const cv = document.getElementById('estructura'), ctx = cv.getContext('2d'), caja = document.getElementById('lienzo');
+  const S = []; // [a, b, grupo]
+  const seg = (a, b, g) => S.push([a, b, g]);
+  const prisma = (x0, y0, z0, x1, y1, z1, g) => { const P = [[x0,y0,z0],[x1,y0,z0],[x1,y0,z1],[x0,y0,z1],[x0,y1,z0],[x1,y1,z0],[x1,y1,z1],[x0,y1,z1]];
+    [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]].forEach(([a, b]) => seg(P[a], P[b], g)); };
+  prisma(-2.6, -.3, -2.6, 2.6, 0, 2.6, 'base');
+  for (let i = -2; i <= 2; i++) { seg([i * 1.1, 0, -2.6], [i * 1.1, 0, 2.6], 'malla'); seg([-2.6, 0, i * 1.1], [2.6, 0, i * 1.1], 'malla'); }
+  const COL = [[-1.7, -1.7], [1.7, -1.7], [1.7, 1.7], [-1.7, 1.7]], H = 3.4;
+  COL.forEach(([x, z], k) => { prisma(x - .2, 0, z - .2, x + .2, H, z + .2, 'c' + k); prisma(x - .45, 0, z - .45, x + .45, .25, z + .45, 'c' + k); });
+  for (let k = 0; k < 4; k++) { const [x0, z0] = COL[k], [x1, z1] = COL[(k + 1) % 4];
+    for (const y of [1.7, H]) seg([x0, y, z0], [x1, y, z1], 'marco');
+    seg([x0, 0.25, z0], [x1, 1.7, z1], 'marco'); seg([x1, 0.25, z1], [x0, 1.7, z0], 'marco'); }
+  prisma(-2.2, H, -2.2, 2.2, H + .3, 2.2, 'techo');
+  [[-2.2, -2.2], [2.2, -2.2], [2.2, 2.2], [-2.2, 2.2]].forEach(([x, z]) => seg([x, H + .3, z], [0, H + 1.3, 0], 'techo'));
+  const NOMBRES = ['Clientes', 'Gente', 'Comunidades', 'Grupo'], TOPE = H + 1.4;
+
+  let W = 0, Hh = 0, dpr = 1, ang = -.6, incl = .42, sel = 0, hover = -1, nivel = quieto ? 9 : -1, t0 = 0, activo = false, visto = false, pausa = 0, arrastre = null;
+  const medir = () => { dpr = Math.min(2, devicePixelRatio || 1); const r = caja.getBoundingClientRect(); W = r.width; Hh = r.height; cv.width = W * dpr; cv.height = Hh * dpr; if (!activo) dibujar(); };
+  const proy = ([x, y, z]) => { const ca = Math.cos(ang), sa = Math.sin(ang), x1 = x * ca - z * sa, z1 = x * sa + z * ca, ci = Math.cos(incl), si = Math.sin(incl);
+    const y2 = (y - 1.6) * ci + z1 * si, z2 = z1 * ci - (y - 1.6) * si, f = 11 / (11 + z2), e = Math.min(W, Hh) / 9;
+    return [W / 2 + x1 * e * f, Hh / 2 - 6 - y2 * e * f]; };
+  const corta = (a, b, h) => { if (a[1] <= h && b[1] <= h) return [a, b]; if (a[1] > h && b[1] > h) return null; const [lo, hi] = a[1] < b[1] ? [a, b] : [b, a], t = (h - lo[1]) / (hi[1] - lo[1]); return [lo, lo.map((v, i) => v + (hi[i] - v) * t)]; };
+  function dibujar() {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, Hh);
+    const foco = hover >= 0 ? hover : sel;
+    for (const [a, b, g] of S) {
+      const c = corta(a, b, nivel); if (!c) continue;
+      const [p, q] = c.map(proy), on = g === 'c' + foco;
+      ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]);
+      ctx.strokeStyle = on ? '#5CC27D' : g === 'malla' ? 'rgba(98,160,236,.18)' : g === 'techo' ? 'rgba(242,180,42,.75)' : g === 'base' ? 'rgba(201,210,218,.6)' : 'rgba(98,160,236,.55)';
+      ctx.lineWidth = on ? 2.4 : 1.1; ctx.stroke();
+    }
+    if (nivel < TOPE) { const y = nivel, P = [[-2.8, -2.8], [2.8, -2.8], [2.8, 2.8], [-2.8, 2.8], [-2.8, -2.8]].map(([x, z]) => proy([x, y, z]));
+      ctx.setLineDash([5, 5]); ctx.strokeStyle = '#F2B42A'; ctx.lineWidth = 1; ctx.beginPath(); P.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.stroke(); ctx.setLineDash([]); }
+    ctx.textAlign = 'center';
+    if (nivel >= H) COL.forEach(([x, z], k) => { const [px, py] = proy([x * 1.42, 1.9, z * 1.42]), on = k === foco;
+      ctx.fillStyle = on ? '#5CC27D' : 'rgba(201,210,218,.75)'; ctx.font = `${on ? 700 : 600} ${on ? 13 : 11}px Archivo`;
+      ctx.fillText(`${k + 1} · ${NOMBRES[k].toUpperCase()}`, px, py); });
+    if (nivel >= TOPE) { const [tx, ty] = proy([0, H + 1.75, 0]); ctx.fillStyle = '#F2B42A'; ctx.font = '600 11px Archivo'; ctx.fillText('SISTEMA DE GESTIÓN INTEGRAL', tx, ty);
+      const [bx, by] = proy([0, -.3, -2.6]); ctx.fillStyle = 'rgba(201,210,218,.8)'; ctx.fillText('VALORES · REQUISITOS LEGALES', bx, by + 20); }
+  }
+  const botones = [...document.querySelectorAll('#comp button')];
+  function elegir(k, usuario) { if (k === sel && !usuario) return; sel = k; botones.forEach((b, i) => b.setAttribute('aria-pressed', i === k)); if (usuario) pausa = performance.now() + 9000; }
+  function cuadro(t) {
+    if (!activo) return;
+    if (nivel < TOPE) nivel = Math.min(TOPE, -0.3 + (t - t0) / 380); // se levanta por niveles
+    if (!quieto && !arrastre) ang += .0022;
+    if (!quieto && t > pausa && nivel >= TOPE && hover < 0) elegir(Math.floor((t - t0) / 3200) % 4, false); // resalta un compromiso a la vez
+    dibujar(); requestAnimationFrame(cuadro);
+  }
+  const arrancar = () => { const antes = activo; activo = visto && !document.hidden && enPantalla; if (activo && !antes) requestAnimationFrame(cuadro); };
+  let enPantalla = false;
+  botones.forEach((b, k) => { b.addEventListener('click', () => elegir(k, true)); b.addEventListener('mouseenter', () => { hover = k; elegir(k, true); }); b.addEventListener('mouseleave', () => { hover = -1; }); });
+  caja.addEventListener('pointerdown', e => { arrastre = { x:e.clientX, y:e.clientY, a:ang, i:incl }; caja.setPointerCapture(e.pointerId); });
+  caja.addEventListener('pointerup', () => arrastre = null);
+  caja.addEventListener('pointermove', e => {
+    const r = caja.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+    if (arrastre) { ang = arrastre.a + (e.clientX - arrastre.x) / 140; incl = Math.max(.1, Math.min(.9, arrastre.i + (e.clientY - arrastre.y) / 300)); pausa = performance.now() + 9000; if (!activo) dibujar(); return; }
+    let mejor = -1, d0 = 30;
+    COL.forEach(([x, z], k) => { const a = proy([x, 0, z]), b = proy([x, H, z]), vx = b[0] - a[0], vy = b[1] - a[1], t = Math.max(0, Math.min(1, ((mx - a[0]) * vx + (my - a[1]) * vy) / (vx * vx + vy * vy)));
+      const d = Math.hypot(mx - a[0] - vx * t, my - a[1] - vy * t); if (d < d0) { d0 = d; mejor = k; } });
+    if (mejor !== hover) { hover = mejor; if (mejor >= 0) elegir(mejor, true); if (!activo) dibujar(); }
+  });
+  caja.addEventListener('pointerleave', () => { hover = -1; });
+  medir(); new ResizeObserver(medir).observe(caja);
+  // Solo corre en pantalla y con la pestaña visible (guía §9)
+  new IntersectionObserver(([e]) => { enPantalla = e.isIntersecting; if (enPantalla && !visto) { visto = true; t0 = performance.now(); } arrancar(); }, { threshold:.2 }).observe(caja);
+  document.addEventListener('visibilitychange', arrancar);
+})();
+
+// 5 · Reglas de Oro: pictogramas propios que se dibujan
+const PIC = {
+  1: '<rect x="14" y="10" width="36" height="46" rx="2"/><path d="M24 10V6h16v4" style="--j:1"/><path d="M22 26l4 4 8-8M22 42h20M22 48h14" style="--j:2"/>',
+  2: '<path d="M28 12h8v10l6 8v26H22V30l6-8z"/><circle cx="32" cy="34" r="22" style="--j:1"/><line x1="16" y1="18" x2="48" y2="50" style="--j:2"/>',
+  3: '<circle cx="32" cy="24" r="12"/><path d="M24 34l-6 22 14-8 14 8-6-22" style="--j:1"/><path d="M27 24l4 4 7-7" style="--j:2"/>',
+  4: '<rect x="16" y="28" width="32" height="26" rx="2"/><path d="M22 28v-8a10 10 0 0 1 20 0v8" style="--j:1"/><circle cx="32" cy="40" r="3" style="--j:2"/><line x1="32" y1="43" x2="32" y2="48" style="--j:2"/>',
+  5: '<path d="M32 8l26 46H6z"/><line x1="32" y1="24" x2="32" y2="38" style="--j:1"/><circle cx="32" cy="45" r="1.5" style="--j:2"/>',
+  6: '<rect x="6" y="28" width="30" height="18"/><path d="M36 34h12l8 8v4H36z" style="--j:1"/><circle cx="16" cy="50" r="5" style="--j:2"/><circle cx="46" cy="50" r="5" style="--j:2"/>',
+  7: '<path d="M10 26v12h10l18 12V14L20 26z"/><path d="M46 24c4 4 4 12 0 16M52 18c8 8 8 20 0 28" style="--j:1"/>',
+  8: '<line x1="44" y1="6" x2="30" y2="34"/><path d="M22 32l16 8-6 18-22-10z" style="--j:1"/><path d="M18 46l-4 8M24 50l-3 8M30 52l-1 8" style="--j:2"/>',
+  9: '<path d="M10 40a22 22 0 0 1 44 0z"/><path d="M6 40h52v6H6z" style="--j:1"/><line x1="32" y1="18" x2="32" y2="30" style="--j:2"/>',
+  10: '<rect x="10" y="8" width="26" height="48"/><path d="M36 32h18M46 24l8 8-8 8" style="--j:1"/><circle cx="30" cy="34" r="1.5" style="--j:2"/>',
+};
+const REGLAS = [
+  ['Planificar', 'Todo trabajo debe planificarse, con los equipos y herramientas adecuados, identificando los peligros HSE y determinando sus controles.'],
+  ['Cero alcohol y drogas', 'La tolerancia con el alcohol y las drogas psicoactivas es cero: bajo ninguna circunstancia se trabaja bajo su efecto.'],
+  ['Competencia', 'Todo trabajador debe estar capacitado en las tareas que ejecuta y ser competente en la labor asignada.'],
+  ['Bloqueo y etiquetado', 'En toda labor con exposición a energías peligrosas se aplica el protocolo de bloqueo y etiquetado (LO-TO).'],
+  ['Alto riesgo con permiso', 'Las tareas de alto riesgo se ejecutan según los procedimientos de trabajo seguro, con autorización previa del jefe de área.'],
+  ['Equipos certificados', 'El uso de vehículos y equipo mayor está limitado a personas certificadas y autorizadas.'],
+  ['Reportar', 'Todo colaborador debe reportar las condiciones y los comportamientos inseguros que identifique.'],
+  ['Orden y aseo', 'Toda actividad se realiza en condiciones de orden y aseo.'],
+  ['Protección personal', 'El uso de los elementos de protección personal apropiados para cada tarea es indispensable para ejecutarla.'],
+  ['Emergencias', 'Antes de iniciar cualquier labor se debe conocer el protocolo de emergencias.'],
+];
+const conLargo = s => s.replace(/<(path|circle|rect|line)/g, '<$1 pathLength="1"');
+const reglas = document.getElementById('reglas');
+reglas.innerHTML = REGLAS.map(([t, x], i) => `
+  <article class="regla" tabindex="0" style="--i:${i}" aria-label="Regla ${i + 1}: ${t}. ${x}">
+    <div class="giro">
+      <div class="cara frente"><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="gira" aria-hidden="true">↻</span>
+        <svg class="pic" viewBox="0 0 64 64" style="--d:${i * 110 + 500}ms" aria-hidden="true">${conLargo(PIC[i + 1])}</svg><h3>${t}</h3></div>
+      <div class="cara dorso" aria-hidden="true"><span class="n">Regla ${String(i + 1).padStart(2, '0')} · ${t}</span><p>${x}</p><span class="ok">✓</span></div>
+    </div></article>`).join('');
+una(reglas, el => { el.classList.add('vis'); el.querySelectorAll('.frente').forEach(f => f.classList.add('dibuja')); }, .2);
+reglas.querySelectorAll('.regla').forEach(r => {
+  r.addEventListener('click', () => r.classList.toggle('girada'));   // en táctil, tocar gira
+  r.addEventListener('mouseleave', () => { const f = r.querySelector('.frente'), p = f.querySelector('.pic');
+    f.classList.remove('dibuja'); void f.offsetWidth; p.style.setProperty('--d', '.35s'); f.classList.add('dibuja'); });   // al volver, se dibuja de nuevo
+});
+
+// 6 y 7 · Entradas
+una(document.getElementById('eje'), el => el.classList.add('vis'));
+una(document.getElementById('piensa-t'), el => el.classList.add('vis'));
+una(document.getElementById('persona'), el => el.classList.add('dibuja'));
+una(document.getElementById('prac'), el => el.querySelectorAll('.pr').forEach(p => { p.classList.add('vis', 'dibuja'); }));
+document.querySelectorAll('.pr').forEach(p => p.addEventListener('mouseenter', () => { p.classList.remove('dibuja'); void p.offsetWidth; p.classList.add('dibuja'); }));
+</script>
+</body></html>

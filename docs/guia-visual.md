@@ -1,6 +1,6 @@
 # Guía visual base · Grupo HL
 
-Versión 1.4 · 2026-10-19
+Versión 1.5 · 2026-10-19
 
 Esta guía define cómo se ve y cómo se mueve el nuevo sitio de Grupo HL. Es la referencia obligatoria
 durante el desarrollo: si un componente nuevo no encaja en estas reglas, primero se ajusta la guía y
@@ -519,8 +519,8 @@ ve el estado final. No suman JavaScript. Única excepción: la tira de negativos
 **Reglas**
 
 - Cada animación se dispara **una vez**, al entrar en pantalla. Nada en bucle, salvo el hero del
-  inicio (giro lento y disciplina resaltada del gemelo digital), la cinta de la franja P3 y el punto de
-  "Hablar con HL". Todo bucle se detiene fuera de pantalla y con la pestaña oculta.
+  inicio (giro lento y disciplina resaltada del gemelo digital), la estructura 3D de la política en HSE
+  (§12.5), la cinta de la franja P3 y el punto de "Hablar con HL". Todo bucle se detiene fuera de pantalla y con la pestaña oculta.
 - `prefers-reduced-motion: reduce` pone todas las duraciones en 0 (ya resuelto en `tokens.css`) y
   muestra el estado final.
 - Las cifras animadas parten del **valor real ya escrito**: Google y los lectores de pantalla ven 58,
@@ -683,6 +683,53 @@ contenido, y los valida HL junto con la autorización.
 - Los hitos se ubican en su década (1968, 1970, 1980, 1990, 2000, hoy); si llegan años exactos, se
   usan sin cambiar el diseño.
 
+### 12.5 HSE, Noticias, Acreedores y legales
+
+Decididos con maquetas el 2026-10-19 (dos rondas): [hse.html](../design/maquetas/hse.html) y
+[noticias-legales.html](../design/maquetas/noticias-legales.html). Criterio de la segunda ronda (pedido de
+Juan David): **movimiento en cada bloque** (entrada y hover), tarjetas en vez de párrafos y diagramas
+donde hay mucho texto.
+
+**HSE y calidad** (acento verde, `/hse/`):
+1. **Cabecera:** P1 L-05, H1 "Seguridad / que se mide" (líneas que suben), entrada y chips ISO; lámina
+   verde con la foto del equipo (`generales/mejor-gente.jpg`) que entra con barrido y se acerca, ejes
+   punteados, cota en señal que se mide y cruz de seguridad que gira al entrar y al pasar; la foto sigue
+   levemente al cursor.
+2. **Indicadores** sobre grafito con rayas P3 en `--hl-verde`: −64 %, −72 %, +1 M HH sin incidentes
+   (premio Chevron) y 0 incidentes ambientales en Chipirón (PDF ECOHL). Bajan como barrera, las cifras
+   cuentan y la celda se ilumina al pasar. Nota de indicadores de 3 años pendientes.
+3. **Certificaciones:** tarjetas con norma, ámbito, código SGS, sello (gira al entrar) y enlace al PDF;
+   se inclinan en 3D con el cursor con un brillo verde. BPI aparte, punteada, "por confirmar".
+4. **Política de gestión integral:** estructura 3D de alambre en canvas propio (como el gemelo): cimiento
+   = valores y requisitos legales; 4 columnas = clientes, gente, comunidades, grupo; cubierta = sistema de
+   gestión integral. Se levanta por niveles, gira despacio, resalta una columna a la vez (verde) y la lista
+   de la derecha despliega su texto; pasar sobre una columna o un botón la elige; se arrastra para girar.
+   Bucle permitido (§9): se detiene fuera de pantalla, con la pestaña oculta y con movimiento reducido.
+5. **10 Reglas de Oro** en tarjetas: número, pictograma propio y título corto (aprobados para esta
+   versión); caen como señales (rotateX) en secuencia, dibujan el pictograma y miden una cota verde; al
+   pasar, enfocar o tocar giran (rotateY) y muestran la regla completa sobre verde.
+6. **PIENSA®:** eje de 3 pasos (planificación, tema, herramienta) que se mide con un pulso en señal; la
+   persona en el centro con pictograma.
+7. **Prácticas:** 4 tarjetas que se levantan, se llenan de `--sec-soft` y redibujan su pictograma.
+8. **Cierre** verde con rayas que corren al pasar y "Hablar con HL".
+
+**Noticias** (acento óxido, solo con 3 o más entradas):
+- Índice: H1 en dos líneas que suben; filtros (Todas · Noticias · Adjudicados) con una marca que corre y
+  tarjetas que se reacomodan (FLIP); tarjetas con lámina óxido (a color al pasar), inclinación 3D, título
+  subrayado que se mide, "Leer →" que entra; **sello de recibido** con la fecha que se estampa al entrar y
+  otra vez al pasar; **adjudicados** con franja P3 que sube y cuyas rayas corren al pasar. La primera
+  tarjeta va en grande.
+- Entrada: barra de lectura (cota óxido arriba), cabecera con lámina en paralaje y sello, texto a 66
+  caracteres (17,5 px), cita que se revela, proyecto relacionado y compartir con barrido.
+
+**Acreedores** (azul): convocatorias como documentos sobre una línea de tiempo que se mide; esquina
+doblada que se abre al pasar, flecha de descarga que rebota, estado (vigente/anterior) en chip; aviso de
+que los accesos internos salen del sitio.
+
+**Legales** (datos y términos, azul, una plantilla): cajetín del documento con PDF, aviso de revisión
+jurídica, índice fijo que se llena con lo leído y marca la sección actual, secciones que se encienden al
+llegar, enlace a cada sección al pasar por su título; texto a 68 caracteres.
+
 ### 12.4 Comportamiento común (Inicio y Nosotros)
 
 - **Sin JavaScript o con `prefers-reduced-motion`:** todo el contenido está en el HTML. El gemelo se
@@ -778,5 +825,6 @@ los sectores principales** y van primero y más grandes donde aparezcan los sect
 | 1.0 | 2026-10-13 | Primera versión a partir de la propuesta Rev. 0. Ajustes de contraste (`--signal`, `--bad`, `--good`) y nuevos tokens `--signal-ink` y `--steel`. |
 | 1.1 | 2026-10-15 | Movimiento más corto y fluido (`--t-vista` .5 s, `--t-izaje` .6 s, `--t-aparece` .5 s, `--t-rapido` .2 s), reglas de rendimiento y diseño por formato de pantalla (§5). |
 | 1.3 | 2026-10-19 | Inicio y Nosotros (§12), decididos con maquetas en `design/maquetas/`: lema D2 (§2.3), monograma vectorial y reglas del manual de marca (§2.2), barra inmersa y botón de trazo (§7), mosaico de cabecera y archivo histórico (§8), pictogramas de plano (§8), firmas de Inicio (gemelo digital) y Nosotros (tira de negativos) (§9). |
+| 1.5 | 2026-10-19 | HSE, Noticias, Acreedores y legales (§12.5), con movimiento en cada bloque; bucle permitido para la estructura 3D de HSE (§9). |
 | 1.4 | 2026-10-19 | Proyectos y Sectores (§13): menú con submenú en Proyectos (Sectores y Servicios), prevalencia de Cemento y Minería, explorador con mapa vivo y pod de línea, página de Sectores con escenarios; bloque de sectores del inicio con prevalencia (§12.1). |
 | 1.2 | 2026-10-15 | Ampliación controlada para dar personalidad a cada sección: acentos de sección (§3.5), pods P1/P2/P3 y lámina de foto (§6), fotos nunca mayores de 800 px con lámina y hoja de contactos (§8), firma de movimiento por sección (§9). Decidido con maquetas sobre fotos reales. |
