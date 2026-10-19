@@ -1,0 +1,119 @@
+---
+// Páginas legales (datos y términos; guía §12.5): cajetín del documento, aviso de revisión jurídica, índice
+// fijo que se llena con lo leído y texto a 68 caracteres. El texto sale del cuerpo Markdown de la página.
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Pod from '../components/Pod.astro';
+import { cargar } from '../lib/datos';
+import type { Lang } from '../i18n/rutas';
+import { t } from '../i18n/ui';
+
+interface Props { lang: Lang; alterno: string; pagina: 'datos' | 'terminos' }
+const { lang, alterno, pagina: cual } = Astro.props;
+const { datos } = await cargar();
+const entrada = (datos.paginas.find((p) => p.data.pagina === cual && p.data.lang === lang)
+  ?? datos.paginas.find((p) => p.data.pagina === cual && p.data.lang === 'es'))!;
+const pagina = entrada.data;
+const { Content, headings } = await render(entrada);
+const indice = headings.filter((h) => h.depth === 2);
+const doc = pagina.documento;
+const fecha = (iso: string) => new Intl.DateTimeFormat(lang === 'es' ? 'es-CO' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(iso));
+const [t1, ...t2] = pagina.titulo.split(' ');
+---
+<Base titulo={pagina.titulo} descripcion={pagina.descripcion} lang={lang} alterno={alterno}>
+  <section class="wrap legal">
+    <header class="cab">
+      <div>
+        <Pod forma="rotulo" codigo="P-05" nombre={t(lang, 'legal')} />
+        <h1><span class="l"><span>{t1}</span></span> <span class="l"><span>{t2.join(' ')}</span></span></h1>
+      </div>
+      <p class="lead aparece" style="--i:2">{pagina.descripcion}</p>
+    </header>
+
+    <div class="leg-g">
+      {indice.length > 1 && (
+        <nav class="indice voz-datos" aria-label={t(lang, 'contenido')}>
+          {indice.map((h) => <a href={`#${h.slug}`} data-id={h.slug}><span>{h.text}</span></a>)}
+        </nav>
+      )}
+      <div class="cuerpo">
+        {doc && (
+          <dl class="cajetin">
+            <div><dt class="voz-datos">{t(lang, 'documento')}</dt><dd>{doc.codigo}</dd></div>
+            <div><dt class="voz-datos">{t(lang, 'actualizacion')}</dt><dd>{doc.actualizacion}</dd></div>
+            <div><dt class="voz-datos">{t(lang, 'fecha')}</dt><dd><time datetime={doc.fecha}>{fecha(doc.fecha)}</time></dd></div>
+            <div><dt class="voz-datos">{t(lang, 'norma')}</dt><dd>{doc.ley}</dd></div>
+            <div class="pdf"><dt class="voz-datos">{t(lang, 'descargar')}</dt><dd><a href={doc.pdf} download>PDF <i aria-hidden="true">↓</i></a></dd></div>
+          </dl>
+        )}
+        {!pagina.revisionJuridica && <p class="juridica"><span class="voz-datos">{t(lang, 'revisionPendiente')}</span> {t(lang, 'revisionPendienteTxt')}</p>}
+        <article class="texto"><Content /></article>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // El índice se llena con lo leído y marca la sección actual.
+  function leer() {
+    const enlaces = [...document.querySelectorAll<HTMLAnchorElement>('.indice a')];
+    const titulos = enlaces.map((a) => document.getElementById(a.dataset.id!)).filter(Boolean) as HTMLElement[];
+    if (!titulos.length) return;
+    let actual = 0;
+    titulos.forEach((h, i) => {
+      const fin = titulos[i + 1]?.getBoundingClientRect().top ?? document.querySelector('.texto')!.getBoundingClientRect().bottom;
+      const ini = h.getBoundingClientRect().top, mitad = innerHeight * 0.4;
+      enlaces[i].style.setProperty('--p', String(Math.max(0, Math.min(1, (mitad - ini) / Math.max(1, fin - ini)))));
+      if (ini < mitad) actual = i;
+    });
+    enlaces.forEach((a, i) => a.classList.toggle('actual', i === actual));
+  }
+  addEventListener('scroll', leer, { passive: true });
+  document.addEventListener('astro:page-load', leer);
+  leer();
+</script>
+
+<style>
+  .legal { padding-block: var(--s5) var(--s7); }
+  .cab { display: grid; gap: var(--s4); align-items: end; margin-bottom: var(--s6); }
+  h1 { margin: var(--s3) 0 0; font-size: var(--fs-h1); line-height: var(--lh-display); }
+  h1 .l { display: block; overflow: hidden; padding-bottom: .06em; }
+  h1 .l > span { display: block; animation: linea var(--t-izaje) var(--ease-izaje) both; }
+  h1 .l + .l > span { font-weight: var(--fw-fina); color: var(--sec); animation-delay: 120ms; }
+  @keyframes linea { from { transform: translateY(105%); } }
+  .lead { margin: 0; color: var(--muted); }
+  .leg-g { display: grid; gap: var(--s5); }
+  .indice { display: grid; gap: 2px; border-top: var(--border-strong) solid var(--ink); padding-top: var(--s2); align-self: start; }
+  .indice a { position: relative; display: block; padding: var(--s1) var(--s2); color: var(--muted); text-decoration: none; overflow: hidden; }
+  .indice a::before { content: ''; position: absolute; inset: 0; background: var(--sec-soft); transform: scaleX(var(--p, 0)); transform-origin: left; }
+  .indice a::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--sec); transform: scaleY(0); transition: transform var(--t-rapido) var(--ease-plano); }
+  .indice a span { position: relative; }
+  .indice a.actual { color: var(--sec); }
+  .indice a.actual::after { transform: scaleY(1); }
+  .cajetin { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 0 var(--s4); background: var(--paper); border: var(--border-strong) solid var(--ink); }
+  .cajetin div { display: grid; gap: 2px; padding: var(--s2) var(--s3); border-right: var(--border) solid var(--line); border-bottom: var(--border) solid var(--line); }
+  .cajetin dt { color: var(--muted); }
+  .cajetin dd { margin: 0; font-weight: var(--fw-strong); }
+  .cajetin .pdf { justify-items: end; align-content: center; }
+  .cajetin .pdf dt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .cajetin .pdf a { display: inline-flex; gap: var(--s2); min-height: 40px; align-items: center; padding: 0 var(--s3); border: var(--border-strong) solid var(--ink); color: var(--ink); text-decoration: none; font-weight: var(--fw-strong); transition: background-color var(--t-rapido) ease, color var(--t-rapido) ease; }
+  .cajetin .pdf a:hover { background: var(--ink); color: var(--bg); }
+  .juridica { margin: 0 0 var(--s5); padding: var(--s2) var(--s3); background: var(--signal-soft); border: var(--border-strong) solid var(--signal); color: var(--ink); font-size: var(--fs-sm); }
+  .juridica .voz-datos { color: var(--signal-ink); margin-right: var(--s2); }
+  .texto { max-width: 68ch; }
+  .texto :global(h2) { font-size: var(--fs-h3); margin: var(--s6) 0 var(--s3); scroll-margin-top: calc(var(--bar-h) + var(--s3)); }
+  .texto :global(h3) { font-size: var(--fs-lead); margin: var(--s5) 0 var(--s2); scroll-margin-top: calc(var(--bar-h) + var(--s3)); }
+  .texto :global(h4) { font-size: var(--fs-body); margin: var(--s4) 0 var(--s2); }
+  .texto :global(p), .texto :global(li) { line-height: var(--lh-text); }
+  .texto :global(p) { margin: 0 0 var(--s3); }
+  .texto :global(ul) { padding-left: var(--s4); margin: 0 0 var(--s3); }
+  .texto :global(h2:first-child) { margin-top: 0; }
+  .texto :global(a) { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+  @media (min-width: 900px) {
+    .cab { grid-template-columns: 7fr 5fr; gap: var(--s5); }
+    .leg-g { grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: var(--s6); }
+    .indice { position: sticky; top: calc(var(--bar-h) + var(--s3)); max-height: calc(100vh - var(--bar-h) - var(--s5)); overflow: auto; }
+    .cajetin { grid-template-columns: repeat(4, auto) 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { h1 .l > span { animation: none; } .indice a::after { transition: none; } }
+</style>

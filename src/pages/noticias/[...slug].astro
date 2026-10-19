@@ -1,0 +1,10 @@
+---
+// Noticias (guía §12.5): índice y entradas; no se genera nada con menos de 3 noticias (especificación §3).
+import Noticias from '../../plantillas/Noticias.astro';
+import Noticia from '../../plantillas/Noticia.astro';
+import { rutasNoticias } from '../../lib/datos';
+
+export const getStaticPaths = () => rutasNoticias('es');
+const p = Astro.props as any;
+---
+{p.tipo === 'indice' ? <Noticias lang={p.lang} alterno={p.alterno} items={p.items} /> : <Noticia lang={p.lang} alterno={p.alterno} noticia={p.noticia} codigo={p.codigo} />}

@@ -1,0 +1,106 @@
+---
+// Información para acreedores (guía §12.5, Ley 1116): las convocatorias como documentos sobre una línea de
+// tiempo; la esquina doblada se abre al pasar y la flecha de descarga rebota. Acento azul.
+import Base from '../layouts/Base.astro';
+import Pod from '../components/Pod.astro';
+import { cargar } from '../lib/datos';
+import type { Lang } from '../i18n/rutas';
+import { t } from '../i18n/ui';
+
+interface Props { lang: Lang; alterno: string }
+const { lang, alterno } = Astro.props;
+const { datos } = await cargar();
+const pagina = (datos.paginas.find((p) => p.data.pagina === 'acreedores' && p.data.lang === lang)
+  ?? datos.paginas.find((p) => p.data.pagina === 'acreedores' && p.data.lang === 'es'))!.data;
+const fecha = (iso: string) => new Intl.DateTimeFormat(lang === 'es' ? 'es-CO' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(iso));
+const [t1, ...t2] = pagina.titulo.split(' ');
+---
+<Base titulo={pagina.titulo} descripcion={pagina.descripcion} lang={lang} alterno={alterno}>
+  <section class="wrap acreedores">
+    <header class="cab">
+      <div>
+        <Pod forma="rotulo" codigo="P-04" nombre={t(lang, 'acreedores')} />
+        <h1><span class="l"><span>{t1}</span></span> <span class="l"><span>{t2.join(' ')}</span></span></h1>
+      </div>
+      <p class="lead aparece" style="--i:2">{pagina.descripcion}</p>
+    </header>
+
+    <ol class="linea revela">
+      {(pagina.documentos ?? []).map((d, i) => (
+        <li style={`--i:${i}`}>
+          <a class="doc" href={d.pdf} download>
+            <span class="hito" aria-hidden="true"></span>
+            <span class="fecha voz-datos"><time datetime={d.fecha}>{fecha(d.fecha)}</time></span>
+            <span class="n" aria-hidden="true">{d.numero}</span>
+            <b>{d.titulo}</b>
+            <span class="pie voz-datos">
+              <span class:list={['chip', d.estado]}>{t(lang, d.estado === 'vigente' ? 'vigente' : 'anterior')}</span>
+              <span class="baja">PDF <i aria-hidden="true">↓</i></span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+
+    <p class="aviso">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M6 10h28v22H6zM6 16h28M14 24h12" /></svg>
+      <span><b>{t(lang, 'acreedoresAviso1')}</b> {t(lang, 'acreedoresAviso2')}</span>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .acreedores { padding-block: var(--s5) var(--s7); }
+  .cab { display: grid; gap: var(--s4); align-items: end; margin-bottom: var(--s6); }
+  h1 { margin: var(--s3) 0 0; font-size: var(--fs-h1); line-height: var(--lh-display); }
+  h1 .l { display: block; overflow: hidden; padding-bottom: .06em; }
+  h1 .l > span { display: block; animation: linea var(--t-izaje) var(--ease-izaje) both; }
+  h1 .l + .l > span { font-weight: var(--fw-fina); color: var(--sec); animation-delay: 120ms; }
+  @keyframes linea { from { transform: translateY(105%); } }
+  .lead { margin: 0; color: var(--muted); }
+  .linea { position: relative; list-style: none; margin: 0; padding: var(--s5) 0 0; display: grid; gap: var(--s5) var(--s4); }
+  .linea::before { content: ''; position: absolute; left: 0; right: 0; top: 12px; height: 1.5px; background: var(--sec); transform-origin: left; }
+  .doc {
+    position: relative; display: grid; gap: var(--s3); padding: var(--s4); color: var(--ink); text-decoration: none; background: var(--paper);
+    border: var(--border-strong) solid var(--ink); clip-path: polygon(0 0, calc(100% - 34px) 0, 100% 34px, 100% 100%, 0 100%);
+    transition: clip-path var(--t-aparece) var(--ease-plano), transform var(--t-rapido) var(--ease-izaje);
+  }
+  .doc::before {
+    content: ''; position: absolute; right: 0; top: 0; width: 34px; height: 34px; transition: opacity var(--t-rapido) ease;
+    background: linear-gradient(225deg, transparent 50%, var(--sec-soft) 50%); border-left: var(--border-strong) solid var(--ink); border-bottom: var(--border-strong) solid var(--ink);
+  }
+  .doc:hover, .doc:focus-visible { clip-path: polygon(0 0, 100% 0, 100% 0, 100% 100%, 0 100%); transform: translateY(-6px); }
+  .doc:hover::before, .doc:focus-visible::before { opacity: 0; }
+  .doc:focus-visible { outline: var(--focus-ring); outline-offset: 3px; }
+  .hito { position: absolute; top: calc(-1 * var(--s5) - 1px); left: var(--s4); width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 2px solid var(--sec); }
+  .fecha { position: absolute; top: calc(-1 * var(--s5) - 2px); left: calc(var(--s4) + 24px); color: var(--sec); }
+  .n { font-family: var(--f-ancha); font-stretch: var(--wdth-stat); font-weight: var(--fw-negra); font-size: var(--fs-stat); line-height: .85; color: var(--sec); }
+  .doc b { font-stretch: var(--wdth-subtitle); font-size: var(--fs-lead); line-height: var(--lh-title); }
+  .pie { display: flex; justify-content: space-between; align-items: center; gap: var(--s2); padding-top: var(--s2); border-top: var(--border) dashed var(--line); color: var(--muted); }
+  .chip { padding: 2px var(--s2); border: var(--border) solid currentColor; }
+  .chip.vigente { color: var(--good); background: var(--good-soft); }
+  .baja { color: var(--ink); font-weight: var(--fw-strong); }
+  .baja i { display: inline-block; font-style: normal; }
+  .doc:hover .baja i { animation: rebota .6s var(--ease-izaje) 2; }
+  @keyframes rebota { 50% { transform: translateY(4px); } }
+  .aviso { display: flex; gap: var(--s3); align-items: center; margin: var(--s6) 0 0; padding: var(--s3) var(--s4); background: var(--paper); border: var(--border-strong) solid var(--ink); color: var(--muted); }
+  .aviso svg { width: 40px; height: 40px; flex: none; color: var(--sec); }
+  .aviso path { fill: none; stroke: currentColor; stroke-width: 1.8; }
+  .aviso b { color: var(--ink); }
+  :global(html.js) .linea::before { transition: transform var(--t-cota) var(--ease-plano); }
+  :global(html.js) .linea:not(:global(.visible))::before { transform: scaleX(0); }
+  :global(html.js) .linea li { transition: opacity var(--t-izaje) var(--ease-izaje), transform var(--t-izaje) var(--ease-izaje); transition-delay: calc(var(--i) * 120ms + 200ms); }
+  :global(html.js) .linea:not(:global(.visible)) li { opacity: 0; transform: translateY(28px); }
+  :global(html.sin-revela) .linea li { opacity: 1; transform: none; }
+  :global(html.sin-revela) .linea::before { transform: none; }
+  @media (min-width: 900px) {
+    .cab { grid-template-columns: 7fr 5fr; gap: var(--s5); }
+    .linea { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    h1 .l > span { animation: none; }
+    .doc, .doc::before { transition: none; }
+    .doc:hover .baja i { animation: none; }
+    :global(html.js) .linea li, :global(html.js) .linea::before { opacity: 1; transform: none; transition: none; }
+  }
+</style>

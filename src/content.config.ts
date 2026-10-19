@@ -162,10 +162,43 @@ const paginas = defineCollection({
     mision: z.object({ antes: z.string(), clave: z.string() }).optional(),
     vision: z.object({ texto: z.string(), promesas: z.array(z.string()) }).optional(),
     foto: image().optional(),
-    indicadores: z.array(z.object({ valor: z.number(), signo: z.string().optional(), unidad: z.string(), etiqueta: z.string(), fuente: z.string() })).optional(),
+    indicadores: z.array(z.object({
+      valor: z.number(), signo: z.string().optional(), unidad: z.string(), etiqueta: z.string(), fuente: z.string(),
+      /** En qué páginas va (inicio, hse); sin valor, en las dos. */
+      donde: z.array(z.enum(['inicio', 'hse'])).optional(),
+    })).optional(),
+    // HSE (guía §12.5): política en 3D, Reglas de Oro, PIENSA® y prácticas.
+    politica: z.object({
+      intro: z.string(),
+      compromisos: z.array(z.object({ titulo: z.string(), corto: z.string(), texto: z.string() })).length(4),
+      cimiento: z.string(), cubierta: z.string(),
+    }).optional(),
+    reglas: z.array(z.object({ titulo: z.string(), texto: z.string() })).optional(),
+    piensa: z.object({ texto: z.string(), pasos: z.array(z.object({ titulo: z.string(), texto: z.string() })) }).optional(),
+    practicas: z.array(z.object({ titulo: z.string(), texto: z.string(), quien: z.string(), icono: z.enum(['ojo', 'pare', 'pasaporte', 'liderazgo']) })).optional(),
+    // Acreedores y legales: documentos en PDF (public/documentos/).
+    documentos: z.array(z.object({ numero: z.string(), titulo: z.string(), fecha: z.string(), pdf: z.string(), estado: z.enum(['vigente', 'anterior']) })).optional(),
+    documento: z.object({ codigo: z.string(), actualizacion: z.number(), fecha: z.string(), ley: z.string(), pdf: z.string() }).optional(),
     valores: z.array(z.object({ nombre: z.string(), frase: z.string(), icono: z.enum(['ventana', 'anillos', 'calendario', 'escalones', 'casco']) })).optional(),
     presencia: z.object({ titulo: z.string(), clave: z.string(), texto: z.string() }).optional(),
   }),
 });
 
-export const collections = { proyectos, servicios, sectores, sedes, certificaciones, historia, testimonios, sitio, paginas };
+// Noticias y adjudicados (especificación §4, guía §12.5): un archivo por noticia e idioma. Con menos de 3 en
+// español la sección no se publica (src/lib/noticias.ts).
+const noticias = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/noticias', generateId: porArchivo }),
+  schema: ({ image }) => z.object({
+    lang: z.enum(['es', 'en']),
+    slug: z.string(),
+    titulo: z.string(),
+    resumen: z.string(),
+    fecha: z.coerce.date(),
+    tipo: z.enum(['noticia', 'adjudicado']),
+    foto: image().optional(),
+    proyecto: reference('proyectos').optional(),
+    etiqueta: z.string().optional(),
+  }),
+});
+
+export const collections = { proyectos, servicios, sectores, sedes, certificaciones, historia, testimonios, sitio, paginas, noticias };

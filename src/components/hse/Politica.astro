@@ -1,0 +1,94 @@
+---
+// Política de gestión integral (guía §12.5-4): la estructura 3D (cimiento, 4 columnas, cubierta) y los 4
+// compromisos como botones que despliegan su texto. Sin JS, los botones muestran todos los textos.
+import { t } from '../../i18n/ui';
+import type { Lang } from '../../i18n/rutas';
+
+type Politica = { intro: string; compromisos: { titulo: string; corto: string; texto: string }[]; cimiento: string; cubierta: string };
+interface Props { lang: Lang; politica: Politica }
+const { lang, politica } = Astro.props;
+const rotulos = { cubierta: t(lang, 'hseCubierta'), cimiento: t(lang, 'hseCimiento') };
+---
+<section class="politica" aria-labelledby="pol-titulo">
+  <div class="wrap">
+    <div class="cab">
+      <h2 id="pol-titulo" class="tit">{t(lang, 'hsePolitica1')} <span>{t(lang, 'hsePolitica2')}</span></h2>
+      <p class="intro">{politica.intro}</p>
+    </div>
+    <div class="pol-g">
+      <div class="estructura" data-nombres={JSON.stringify(politica.compromisos.map((c) => c.corto))} data-rotulos={JSON.stringify(rotulos)}>
+        <canvas aria-hidden="true"></canvas>
+        <span class="ayuda voz-datos" aria-hidden="true">{t(lang, 'hseAyudaEstructura')}</span>
+      </div>
+      <div>
+        <div class="compromisos" role="group" aria-label={t(lang, 'hseCompromisos')}>
+          {politica.compromisos.map((c, i) => (
+            <button type="button" aria-pressed={i === 0 ? 'true' : 'false'}>
+              <span class="bur" aria-hidden="true">{i + 1}</span>
+              <span><b>{c.titulo}</b><span class="txt"><span>{c.texto}</span></span></span>
+            </button>
+          ))}
+        </div>
+        <dl class="base">
+          <div><dt>{t(lang, 'hseCimiento')}</dt><dd>{politica.cimiento}</dd></div>
+          <div><dt>{t(lang, 'hseCubierta')}</dt><dd>{politica.cubierta}</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../../scripts/estructura.ts';
+</script>
+
+<style>
+  .politica { background: var(--hl-grafito); color: var(--hl-blanco); padding-block: var(--s7); }
+  .cab { display: grid; gap: var(--s3); margin-bottom: var(--s5); }
+  .tit { margin: 0; color: var(--hl-blanco); }
+  .tit span { display: block; font-weight: var(--fw-fina); color: var(--hl-concreto); }
+  .intro { margin: 0; color: var(--hl-concreto); max-width: 60ch; }
+  .pol-g { display: grid; gap: var(--s5); align-items: center; }
+  .estructura {
+    position: relative; aspect-ratio: 1 / .86; cursor: grab; touch-action: pan-y;
+    border: var(--border) solid color-mix(in srgb, var(--hl-blanco) 12%, transparent);
+    background-image: linear-gradient(color-mix(in srgb, var(--hl-azul-claro) 8%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--hl-azul-claro) 8%, transparent) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .estructura:active { cursor: grabbing; }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .ayuda { position: absolute; left: var(--s3); bottom: var(--s2); color: var(--hl-acero); }
+  :global(html:not(.js)) .estructura { display: none; }
+  .compromisos { display: grid; gap: var(--s2); }
+  .compromisos button {
+    position: relative; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: var(--s3); align-items: center;
+    padding: var(--s3) var(--s4); background: transparent; color: var(--hl-concreto); text-align: left; cursor: pointer; overflow: hidden;
+    font: inherit; border: var(--border) solid color-mix(in srgb, var(--hl-blanco) 16%, transparent);
+    transition: border-color var(--t-rapido) ease, color var(--t-rapido) ease;
+  }
+  .compromisos button::before { content: ''; position: absolute; inset: 0; background: var(--sec); transform: scaleX(0); transform-origin: left; transition: transform var(--t-aparece) var(--ease-plano); }
+  .compromisos button > * { position: relative; }
+  .bur { width: 36px; height: 36px; border-radius: 50%; border: var(--border-strong) solid currentColor; display: grid; place-items: center; font-weight: var(--fw-title); }
+  .compromisos b { display: block; color: var(--hl-blanco); font-stretch: var(--wdth-subtitle); font-weight: var(--fw-title); font-size: var(--fs-lead); }
+  .txt { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--t-aparece) var(--ease-plano); }
+  .txt > span { overflow: hidden; font-size: var(--fs-sm); }
+  .compromisos button[aria-pressed='true']::before { transform: scaleX(1); }
+  .compromisos button[aria-pressed='true'] { color: var(--sec-ink); border-color: var(--sec); }
+  .compromisos button[aria-pressed='true'] b { color: var(--sec-ink); }
+  .compromisos button[aria-pressed='true'] .txt { grid-template-rows: 1fr; }
+  .compromisos button[aria-pressed='true'] .txt > span { padding-top: var(--s1); }
+  .compromisos button:hover:not([aria-pressed='true']) { border-color: var(--hl-verde); color: var(--hl-blanco); }
+  .compromisos button:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+  /* Sin JS no hay selección: todos los textos abiertos */
+  :global(html:not(.js)) .txt { grid-template-rows: 1fr; }
+  .base { margin: var(--s4) 0 0; display: grid; gap: var(--s2); font-size: var(--fs-sm); color: var(--hl-acero); }
+  .base div { display: grid; gap: 2px; }
+  .base dt { color: var(--hl-verde); font-weight: var(--fw-strong); }
+  .base dd { margin: 0; }
+  @media (min-width: 900px) {
+    .cab { grid-template-columns: 7fr 5fr; align-items: end; gap: var(--s5); }
+    .pol-g { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  }
+  @media (prefers-reduced-motion: reduce) { .compromisos button::before, .txt { transition: none; } }
+</style>

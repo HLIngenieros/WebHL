@@ -1,0 +1,125 @@
+---
+// Entrada de noticia (guía §12.5): barra de lectura, cabecera con lámina en paralaje y sello, texto a 66
+// caracteres, cita que se revela, proyecto relacionado y compartir.
+import Base from '../layouts/Base.astro';
+import Foto from '../components/ui/Foto.astro';
+import { ruta, urlDe, type Lang } from '../i18n/rutas';
+import { t } from '../i18n/ui';
+import { cargar } from '../lib/datos';
+import { bloque } from '../lib/contenido';
+import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+
+interface Props { lang: Lang; alterno: string; noticia: CollectionEntry<'noticias'>; codigo: string }
+const { lang, alterno, noticia, codigo } = Astro.props;
+const n = noticia.data;
+const { Content } = await render(noticia);
+const { datos } = await cargar();
+const proyecto = n.proyecto ? datos.proyectos.find((p) => p.id === n.proyecto!.id) : undefined;
+const sello = new Intl.DateTimeFormat(lang === 'es' ? 'es-CO' : 'en-US', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' })
+  .format(n.fecha).replace(/\./g, '').replace(/ de /g, ' ').toUpperCase();
+const url = new URL(Astro.url.pathname, Astro.site).href;
+---
+<Base titulo={n.titulo} descripcion={n.resumen} lang={lang} alterno={alterno}>
+  <div class="lectura" aria-hidden="true"><i></i></div>
+  <article class="noticia">
+    <header class="hero">
+      {n.foto && <Foto src={n.foto} alt="" sizes="100vw" prioridad />}
+      <span class="tinte" aria-hidden="true"></span>
+      <div class="wrap hero-in">
+        <span class="voz-datos">{codigo} · {t(lang, n.tipo === 'adjudicado' ? 'adjudicado' : 'noticia')}</span>
+        <h1>{n.titulo}</h1>
+      </div>
+      <span class="sello" aria-hidden="true"><small class="voz-datos">{t(lang, 'recibido')}</small><b>{sello}</b></span>
+    </header>
+    <div class="wrap cuerpo-g">
+      <aside class="meta">
+        <p><span class="voz-datos">{t(lang, 'fecha')}</span><time datetime={n.fecha.toISOString().slice(0, 10)}>{sello}</time></p>
+        <a class="volver" href={ruta('noticias', lang)}><i aria-hidden="true">←</i> {t(lang, 'todasNoticias')}</a>
+      </aside>
+      <div class="texto">
+        <p class="lead">{n.resumen}</p>
+        <Content />
+        {proyecto && (
+          <a class="rel" href={urlDe('proyectos', proyecto.data.slug, lang)}>
+            <span class="voz-datos">{t(lang, 'proyectoRelacionado')}</span>
+            <b>{bloque(proyecto.data, lang).titulo}</b>
+            <span class="ir">{t(lang, 'verFicha')} →</span>
+          </a>
+        )}
+      </div>
+      <aside class="compartir">
+        <span class="voz-datos">{t(lang, 'compartir')}</span>
+        <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} rel="noopener" target="_blank">LinkedIn</a>
+        <button type="button" data-url={url} data-ok={t(lang, 'enlaceCopiado')}>{t(lang, 'copiarEnlace')}</button>
+      </aside>
+    </div>
+  </article>
+</Base>
+
+<script>
+  // Barra de lectura y paralaje leve de la cabecera; copiar enlace con confirmación.
+  function iniciar() {
+    const art = document.querySelector<HTMLElement>('.noticia');
+    const barra = document.querySelector<HTMLElement>('.lectura i');
+    if (!art || !barra) return;
+    const img = art.querySelector<HTMLElement>('.hero img');
+    const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const alBajar = () => {
+      const r = art.getBoundingClientRect();
+      barra.style.transform = `scaleX(${Math.max(0, Math.min(1, -r.top / Math.max(1, r.height - innerHeight)))})`;
+      if (img && !quieto && r.top > -innerHeight) img.style.transform = `translateY(${r.top * -0.15}px) scale(1.1)`;
+    };
+    addEventListener('scroll', alBajar, { passive: true });
+    alBajar();
+    const copiar = art.querySelector<HTMLButtonElement>('.compartir button');
+    copiar?.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(copiar.dataset.url!); } catch { /* sin permiso */ }
+      const antes = copiar.textContent; copiar.textContent = copiar.dataset.ok!; setTimeout(() => { copiar.textContent = antes; }, 1600);
+    });
+  }
+  iniciar();
+  document.addEventListener('astro:page-load', iniciar);
+</script>
+
+<style>
+  .lectura { position: sticky; top: var(--bar-h); z-index: 5; height: 4px; }
+  .lectura i { display: block; height: 100%; background: var(--sec); transform-origin: left; transform: scaleX(0); }
+  .hero { position: relative; min-height: 420px; overflow: hidden; background: var(--hl-grafito); color: var(--hl-blanco); display: flex; align-items: flex-end; }
+  .hero :global(img) { position: absolute; inset: 0; width: 100%; max-width: none; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.1); transform: scale(1.1); }
+  .tinte { position: absolute; inset: 0; background: var(--sec-noticias); mix-blend-mode: multiply; opacity: .8; }
+  .hero-in { position: relative; display: grid; gap: var(--s2); padding-block: var(--s6) var(--s5); }
+  .hero-in .voz-datos { color: var(--hl-concreto); }
+  h1 { margin: 0; max-width: 20ch; color: var(--hl-blanco); font-size: var(--fs-h1); line-height: var(--lh-display); animation: aparece var(--t-izaje) var(--ease-izaje) both; }
+  .sello {
+    position: absolute; right: var(--gutter); top: var(--s5); display: grid; justify-items: center; gap: 2px; padding: var(--s1) var(--s3);
+    color: var(--sec); background: color-mix(in srgb, var(--paper) 94%, transparent); border: 2px solid currentColor; outline: 1px solid currentColor; outline-offset: 2px;
+    transform: rotate(-4deg); animation: estampa .45s var(--ease-izaje) .4s both;
+  }
+  .sello b { font-family: var(--f-ancha); font-stretch: var(--wdth-display); font-weight: var(--fw-negra); font-size: var(--fs-lead); line-height: 1; white-space: nowrap; }
+  @keyframes estampa { 0% { transform: rotate(-16deg) scale(1.7); opacity: 0; } 60% { opacity: 1; } 100% { transform: rotate(-4deg); opacity: 1; } }
+  .cuerpo-g { display: grid; gap: var(--s5); padding-block: var(--s6) var(--s7); }
+  .meta { display: grid; gap: var(--s3); align-content: start; }
+  .meta p { margin: 0; display: grid; }
+  .meta .voz-datos, .compartir .voz-datos { color: var(--muted); }
+  .volver { color: var(--sec); text-decoration: none; font-weight: var(--fw-strong); }
+  .volver i { display: inline-block; font-style: normal; transition: transform var(--t-rapido) var(--ease-plano); }
+  .volver:hover i { transform: translateX(-5px); }
+  .texto { max-width: 66ch; }
+  .texto .lead { margin: 0 0 var(--s5); }
+  .texto :global(p), .texto :global(li) { line-height: var(--lh-text); }
+  .texto :global(h2) { font-size: var(--fs-h3); margin: var(--s6) 0 var(--s3); }
+  .texto :global(blockquote) { margin: var(--s5) 0; padding-left: var(--s4); border-left: 4px solid var(--sec); font-stretch: var(--wdth-subtitle); font-weight: var(--fw-title); font-size: var(--fs-lead); }
+  .rel { display: grid; gap: var(--s1); margin-top: var(--s5); padding: var(--s3) var(--s4); background: var(--paper); border: var(--border-strong) solid var(--ink); color: var(--ink); text-decoration: none; transition: transform var(--t-rapido) var(--ease-izaje); }
+  .rel:hover { transform: translateY(-4px); }
+  .rel .voz-datos, .rel .ir { color: var(--sec-proyectos); }
+  .rel b { font-size: var(--fs-lead); }
+  .compartir { display: grid; gap: var(--s2); align-content: start; }
+  .compartir a, .compartir button { position: relative; display: flex; align-items: center; min-height: 44px; padding: 0 var(--s3); overflow: hidden; background: var(--paper); border: var(--border-strong) solid var(--ink); color: var(--ink); font: inherit; text-decoration: none; cursor: pointer; transition: background-color var(--t-rapido) ease, color var(--t-rapido) ease; }
+  .compartir a:hover, .compartir button:hover { background: var(--sec); border-color: var(--sec); color: var(--sec-ink); }
+  @media (min-width: 900px) {
+    .cuerpo-g { grid-template-columns: minmax(0, 3fr) minmax(0, 7fr) minmax(0, 2fr); }
+    .meta, .compartir { position: sticky; top: calc(var(--bar-h) + var(--s4)); align-self: start; }
+  }
+  @media (prefers-reduced-motion: reduce) { h1, .sello { animation: none; } .rel, .volver i { transition: none; } }
+</style>

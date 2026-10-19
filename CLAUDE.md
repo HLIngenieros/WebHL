@@ -245,9 +245,17 @@ en [contenido/README.md](contenido/README.md).
     `src/lib/mapa.ts`). Sin JS el mapa es la lámina quieta (interactivo solo tras hidratar). La hoja de filtros
     móvil desapareció: en móvil las placas se desplazan de lado. Explorador: 37 KB de JS, Lighthouse móvil
     98/100/100/100, LCP 1,8-1,96 s. 389 pruebas. En SVG, Preact necesita `tabindex` en minúscula.
-  - **Siguiente paso:** F3.3 (maquetas de HSE, Noticias, Acreedores y legales → aprobación →
-    páginas) y la Tarea 14 (cierre, Lighthouse, revisión y merge a `main`). Ejecución en modo nativo, sin
-    subagentes (pedido de Juan David).
+  - **F3.3 cerrada (19-oct):** maquetas aprobadas en dos rondas (la segunda con movimiento en cada bloque,
+    guía v1.5 §12.5). HSE (`/hse/`) con indicadores que cuentan, certificaciones que se inclinan, política como
+    estructura 3D de alambre (canvas propio, `src/lib/estructura.ts` + `src/scripts/estructura.ts`; bucle permitido),
+    Reglas de Oro que caen y giran, PIENSA® y prácticas. Acreedores con los 3 PDF reales y Datos con el texto del
+    manual M-TI-001 (extraído del PDF; el correo personal se cambió por un buzón pendiente, D7) en
+    `public/documentos/`. Noticias: colección `noticias`, plantillas de índice y entrada, y la regla de
+    publicación (`src/lib/noticias.ts`: con menos de 3 en español no hay página, ni menú, ni pie, ni bloque del
+    inicio; hoy no hay). HSE, Acreedores, legales y Noticias tienen archivo propio en `src/pages/`. 444 pruebas;
+    Lighthouse móvil HSE 98 (LCP 1,97 s), Acreedores 99, Datos 99.
+  - **Siguiente paso:** Tarea 14 (cierre de F3: LCP de Nosotros, matriz de pantallas, modo oscuro, revisión de
+    código y merge a `main`). Ejecución en modo nativo, sin subagentes (pedido de Juan David).
   - **Decisiones de F3 con efecto visible:** sin precarga de fuente (primera visita: un instante con el
     respaldo); indicadores de la visión con reglas a ancho completo (mezclan días y %); logos de asociadas
     sobre placa blanca (modo oscuro); sedes con su ciudad real (Santo Domingo).

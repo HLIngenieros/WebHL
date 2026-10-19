@@ -1,0 +1,97 @@
+---
+// Indicadores de HSE (guía §12.5-2): sobre grafito, bajan como barrera al entrar y las cifras cuentan desde
+// 0 hasta su valor (escrito en el HTML). Al pasar, la celda se ilumina con una cota verde.
+import { t } from '../../i18n/ui';
+import type { Lang } from '../../i18n/rutas';
+
+type Indicador = { valor: number; signo?: string; unidad: string; etiqueta: string; fuente: string };
+interface Props { lang: Lang; indicadores: Indicador[] }
+const { lang, indicadores } = Astro.props;
+const unidad = (u: string) => (u ? (u === '%' ? ' %' : ` ${u}`) : '');
+---
+<section class="indicadores-hse" aria-labelledby="ind-titulo">
+  <span class="rayas" aria-hidden="true"></span>
+  <div class="ind-in">
+    <div class="cab">
+      <h2 id="ind-titulo" class="tit">{t(lang, 'hseIndicadores1')} <span>{t(lang, 'hseIndicadores2')}</span></h2>
+      <span class="voz-datos fuente-cab">{t(lang, 'fuenteEcohl')}</span>
+    </div>
+    <ul class="celdas revela">
+      {indicadores.map((x, i) => (
+        <li style={`--i:${i}`}>
+          <b class="valor" data-n={x.valor} data-signo={x.signo ?? ''} data-unidad={unidad(x.unidad)}>{x.signo}{x.valor}{unidad(x.unidad)}</b>
+          <span class="etiqueta">{x.etiqueta}</span>
+          <span class="voz-datos fuente">{x.fuente}</span>
+        </li>
+      ))}
+    </ul>
+    <p class="pendiente">{t(lang, 'hseIndicadoresPendientes')}</p>
+  </div>
+</section>
+
+<script>
+  // Las cifras cuentan al entrar (el valor real ya está en el HTML).
+  function contar() {
+    const lista = document.querySelector<HTMLElement>('.indicadores-hse .celdas');
+    if (!lista || lista.dataset.contado || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    lista.dataset.contado = '1';
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      io.disconnect();
+      lista.querySelectorAll<HTMLElement>('.valor').forEach((el, i) => {
+        const n = Number(el.dataset.n), inicio = performance.now() + i * 130 + 250;
+        if (!n) return;
+        const paso = (ahora: number) => {
+          const p = Math.max(0, Math.min(1, (ahora - inicio) / 1100));
+          el.textContent = `${el.dataset.signo}${Math.round(n * (1 - (1 - p) ** 3))}${el.dataset.unidad}`;
+          if (p < 1) requestAnimationFrame(paso);
+        };
+        requestAnimationFrame(paso);
+      });
+    }, { threshold: 0.3 });
+    io.observe(lista);
+  }
+  contar();
+  document.addEventListener('astro:page-load', contar);
+</script>
+
+<style>
+  .indicadores-hse { display: grid; grid-template-columns: var(--s5) minmax(0, 1fr); background: var(--hl-grafito); color: var(--hl-blanco); }
+  .rayas { background: repeating-linear-gradient(-45deg, var(--hl-verde) 0 10px, var(--hl-grafito) 10px 20px); }
+  .ind-in { padding: var(--s6) var(--gutter); }
+  .cab { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--s3); margin-bottom: var(--s5); }
+  .tit { margin: 0; color: var(--hl-blanco); }
+  .tit span { display: block; font-weight: var(--fw-fina); color: var(--hl-concreto); }
+  .fuente-cab, .fuente { color: var(--hl-acero); }
+  .celdas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4) 0; }
+  .celdas li {
+    position: relative; display: grid; gap: var(--s1); align-content: start; padding: var(--s3) var(--s4) var(--s1);
+    border-left: var(--border) solid color-mix(in srgb, var(--hl-blanco) 18%, transparent);
+    transition: background-color var(--t-rapido) ease;
+  }
+  .celdas li::before {
+    content: ''; position: absolute; left: -1px; right: 0; top: 0; height: 3px; background: var(--hl-verde);
+    transform: scaleX(0); transform-origin: left; transition: transform var(--t-aparece) var(--ease-plano);
+  }
+  .celdas li:hover { background: color-mix(in srgb, var(--hl-verde) 8%, transparent); }
+  .celdas li:hover::before { transform: scaleX(1); }
+  .valor {
+    font-family: var(--f-ancha); font-stretch: var(--wdth-stat); font-weight: var(--fw-negra); font-size: var(--fs-stat);
+    line-height: .9; color: var(--hl-verde); white-space: nowrap; letter-spacing: -.02em; font-variant-numeric: tabular-nums;
+  }
+  .etiqueta { color: var(--hl-concreto); font-size: var(--fs-sm); }
+  .pendiente { display: flex; align-items: center; gap: var(--s2); margin: var(--s5) 0 0; color: var(--hl-acero); font-size: var(--fs-sm); }
+  .pendiente::before { content: ''; width: 10px; height: 10px; border: var(--border-strong) dashed var(--hl-senal); }
+  @media (min-width: 900px) {
+    .indicadores-hse { grid-template-columns: 72px minmax(0, 1fr); }
+    .ind-in { padding: var(--s7) var(--s5); }
+    .celdas { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  /* Barrera: las celdas bajan a su sitio al entrar (revela.ts) */
+  :global(html.js) .celdas:not(:global(.visible)) li { opacity: 0; transform: translateY(-48px); }
+  :global(html.js) .celdas li { transition: opacity var(--t-izaje) var(--ease-izaje), transform var(--t-izaje) var(--ease-izaje), background-color var(--t-rapido) ease; transition-delay: calc(var(--i, 0) * 130ms), calc(var(--i, 0) * 130ms), 0s; }
+  :global(html.sin-revela) .celdas li { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .celdas:is(:global(.visible), :not(:global(.visible))) li { opacity: 1; transform: none; transition: none; }
+  }
+</style>

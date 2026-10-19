@@ -9,7 +9,7 @@ import type { DatosTarjeta, Imagen } from './explorador';
 import { RUTAS, urlDe, type Lang, type Seccion } from '../i18n/rutas';
 import { PAISES } from '../i18n/ui';
 
-const NOMBRES = ['proyectos', 'servicios', 'sectores', 'sedes', 'certificaciones', 'historia', 'testimonios', 'sitio', 'paginas'] as const;
+const NOMBRES = ['proyectos', 'servicios', 'sectores', 'sedes', 'certificaciones', 'historia', 'testimonios', 'sitio', 'paginas', 'noticias'] as const;
 
 async function leer() {
   const datos = Object.fromEntries(await Promise.all(NOMBRES.map(async (n) => [n, await getCollection(n)]))) as {
@@ -114,4 +114,25 @@ export async function tarjetas(xs: ProyectoEntrada[], lang: Lang): Promise<Datos
       discreta: p.visibilidad === 'discreta',
     };
   }));
+}
+
+/** Rutas de Noticias (guía §12.5): índice y entradas del idioma, o ninguna con menos de 3 noticias en español. */
+export async function rutasNoticias(lang: Lang) {
+  const { hayNoticias, noticiasDe } = await import('./noticias');
+  const { datos } = await cargar();
+  if (!hayNoticias(datos.noticias)) return [];
+  const otro: Lang = lang === 'es' ? 'en' : 'es';
+  const lista = noticiasDe(datos.noticias, lang);
+  const codigo = (i: number) => `N-${String(lista.length - i).padStart(2, '0')}`;
+  const base = RUTAS.noticias[lang];
+  const parDe = (slug: string) => { const id = lista.find((x) => x.data.slug === slug)!.id.replace(/\.\w+$/, '');
+    const par = datos.noticias.find((x) => x.data.lang === otro && x.id.replace(/\.\w+$/, '') === id); return par ? `${RUTAS.noticias[otro]}${par.data.slug}/` : RUTAS.noticias[otro]; };
+  const items = lista.map((x, i) => ({
+    codigo: codigo(i), url: `${base}${x.data.slug}/`, titulo: x.data.titulo, resumen: x.data.resumen, fecha: x.data.fecha,
+    tipo: x.data.tipo, foto: x.data.foto, etiqueta: x.data.etiqueta,
+  }));
+  return [
+    { params: { slug: undefined }, props: { tipo: 'indice' as const, lang, alterno: RUTAS.noticias[otro], items } },
+    ...lista.map((x, i) => ({ params: { slug: x.data.slug }, props: { tipo: 'entrada' as const, lang, alterno: parDe(x.data.slug), noticia: x, codigo: codigo(i) } })),
+  ];
 }

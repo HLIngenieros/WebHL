@@ -1,0 +1,28 @@
+---
+// Últimas noticias en el inicio (guía §12.1-4 y §12.5): las 3 más recientes; no existe con menos de 3.
+import Cabecera from './Cabecera.astro';
+import TarjetaNoticia from '../noticias/TarjetaNoticia.astro';
+import { rutasNoticias } from '../../lib/datos';
+import { ruta, type Lang } from '../../i18n/rutas';
+import { t } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const indice = (await rutasNoticias(lang)).find((r) => r.props.tipo === 'indice');
+const items = indice && 'items' in indice.props ? indice.props.items.slice(0, 3) : [];
+---
+{items.length > 0 && (
+  <section class="noticias-inicio" data-seccion="noticias" aria-labelledby="noticias-titulo">
+    <div class="wrap">
+      <Cabecera id="noticias-titulo" codigo="L-06" nombre={t(lang, 'noticias')} titulo={[t(lang, 'noticias1'), t(lang, 'noticias2')]}
+        enlace={{ href: ruta('noticias', lang), texto: t(lang, 'todasNoticias') }} />
+      <div class="rejilla revela">{items.map((x, i) => <TarjetaNoticia lang={lang} {...x} i={i} />)}</div>
+    </div>
+  </section>
+)}
+
+<style>
+  .noticias-inicio { padding-block: var(--s7); background: var(--bg); }
+  .rejilla { display: grid; gap: var(--s3); }
+  @media (min-width: 900px) { .rejilla { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+</style>

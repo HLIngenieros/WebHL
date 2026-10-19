@@ -1,7 +1,7 @@
 ---
 // Inicio (guía §12.1, especificación §5): hero con barra inmersa, franja de sectores, HL en cifras,
 // destacados, servicios, sectores (Cemento y Minería al frente), franja HSE y clientes. Noticias: el
-// bloque no existe hasta que haya al menos 3 (especificación §3); hoy no hay colección.
+// bloque no existe hasta que haya al menos 3 (especificación §3).
 import Base from '../layouts/Base.astro';
 import Hero from '../components/inicio/Hero.astro';
 import FranjaSectores from '../components/inicio/FranjaSectores.astro';
@@ -11,6 +11,7 @@ import ServiciosInicio from '../components/inicio/ServiciosInicio.astro';
 import SectoresInicio from '../components/inicio/SectoresInicio.astro';
 import FranjaHse from '../components/inicio/FranjaHse.astro';
 import Clientes from '../components/inicio/Clientes.astro';
+import NoticiasInicio from '../components/inicio/NoticiasInicio.astro';
 import { cifrasInicio } from '../lib/inicio';
 import { cargar } from '../lib/datos';
 import { txt } from '../lib/contenido';
@@ -33,5 +34,6 @@ const cifras = cifrasInicio({ fundacion: sitio.fundacion, paises: sitio.paises, 
   <ServiciosInicio lang={lang} />
   <SectoresInicio lang={lang} />
   <FranjaHse lang={lang} />
+  <NoticiasInicio lang={lang} />
   <Clientes lang={lang} />
 </Base>

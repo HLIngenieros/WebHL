@@ -1,0 +1,112 @@
+---
+// Reglas de Oro (guía §12.5-5): tarjetas que caen como señales en secuencia, dibujan su pictograma y miden
+// una cota verde; al pasar, enfocar o tocar giran y muestran la regla completa. El nombre accesible de cada
+// tarjeta lleva la regla entera.
+import { t } from '../../i18n/ui';
+import type { Lang } from '../../i18n/rutas';
+
+interface Props { lang: Lang; reglas: { titulo: string; texto: string }[] }
+const { lang, reglas } = Astro.props;
+// Pictogramas de plano, uno por regla y en su orden (viewBox 64): [trazos, retraso 0-2].
+const PIC: [string, number][][] = [
+  [['M14 12h36v44H14z', 0], ['M24 12V6h16v6', 1], ['M22 28l4 4 8-8M22 42h20M22 48h14', 2]],
+  [['M28 12h8v10l6 8v26H22V30l6-8z', 0], ['M10 34a22 22 0 1 0 44 0a22 22 0 1 0 -44 0', 1], ['M16 18L48 50', 2]],
+  [['M20 24a12 12 0 1 0 24 0a12 12 0 1 0 -24 0', 0], ['M24 34l-6 22 14-8 14 8-6-22', 1], ['M27 24l4 4 7-7', 2]],
+  [['M16 28h32v26H16z', 0], ['M22 28v-8a10 10 0 0 1 20 0v8', 1], ['M32 38v10', 2]],
+  [['M32 8l26 46H6z', 0], ['M32 24v14', 1], ['M32 44v2', 2]],
+  [['M6 28h30v18H6z', 0], ['M36 34h12l8 8v4H36z', 1], ['M11 50a5 5 0 1 0 10 0a5 5 0 1 0 -10 0M41 50a5 5 0 1 0 10 0a5 5 0 1 0 -10 0', 2]],
+  [['M10 26v12h10l18 12V14L20 26z', 0], ['M46 24c4 4 4 12 0 16M52 18c8 8 8 20 0 28', 1]],
+  [['M44 6L30 34', 0], ['M22 32l16 8-6 18-22-10z', 1], ['M18 46l-4 8M24 50l-3 8M30 52l-1 8', 2]],
+  [['M10 40a22 22 0 0 1 44 0z', 0], ['M6 40h52v6H6z', 1], ['M32 18v12', 2]],
+  [['M10 8h26v48H10z', 0], ['M36 32h18M46 24l8 8-8 8', 1], ['M30 34v1', 2]],
+];
+const dos = (n: number) => String(n).padStart(2, '0');
+---
+<section class="reglas-sec" aria-labelledby="reglas-titulo">
+  <div class="wrap">
+    <div class="cab">
+      <h2 id="reglas-titulo" class="tit">{t(lang, 'hseReglas1')} <span>{t(lang, 'hseReglas2')}</span></h2>
+      <span class="voz-datos">{t(lang, 'hseReglasAyuda')}</span>
+    </div>
+    <ul class="reglas revela">
+      {reglas.map((r, i) => (
+        <li class="regla" tabindex="0" style={`--i:${i}`} aria-label={`${t(lang, 'regla')} ${i + 1}: ${r.titulo}. ${r.texto}`}>
+          <div class="giro">
+            <div class="cara frente" aria-hidden="true">
+              <span class="n">{dos(i + 1)}</span>
+              <span class="gira">↻</span>
+              <svg class="pic" viewBox="0 0 64 64">
+                {PIC[i % PIC.length].map(([d, j]) => <path d={d} pathLength="1" style={`--j:${j}`} />)}
+              </svg>
+              <h3>{r.titulo}</h3>
+            </div>
+            <div class="cara dorso" aria-hidden="true">
+              <span class="voz-datos">{t(lang, 'regla')} {dos(i + 1)} · {r.titulo}</span>
+              <p>{r.texto}</p>
+              <span class="ok">✓</span>
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<script>
+  // En táctil, tocar gira la tarjeta; al salir, el pictograma se dibuja otra vez.
+  function reglas() {
+    document.querySelectorAll<HTMLElement>('.regla:not([data-listo])').forEach((r) => {
+      r.dataset.listo = '1';
+      r.addEventListener('click', () => r.classList.toggle('girada'));
+      r.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); r.classList.toggle('girada'); } });
+      r.addEventListener('mouseleave', () => { r.classList.add('redibuja'); r.querySelector('.pic')?.getBoundingClientRect(); requestAnimationFrame(() => r.classList.remove('redibuja')); });
+    });
+  }
+  reglas();
+  document.addEventListener('astro:page-load', reglas);
+</script>
+
+<style>
+  .reglas-sec { padding-block: var(--s7); background: var(--bg); }
+  .cab { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--s3); margin-bottom: var(--s5); }
+  .cab .voz-datos { color: var(--muted); }
+  .tit { margin: 0; }
+  .tit span { display: block; font-weight: var(--fw-fina); }
+  .reglas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s3); perspective: 1200px; }
+  .regla { position: relative; height: 250px; cursor: pointer; outline: none; transform-origin: top center; }
+  .giro { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform var(--t-aparece) var(--ease-plano); }
+  .regla:hover .giro, .regla:focus-visible .giro, .regla.girada .giro { transform: rotateY(180deg); }
+  .regla:focus-visible .cara { outline: var(--focus-ring); outline-offset: 2px; }
+  .cara { position: absolute; inset: 0; display: flex; flex-direction: column; padding: var(--s3); border: var(--border-strong) solid var(--ink); backface-visibility: hidden; }
+  .frente { background: var(--paper); }
+  .n { font-family: var(--f-ancha); font-stretch: var(--wdth-stat); font-weight: var(--fw-negra); font-size: var(--fs-h1); line-height: .85; color: var(--sec); letter-spacing: -.02em; }
+  .gira { position: absolute; right: var(--s3); top: var(--s3); color: var(--muted); transition: transform var(--t-aparece) var(--ease-izaje); }
+  .regla:hover .gira { transform: rotate(180deg); }
+  .pic { width: 60px; height: 60px; margin: auto 0 var(--s3); color: var(--sec); }
+  .pic path { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  h3 { margin: 0; font-size: var(--fs-lead); line-height: var(--lh-title); }
+  .frente::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: var(--sec); }
+  .dorso { justify-content: space-between; gap: var(--s2); background: var(--sec); color: var(--sec-ink); border-color: var(--sec); transform: rotateY(180deg); }
+  .dorso p { margin: 0; font-size: var(--fs-sm); }
+  .ok { width: 34px; height: 34px; border-radius: 50%; background: var(--sec-ink); color: var(--sec); display: grid; place-items: center; font-weight: var(--fw-negra); }
+  @media (min-width: 900px) { .reglas { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+
+  /* Entrada (revela.ts): caen como señales, se dibuja el pictograma y se mide la cota */
+  :global(html.js) .reglas .regla { transition: transform var(--t-izaje) var(--ease-izaje), opacity var(--t-rapido) ease; transition-delay: calc(var(--i) * 110ms); }
+  :global(html.js) .reglas:not(:global(.visible)) .regla { transform: rotateX(-95deg); opacity: 0; }
+  :global(html.js) .pic path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  :global(html.js) .reglas:global(.visible) .pic path { animation: trazo var(--t-trazo) var(--ease-plano) forwards; animation-delay: calc(var(--i) * 110ms + var(--j) * 120ms + 400ms); }
+  :global(html.js) .reglas:global(.visible) .regla.redibuja .pic path { animation: none; }
+  :global(html.js) .frente::after { transform: scaleX(0); transform-origin: left; transition: transform var(--t-aparece) var(--ease-plano); transition-delay: calc(var(--i) * 110ms + 600ms); }
+  :global(html.js) .reglas:global(.visible) .frente::after { transform: scaleX(1); }
+  @keyframes trazo { to { stroke-dashoffset: 0; } }
+  :global(html.sin-revela) .reglas .regla { transform: none; opacity: 1; }
+  :global(html.sin-revela) .pic path { stroke-dashoffset: 0; }
+  :global(html.sin-revela) .frente::after { transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .giro, .gira { transition: none; }
+    :global(html.js) .reglas:is(:global(.visible), :not(:global(.visible))) .regla { transform: none; opacity: 1; transition: none; }
+    :global(html.js) .pic path { stroke-dashoffset: 0; animation: none !important; }
+    :global(html.js) .frente::after { transform: none; transition: none; }
+  }
+</style>

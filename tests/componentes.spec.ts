@@ -40,7 +40,7 @@ test('a 360 px la tabla se desplaza sola y la página no', async ({ page }) => {
 });
 
 test('las páginas provisionales usan la Nota de la guía', async ({ page }) => {
-  await page.goto('/hse/'); // provisional hasta F3.3
+  await page.goto('/contacto/'); // provisional hasta F4
   await expect(page.locator('main .nota')).toHaveCount(1);
 });
 

@@ -1,0 +1,5 @@
+Noticias y proyectos adjudicados (especificación §4, guía §12.5). Un archivo por noticia e idioma:
+  <slug>.es.md  /  <slug>.en.md
+Campos: lang, slug, titulo, resumen, fecha (AAAA-MM-DD), tipo (noticia | adjudicado), foto (opcional,
+ruta a src/assets), proyecto (opcional, id de la ficha), etiqueta (opcional, p. ej. "Cemento · Colombia").
+Con menos de 3 noticias en español, /noticias/ no se publica y sale del menú, del pie y del inicio.

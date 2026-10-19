@@ -9,7 +9,7 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const { datos } = await cargar();
 const hse = datos.paginas.find((p) => p.data.pagina === 'hse' && p.data.lang === lang) ?? datos.paginas.find((p) => p.data.pagina === 'hse');
-const indicadores = hse?.data.indicadores ?? [];
+const indicadores = (hse?.data.indicadores ?? []).filter((x) => !x.donde || x.donde.includes('inicio'));
 ---
 {indicadores.length > 0 && (
   <section class="franja-hse" data-seccion="hse" aria-labelledby="hse-titulo">

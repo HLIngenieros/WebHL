@@ -45,8 +45,8 @@ permitidos). [especificacion.md](especificacion.md) v1.2 (§3 menú y prevalenci
 | 8c · Explorador con mapa vivo | ✅ | `35fb75d` |
 | 9-11 · Nosotros (F3.2) | ✅ cerrada | `bda87aa`, `2a177e0`, `aba255a` |
 | 12 · Maquetas de F3.3 | ✅ aprobadas (guía §12.5) | — |
-| **13 · Páginas de F3.3** | **siguiente** | — |
-| 14 · Cierre de la fase | pendiente | — |
+| 13 · Páginas de F3.3 | ✅ (cierra F3.3) | (este) |
+| **14 · Cierre de la fase** | **siguiente** | — |
 
 Se hizo F3.2 antes de la puerta de la Tarea 7 para que Juan David aprobara maquetas una sola vez. El
 registro detallado (decisiones tomadas, pruebas por tarea) está en `.superpowers/sdd/plan-f3/progress.md`

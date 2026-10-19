@@ -1,0 +1,79 @@
+---
+// Tarjeta de noticia (guía §12.5): lámina óxido (a color al pasar), sello de recibido que se estampa al entrar y
+// otra vez al pasar, franja P3 en los adjudicados, título que se subraya y "Leer" que entra.
+import Foto from '../ui/Foto.astro';
+import Ilustracion from '../Ilustracion';
+import { t } from '../../i18n/ui';
+import type { Lang } from '../../i18n/rutas';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  lang: Lang; codigo: string; url: string; titulo: string; resumen?: string; fecha: Date; tipo: 'noticia' | 'adjudicado';
+  foto?: ImageMetadata; etiqueta?: string; grande?: boolean; i?: number;
+}
+const { lang, codigo, url, titulo, resumen, fecha, tipo, foto, etiqueta, grande = false, i = 0 } = Astro.props;
+const sello = new Intl.DateTimeFormat(lang === 'es' ? 'es-CO' : 'en-US', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' })
+  .format(fecha).replace(/\./g, '').replace(/ de /g, ' ').toUpperCase();
+const H = grande ? 'h2' : 'h3';
+---
+<article class:list={['noti', { grande }]} data-seccion="noticias" data-tipo={tipo} style={`--i:${i}`}>
+  <div class="lam">
+    {foto ? <Foto src={foto} alt="" sizes={grande ? '(min-width: 900px) 66vw, 100vw' : '(min-width: 900px) 33vw, 100vw'} /> : <span class="sin-foto"><Ilustracion sector="industria" /></span>}
+    <span class="tinte" aria-hidden="true"></span>
+    <span class="sello" aria-hidden="true"><small class="voz-datos">{t(lang, 'recibido')}</small><b>{sello}</b></span>
+    {tipo === 'adjudicado' && <span class="p3 voz-datos"><i aria-hidden="true"></i><span>{t(lang, 'adjudicado')}</span></span>}
+  </div>
+  <div class="cu">
+    <span class="cod voz-datos"><span>{codigo}</span><span>{etiqueta ?? t(lang, tipo === 'adjudicado' ? 'adjudicado' : 'noticia')}</span><time datetime={fecha.toISOString().slice(0, 10)}>{sello}</time></span>
+    <H class="tit"><a href={url}>{titulo}</a></H>
+    {resumen && grande && <p>{resumen}</p>}
+    <span class="leer" aria-hidden="true">{t(lang, 'leer')} →</span>
+  </div>
+</article>
+
+<style>
+  .noti { position: relative; display: flex; flex-direction: column; background: var(--paper); border: var(--border-strong) solid var(--ink); transition: transform var(--t-rapido) var(--ease-izaje); }
+  .noti[hidden] { display: none; }
+  .lam { position: relative; overflow: hidden; aspect-ratio: 16 / 10; background: var(--hl-grafito); }
+  .grande .lam { aspect-ratio: auto; flex: 1; min-height: 320px; }
+  .lam :global(img) { position: absolute; inset: 0; width: 100%; max-width: none; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.1); transform: scale(1.04); transition: filter var(--t-aparece) ease, transform 1.2s var(--ease-izaje); }
+  .sin-foto { position: absolute; inset: 12%; }
+  .tinte { position: absolute; inset: 0; background: var(--sec); mix-blend-mode: multiply; opacity: .82; transition: opacity var(--t-aparece) ease; }
+  .noti:hover .lam :global(img) { filter: none; transform: scale(1.1); }
+  .noti:hover .tinte { opacity: 0; }
+  .sello {
+    position: absolute; right: var(--s3); top: var(--s3); z-index: 1; display: grid; justify-items: center; gap: 2px; padding: var(--s1) var(--s3);
+    color: var(--sec); background: color-mix(in srgb, var(--paper) 94%, transparent);
+    border: 2px solid currentColor; outline: 1px solid currentColor; outline-offset: 2px; transform: rotate(-4deg);
+  }
+  .sello b { font-family: var(--f-ancha); font-stretch: var(--wdth-display); font-weight: var(--fw-negra); font-size: var(--fs-lead); line-height: 1; white-space: nowrap; }
+  .p3 { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; display: flex; height: 30px; background: var(--hl-senal); color: var(--hl-grafito); border-top: var(--border) solid var(--hl-grafito); }
+  .p3 i { width: 56px; background: repeating-linear-gradient(-45deg, var(--hl-grafito) 0 6px, var(--hl-senal) 6px 12px); background-size: 16.97px 16.97px; border-right: var(--border) solid var(--hl-grafito); }
+  .noti:hover .p3 i { animation: rayas .6s linear infinite; }
+  @keyframes rayas { to { background-position: 16.97px 0; } }
+  .p3 span { display: flex; align-items: center; padding: 0 var(--s3); }
+  .cu { display: grid; gap: var(--s2); padding: var(--s3) var(--s4) var(--s4); }
+  .cod { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); color: var(--sec); }
+  .tit { margin: 0; font-size: var(--fs-lead); line-height: var(--lh-title); }
+  .grande .tit { font-size: var(--fs-h2); }
+  .tit a { color: var(--ink); text-decoration: none; background: linear-gradient(var(--sec), var(--sec)) left bottom / 0 2px no-repeat; transition: background-size var(--t-aparece) var(--ease-plano); }
+  .tit a::after { content: ''; position: absolute; inset: 0; }
+  .noti:hover .tit a { background-size: 100% 2px; }
+  .noti:has(a:focus-visible) { outline: var(--focus-ring); outline-offset: 3px; }
+  .tit a:focus-visible { outline: none; }
+  .cu p { margin: 0; color: var(--muted); }
+  .leer { color: var(--sec); font-weight: var(--fw-strong); opacity: 0; transform: translateX(-10px); transition: opacity var(--t-rapido) ease, transform var(--t-rapido) var(--ease-izaje); }
+  .noti:hover .leer { opacity: 1; transform: none; }
+  /* Entrada (revela.ts en la rejilla): suben y el sello se estampa; la franja sube */
+  :global(html.js) :global(.revela):not(:global(.visible)) .noti { opacity: 0; transform: translateY(28px); }
+  :global(html.js) .noti { transition: opacity var(--t-izaje) var(--ease-izaje), transform var(--t-izaje) var(--ease-izaje); transition-delay: calc(var(--i) * 90ms); }
+  :global(html.js) :global(.revela.visible) .sello { animation: estampa .45s var(--ease-izaje) both; animation-delay: calc(var(--i) * 150ms + 300ms); }
+  .noti.estampa .sello { animation: estampa .45s var(--ease-izaje) both !important; animation-delay: 0s !important; }
+  @keyframes estampa { 0% { transform: rotate(-16deg) scale(1.7); opacity: 0; } 60% { opacity: 1; } 80% { transform: rotate(-3deg) scale(.96); } 100% { transform: rotate(-4deg); opacity: 1; } }
+  :global(html.sin-revela) .noti { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .noti, .lam :global(img), .tinte, .tit a, .leer { transition: none; }
+    .noti:hover .p3 i, .sello { animation: none !important; }
+    :global(html.js) .noti { opacity: 1 !important; transform: none !important; }
+  }
+</style>

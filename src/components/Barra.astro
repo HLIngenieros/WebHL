@@ -5,12 +5,17 @@ import { MENU, BAJO_PROYECTOS, ruta, par, seccionDe, type ClaveRuta, type Lang }
 import { t } from '../i18n/ui';
 import Marca from './Marca.astro';
 import PanelProyectos from './PanelProyectos.astro';
+import { cargar } from '../lib/datos';
+import { hayNoticias } from '../lib/noticias';
 
 interface Props { lang: Lang; alterno?: string; inmersa?: boolean }
 const { lang, alterno, inmersa = false } = Astro.props;
 const otro: Lang = lang === 'es' ? 'en' : 'es';
 const hrefOtro = alterno ?? par(Astro.url.pathname);
 const activa = seccionDe(Astro.url.pathname);
+// Noticias solo existe con 3 o más entradas (especificación §3).
+const { datos } = await cargar();
+const menu = MENU.filter((k) => k !== 'noticias' || hayNoticias(datos.noticias));
 // En Servicios y Sectores se marca Proyectos, de donde cuelgan (aria-current="true", no "page").
 const actual = (k: ClaveRuta) => (k === activa ? 'page' : k === 'proyectos' && activa && BAJO_PROYECTOS.includes(activa) ? 'true' : undefined);
 ---
@@ -22,7 +27,7 @@ const actual = (k: ClaveRuta) => (k === activa ? 'page' : k === 'proyectos' && a
 
     <nav id="nav-principal" aria-label={t(lang, 'menu')}>
       <ul>
-        {MENU.map((k, i) => (
+        {menu.map((k, i) => (
           <li class:list={{ 'con-panel': k === 'proyectos' }}>
             <a href={ruta(k, lang)} data-seccion={k} aria-current={actual(k)}><span class="num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>{t(lang, k)}</a>
             {k === 'proyectos' && (
@@ -53,7 +58,7 @@ const actual = (k: ClaveRuta) => (k === activa ? 'page' : k === 'proyectos' && a
       <button type="button" class="cerrar voz-datos" data-cerrar>{t(lang, 'cerrar')}</button>
     </div>
     <ul>
-      {MENU.map((k, i) => (
+      {menu.map((k, i) => (
         <li style={`--i:${i}`}>
           <div class="fila">
             <a href={ruta(k, lang)} data-seccion={k} data-astro-prefetch="viewport" aria-current={actual(k)}>{t(lang, k)}</a>

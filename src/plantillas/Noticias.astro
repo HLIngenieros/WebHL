@@ -1,0 +1,93 @@
+---
+// Índice de noticias (guía §12.5): H1 que sube, filtros (todas · noticias · adjudicados) con una marca que corre
+// y tarjetas que se reacomodan; la más reciente en grande. Solo se genera con 3 o más entradas.
+import Base from '../layouts/Base.astro';
+import Pod from '../components/Pod.astro';
+import TarjetaNoticia from '../components/noticias/TarjetaNoticia.astro';
+import type { Lang } from '../i18n/rutas';
+import { t } from '../i18n/ui';
+import type { ImageMetadata } from 'astro';
+
+type Item = { codigo: string; url: string; titulo: string; resumen: string; fecha: Date; tipo: 'noticia' | 'adjudicado'; foto?: ImageMetadata; etiqueta?: string };
+interface Props { lang: Lang; alterno: string; items: Item[] }
+const { lang, alterno, items } = Astro.props;
+const cuenta = (tipo?: string) => items.filter((x) => !tipo || x.tipo === tipo).length;
+const FILTROS = [['todo', 'todas', cuenta()], ['noticia', 'noticias', cuenta('noticia')], ['adjudicado', 'adjudicados', cuenta('adjudicado')]] as const;
+---
+<Base titulo={t(lang, 'noticias')} descripcion={t(lang, 'noticiasEntrada')} lang={lang} alterno={alterno}>
+  <section class="wrap noticias-pag">
+    <header class="cab">
+      <div>
+        <Pod forma="rotulo" codigo="L-06" nombre={t(lang, 'noticias')} />
+        <h1><span class="l"><span>{t(lang, 'noticias1')}</span></span> <span class="l"><span>{t(lang, 'noticias2')}</span></span></h1>
+      </div>
+      <p class="lead aparece" style="--i:2">{t(lang, 'noticiasEntrada')}</p>
+    </header>
+    <div class="filtros voz-datos" role="group" aria-label={t(lang, 'filtrar')}>
+      <span class="marca" aria-hidden="true"></span>
+      {FILTROS.map(([f, clave, n], i) => <button type="button" data-f={f} aria-pressed={i === 0 ? 'true' : 'false'} disabled={!n}>{t(lang, clave)} · {n}</button>)}
+    </div>
+    <div class="rejilla revela">
+      {items.map((x, i) => <TarjetaNoticia lang={lang} {...x} grande={i === 0} i={i} />)}
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Filtros: la marca corre al botón elegido y las tarjetas se reacomodan (FLIP); al pasar, el sello se estampa otra vez.
+  function iniciar() {
+    const caja = document.querySelector<HTMLElement>('.noticias-pag .filtros:not([data-listo])');
+    const rejilla = document.querySelector<HTMLElement>('.noticias-pag .rejilla');
+    if (!caja || !rejilla) return;
+    caja.dataset.listo = '1';
+    const marca = caja.querySelector<HTMLElement>('.marca')!, botones = [...caja.querySelectorAll<HTMLButtonElement>('button')];
+    const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const mover = (b: HTMLElement) => { marca.style.width = `${b.offsetWidth}px`; marca.style.transform = `translateX(${b.offsetLeft}px)`; };
+    mover(botones[0]);
+    botones.forEach((b) => b.addEventListener('click', () => {
+      botones.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      mover(b);
+      const tarjetas = [...rejilla.querySelectorAll<HTMLElement>('.noti')];
+      const antes = new Map(tarjetas.filter((c) => !c.hidden).map((c) => [c, c.getBoundingClientRect()]));
+      tarjetas.forEach((c) => { c.hidden = b.dataset.f !== 'todo' && c.dataset.tipo !== b.dataset.f; });
+      const primera = tarjetas.find((c) => !c.hidden);
+      tarjetas.forEach((c) => c.classList.toggle('grande', c === primera));
+      if (quieto) return;
+      tarjetas.filter((c) => !c.hidden).forEach((c, i) => {
+        const a = antes.get(c), d = c.getBoundingClientRect();
+        if (a) c.animate([{ transform: `translate(${a.left - d.left}px, ${a.top - d.top}px)` }, { transform: 'none' }], { duration: 500, easing: 'cubic-bezier(.6, 0, .2, 1)' });
+        else c.animate([{ opacity: 0, transform: 'translateY(20px)' }, { opacity: 1, transform: 'none' }], { duration: 450, delay: i * 60, easing: 'cubic-bezier(.2, .8, .2, 1)', fill: 'backwards' });
+      });
+    }));
+    rejilla.querySelectorAll<HTMLElement>('.noti').forEach((c) => c.addEventListener('mouseenter', () => {
+      c.classList.remove('estampa'); void c.offsetWidth; c.classList.add('estampa');
+    }));
+  }
+  iniciar();
+  document.addEventListener('astro:page-load', iniciar);
+</script>
+
+<style>
+  .noticias-pag { padding-block: var(--s5) var(--s7); }
+  .cab { display: grid; gap: var(--s4); align-items: end; margin-bottom: var(--s5); }
+  h1 { margin: var(--s3) 0 0; font-size: var(--fs-h1); line-height: var(--lh-display); }
+  h1 .l { display: block; overflow: hidden; padding-bottom: .06em; }
+  h1 .l > span { display: block; animation: linea var(--t-izaje) var(--ease-izaje) both; }
+  h1 .l + .l > span { font-weight: var(--fw-fina); animation-delay: 120ms; }
+  @keyframes linea { from { transform: translateY(105%); } }
+  .lead { margin: 0; color: var(--muted); }
+  .filtros { position: relative; display: inline-flex; flex-wrap: wrap; margin-bottom: var(--s4); background: var(--paper); border: var(--border-strong) solid var(--ink); }
+  .filtros button { position: relative; z-index: 1; min-height: 44px; padding: 0 var(--s3); background: none; border: 0; color: var(--ink); font: inherit; cursor: pointer; transition: color var(--t-rapido) ease; }
+  .filtros button[aria-pressed='true'] { color: var(--sec-ink); }
+  .filtros button:disabled { color: var(--muted); cursor: default; }
+  .filtros button:focus-visible { outline: var(--focus-ring); outline-offset: -3px; }
+  .marca { position: absolute; top: 0; bottom: 0; left: 0; width: 0; background: var(--sec); transition: transform var(--t-aparece) var(--ease-plano), width var(--t-aparece) var(--ease-plano); }
+  :global(html:not(.js)) .filtros { display: none; }
+  .rejilla { display: grid; gap: var(--s3); }
+  @media (min-width: 900px) {
+    .cab { grid-template-columns: 7fr 5fr; gap: var(--s5); }
+    .rejilla { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .rejilla :global(.noti.grande) { grid-column: span 2; grid-row: span 2; }
+  }
+  @media (prefers-reduced-motion: reduce) { h1 .l > span { animation: none; } .marca { transition: none; } }
+</style>

@@ -1,0 +1,274 @@
+---
+// HSE y calidad (guía §12.5, especificación §5): cabecera viva, indicadores, certificaciones, política en
+// 3D, Reglas de Oro, PIENSA®, prácticas y cierre. Acento verde. Todo el texto está en el HTML: sin JS o con
+// movimiento reducido se lee completo y quieto.
+import Base from '../layouts/Base.astro';
+import Pod from '../components/Pod.astro';
+import Foto from '../components/ui/Foto.astro';
+import { Image } from 'astro:assets';
+import Indicadores from '../components/hse/Indicadores.astro';
+import Politica from '../components/hse/Politica.astro';
+import Reglas from '../components/hse/Reglas.astro';
+import { cargar } from '../lib/datos';
+import { txt } from '../lib/contenido';
+import { ruta, type Lang } from '../i18n/rutas';
+import { t } from '../i18n/ui';
+import equipo from '../assets/generales/mejor-gente.jpg';
+
+interface Props { lang: Lang; alterno: string }
+const { lang, alterno } = Astro.props;
+const { datos } = await cargar();
+const pagina = (datos.paginas.find((p) => p.data.pagina === 'hse' && p.data.lang === lang)
+  ?? datos.paginas.find((p) => p.data.pagina === 'hse' && p.data.lang === 'es'))!.data;
+const indicadores = (pagina.indicadores ?? []).filter((x) => !x.donde || x.donde.includes('hse'));
+const AMBITO: Record<string, 'hseCalidad' | 'hseAmbiente' | 'hseSeguridad'> = { 'iso-9001': 'hseCalidad', 'iso-14001': 'hseAmbiente', 'iso-45001': 'hseSeguridad' };
+// ISO en orden (9001, 14001, 45001) y luego las demás.
+const numeroIso = (id: string) => (id.startsWith('iso') ? Number(id.replace(/\D/g, '')) : Infinity);
+const certs = [...datos.certificaciones].sort((a, b) => numeroIso(a.id) - numeroIso(b.id))
+  .map((c) => ({ id: c.id, norma: txt(c.data.norma, lang)!, ente: c.data.ente, codigo: c.data.codigo, sello: c.data.sello, iso: c.id.startsWith('iso'), ambito: AMBITO[c.id] }));
+const ICONOS: Record<string, [string, number][]> = {
+  ojo: [['M6 28c6-9 14-13 22-13s16 4 22 13c-6 9-14 13-22 13S12 37 6 28z', 0], ['M21 28a7 7 0 1 0 14 0a7 7 0 1 0 -14 0', 1]],
+  pare: [['M20 6h16l14 14v16L36 50H20L6 36V20z', 0], ['M18 28h20', 1]],
+  pasaporte: [['M12 6h32v44H12z', 0], ['M21 22a7 7 0 1 0 14 0a7 7 0 1 0 -14 0', 1], ['M18 38h20M18 44h12', 2]],
+  liderazgo: [['M8 46V30h10v16M23 46V18h10v28M38 46V8h10v38', 0], ['M4 46h48', 1]],
+};
+---
+<Base titulo={pagina.titulo} descripcion={pagina.descripcion} lang={lang} alterno={alterno}>
+  <!-- 1 · Cabecera viva -->
+  <section class="wrap cabecera" aria-labelledby="hse-h1">
+    <div class="cab-txt">
+      <Pod forma="rotulo" codigo="L-05" nombre={t(lang, 'hse')} />
+      <h1 id="hse-h1"><span class="l"><span>{t(lang, 'hseInicio1')}</span></span> <span class="l"><span>{t(lang, 'hseInicio2')}</span></span></h1>
+      <p class="lead aparece" style="--i:3">{pagina.descripcion}</p>
+      <ul class="chips voz-datos">
+        {certs.filter((c) => c.iso).map((c, i) => <li class="aparece" style={`--i:${i + 4}`}>{c.norma}</li>)}
+      </ul>
+    </div>
+    <div class="lamina-hse" aria-hidden="true">
+      <Foto src={equipo} alt="" sizes="(min-width: 900px) 50vw, 100vw" prioridad />
+      <span class="tinte"></span>
+      <svg class="ejes" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="25" y1="0" x2="25" y2="100" /><line x1="75" y1="0" x2="75" y2="100" /><line x1="0" y1="72" x2="100" y2="72" /><line class="mide" x1="25" y1="88" x2="75" y2="88" /></svg>
+      <span class="cruz"></span>
+      <span class="pie voz-datos">{t(lang, 'hseGente')}</span>
+    </div>
+  </section>
+
+  {indicadores.length > 0 && <Indicadores lang={lang} indicadores={indicadores} />}
+
+  <!-- 3 · Certificaciones -->
+  <section class="certificaciones" aria-labelledby="cert-titulo">
+    <div class="wrap">
+      <div class="cab">
+        <h2 id="cert-titulo" class="tit">{t(lang, 'hseCert1')} <span>{t(lang, 'hseCert2')}</span></h2>
+        <span class="voz-datos">{t(lang, 'hseSgi')}</span>
+      </div>
+      <ul class="certs revela">
+        {certs.map((c, i) => (
+          <li class:list={['cert', { dudosa: !c.iso }]} style={`--i:${i}`}>
+            <span class="c1 voz-datos"><span>C-0{i + 1}</span><span>{c.ambito ? t(lang, c.ambito) : t(lang, 'certPorConfirmar')}</span></span>
+            <span class="norma">{c.norma}</span>
+            <span class="ente">{c.ente}</span>
+            {c.sello && <Image class="sello" src={c.sello} width={160} alt={`${t(lang, 'sello')} ${c.ente} ${c.norma}`} />}
+            {c.codigo && <span class="c3 voz-datos"><span>{c.codigo}</span></span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {pagina.politica && <Politica lang={lang} politica={pagina.politica} />}
+  {pagina.reglas && <Reglas lang={lang} reglas={pagina.reglas} />}
+
+  <!-- 6 · PIENSA® -->
+  {pagina.piensa && (
+    <section class="piensa" aria-labelledby="piensa-titulo">
+      <div class="wrap piensa-g">
+        <div>
+          <Pod forma="rotulo" codigo="M-01" nombre={t(lang, 'metodologia')} />
+          <h2 id="piensa-titulo" class="tit piensa-tit">PIENSA<sup>®</sup></h2>
+          <p class="lead">{pagina.piensa.texto}</p>
+        </div>
+        <div>
+          <ol class="eje revela">
+            {pagina.piensa.pasos.map((p, i) => (
+              <li style={`--i:${i}`}><span class="bur">{i + 1}</span><h3>{p.titulo}</h3><p>{p.texto}</p></li>
+            ))}
+          </ol>
+          <p class="persona"><svg class="pic" viewBox="0 0 40 40" aria-hidden="true"><path d="M14 12a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M8 36c0-7 5-12 12-12s12 5 12 12" /></svg><span>{t(lang, 'hsePersona')}</span></p>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- 7 · Prácticas -->
+  {pagina.practicas && (
+    <section class="practicas" aria-labelledby="prac-titulo">
+      <div class="wrap">
+        <div class="cab"><h2 id="prac-titulo" class="tit">{t(lang, 'hsePracticas1')} <span>{t(lang, 'hsePracticas2')}</span></h2></div>
+        <ul class="prac revela">
+          {pagina.practicas.map((p, i) => (
+            <li style={`--i:${i}`}>
+              <svg class="pic" viewBox="0 0 56 56" aria-hidden="true">{ICONOS[p.icono].map(([d, j]) => <path d={d} pathLength="1" style={`--j:${j}`} />)}</svg>
+              <h3>{p.titulo}</h3><p>{p.texto}</p><span class="voz-datos quien">{p.quien}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <!-- 8 · Cierre -->
+  <section class="cierre-hse">
+    <div class="wrap cierre-in">
+      <h2>{t(lang, 'hseCierre1')} <span>{t(lang, 'hseCierre2')}</span></h2>
+      <a class="ir" href={ruta('contacto', lang)}>{t(lang, 'hablar')} <i aria-hidden="true">→</i></a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Certificaciones: se inclinan con el cursor. Lámina: la foto sigue levemente al cursor.
+  function iniciar() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll<HTMLElement>('.cert:not([data-listo])').forEach((c) => {
+      c.dataset.listo = '1';
+      c.addEventListener('pointermove', (e) => {
+        const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        c.style.transform = `perspective(900px) rotateY(${(x - 0.5) * 14}deg) rotateX(${(0.5 - y) * 12}deg)`;
+        c.style.setProperty('--mx', `${x * 100}%`); c.style.setProperty('--my', `${y * 100}%`);
+      });
+      c.addEventListener('pointerleave', () => { c.style.transform = ''; });
+    });
+    const lam = document.querySelector<HTMLElement>('.lamina-hse:not([data-listo])');
+    const img = lam?.querySelector<HTMLElement>('img');
+    if (lam && img) {
+      lam.dataset.listo = '1';
+      lam.addEventListener('pointermove', (e) => { const r = lam.getBoundingClientRect(); img.style.translate = `${((e.clientX - r.left) / r.width - 0.5) * -16}px ${((e.clientY - r.top) / r.height - 0.5) * -16}px`; });
+      lam.addEventListener('pointerleave', () => { img.style.translate = '0 0'; });
+    }
+  }
+  iniciar();
+  document.addEventListener('astro:page-load', iniciar);
+</script>
+
+<style>
+  .tit { margin: 0; }
+  .tit span { display: block; font-weight: var(--fw-fina); }
+  .cab { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--s3); margin-bottom: var(--s5); }
+  .cab > .voz-datos { color: var(--muted); }
+
+  /* 1 · Cabecera */
+  .cabecera { display: grid; gap: var(--s5); padding-block: var(--s5) var(--s6); }
+  .cab-txt { display: grid; gap: var(--s4); align-content: center; justify-items: start; }
+  h1 { margin: 0; font-size: var(--fs-h1); line-height: var(--lh-display); }
+  h1 .l { display: block; overflow: hidden; padding-bottom: .06em; }
+  h1 .l > span { display: block; animation: linea var(--t-izaje) var(--ease-izaje) both; }
+  h1 .l + .l > span { font-weight: var(--fw-fina); color: var(--sec); animation-delay: 120ms; }
+  @keyframes linea { from { transform: translateY(105%); } }
+  .lead { margin: 0; color: var(--muted); max-width: 46ch; }
+  .chips { display: flex; flex-wrap: wrap; gap: var(--s2); list-style: none; margin: 0; padding: 0; }
+  .chips li { padding: var(--s1) var(--s2); border: var(--border-strong) solid var(--ink); transition: background-color var(--t-rapido) ease, color var(--t-rapido) ease; }
+  .chips li:hover { background: var(--sec); border-color: var(--sec); color: var(--sec-ink); }
+  .lamina-hse { position: relative; overflow: hidden; min-height: 320px; background: var(--hl-grafito); }
+  /* Barrido de entrada: una cortina grafito se retira (la foto se pinta desde el primer instante: es el LCP). */
+  .lamina-hse::after { content: ''; position: absolute; inset: 0; z-index: 2; background: var(--hl-grafito); transform-origin: right; animation: cortina var(--t-trazo) var(--ease-plano) both; pointer-events: none; }
+  @keyframes cortina { to { transform: scaleX(0); } }
+  .lamina-hse :global(img) { position: absolute; inset: -4%; width: 108%; max-width: none; height: 108%; object-fit: cover; filter: grayscale(1) contrast(1.1); animation: acerca 1.6s var(--ease-izaje) both; transition: translate var(--t-aparece) var(--ease-izaje); }
+  @keyframes acerca { from { transform: scale(1.15); } }
+  .tinte { position: absolute; inset: 0; background: var(--sec-hse); mix-blend-mode: multiply; opacity: .85; }
+  .ejes { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .ejes line { stroke: color-mix(in srgb, var(--hl-blanco) 55%, transparent); stroke-width: 1; stroke-dasharray: 4 6; vector-effect: non-scaling-stroke; }
+  .ejes .mide { stroke: var(--hl-senal); stroke-width: 1.5; stroke-dasharray: none; transform-origin: left; animation: mide var(--t-cota) var(--ease-plano) 1s both; }
+  @keyframes mide { from { transform: scaleX(0); } }
+  .cruz { position: absolute; right: var(--s4); top: var(--s4); width: 88px; height: 88px; border: 2px solid var(--hl-blanco); animation: cruz var(--t-trazo) var(--ease-izaje) .9s both; transition: transform var(--t-aparece) var(--ease-izaje); }
+  .cruz::before, .cruz::after { content: ''; position: absolute; left: 50%; top: 50%; background: var(--hl-blanco); transform: translate(-50%, -50%); }
+  .cruz::before { width: 46px; height: 12px; } .cruz::after { width: 12px; height: 46px; }
+  @keyframes cruz { from { transform: rotate(-90deg) scale(.4); opacity: 0; } }
+  .lamina-hse:hover .cruz { transform: rotate(90deg); }
+  .pie { position: absolute; left: var(--s3); bottom: var(--s3); color: var(--hl-concreto); }
+  @media (min-width: 900px) { .cabecera { grid-template-columns: 1fr 1fr; min-height: 540px; } .cab-txt { padding-right: var(--s5); } }
+
+  /* 3 · Certificaciones */
+  .certificaciones { padding-block: var(--s7); background: var(--bg); }
+  .certs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s3); }
+  .cert {
+    position: relative; display: grid; grid-template-rows: auto auto 1fr auto; gap: var(--s2); padding: var(--s4); overflow: hidden;
+    background: var(--paper); border: var(--border-strong) solid var(--ink); transition: transform var(--t-rapido) var(--ease-izaje);
+  }
+  .cert::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity var(--t-rapido) ease; background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--sec) 22%, transparent), transparent 60%); }
+  .cert:hover::after { opacity: 1; }
+  .cert.dudosa { border-style: dashed; background: transparent; }
+  .c1, .c3 { display: flex; justify-content: space-between; gap: var(--s2); color: var(--sec); }
+  .c3 { color: var(--muted); border-top: var(--border) dashed var(--line); padding-top: var(--s2); }
+  .norma { font-family: var(--f-ancha); font-stretch: var(--wdth-display); font-weight: var(--fw-display); font-size: var(--fs-h3); line-height: var(--lh-title); white-space: nowrap; }
+  .dudosa .norma { font-size: var(--fs-lead); white-space: normal; }
+  .ente { color: var(--muted); font-size: var(--fs-sm); }
+  .sello { height: 80px; width: auto; max-width: none; justify-self: start; align-self: end; padding: var(--s1); background: var(--hl-blanco); transition: transform var(--t-aparece) var(--ease-izaje); }
+  .cert:hover .sello { transform: rotate(8deg) scale(1.06); }
+  :global(html.js) .certs:not(:global(.visible)) .cert { opacity: 0; transform: translateY(28px); }
+  :global(html.js) .certs .cert { transition: opacity var(--t-izaje) var(--ease-izaje), transform var(--t-izaje) var(--ease-izaje); transition-delay: calc(var(--i) * 90ms); }
+  :global(html.js) .certs:not(:global(.visible)) .sello { transform: rotate(-25deg) scale(.6); opacity: 0; }
+  :global(html.js) .certs .sello { transition: transform var(--t-trazo) var(--ease-izaje), opacity var(--t-aparece) ease; transition-delay: calc(250ms + var(--i) * 120ms); }
+  :global(html.js) .certs:global(.visible) .cert:hover .sello { transition-delay: 0s; }
+  :global(html.sin-revela) .certs .cert, :global(html.sin-revela) .certs .sello { opacity: 1; transform: none; }
+  @media (min-width: 900px) { .certs { grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, .8fr); } }
+
+  /* 6 · PIENSA® */
+  .piensa { padding-block: var(--s7); background: var(--bg); border-top: var(--border) solid var(--line); }
+  .piensa-g { display: grid; gap: var(--s5); align-items: center; }
+  .piensa-g > div:first-child { display: grid; gap: var(--s3); justify-items: start; }
+  .piensa-tit sup { color: var(--sec); font-size: var(--fs-lead); vertical-align: top; }
+  .eje { position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); }
+  .eje::before { content: ''; position: absolute; left: 21px; right: 21px; top: 21px; height: 1.5px; background: var(--sec); transform-origin: left; }
+  .eje .bur { position: relative; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; margin-bottom: var(--s3); background: var(--bg); color: var(--sec); border: var(--border-strong) solid var(--sec); font-weight: var(--fw-title); transition: background-color var(--t-rapido) ease, color var(--t-rapido) ease, transform var(--t-aparece) var(--ease-izaje); }
+  .eje li:hover .bur { background: var(--sec); color: var(--sec-ink); transform: scale(1.12); }
+  .eje h3 { margin: 0 0 var(--s1); font-size: var(--fs-lead); }
+  .eje p { margin: 0; color: var(--muted); font-size: var(--fs-sm); }
+  :global(html.js) .eje::before { transition: transform var(--t-trazo) var(--ease-plano); }
+  :global(html.js) .eje:not(:global(.visible))::before { transform: scaleX(0); }
+  .persona { display: flex; align-items: center; gap: var(--s3); margin: var(--s4) 0 0; padding: var(--s3) var(--s4); border: var(--border-strong) solid var(--ink); background: var(--paper); }
+  .persona .pic { width: 40px; height: 40px; flex: none; color: var(--sec); }
+  .pic path { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  @media (min-width: 900px) { .piensa-g { grid-template-columns: 5fr 7fr; gap: var(--s6); } }
+
+  /* 7 · Prácticas */
+  .practicas { padding-block: var(--s7); background: var(--paper); }
+  .prac { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s3); }
+  .prac li { position: relative; display: grid; gap: var(--s2); align-content: start; padding: var(--s4); overflow: hidden; background: var(--bg); border: var(--border-strong) solid var(--ink); }
+  .prac li::before { content: ''; position: absolute; inset: 0; background: var(--sec-soft); transform: scaleY(0); transform-origin: bottom; transition: transform var(--t-aparece) var(--ease-plano); }
+  .prac li > * { position: relative; }
+  .prac li:hover::before { transform: scaleY(1); }
+  .prac .pic { width: 56px; height: 56px; color: var(--sec); }
+  .prac h3 { margin: 0; font-size: var(--fs-lead); }
+  .prac p { margin: 0; color: var(--muted); font-size: var(--fs-sm); }
+  .quien { color: var(--sec); }
+  :global(html.js) .prac li { transition: opacity var(--t-izaje) var(--ease-izaje), transform var(--t-izaje) var(--ease-izaje); transition-delay: calc(var(--i) * 90ms); }
+  :global(html.js) .prac:not(:global(.visible)) li { opacity: 0; transform: translateY(28px); }
+  :global(html.js) .prac:global(.visible) li:hover { transform: translateY(-6px); transition-delay: 0s; }
+  :global(html.js) .prac .pic path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  :global(html.js) .prac:global(.visible) .pic path { animation: trazo var(--t-trazo) var(--ease-plano) forwards; animation-delay: calc(var(--i) * 90ms + var(--j) * 120ms + 300ms); }
+  @keyframes trazo { to { stroke-dashoffset: 0; } }
+  :global(html.sin-revela) .prac li { opacity: 1; transform: none; }
+  :global(html.sin-revela) .prac .pic path { stroke-dashoffset: 0; }
+  @media (min-width: 900px) { .prac { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+  /* 8 · Cierre */
+  .cierre-hse { position: relative; overflow: hidden; background: var(--sec); color: var(--sec-ink); }
+  .cierre-hse::before { content: ''; position: absolute; inset: 0 -60px; background: repeating-linear-gradient(-45deg, color-mix(in srgb, var(--sec-ink) 8%, transparent) 0 14px, transparent 14px 28px); transform: translateX(-40px); transition: transform 1.2s linear; }
+  .cierre-hse:hover::before { transform: translateX(0); }
+  .cierre-in { position: relative; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s4); padding-block: var(--s6); }
+  .cierre-in h2 { margin: 0; color: var(--sec-ink); }
+  .cierre-in h2 span { font-weight: var(--fw-fina); }
+  .ir { display: inline-flex; align-items: center; gap: var(--s3); min-height: 52px; padding: 0 var(--s4); background: var(--sec-ink); color: var(--sec); text-decoration: none; font-weight: var(--fw-strong); }
+  .ir i { font-style: normal; transition: transform var(--t-rapido) var(--ease-plano); }
+  .ir:hover i { transform: translateX(6px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    h1 .l > span, .lamina-hse::after, .lamina-hse :global(img), .ejes .mide, .cruz { animation: none; }
+    .lamina-hse::after { display: none; }
+    .cruz, .cert, .sello, .prac li::before, .cierre-hse::before, .eje .bur { transition: none; }
+    :global(html.js) .certs .cert, :global(html.js) .certs .sello, :global(html.js) .prac li { opacity: 1; transform: none; transition: none; }
+    :global(html.js) .eje::before { transform: none; }
+    :global(html.js) .prac .pic path { stroke-dashoffset: 0; animation: none; }
+  }
+</style>
