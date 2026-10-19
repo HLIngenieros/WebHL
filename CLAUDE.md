@@ -239,7 +239,13 @@ en [contenido/README.md](contenido/README.md).
     `nosotros.astro`, `en/`): el CSS de `[...ruta]` lleva el de todas sus plantillas. Lighthouse móvil del inicio
     98-99/100/100/100, LCP 1,8-1,98 s (margen corto: las fotos de destacados compiten con la fuente). Nosotros
     queda en 3,2 s de LCP (anterior a esta tarea; anotado en la Tarea 14). 372 pruebas.
-  - **Siguiente paso:** 8b (página de Sectores) y 8c (explorador con mapa vivo); luego F3.3 (maquetas de HSE, Noticias, Acreedores y legales → aprobación →
+  - **8b cerrada** (página de Sectores con escenarios) y **8c cerrada** (explorador con mapa vivo: placas,
+    servicios por grupo, países bajo el mapa, total con cota, pod de línea, lista compacta; mapa con acercar,
+    desplazar, Ctrl + rueda, pellizco, grupos por distancia en pantalla, ventana de la obra; funciones puras en
+    `src/lib/mapa.ts`). Sin JS el mapa es la lámina quieta (interactivo solo tras hidratar). La hoja de filtros
+    móvil desapareció: en móvil las placas se desplazan de lado. Explorador: 37 KB de JS, Lighthouse móvil
+    98/100/100/100, LCP 1,8-1,96 s. 389 pruebas. En SVG, Preact necesita `tabindex` en minúscula.
+  - **Siguiente paso:** F3.3 (maquetas de HSE, Noticias, Acreedores y legales → aprobación →
     páginas) y la Tarea 14 (cierre, Lighthouse, revisión y merge a `main`). Ejecución en modo nativo, sin
     subagentes (pedido de Juan David).
   - **Decisiones de F3 con efecto visible:** sin precarga de fuente (primera visita: un instante con el

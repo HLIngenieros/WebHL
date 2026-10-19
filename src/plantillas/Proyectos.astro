@@ -1,33 +1,50 @@
 ---
-// Explorador de proyectos (especificación §5). La lista completa va en el HTML; la isla agrega filtros,
-// reacomodo y mapa interactivo cuando el navegador está libre (client:idle).
+// Explorador de proyectos (guía §13.2, especificación §5). La lista completa va en el HTML; la isla agrega
+// filtros en placas, mapa vivo, pod de línea y reacomodo cuando el navegador está libre (client:idle).
 import Base from '../layouts/Base.astro';
 import Encabezado from '../components/ui/Encabezado.astro';
 import Pod from '../components/Pod.astro';
 import Explorador from '../components/Explorador';
 import { cargar, tarjetas } from '../lib/datos';
-import { bloque, paraExplorador, txt, type Entrada, type Proyecto } from '../lib/contenido';
-import { proyectar, puntosDe } from '../lib/mapa';
+import { bloque, paraExplorador, resumenSectores, txt, type Entrada, type Proyecto } from '../lib/contenido';
+import { proyectar } from '../lib/mapa';
 import { PAISES, t, tn } from '../i18n/ui';
-import type { Lang } from '../i18n/rutas';
+import { ruta, urlDe, type Lang } from '../i18n/rutas';
 
 interface Props { lang: Lang; alterno: string }
 const { lang, alterno } = Astro.props;
 const { datos } = await cargar();
-const todas = await tarjetas(paraExplorador(datos.proyectos as unknown as Entrada<Proyecto>[]), lang);
+const proyectos = datos.proyectos as unknown as Entrada<Proyecto>[];
+const todas = await tarjetas(paraExplorador(proyectos), lang);
 
-const nombre = (d: { es: { nombre: string }; en?: { nombre: string } }) => bloque(d, lang).nombre;
 const servicios = [...datos.servicios].sort((a, b) => a.data.grupo.localeCompare(b.data.grupo) || a.data.orden - b.data.orden);
-const sectores = [...datos.sectores].sort((a, b) => a.data.orden - b.data.orden);
+// Cemento y Minería primero (guía §13): el mismo orden que el submenú y la página de Sectores.
+const sectores = resumenSectores(datos.sectores, proyectos).map((r) => r.sector);
 const paises = [...new Set(todas.flatMap((x) => (x.pais ? [x.pais] : [])))];
 const opciones = {
-  servicio: servicios.map((s) => ({ valor: s.data.slug[lang], nombre: nombre(s.data) })),
-  sector: sectores.map((s) => ({ valor: s.data.slug[lang], nombre: nombre(s.data) })),
+  sector: sectores.map((s) => ({ valor: s.data.slug[lang], nombre: bloque(s.data, lang).nombre, id: s.id, principal: s.data.principal })),
+  servicio: servicios.map((s) => ({ valor: s.data.slug[lang], nombre: bloque(s.data, lang).nombre, grupo: s.data.grupo })),
   pais: paises.map((p) => ({ valor: p, nombre: PAISES[p.toUpperCase()][lang] })).sort((a, b) => a.nombre.localeCompare(b.nombre, lang)),
+};
+const grupos = { A: t(lang, 'grupoA'), B: t(lang, 'grupoB'), C: t(lang, 'grupoC') };
+const codigo = (letra: string, orden: number) => `${letra}-${String(orden).padStart(2, '0')}`;
+const lineas = {
+  sector: Object.fromEntries(sectores.map((s) => [s.data.slug[lang], {
+    codigo: codigo('S', s.data.orden), nombre: bloque(s.data, lang).nombre, texto: bloque(s.data, lang).intro, url: urlDe('sectores', s.data.slug, lang),
+  }])),
+  servicio: Object.fromEntries(servicios.map((s) => [s.data.slug[lang], {
+    codigo: codigo(s.data.grupo, s.data.orden), nombre: bloque(s.data, lang).nombre, texto: bloque(s.data, lang).resumen, url: urlDe('servicios', s.data.slug, lang),
+  }])),
 };
 const mapa = {
   paises,
-  puntos: puntosDe(todas.map((x) => ({ coordenadas: x.coordenadas, titulo: x.titulo, pais: x.pais }))),
+  obras: todas.filter((x) => x.coordenadas).map((x) => {
+    const [px, py] = proyectar(x.coordenadas!);
+    return {
+      id: x.id, x: px, y: py, titulo: x.titulo, ciudad: x.lugar?.split(',')[0], datos: [x.cliente, x.lugar].filter(Boolean).join(' · '),
+      codigo: x.codigo, sector: x.sector.nombre, url: x.url, imagen: x.imagen,
+    };
+  }),
   sedes: datos.sedes.map((s) => {
     const [x, y] = proyectar(s.data.coordenadas);
     return { x, y, etiqueta: `${txt(s.data.nombre, lang)} · ${s.data.ciudad}` };
@@ -35,14 +52,15 @@ const mapa = {
 };
 ---
 <Base titulo={t(lang, 'proyectos')} descripcion={t(lang, 'proyectosEntrada')} lang={lang} alterno={alterno}>
-  <div class="wrap proyectos pila">
+  <div class="wrap proyectos">
     <Encabezado nivel={1} titulo={t(lang, 'proyectos')} entrada={t(lang, 'proyectosEntrada')} medida={tn(lang, 'nProyectos', todas.length)}>
       <Pod slot="pod" forma="rotulo" codigo="L-02" nombre={t(lang, 'proyectos')} />
     </Encabezado>
-    <Explorador client:idle lang={lang} tarjetas={todas} opciones={opciones} mapa={mapa} />
+    <Explorador client:idle lang={lang} tarjetas={todas} opciones={opciones} grupos={grupos} lineas={lineas} mapa={mapa} ruta={ruta('proyectos', lang)} />
   </div>
 </Base>
 
 <style>
-  .proyectos { --pila: var(--s6); padding-block: var(--s5) var(--s7); }
+  .proyectos { padding-block: var(--s5) var(--s7); }
+  .proyectos > :global(* + *) { margin-top: var(--s5); }
 </style>

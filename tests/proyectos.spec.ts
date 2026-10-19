@@ -302,7 +302,10 @@ test.describe('mapa de presencia', () => {
     await page.goto('/muestra/');
     const mapa = page.locator('#mapa .mapa');
     for (const pais of ['co', 'gt', 'ec', 'pa']) await expect(mapa.locator(`path.con-obra[data-pais="${pais}"]`)).toHaveCount(1);
-    await expect(mapa.locator('.punto')).toHaveCount(15);
+    // Sin JS los puntos ya vienen agrupados por cercanía (22 fichas, 15 con coordenadas).
+    const n = await mapa.locator('.punto').count();
+    expect(n).toBeGreaterThan(3);
+    expect(n).toBeLessThanOrEqual(15);
     await expect(mapa.locator('.sede')).toHaveCount(4);
   });
 
@@ -320,15 +323,16 @@ test.describe('explorador de proyectos', () => {
   const hidratado = (page: import('@playwright/test').Page) => page.waitForSelector('astro-island:not([ssr])', { state: 'attached' });
   const visibles = (page: import('@playwright/test').Page) => page.locator('.explorador .tarjeta:visible');
   const boton = (page: import('@playwright/test').Page, dim: string, valor: string) =>
-    page.locator(`.filtros-inline [data-dim="${dim}"] button[data-valor="${valor}"]`);
+    page.locator(`.explorador [data-dim="${dim}"] button[data-valor="${valor}"]`);
 
   test.describe('sin JavaScript', () => {
     test.use({ javaScriptEnabled: false });
     test('(foco 5) se ven las 22 tarjetas y no hay filtros muertos; las discretas van al final', async ({ page }) => {
       await page.goto('/proyectos/');
       await expect(visibles(page)).toHaveCount(22);
-      await expect(page.locator('.filtros-inline')).toBeHidden();
-      await expect(page.locator('.abrir-filtros')).toBeHidden();
+      await expect(page.locator('.filtros-explorador')).toBeHidden();
+      await expect(page.locator('.paises')).toBeHidden();
+      await expect(page.locator('.mapa-controles')).toHaveCount(0);
       const ids = await page.locator('.explorador .tarjeta').evaluateAll((xs) => xs.map((x) => x.getAttribute('data-id')));
       expect(ids.slice(-2).sort()).toEqual([...DISCRETAS].sort());
     });
@@ -380,19 +384,108 @@ test.describe('explorador de proyectos', () => {
     await expect(visibles(page)).toHaveCount(1);
   });
 
-  test('(foco 5) en móvil los filtros van en una hoja que atrapa y devuelve el foco', async ({ page }) => {
+  test('(foco 5) en móvil las placas se desplazan de lado y filtran', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/proyectos/');
     await hidratado(page);
-    await expect(page.locator('.filtros-inline')).toBeHidden();
-    const abrir = page.locator('.abrir-filtros');
-    await abrir.click();
-    const hoja = page.locator('dialog.hoja-filtros');
-    await expect(hoja).toHaveAttribute('open', '');
-    expect(await page.evaluate(() => !!document.activeElement?.closest('dialog.hoja-filtros'))).toBe(true);
+    await expect(page.locator('.filtros-explorador')).toBeVisible();
+    await boton(page, 'sector', 'mineria').click();
+    await expect(visibles(page)).toHaveCount(4);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+
+  // Guía §13.2 · Explorador con mapa vivo
+  const caja = (page: import('@playwright/test').Page) =>
+    page.locator('.explorador svg.mapa').evaluate((s) => s.getAttribute('viewBox')!.split(' ').map(Number));
+
+  test('las placas ponen Cemento y Minería primero y más anchas', async ({ page }) => {
+    await page.goto('/proyectos/');
+    await hidratado(page);
+    const placas = page.locator('.placas .placa');
+    await expect(placas.nth(0)).toHaveAttribute('data-valor', 'cemento');
+    await expect(placas.nth(1)).toHaveAttribute('data-valor', 'mineria');
+    await expect(page.locator('.placas .placa.mayor')).toHaveCount(2);
+  });
+
+  test('al elegir un sector o un servicio aparece su pod de línea con enlace', async ({ page }) => {
+    await page.goto('/proyectos/?sector=cemento&servicio=montaje-mecanico');
+    await hidratado(page);
+    const pods = page.locator('.pod-linea');
+    await expect(pods).toHaveCount(2);
+    await expect(pods.nth(0).locator('a')).toHaveAttribute('href', '/sectores/cemento/');
+    await expect(pods.nth(1).locator('a')).toHaveAttribute('href', '/servicios/montaje-mecanico/');
+  });
+
+  test('filtrar encoge los puntos que no cumplen y encuadra el resto', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 900 });
+    await page.goto('/proyectos/');
+    await hidratado(page);
+    const [, , w0] = await caja(page);
+    await boton(page, 'sector', 'cemento').click();
+    await expect(page.locator('.explorador .punto.fuera').first()).toBeAttached();
+    await expect.poll(async () => (await caja(page))[2]).toBeLessThan(w0);
+  });
+
+  test('los botones acercan y alejan; "ver toda la región" vuelve al inicio', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 900 });
+    await page.goto('/proyectos/');
+    await hidratado(page);
+    const [, , w0] = await caja(page);
+    await expect(page.getByRole('button', { name: 'Alejar' })).toBeDisabled();
+    await page.getByRole('button', { name: 'Acercar' }).click();
+    await expect.poll(async () => (await caja(page))[2]).toBeLessThan(w0 * 0.7);
+    await page.getByRole('button', { name: 'Ver toda la región' }).click();
+    await expect.poll(async () => Math.round((await caja(page))[2])).toBe(Math.round(w0));
+  });
+
+  test('la rueda sola no acerca (muestra la pista); con Ctrl sí', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 900 });
+    await page.goto('/proyectos/');
+    await hidratado(page);
+    const svg = page.locator('.explorador svg.mapa');
+    await svg.scrollIntoViewIfNeeded();
+    const [, , w0] = await caja(page);
+    await svg.hover();
+    await page.mouse.wheel(0, -200);
+    await expect(page.locator('.mapa-pista')).toHaveClass(/ver/);
+    expect((await caja(page))[2]).toBeCloseTo(w0);
+    await page.keyboard.down('Control');
+    await page.mouse.wheel(0, -200);
+    await page.keyboard.up('Control');
+    await expect.poll(async () => (await caja(page))[2]).toBeLessThan(w0);
+  });
+
+  test('un grupo acerca a sus obras y un punto abre su ventana; Esc la cierra', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 900 });
+    await page.goto('/proyectos/');
+    await hidratado(page);
+    const [, , w0] = await caja(page);
+    const grupo = page.locator('.explorador .punto.grupo').first();
+    await expect(grupo).toHaveAttribute('tabindex', '0');
+    await grupo.focus();
+    await page.keyboard.press('Enter');
+    await expect.poll(async () => (await caja(page))[2]).toBeLessThan(w0);
+    const uno = page.locator('.explorador .punto:not(.grupo):not(.fuera)').first();
+    await uno.focus();
+    await page.keyboard.press('Enter');
+    const ventana = page.locator('.mapa-ventana');
+    await expect(ventana).toBeVisible();
+    await expect(ventana.locator('a')).toHaveAttribute('href', /^\/proyectos\/[a-z0-9-]+\/$/);
     await page.keyboard.press('Escape');
-    await expect(hoja).not.toHaveAttribute('open', '');
-    await expect(abrir).toBeFocused();
+    await expect(ventana).toHaveCount(0);
+  });
+
+  test('pasar por una tarjeta resalta su punto', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 900 });
+    await page.goto('/proyectos/');
+    await hidratado(page);
+    await page.locator('.explorador .tarjeta[data-id="planta-cementos-progreso"]').hover();
+    await expect(page.locator('.explorador .punto.resalta')).toHaveCount(1);
+  });
+
+  test('la leyenda dice cuántas fichas no tienen ubicación', async ({ page }) => {
+    await page.goto('/proyectos/');
+    await expect(page.locator('.ley-sin')).toContainText('7');
   });
 });
 
@@ -541,5 +634,51 @@ test.describe('página de Sectores', () => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/sectores/');
     await expect(page.locator('.escena .capas .capa-cotas').first()).toHaveCSS('animation-name', 'none');
+  });
+});
+
+// Guía §13.2 · Mapa vivo: funciones puras de encuadre, acercamiento y grupos.
+test.describe('mapa vivo (funciones)', () => {
+  test('limitar respeta el acercamiento máximo, la proporción y el lienzo', async () => {
+    const { limitar, ANCHO, ALTO, ANCHO_MIN } = await import('../src/lib/mapa');
+    const c = limitar({ x: -5000, y: 0, w: 10, h: 10 });
+    expect(c.w).toBe(ANCHO_MIN);
+    expect(c.h).toBeCloseTo((ANCHO_MIN * ALTO) / ANCHO);
+    expect(c.x + c.w / 2).toBe(0);
+    expect(limitar({ x: 0, y: 0, w: 5000, h: 1 }).w).toBe(ANCHO);
+  });
+
+  test('acercar deja quieto el punto elegido', async () => {
+    const { acercar, COMPLETA } = await import('../src/lib/mapa');
+    const c = acercar(COMPLETA, 0.5, 300, 400);
+    expect(c.w).toBe(500);
+    // El punto (300, 400) queda en la misma fracción de la caja.
+    expect((300 - c.x) / c.w).toBeCloseTo(300 / 1000);
+  });
+
+  test('encuadre incluye todos los puntos y no acerca de más', async () => {
+    const { encuadre } = await import('../src/lib/mapa');
+    const ps = [{ x: 500, y: 400 }, { x: 520, y: 410 }];
+    const c = encuadre(ps);
+    expect(c.w).toBeGreaterThanOrEqual(260);
+    for (const p of ps) { expect(p.x).toBeGreaterThan(c.x); expect(p.x).toBeLessThan(c.x + c.w); expect(p.y).toBeGreaterThan(c.y); expect(p.y).toBeLessThan(c.y + c.h); }
+  });
+
+  test('llenar amplía al aspecto del contenedor sin recortar', async () => {
+    const { llenar, COMPLETA } = await import('../src/lib/mapa');
+    const c = llenar(COMPLETA, 2);
+    expect(c.w / c.h).toBeCloseTo(2);
+    expect(c.h).toBeCloseTo(COMPLETA.h);
+    expect(c.w).toBeGreaterThan(COMPLETA.w);
+  });
+
+  test('agrupar junta lo cercano en pantalla y lo separa al acercar', async () => {
+    const { agrupar } = await import('../src/lib/mapa');
+    const ps = [{ id: 'a', x: 100, y: 100 }, { id: 'b', x: 110, y: 100 }, { id: 'c', x: 400, y: 100 }];
+    const lejos = agrupar(ps, 1); // 1 unidad por píxel: a y b a 10 px
+    expect(lejos.map((g) => g.clave)).toEqual(['a|b', 'c']);
+    expect(lejos[0].x).toBe(105);
+    const cerca = agrupar(ps, 0.2); // a y b a 50 px
+    expect(cerca).toHaveLength(3);
   });
 });

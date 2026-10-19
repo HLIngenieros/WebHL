@@ -17,14 +17,17 @@ import Lamina from '../components/Lamina';
 import Ilustracion, { SECTORES_ILUSTRADOS } from '../components/Ilustracion';
 import { cargar, tarjetas, imagen } from '../lib/datos';
 import Mapa from '../components/Mapa';
-import { proyectar, puntosDe } from '../lib/mapa';
+import { proyectar } from '../lib/mapa';
 import { paraExplorador, txt } from '../lib/contenido';
 
 const { datos } = await cargar();
 const ejemplos = await tarjetas(datos.proyectos.filter((p) => ['planta-columbus', 'torre-grua-maceo'].includes(p.id)), 'es');
 const laminaSuelta = await imagen(columbus, 'Patio de almacenamiento de la planta Columbus');
-const todas = paraExplorador(datos.proyectos as never).map((p: any) => ({ coordenadas: p.data.coordenadas, titulo: p.data.es.titulo, pais: p.data.pais?.toLowerCase() }));
-const puntos = puntosDe(todas);
+const todas = paraExplorador(datos.proyectos as never).map((p: any) => ({ id: p.id as string, coordenadas: p.data.coordenadas, titulo: p.data.es.titulo as string, ciudad: p.data.ciudad, pais: p.data.pais?.toLowerCase() }));
+const obras = todas.filter((x) => x.coordenadas).map((x, i) => {
+  const [px, py] = proyectar(x.coordenadas);
+  return { id: x.id, x: px, y: py, titulo: x.titulo, ciudad: x.ciudad, codigo: `P-${i + 1}`, sector: '', url: '#' };
+});
 const paisesObra = [...new Set(todas.flatMap((x) => (x.pais ? [x.pais] : [])))];
 const sedes = datos.sedes.map((s) => { const [x, y] = proyectar(s.data.coordenadas); return { x, y, etiqueta: `${txt(s.data.nombre, 'es')} · ${s.data.ciudad}` }; });
 
@@ -100,8 +103,8 @@ const cantidades = [
     </section>
 
     <section class="bloque" id="mapa">
-      <Encabezado codigo="C-06" titulo="Mapa de presencia" entrada="Países con obra en el acento de la sección, un punto por ciudad y las sedes." />
-      <Mapa lang="es" paises={paisesObra} puntos={puntos} sedes={sedes} />
+      <Encabezado codigo="C-06" titulo="Mapa de presencia" entrada="Países con obra en el acento de la sección, los puntos agrupados por cercanía y las sedes." />
+      <Mapa lang="es" paises={paisesObra} obras={obras} sedes={sedes} />
     </section>
 
     <section class="bloque">
