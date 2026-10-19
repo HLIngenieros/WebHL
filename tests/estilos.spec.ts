@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import fs from 'node:fs';
 
 test('carga Archivo autoalojada', async ({ page }) => {
   const fuentes: string[] = [];
@@ -52,4 +53,52 @@ test('a 1366 px la escala base no cambia', async ({ page }) => {
   await page.setViewportSize({ width: 1366, height: 800 });
   await page.goto('/muestra/');
   expect(await page.evaluate(() => parseFloat(getComputedStyle(document.querySelector('h1')!).fontSize))).toBe(68);
+});
+
+// F3.0 · Fuente y LCP (especificación §7): archivo reducido y respaldo con métricas ajustadas, para que
+// el cambio de fuente no mueva el texto (el repintado era lo que retrasaba el LCP).
+test.describe('fuente sin repintado', () => {
+  test('la fuente reducida pesa a lo sumo 73 KB (antes 88)', () => {
+    const kb = fs.statSync('public/fonts/archivo-var-latin.woff2').size / 1024;
+    expect(kb).toBeLessThanOrEqual(73);
+  });
+
+  test('la hoja declara los dos respaldos con métricas', async ({ page }) => {
+    await page.goto('/');
+    const caras = await page.evaluate(() =>
+      [...document.styleSheets].flatMap((s) => [...s.cssRules]).filter((r) => r instanceof CSSFontFaceRule).map((r) => (r as CSSFontFaceRule).cssText));
+    for (const nombre of ['"Archivo respaldo"', '"Archivo respaldo ancho"']) {
+      const cara = caras.find((c) => c.includes(`font-family: ${nombre};`));
+      expect(cara, nombre).toBeTruthy();
+      expect(cara).toContain('size-adjust');
+      expect(cara).toContain('ascent-override');
+    }
+  });
+
+  // Medido el 2026-10-19: la precarga competía con el HTML y el CSS en 4G (explorador 2,3 → 1,8 s).
+  test('la fuente no se precarga', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('link[rel="preload"][as="font"]')).toHaveCount(0);
+  });
+
+  test('títulos y texto usan su respaldo', async ({ page }) => {
+    await page.goto('/proyectos/planta-columbus/');
+    expect(await page.locator('h1').evaluate((e) => getComputedStyle(e).fontFamily)).toContain('Archivo respaldo ancho');
+    expect(await page.locator('main p').first().evaluate((e) => getComputedStyle(e).fontFamily)).toMatch(/Archivo respaldo(?! ancho)/);
+  });
+
+  test('sin la fuente, el título de la ficha mide casi lo mismo', async ({ browser }) => {
+    const alto = async (bloquear: boolean) => {
+      const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+      const page = await ctx.newPage();
+      if (bloquear) await page.route('**/*.woff2', (r) => r.abort());
+      await page.goto('/proyectos/planta-columbus/');
+      await page.evaluate(() => document.fonts.ready);
+      const h = await page.locator('h1').evaluate((e) => e.getBoundingClientRect().height);
+      await ctx.close();
+      return h;
+    };
+    const [con, sin] = [await alto(false), await alto(true)];
+    expect(Math.abs(con - sin) / con).toBeLessThanOrEqual(0.04);
+  });
 });

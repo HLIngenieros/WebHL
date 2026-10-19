@@ -47,7 +47,10 @@
   color-scheme: light;
 
   /* ---- Tipografía ---- */
-  --f: "Archivo", "Arial Narrow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* "Archivo respaldo" y "… ancho" son Arial con métricas de Archivo (global.css, design/fuente.py):
+     el cambio de fuente no mueve el texto. La ancha va en las voces expandidas (display, título, cifra). */
+  --f: "Archivo", "Archivo respaldo", "Arial Narrow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-ancha: "Archivo", "Archivo respaldo ancho", "Arial", system-ui, sans-serif;
 
   /* anchos (eje wdth de Archivo) */
   --wdth-display: 122%;    /* h1, cifras grandes */

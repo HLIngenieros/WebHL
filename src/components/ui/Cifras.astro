@@ -26,7 +26,7 @@ const partes = (v: string) => { const [num, ...resto] = v.split(' '); return { 
   .cifras > div:last-child:nth-child(odd) { grid-column: span 2; }
   dd {
     /* la cifra nunca se sale de su celda: se ajusta al ancho disponible, con el tamaño de la guía como tope */
-    margin: 0; color: var(--sec); font-size: min(var(--fs-stat), 15cqi); font-stretch: var(--wdth-stat);
+    margin: 0; color: var(--sec); font-size: min(var(--fs-stat), 15cqi); font-stretch: var(--wdth-stat); font-family: var(--f-ancha);
     font-weight: var(--fw-title); line-height: 1;
   }
   dt { color: var(--muted); }
