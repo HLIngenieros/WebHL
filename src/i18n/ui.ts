@@ -88,6 +88,10 @@ const es = {
   ctaServicio: '¿Necesita este servicio?',
   ctaSector: '¿Trabaja en este sector?',
   ctaTexto: 'Cuéntenos el alcance y le respondemos con la experiencia de HL en obras comparables.',
+  cifraTrayectoria: 'años',
+  cifraPresencia: 'países',
+  cifraSedes: 'sedes',
+  cifraCalidad: 'normas ISO',
 };
 
 const en: Record<keyof typeof es, string> = {
@@ -176,6 +180,10 @@ const en: Record<keyof typeof es, string> = {
   ctaServicio: 'Need this service?',
   ctaSector: 'Working in this sector?',
   ctaTexto: 'Tell us the scope and we will reply with HL experience on comparable projects.',
+  cifraTrayectoria: 'years',
+  cifraPresencia: 'countries',
+  cifraSedes: 'offices',
+  cifraCalidad: 'ISO standards',
 };
 
 export type ClaveUI = keyof typeof es;
@@ -220,4 +228,6 @@ export const PAISES: Record<string, Record<Lang, string>> = {
   GT: { es: 'Guatemala', en: 'Guatemala' },
   PA: { es: 'Panamá', en: 'Panama' },
   DO: { es: 'República Dominicana', en: 'Dominican Republic' },
+  CR: { es: 'Costa Rica', en: 'Costa Rica' },
+  BO: { es: 'Bolivia', en: 'Bolivia' },
 };

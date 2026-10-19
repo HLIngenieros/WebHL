@@ -37,7 +37,7 @@ interface Sede { nombre: Texto; buzon?: string; confirmar?: string[] }
 interface Certificacion { norma: Texto; vence?: Date; pdf?: string; confirmar?: string[] }
 interface Hito extends ConIdiomas { anio?: number }
 interface Testimonio { autorizado: boolean; cargo: Texto; cita: Texto }
-interface Sitio { asociadas?: unknown[]; clientes?: { nombre?: string }[]; cifras?: { etiqueta: Texto }[]; confirmar?: string[] }
+interface Sitio { paises?: string[]; asociadas?: unknown[]; clientes?: { nombre?: string }[]; cifras?: { etiqueta: Texto }[]; confirmar?: string[] }
 interface Pagina { pagina: string; lang: Lang; revisionJuridica?: boolean; confirmar?: string[] }
 
 export interface Datos {
@@ -163,6 +163,9 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
       if (previo) errores.push(`- proyectos/${id}: slug.${lang} "${data.slug[lang]}" repite el de ${previo}`);
       else vistos.set(data.slug[lang], id);
     }
+  }
+  for (const { id, data } of datos.sitio ?? []) {
+    for (const c of data.paises ?? []) if (!PAISES[c]) errores.push(`- sitio/${id}: país "${c}" sin nombre en src/i18n/ui.ts (PAISES)`);
   }
   if (errores.length) throw new Error(`Errores en el contenido:\n${errores.join('\n')}`);
 

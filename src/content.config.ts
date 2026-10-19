@@ -128,6 +128,8 @@ const sitio = defineCollection({
   loader: file('src/content/sitio.yaml'),
   schema: ({ image }) => z.object({
     fundacion: z.number().int(),
+    lema: texto,
+    paises: z.array(z.string().length(2)).min(1),
     cifras: z.array(z.object({ valor: z.number(), prefijo: z.string().optional(), unidad: unidad.optional(), etiqueta: texto })),
     redes: z.array(z.object({ red: z.string(), url: z.url() })),
     asociadas: z.array(z.object({ nombre: z.string(), logo: image().optional() })).optional(),

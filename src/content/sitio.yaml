@@ -1,6 +1,13 @@
 # Datos generales del sitio. La edad se calcula desde `fundacion`; nunca se escribe fija.
 - id: hl
   fundacion: 1968
+  # Lema único (D2, guía §2.3). El EN es propuesta: se cierra en F5.
+  lema:
+    es: Construimos la industria con gente que cumple, desde 1968.
+    en: Building industry with people who deliver, since 1968.
+  # Países con obra: los nombra el texto "Ejecutamos los proyectos de forma diferente" del inicio actual
+  # (contenido/institucional.md §1). Las fichas solo registran CO, EC, GT y PA.
+  paises: [CO, PA, CR, DO, GT, BO, EC]
   cifras:
     - { valor: 530, prefijo: '+', etiqueta: { es: Proyectos ejecutados } }
     - { valor: 4000000, prefijo: '+', unidad: hh, etiqueta: { es: Horas hombre al año } }
@@ -30,7 +37,6 @@
     - { nombre: Chevron, logo: ../assets/clientes/chevron.png }
   confirmar:
     - "Cifras de portada de 2020 (+530 proyectos, +4.000.000 HH al año): actualizar."
-    - "7 países con obra: las fichas solo registran Colombia, Ecuador, Guatemala y Panamá (y la sede de República Dominicana). ¿Cuáles son los otros? (no hay fichas de Costa Rica ni de Bolivia)"
     - "¿Bolsa y Mercados de Valores de la República Dominicana es cliente?"
     - "Logos de clientes: ¿se mantienen los 18 y se agregan clientes 2020-2026?"
     - "Proyectos 2020-2026: ninguna ficha publicada es posterior a enero de 2020. Enviar cliente, años, alcance y cifras de los recientes."
