@@ -92,6 +92,8 @@ const es = {
   cifraPresencia: 'países',
   cifraSedes: 'sedes',
   cifraCalidad: 'normas ISO',
+  verProyectos: 'Ver proyectos',
+  bajar: 'Bajar',
 };
 
 const en: Record<keyof typeof es, string> = {
@@ -184,6 +186,8 @@ const en: Record<keyof typeof es, string> = {
   cifraPresencia: 'countries',
   cifraSedes: 'offices',
   cifraCalidad: 'ISO standards',
+  verProyectos: 'View projects',
+  bajar: 'Scroll',
 };
 
 export type ClaveUI = keyof typeof es;

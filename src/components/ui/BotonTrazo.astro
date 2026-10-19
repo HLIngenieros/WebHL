@@ -1,0 +1,61 @@
+---
+// Botón de trazo (guía §7): acción principal de un hero. Solo CSS: el enlace funciona desde el primer
+// instante; la entrada (contorno que se dibuja, llenado, texto y flecha) es presentación.
+interface Props { href: string; texto: string }
+const { href, texto } = Astro.props;
+---
+<a class="boton-trazo" href={href}>
+  <span class="bt-borde bt-t" aria-hidden="true"></span><span class="bt-borde bt-r" aria-hidden="true"></span>
+  <span class="bt-borde bt-b" aria-hidden="true"></span><span class="bt-borde bt-l" aria-hidden="true"></span>
+  <span class="bt-marca bt-a" aria-hidden="true"></span><span class="bt-marca bt-z" aria-hidden="true"></span>
+  <span class="bt-texto">{texto}</span>
+  <span class="bt-flecha" aria-hidden="true"><i>→</i></span>
+</a>
+
+<style>
+  .boton-trazo {
+    position: relative; display: inline-flex; align-items: stretch; height: var(--s6);
+    color: var(--hl-blanco); text-decoration: none; isolation: isolate; background-color: var(--accent);
+  }
+  /* Entrada (con JS y sin movimiento reducido): contorno → llenado → texto y flecha. */
+  .boton-trazo::before { content: ""; position: absolute; inset: 0; z-index: 0; background: var(--accent); transform-origin: left; }
+  :global(html.js) .boton-trazo { background-color: transparent; }
+  :global(html.js) .boton-trazo::before { transform: scaleX(0); animation: bt-x .6s var(--ease-plano) 1.3s forwards; }
+  .bt-borde { position: absolute; z-index: 2; background: var(--accent); pointer-events: none; }
+  .bt-t, .bt-b { left: 0; right: 0; height: 1.5px; }
+  .bt-r, .bt-l { top: 0; bottom: 0; width: 1.5px; }
+  .bt-t { top: 0; transform-origin: left; } .bt-b { bottom: 0; transform-origin: right; }
+  .bt-r { right: 0; transform-origin: top; } .bt-l { left: 0; transform-origin: bottom; }
+  :global(html.js) .bt-t, :global(html.js) .bt-b { transform: scaleX(0); animation: bt-x .3s linear forwards; }
+  :global(html.js) .bt-r, :global(html.js) .bt-l { transform: scaleY(0); animation: bt-y .3s linear forwards; }
+  :global(html.js) .bt-t { animation-delay: .4s; } :global(html.js) .bt-r { animation-delay: .7s; }
+  :global(html.js) .bt-b { animation-delay: 1s; } :global(html.js) .bt-l { animation-delay: 1.3s; }
+  @keyframes bt-x { to { transform: scaleX(1); } } @keyframes bt-y { to { transform: scaleY(1); } }
+  .bt-texto, .bt-flecha { position: relative; z-index: 1; display: flex; align-items: center; transition: color var(--t-rapido) ease .08s; }
+  :global(html.js) .bt-texto, :global(html.js) .bt-flecha { opacity: 0; animation: bt-ap var(--t-aparece) var(--ease-izaje) 1.7s forwards; }
+  @keyframes bt-ap { to { opacity: 1; } }
+  .bt-texto { padding: 0 var(--s5); font-stretch: var(--wdth-title); font-family: var(--f-ancha); font-weight: var(--fw-subtitle); font-size: var(--fs-lead); }
+  .bt-flecha { width: var(--s6); justify-content: center; overflow: hidden; border-left: var(--border) solid color-mix(in srgb, var(--hl-blanco) 25%, transparent); font-size: var(--fs-h3); }
+  .bt-flecha i { font-style: normal; display: block; }
+  /* Hover y foco: barrido de señal, texto en grafito, flecha que da la vuelta, marcas de registro. */
+  .boton-trazo::after {
+    content: ""; position: absolute; inset: 0; z-index: 0; background: var(--hl-senal);
+    transform: scaleX(0); transform-origin: right; transition: transform .45s var(--ease-plano);
+  }
+  .boton-trazo:is(:hover, :focus-visible)::after { transform: scaleX(1); transform-origin: left; }
+  .boton-trazo:is(:hover, :focus-visible) :is(.bt-texto, .bt-flecha) { color: var(--hl-grafito); }
+  .boton-trazo:is(:hover, :focus-visible) .bt-flecha { border-color: color-mix(in srgb, var(--hl-grafito) 25%, transparent); }
+  .boton-trazo:is(:hover, :focus-visible) .bt-flecha i { animation: bt-vuelta .55s var(--ease-plano); }
+  @keyframes bt-vuelta { 45% { transform: translateX(160%); } 46% { transform: translateX(-160%); } }
+  .bt-marca { position: absolute; z-index: 2; width: var(--s2); height: var(--s2); border: 0 solid var(--hl-senal); opacity: 0; transition: opacity var(--t-rapido), transform .35s var(--ease-plano); }
+  .bt-a { top: -7px; left: -7px; border-width: 1.5px 0 0 1.5px; transform: translate(4px, 4px); }
+  .bt-z { bottom: -7px; right: -7px; border-width: 0 1.5px 1.5px 0; transform: translate(-4px, -4px); }
+  .boton-trazo:is(:hover, :focus-visible) .bt-marca { opacity: 1; transform: none; }
+  .boton-trazo:focus-visible { outline: 2px solid var(--hl-senal); outline-offset: 4px; }
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .boton-trazo { background-color: var(--accent); }
+    :global(html.js) .boton-trazo::before { transform: none; animation: none; }
+    :global(html.js) :is(.bt-t, .bt-b, .bt-r, .bt-l) { transform: none; animation: none; }
+    :global(html.js) :is(.bt-texto, .bt-flecha) { opacity: 1; animation: none; }
+  }
+</style>

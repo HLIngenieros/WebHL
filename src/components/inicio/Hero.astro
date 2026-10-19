@@ -1,0 +1,98 @@
+---
+// Hero del inicio · lámina viva (guía §12.1-1): marco de lámina con zonas, H1 con el lema, botón de
+// trazo y el gemelo digital. Grafito en los dos temas: usa los primitivos --hl-*.
+import BotonTrazo from '../ui/BotonTrazo.astro';
+import { partirLema } from '../../lib/inicio';
+import { ruta, type Lang } from '../../i18n/rutas';
+import { t } from '../../i18n/ui';
+
+interface Props { lang: Lang; lema: string }
+const { lang, lema } = Astro.props;
+const [l1, l2, l3] = partirLema(lema);
+// El año del lema es texto (no se calcula): solo se le da su tinta de señal.
+const [antes, despues] = l3.split('1968');
+const ZONAS_X = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+const ZONAS_Y = ['1', '2', '3', '4'];
+---
+<section class="hero" aria-labelledby="lema">
+  <div class="hero-reticula" aria-hidden="true"></div>
+  <div class="gemelo" data-estado="quieto" aria-hidden="true"><canvas></canvas></div>
+  <div class="hero-marco" aria-hidden="true">
+    <div class="zonas-x voz-datos">{ZONAS_X.map((z) => <span>{z}</span>)}</div>
+    <div class="zonas-y voz-datos">{ZONAS_Y.map((z) => <span>{z}</span>)}</div>
+  </div>
+  <div class="hero-txt">
+    <h1 id="lema" class="lema aparece">
+      <span class="l l1"><span>{l1}</span></span>{' '}
+      <span class="l l2"><span>{l2}</span></span>{' '}
+      <span class="l l3"><span>{despues === undefined ? l3 : <>{antes}<b>1968</b>{despues}</>}</span></span>
+    </h1>
+    <div class="hero-accion"><BotonTrazo href={ruta('proyectos', lang)} texto={t(lang, 'verProyectos')} /></div>
+  </div>
+  <div class="hero-bajar voz-datos" aria-hidden="true"><i></i>{t(lang, 'bajar')}</div>
+</section>
+
+<style>
+  .hero {
+    position: relative; overflow: hidden; isolation: isolate;
+    min-height: max(600px, 100svh); display: flex; flex-direction: column;
+    background: var(--hl-grafito); color: var(--hl-blanco);
+  }
+  .hero-reticula {
+    position: absolute; inset: 0; z-index: -1;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--hl-azul-claro) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--hl-azul-claro) 6%, transparent) 1px, transparent 1px);
+    background-size: var(--s6) var(--s6);
+  }
+  /* Marco de lámina: zonas A–H arriba y 1–4 a la izquierda (solo esos dos lados). */
+  .hero-marco { position: absolute; inset: var(--s3); border: var(--border) solid color-mix(in srgb, var(--hl-acero) 35%, transparent); pointer-events: none; }
+  .zonas-x, .zonas-y { position: absolute; display: flex; color: color-mix(in srgb, var(--hl-acero) 70%, transparent); font-size: var(--fs-chip); }
+  .zonas-x { left: 0; right: 0; top: calc(-1 * var(--s3)); height: var(--s3); }
+  .zonas-y { top: 0; bottom: 0; left: calc(-1 * var(--s3)); width: var(--s3); flex-direction: column; }
+  .zonas-x span, .zonas-y span { flex: 1; display: grid; place-items: center; }
+  .zonas-x span + span { border-left: var(--border) solid color-mix(in srgb, var(--hl-acero) 25%, transparent); }
+  .zonas-y span + span { border-top: var(--border) solid color-mix(in srgb, var(--hl-acero) 25%, transparent); }
+
+  /* Bloque de texto centrado en vertical bajo la barra; a la izquierda. */
+  .hero-txt {
+    position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; justify-content: center;
+    padding: calc(var(--bar-h) + var(--s6)) var(--gutter) var(--s7); max-width: var(--wrap); margin-inline: auto; width: 100%; box-sizing: border-box;
+  }
+  .lema { margin: 0; line-height: .9; letter-spacing: -.025em; font-size: var(--fs-lema); }
+  .lema .l { display: block; overflow: hidden; padding-bottom: .04em; }
+  .lema .l > span { display: inline-block; }
+  .l1 { font-weight: var(--fw-negra); }
+  .l2 { font-weight: var(--fw-fina); }
+  .l3 {
+    max-width: none; margin-top: var(--s4); letter-spacing: .14em; text-transform: uppercase; line-height: 1.2;
+    font-stretch: var(--wdth-data); font-family: var(--f); font-weight: var(--fw-boton); font-size: var(--fs-lema-datos);
+    color: var(--hl-concreto); opacity: .78;
+  }
+  .l3 b { font-weight: var(--fw-subtitle); color: var(--hl-senal); }
+  /* Izaje del H1: cada línea sube a su sitio (solo transform; legible desde el primer pintado). */
+  :global(html.js) .lema .l > span { animation: lema-iza .9s var(--ease-izaje) both; }
+  :global(html.js) .lema .l2 > span { animation-delay: .12s; }
+  :global(html.js) .lema .l3 > span { animation-delay: .24s; }
+  @keyframes lema-iza { from { transform: translateY(105%); } }
+  .hero-accion { margin-top: var(--s6); }
+
+  .hero-bajar { position: absolute; z-index: 1; left: 50%; bottom: var(--s5); transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: var(--s1); color: var(--hl-acero); font-size: var(--fs-chip); }
+  .hero-bajar i { width: 1px; height: var(--s5); background: color-mix(in srgb, var(--hl-acero) 30%, transparent); position: relative; overflow: hidden; }
+  .hero-bajar i::after { content: ""; position: absolute; left: -2px; top: 0; width: 5px; height: 1px; background: var(--hl-senal); animation: bajar 2.2s var(--ease-plano) infinite; }
+  @keyframes bajar { to { transform: translateY(var(--s5)); } }
+
+  /* Gemelo digital (Tarea 5): a la derecha; en móvil, debajo del título y más bajo. */
+  .gemelo { position: absolute; z-index: 0; right: -2%; top: var(--bar-h); bottom: var(--s5); width: 62%; }
+  .gemelo canvas { display: block; width: 100%; height: 100%; }
+  @media (max-width: 899.98px) {
+    .hero-marco { display: none; }
+    .hero-txt { flex: 0 0 auto; padding-top: calc(var(--bar-h) + var(--s6)); padding-bottom: 0; }
+    .gemelo { order: 2; position: relative; right: auto; top: auto; bottom: auto; width: 100%; height: 44svh; min-height: 260px; }
+    .hero-bajar { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .lema .l > span { animation: none; }
+    .hero-bajar i::after { animation: none; }
+  }
+</style>

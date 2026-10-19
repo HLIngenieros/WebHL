@@ -1,0 +1,18 @@
+---
+// Inicio (guía §12.1, especificación §5): hero con barra inmersa; el resto de bloques llega en las
+// Tareas 6 y 8 del plan F3.
+import Base from '../layouts/Base.astro';
+import Hero from '../components/inicio/Hero.astro';
+import { cargar } from '../lib/datos';
+import { txt } from '../lib/contenido';
+import type { Lang } from '../i18n/rutas';
+
+interface Props { lang: Lang; alterno: string }
+const { lang, alterno } = Astro.props;
+const { datos } = await cargar();
+const sitio = datos.sitio[0].data;
+const lema = txt(sitio.lema, lang)!;
+---
+<Base titulo="HL Ingenieros" descripcion={lema} lang={lang} alterno={alterno} barra="inmersa">
+  <Hero lang={lang} lema={lema} />
+</Base>

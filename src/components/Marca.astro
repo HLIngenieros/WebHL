@@ -27,6 +27,7 @@ const svg = calado.replace(/<!--[\s\S]*?-->\s*/, '').replace(' role="img" aria-l
     font-stretch: var(--wdth-title); font-family: var(--f-ancha); font-weight: var(--fw-title);
     font-size: var(--fs-marca-nombre); text-transform: uppercase;
   }
+  @media (min-width: 520px) { .marca-nombre { white-space: nowrap; } }
   .marca-lema { color: var(--muted); }
   .marca-blanco .marca-lema { color: var(--hl-acero); }
 </style>

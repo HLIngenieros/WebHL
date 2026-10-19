@@ -18,3 +18,10 @@ export function cifrasInicio(
     { clave: 'calidad', valor: d.certificaciones, etiqueta: t(lang, 'cifraCalidad') },
   ];
 }
+
+/** Las tres líneas del lema en el H1 (guía §2.3): primera palabra · hasta "industria" · el resto. */
+export function partirLema(lema: string): [string, string, string] {
+  const m = lema.match(/^(\S+)\s+(.*?\bindustr\w*)\s+(.*)$/i);
+  if (!m) return [lema, '', ''];
+  return [m[1], m[2], m[3]];
+}

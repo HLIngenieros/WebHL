@@ -15,9 +15,11 @@ interface Props {
   noindex?: boolean;
   /** Acento de sección (guía §3.5); por defecto, el de la sección de la URL. */
   seccion?: string;
+  /** Barra inmersa en el hero (solo el inicio, guía §7). */
+  barra?: 'normal' | 'inmersa';
 }
 
-const { titulo, lang, alterno, noindex = false } = Astro.props;
+const { titulo, lang, alterno, noindex = false, barra = 'normal' } = Astro.props;
 // Solo estas secciones tienen acento propio; el resto (inicio, nosotros, contacto, pie) usa el azul.
 const CON_ACENTO = ['proyectos', 'servicios', 'sectores', 'hse', 'noticias'];
 const deUrl = seccionDe(Astro.url.pathname);
@@ -38,7 +40,7 @@ const barrido = {
 };
 ---
 <!doctype html>
-<html lang={lang} data-seccion={seccion} transition:animate="none">
+<html lang={lang} data-seccion={seccion} class:list={[{ 'barra-inmersa': barra === 'inmersa' }]} transition:animate="none">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -69,7 +71,7 @@ const barrido = {
   </head>
   <body>
     <a class="saltar" href="#contenido">{t(lang, 'saltar')}</a>
-    <Barra lang={lang} alterno={alterno} />
+    <Barra lang={lang} alterno={alterno} inmersa={barra === 'inmersa'} />
     <main id="contenido" transition:name="contenido" transition:animate={barrido}>
       <slot />
     </main>

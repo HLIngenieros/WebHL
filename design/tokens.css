@@ -15,6 +15,7 @@
   --hl-concreto: #E7EAEB;
   --hl-acero: #8A949B;
   --hl-senal: #F2B42A;
+  --hl-azul-claro: #62A0EC; /* azul de líneas sobre grafito (el --accent oscuro): gemelo y retícula del hero */
   --hl-blanco: #FFFFFF;    /* monograma y texto sobre el grafito del hero (igual en los dos temas) */
 
   /* ---- Roles de color · modo claro ---- */
@@ -63,6 +64,8 @@
 
   /* tamaños */
   --fs-h1: clamp(36px, 5.6vw, 68px);
+  --fs-lema: clamp(44px, 6.2vw, 92px);       /* H1 del inicio (guía §12.1) */
+  --fs-lema-datos: clamp(15px, 1.9vw, 28px); /* su línea en voz de datos */
   --fs-h2: clamp(28px, 3.6vw, 44px);
   --fs-h3: 21px;
   --fs-stat: clamp(26px, 3.4vw, 40px);
@@ -86,6 +89,8 @@
   --fw-strong: 600;
   --fw-text: 400;
   --fw-data: 600;
+  --fw-negra: 900;         /* lema: "Construimos" (guía §2.3) */
+  --fw-fina: 300;          /* lema: "la industria" */
   --fw-boton: 550;
 
   /* interlineado y tracking */
@@ -138,6 +143,8 @@
   :root {
     --wrap: 1360px;
     --fs-h1: clamp(68px, 4.4vw, 112px);
+    --fs-lema: clamp(92px, 5.4vw, 140px);
+    --fs-lema-datos: clamp(28px, 1.6vw, 40px);
     --fs-h2: clamp(44px, 2.6vw, 64px);
     --fs-stat: clamp(40px, 2.4vw, 60px);
     --fs-lead: 19px;
