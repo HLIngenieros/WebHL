@@ -506,3 +506,40 @@ test.describe('menores de la revisión', () => {
     await expect(page.locator('.cota-texto')).toHaveText(/proyectos/);
   });
 });
+
+// Guía §13.3 · Página de Sectores: escenarios para Cemento y Minería, índice para el resto.
+test.describe('página de Sectores', () => {
+  test('Cemento y Minería como escenarios, en ese orden; los otros 4 en el índice', async ({ page }) => {
+    await page.goto('/sectores/');
+    const escenas = page.locator('.escena');
+    await expect(escenas).toHaveCount(2);
+    await expect(escenas.nth(0)).toHaveAttribute('data-id', 'cemento');
+    await expect(escenas.nth(1)).toHaveAttribute('data-id', 'mineria');
+    await expect(page.locator('.indice li')).toHaveCount(4);
+    await expect(page.locator('h1')).toHaveCount(1);
+  });
+
+  test('cada escenario enlaza a su sector y al explorador filtrado, con 3 obras', async ({ page }) => {
+    await page.goto('/sectores/');
+    const cemento = page.locator('.escena[data-id=cemento]');
+    await expect(cemento.locator('.obras li')).toHaveCount(3);
+    await expect(cemento.locator('.obras li').first()).toContainText('Planta Columbus');
+    await expect(cemento.locator('a.ir').nth(0)).toHaveAttribute('href', '/sectores/cemento/');
+    await expect(cemento.locator('a.ir').nth(1)).toHaveAttribute('href', '/proyectos/?sector=cemento');
+    await page.goto('/en/sectors/');
+    await expect(page.locator('.escena[data-id=mineria] a.ir').nth(1)).toHaveAttribute('href', '/en/projects/?sector=mining');
+  });
+
+  test('la foto de la lámina no pasa de 800 px', async ({ page }) => {
+    await page.setViewportSize({ width: 2560, height: 1440 });
+    await page.goto('/sectores/');
+    const ancho = await page.locator('.lamina-esc').first().evaluate((e) => e.getBoundingClientRect().width);
+    expect(ancho).toBeLessThanOrEqual(800);
+  });
+
+  test('con movimiento reducido las capas quedan quietas', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/sectores/');
+    await expect(page.locator('.escena .capas .capa-cotas').first()).toHaveCSS('animation-name', 'none');
+  });
+});

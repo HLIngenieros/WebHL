@@ -1,62 +1,202 @@
 ---
-// Índice de sectores: cada uno con su línea estructural, su introducción y cuántos proyectos tiene.
+// Índice de sectores (guía §13.3): Cemento y Minería como escenarios (lámina con la ilustración en capas
+// que se desplazan con el scroll, cifras y 3 obras) y el resto en un índice en filas. Solo obras
+// publicables (sin discretas, D6).
 import Base from '../layouts/Base.astro';
 import Encabezado from '../components/ui/Encabezado.astro';
+import Foto from '../components/ui/Foto.astro';
 import Pod from '../components/Pod.astro';
 import Ilustracion from '../components/Ilustracion';
-import { cargar } from '../lib/datos';
-import { bloque, deSector, type Entrada, type Proyecto } from '../lib/contenido';
-import { urlDe, type Lang } from '../i18n/rutas';
+import { cargar, lugarDe } from '../lib/datos';
+import { bloque, deSector, medida, numero, resumenSectores, txt, type Entrada, type Proyecto } from '../lib/contenido';
+import { ruta, urlDe, type Lang } from '../i18n/rutas';
 import { t, tn } from '../i18n/ui';
+import type { ImageMetadata } from 'astro';
 
 interface Props { lang: Lang; alterno: string }
 const { lang, alterno } = Astro.props;
 const { datos } = await cargar();
 const proyectos = datos.proyectos as unknown as Entrada<Proyecto>[];
-const sectores = [...datos.sectores].sort((a, b) => a.data.orden - b.data.orden);
+const resumen = resumenSectores(datos.sectores, proyectos);
+const total = resumen.reduce((n, s) => n + s.n, 0);
+const conHh = (x: Entrada<Proyecto>) => x.data.hh ?? 0;
+
+const escenas = resumen.filter((s) => s.principal).map(({ sector, n, obra }) => {
+  const tx = bloque(sector.data, lang);
+  const suyos = deSector(proyectos, sector.id);
+  // La lámina lleva la foto de la obra mayor que tenga fotos.
+  const conFoto = [...suyos].filter((x) => x.data.fotos.length).sort((a, b) => conHh(b) - conHh(a))[0];
+  const cifra = obra?.data.cifras[0];
+  return {
+    id: sector.id, n, nombre: tx.nombre, intro: tx.intro,
+    codigo: `S-${String(sector.data.orden).padStart(2, '0')}`,
+    url: urlDe('sectores', sector.data.slug, lang),
+    explorador: `${ruta('proyectos', lang)}?sector=${sector.data.slug[lang]}`,
+    foto: conFoto && { src: conFoto.data.fotos[0].archivo as ImageMetadata, pie: [bloque(conFoto.data, lang).titulo, conFoto.data.ciudad].filter(Boolean).join(' · ') },
+    mayor: obra && cifra ? { valor: numero(cifra.valor, lang), etiqueta: `${txt(cifra.etiqueta, lang)} · ${bloque(obra.data, lang).titulo}` } : undefined,
+    obras: [...suyos].sort((a, b) => conHh(b) - conHh(a)).slice(0, 3).map((x) => {
+      const c = x.data.cifras[0];
+      return {
+        url: urlDe('proyectos', x.data.slug, lang),
+        titulo: bloque(x.data, lang).titulo,
+        datos: [x.data.cliente, lugarDe(x.data, lang)].filter(Boolean).join(' · '),
+        cifra: c ? medida(c.valor, c.unidad, lang) : undefined,
+      };
+    }),
+  };
+});
+const otros = resumen.filter((s) => !s.principal).map(({ sector, n }) => ({
+  id: sector.id, n, nombre: bloque(sector.data, lang).nombre, intro: bloque(sector.data, lang).intro,
+  codigo: `S-${String(sector.data.orden).padStart(2, '0')}`,
+  url: urlDe('sectores', sector.data.slug, lang),
+}));
 ---
 <Base titulo={t(lang, 'sectores')} descripcion={t(lang, 'sectoresEntrada')} lang={lang} alterno={alterno}>
-  <div class="wrap sectores pila">
-    <Encabezado nivel={1} titulo={t(lang, 'sectores')} entrada={t(lang, 'sectoresEntrada')} medida={String(sectores.length)}>
+  <div class="wrap sectores-cab">
+    <Encabezado nivel={1} titulo={`${t(lang, 'sectoresInicio1')} ${t(lang, 'sectoresInicio2')}`} entrada={t(lang, 'sectoresEntrada')}
+      medida={`${tn(lang, 'nSectores', resumen.length)} · ${tn(lang, 'nProyectos', total)}`}>
       <Pod slot="pod" forma="rotulo" codigo="L-04" nombre={t(lang, 'sectores')} />
     </Encabezado>
-    <ul class="lista-sectores">
-      {sectores.map((s, i) => {
-        const tx = bloque(s.data, lang);
-        return (
-          <li data-id={s.id} class="izaje" style={`--i:${i}`}>
-            <div class="dibujo"><Ilustracion sector={s.id} /></div>
-            <span class="voz-datos codigo">{`S-${String(s.data.orden).padStart(2, '0')}`}</span>
-            <h2><a href={urlDe('sectores', s.data.slug, lang)}>{tx.nombre}</a></h2>
-            <p>{tx.intro}</p>
-            <span class="voz-datos conteo">{tn(lang, 'nProyectos', deSector(proyectos, s.id).length)}</span>
-          </li>
-        );
-      })}
-    </ul>
   </div>
+
+  {escenas.map((e, i) => (
+    <section class:list={['escena', { inversa: i % 2 === 1 }]} data-id={e.id} aria-labelledby={`esc-${e.id}`}>
+      <div class="lamina-esc">
+        {e.foto && <Foto src={e.foto.src} alt="" sizes="(min-width: 900px) 58vw, 100vw" class="foto" />}
+        <span class="tinte" aria-hidden="true"></span>
+        <div class="capas" aria-hidden="true"><Ilustracion sector={e.id} tono="blanco" /></div>
+        <span class="lam-cod voz-datos"><span>{e.codigo}</span><span>{t(lang, 'sectorPrincipal')}</span></span>
+        {e.foto && <span class="lam-pie voz-datos">{e.foto.pie}</span>}
+      </div>
+      <div class="cuerpo">
+        <p class="cab voz-datos"><span>{e.codigo} · {e.nombre}</span><span class="conteo">{tn(lang, 'nProyectos', e.n)}</span></p>
+        <h2 id={`esc-${e.id}`} class="nombre">{e.nombre}</h2>
+        <p class="intro">{e.intro}</p>
+        <div class="cifras">
+          <p><b>{e.n}</b><span class="voz-datos">{t(lang, 'proyectos')}</span></p>
+          {e.mayor && <p><b>{e.mayor.valor}</b><span class="voz-datos">{e.mayor.etiqueta}</span></p>}
+        </div>
+        <ul class="obras">
+          {e.obras.map((o) => (
+            <li><a href={o.url}><strong>{o.titulo}</strong><small>{o.datos}</small>{o.cifra && <em class="voz-datos">{o.cifra}</em>}</a></li>
+          ))}
+        </ul>
+        <p class="enlaces">
+          <a class="ir" href={e.url}>{t(lang, 'conocerSector')}</a>
+          <a class="ir" data-seccion="proyectos" href={e.explorador}>{tn(lang, 'verTodos', e.n)}</a>
+        </p>
+      </div>
+    </section>
+  ))}
+
+  <section class="wrap otros" aria-labelledby="otros-titulo">
+    <h2 id="otros-titulo" class="otros-titulo">{t(lang, 'otrosSectores1')} <span>{t(lang, 'otrosSectores2')}</span></h2>
+    <ul class="indice">
+      {otros.map((s) => (
+        <li data-id={s.id} class="trazo">
+          <a href={s.url}>
+            <span class="cod voz-datos">{s.codigo}</span>
+            <span class="nom">{s.nombre}</span>
+            <span class="txt">{s.intro}</span>
+            <span class="conteo voz-datos">{tn(lang, 'nProyectos', s.n)} →</span>
+            <span class="mini" aria-hidden="true"><Ilustracion sector={s.id} /></span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
 </Base>
 
 <style>
-  .sectores { --pila: var(--s6); padding-block: var(--s5) var(--s7); }
-  .lista-sectores { list-style: none; margin: 0; padding: 0; display: grid; border-top: var(--border-strong) solid var(--ink); border-left: var(--border) solid var(--line); }
-  @media (min-width: 640px) { .lista-sectores { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (min-width: 1100px) { .lista-sectores { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  .lista-sectores li {
-    position: relative; display: grid; gap: var(--s2); align-content: start; padding: var(--s4);
-    background: var(--paper); border-right: var(--border) solid var(--line); border-bottom: var(--border) solid var(--line);
+  .sectores-cab { padding-block: var(--s5) var(--s6); }
+
+  /* Escenarios de Cemento y Minería */
+  /* Al ancho del sitio, y la lámina (≈ 7 de 12 columnas) nunca pasa de 800 px, como toda foto (guía §8). */
+  .escena { display: grid; max-width: var(--wrap); margin-inline: auto; background: var(--paper); border-top: var(--border-strong) solid var(--ink); }
+  .escena + .escena { border-top: 0; }
+  .lamina-esc { position: relative; overflow: hidden; min-height: 340px; background: var(--hl-grafito); }
+  .lamina-esc :global(.foto), .lamina-esc :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.15); }
+  .tinte { position: absolute; inset: 0; background: var(--sec); mix-blend-mode: multiply; opacity: .86; }
+  .capas { position: absolute; inset: 12% 7% 6%; display: grid; place-items: end center; }
+  .capas :global(.ilustracion) { max-height: 100%; }
+  .capas :global(.capa-cotas path) { stroke: var(--hl-senal); }
+  .lam-cod { position: absolute; left: var(--s3); top: var(--s3); display: flex; gap: var(--s3); color: var(--hl-blanco); }
+  .lam-cod span + span { color: var(--hl-senal); }
+  .lam-pie { position: absolute; left: var(--s3); bottom: var(--s3); color: var(--hl-concreto); }
+  /* Firma de Sectores: las capas se desplazan a distinta velocidad con el scroll */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .lamina-esc :global(.foto) { animation: capa-foto linear both; animation-timeline: view(); }
+      .capas :global(.capa-estructura) { animation: capa-lenta linear both; animation-timeline: view(); }
+      .capas :global(.capa-ejes) { animation: capa-media linear both; animation-timeline: view(); }
+      .capas :global(.capa-cotas) { animation: capa-rapida linear both; animation-timeline: view(); }
+    }
   }
-  .dibujo {
-    padding: var(--s3); margin-bottom: var(--s2);
-    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size: var(--grid-cell) var(--grid-cell);
+  @keyframes capa-foto { from { transform: scale(1.08) translateY(-3%); } to { transform: scale(1.08) translateY(3%); } }
+  @keyframes capa-lenta { from { transform: translateY(8px); } to { transform: translateY(-8px); } }
+  @keyframes capa-media { from { transform: translateY(20px); } to { transform: translateY(-20px); } }
+  @keyframes capa-rapida { from { transform: translateY(40px); } to { transform: translateY(-40px); } }
+
+  .cuerpo { display: flex; flex-direction: column; gap: var(--s4); padding: var(--s5) var(--gutter); min-width: 0; }
+  .cab { display: flex; justify-content: space-between; gap: var(--s3); margin: 0; color: var(--sec); }
+  .nombre { margin: 0; font-size: var(--fs-h1); line-height: var(--lh-display); }
+  .intro { margin: 0; color: var(--muted); }
+  .cifras { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s4); padding-top: var(--s3); border-top: var(--border) solid var(--line); }
+  .cifras p { margin: 0; display: grid; gap: var(--s1); align-content: start; }
+  .cifras b {
+    font-family: var(--f-ancha); font-stretch: var(--wdth-stat); font-weight: var(--fw-negra); font-size: var(--fs-stat);
+    line-height: .9; color: var(--sec); overflow-wrap: anywhere;
   }
-  .lista-sectores h2 { font-size: var(--fs-h3); }
-  .lista-sectores h2 a { color: var(--ink); text-decoration: none; }
-  .lista-sectores h2 a::after { content: ''; position: absolute; inset: 0; }
-  .lista-sectores li:hover h2 a { color: var(--sec); }
-  .lista-sectores li:has(a:focus-visible) { outline: var(--focus-ring); outline-offset: 2px; }
-  .lista-sectores h2 a:focus-visible { outline: none; }
-  .lista-sectores p { margin: 0; color: var(--muted); }
-  .codigo, .conteo { color: var(--sec); }
+  .cifras span { color: var(--muted); }
+  .obras { list-style: none; margin: 0; padding: 0; border-top: var(--border-strong) solid var(--ink); }
+  .obras a {
+    position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px var(--s3); padding: var(--s3) 0;
+    border-bottom: var(--border) solid var(--line); color: var(--ink); text-decoration: none; overflow: hidden;
+  }
+  .obras a::before { content: ''; position: absolute; inset: 0; background: var(--sec-soft); transform: scaleX(0); transform-origin: left; transition: transform var(--t-aparece) var(--ease-plano); }
+  .obras a > * { position: relative; }
+  .obras a:hover::before, .obras a:focus-visible::before { transform: scaleX(1); }
+  .obras strong { font-stretch: var(--wdth-subtitle); font-weight: var(--fw-title); }
+  .obras small { grid-column: 1; color: var(--muted); font-size: var(--fs-sm); }
+  .obras em { grid-row: 1 / 3; grid-column: 2; align-self: center; font-style: normal; text-align: right; color: var(--sec-proyectos); }
+  .enlaces { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); margin: auto 0 0; }
+  .ir { display: inline-flex; align-items: center; gap: var(--s2); min-height: 44px; color: var(--sec); text-decoration: none; font-weight: var(--fw-strong); font-stretch: var(--wdth-subtitle); }
+  .ir::after { content: '→'; transition: transform var(--t-rapido) var(--ease-plano); }
+  .ir:hover::after { transform: translateX(6px); }
+
+  @media (min-width: 900px) {
+    .escena { grid-template-columns: min(58%, 800px) minmax(0, 1fr); min-height: 560px; }
+    .escena.inversa { grid-template-columns: minmax(0, 1fr) min(58%, 800px); }
+    .escena.inversa .lamina-esc { order: 2; }
+    .cuerpo { padding: var(--s6) var(--s5) var(--s5); }
+  }
+
+  /* Otros sectores: índice en filas, sin cajas */
+  .otros { padding-block: var(--s7); }
+  .otros-titulo { margin: 0 0 var(--s4); }
+  .otros-titulo span { font-weight: var(--fw-fina); }
+  .indice { list-style: none; margin: 0; padding: 0; border-top: var(--border-strong) solid var(--ink); }
+  .indice a {
+    position: relative; display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; align-items: center; gap: var(--s2) var(--s4);
+    padding: var(--s4) 0; border-bottom: var(--border) solid var(--line); color: var(--ink); text-decoration: none; overflow: hidden;
+  }
+  .indice a::before { content: ''; position: absolute; inset: 0; background: var(--sec); transform: scaleX(0); transform-origin: left; transition: transform var(--t-aparece) var(--ease-plano); }
+  .indice a > * { position: relative; }
+  .cod, .conteo { color: var(--sec); }
+  .nom { font-family: var(--f-ancha); font-stretch: var(--wdth-title); font-weight: var(--fw-title); font-size: var(--fs-h3); line-height: var(--lh-title); }
+  .txt, .mini { display: none; }
+  .conteo { text-align: right; white-space: nowrap; }
+  .indice a:hover::before, .indice a:focus-visible::before { transform: scaleX(1); }
+  .indice a:hover, .indice a:focus-visible, .indice a:hover :is(.cod, .conteo, .txt), .indice a:focus-visible :is(.cod, .conteo, .txt) { color: var(--sec-ink); }
+  .indice a:hover :global(:is(.capa-estructura path, .capa-ejes line, .capa-ejes circle)) { stroke: var(--sec-ink); fill: none; }
+  @media (min-width: 900px) {
+    .indice a { grid-template-columns: 64px 240px minmax(0, 1fr) 130px 150px; }
+    .txt { display: block; color: var(--muted); font-size: var(--fs-sm); }
+    .mini { display: block; height: 64px; opacity: 0; transform: translateX(-12px); transition: opacity var(--t-rapido) ease, transform var(--t-aparece) var(--ease-plano); }
+    .mini :global(.ilustracion) { height: 64px; width: auto; }
+    .indice a:hover .mini, .indice a:focus-visible .mini { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .obras a::before, .indice a::before, .mini { transition: none; }
+  }
 </style>

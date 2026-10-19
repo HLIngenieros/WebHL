@@ -40,9 +40,9 @@ permitidos). [especificacion.md](especificacion.md) v1.2 (§3 menú y prevalenci
 | 7 · Maquetas del resto del inicio | ✅ aprobadas (guía §12.1-4, `design/maquetas/inicio-resto.html`) | — |
 | 7b · Maquetas de Proyectos y Sectores | ✅ aprobadas (guía §13, `design/maquetas/{sectores,explorador}.html`) | — |
 | 8a · Menú con submenú de Proyectos | ✅ | `7d807f7` |
-| 8 · Resto del inicio (sectores con prevalencia) | ✅ (cierra F3.1) | (este) |
-| **8b · Página de Sectores** | **siguiente** | — |
-| 8c · Explorador con mapa vivo | pendiente | — |
+| 8 · Resto del inicio (sectores con prevalencia) | ✅ (cierra F3.1) | `eb9a38d` |
+| 8b · Página de Sectores | ✅ | (este) |
+| **8c · Explorador con mapa vivo** | **siguiente** | — |
 | 9-11 · Nosotros (F3.2) | ✅ cerrada | `bda87aa`, `2a177e0`, `aba255a` |
 | 12-13 · F3.3 (maquetas → páginas) | pendiente | — |
 | 14 · Cierre de la fase | pendiente | — |
