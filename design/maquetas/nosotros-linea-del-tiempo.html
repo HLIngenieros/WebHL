@@ -1,0 +1,178 @@
+<!-- Maqueta aprobada el 2026-10-19 (brainstorming F3). Referencia de composición y movimiento, no código de producción: los valores definitivos salen de design/tokens.css y la guía visual v1.3. -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Línea del tiempo v3 · negativos</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<style>
+  :root { --azul:#0B509E; --azul2:#62A0EC; --g:#14181C; --c:#E7EAEB; --paper:#F6F7F7; --ac:#8A949B; --sen:#F2B42A; --mut:#56606A;
+          --ez:cubic-bezier(.2,.8,.2,1); --ep:cubic-bezier(.6,0,.2,1); }
+  * { box-sizing:border-box } html,body { margin:0; background:var(--c); color:var(--g); font-family:Archivo,sans-serif; }
+  .dat { font-stretch:72%; text-transform:uppercase; letter-spacing:.12em; font-weight:600; }
+  .intro { padding:80px 56px 56px; max-width:1100px; }
+  .intro .k { font-size:12px; color:var(--azul); }
+  .intro h1 { margin:14px 0 0; font-stretch:125%; font-weight:900; font-size:56px; line-height:.95; letter-spacing:-.025em; }
+  .intro h1 span { font-weight:300; }
+  .intro p { font-size:16px; color:var(--mut); max-width:62ch; margin:20px 0 0; line-height:1.55; }
+  .rotulo { padding:28px 56px 12px; display:flex; align-items:baseline; gap:14px; }
+  .rotulo .bb { width:30px; height:30px; border-radius:50%; border:1.5px solid var(--azul); display:grid; place-items:center; font-weight:800; color:var(--azul); font-size:13px; flex:none; }
+  .rotulo h2 { margin:0; font-stretch:115%; font-weight:800; font-size:24px; white-space:nowrap; }
+  .rotulo p { margin:0; font-size:14px; color:var(--mut); }
+
+  .tl { position:relative; height:640vh; }
+  .stage { position:sticky; top:0; height:100vh; min-height:620px; background:var(--g); color:var(--paper); overflow:hidden; }
+  .grid { position:absolute; inset:0; background-image:linear-gradient(rgba(98,160,236,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(98,160,236,.05) 1px,transparent 1px); background-size:32px 32px; }
+  .media { position:absolute; right:0; top:0; width:56%; height:calc(100% - 150px); }
+
+  .anio { position:absolute; left:56px; top:8vh; display:flex; align-items:flex-start; gap:18px; z-index:3; }
+  .dig { display:flex; font-stretch:125%; font-weight:900; font-size:clamp(100px,13vw,190px); line-height:.82; letter-spacing:-.04em; }
+  .dig span { display:block; height:.82em; overflow:hidden; }
+  .dig span i { display:block; font-style:normal; transition:transform .5s var(--ez); }
+  .dig span i b { display:block; height:.82em; font-weight:900; }
+  .hito .pc { margin-left:6px; font-size:10.5px; color:var(--sen); border:1px solid rgba(242,180,42,.5); padding:4px 7px; opacity:0; transition:opacity .3s; white-space:nowrap; }
+  .hito .pc.on { opacity:1; } .hito .pc { padding:1px 6px !important; }
+  .hito { position:absolute; left:56px; top:calc(8vh + clamp(100px,13vw,190px) * .82 + 36px); width:min(38%,500px); z-index:3; }
+  .hito .et { font-size:11.5px; color:var(--ac); display:flex; gap:10px; }
+  .hito .et b { color:var(--sen); font-weight:700; }
+  .hito h3 { margin:12px 0 0; font-stretch:122%; font-weight:850; font-size:clamp(26px,3vw,42px); line-height:1; letter-spacing:-.015em; }
+  .hito p { margin:16px 0 0; font-size:16px; line-height:1.55; color:#B9C0C5; max-width:46ch; }
+  .hito .cap { transition:opacity .45s var(--ez), transform .45s var(--ez); }
+  .hito .cap.fuera { opacity:0; transform:translateY(14px); }
+
+  .regla { position:absolute; left:56px; right:56px; bottom:36px; height:96px; z-index:3; }
+  .regla svg { width:100%; height:100%; overflow:visible; display:block; }
+  .regla .base { stroke:rgba(138,148,155,.35); } .regla .tk { stroke:rgba(138,148,155,.35); } .regla .tk.d { stroke:rgba(138,148,155,.7); }
+  .regla .tx { font-family:Archivo; font-stretch:72%; font-size:11px; letter-spacing:.1em; fill:#8A949B; }
+  .regla .cota { stroke:var(--sen); stroke-width:2; }
+  .regla .bub circle { fill:var(--g); stroke:#56606A; stroke-width:1.4; transition:fill .3s, stroke .3s; }
+  .regla .bub text { font-family:Archivo; font-size:11px; font-weight:700; fill:#8A949B; }
+  .regla .bub.pas circle { stroke:var(--azul2); } .regla .bub.pas text { fill:var(--azul2); }
+  .regla .bub.act circle { fill:var(--sen); stroke:var(--sen); } .regla .bub.act text { fill:var(--g); }
+  .regla .cur line { stroke:var(--sen); stroke-dasharray:3 3; } .regla .cur rect { fill:var(--sen); }
+  .regla .cur text { font-family:Archivo; font-stretch:72%; font-size:11px; font-weight:700; letter-spacing:.08em; fill:var(--g); }
+  .ejemplo { position:absolute; right:56px; top:24px; z-index:4; font-size:10.5px; color:#56606A; }
+
+  /* ---------- A · Archivo sobre la mesa ---------- */
+  .pila { position:absolute; inset:7% 10% 4% 6%; }
+  .print { position:absolute; left:50%; top:50%; width:min(78%,560px); background:#EDE9E0; padding:12px 12px 40px;
+           border:1px solid rgba(20,24,28,.35); will-change:transform; }
+  .print .im { aspect-ratio:3/2; background-size:cover; background-position:center; }
+  .print .pie { position:absolute; left:14px; right:14px; bottom:12px; display:flex; justify-content:space-between; color:#3a4148; font-size:11px; }
+  .print .cinta { position:absolute; top:-12px; left:50%; width:96px; height:24px; margin-left:-48px; background:rgba(242,180,42,.82);
+                  transform:rotate(-3deg); border-left:1px dashed rgba(20,24,28,.25); border-right:1px dashed rgba(20,24,28,.25); }
+
+  /* ---------- B · Tira de negativos ---------- */
+  .tira { position:absolute; left:0; right:0; top:50%; height:auto; transform:translateY(-50%);
+          -webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent); mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent); }
+  .pel { display:flex; gap:0; background:#0A0C0E; padding:26px 0; position:relative; will-change:transform; width:max-content; }
+  .pel::before, .pel::after { content:""; position:absolute; left:0; right:0; height:12px;
+            background:repeating-linear-gradient(90deg,transparent 0 10px,#2a3036 10px 20px,transparent 20px 30px); }
+  .pel::before { top:7px } .pel::after { bottom:7px }
+  .cuadro { position:relative; width:300px; margin:0 10px; flex:none; transform-origin:center; transition:transform .5s var(--ez); }
+  .cuadro .im { aspect-ratio:3/2; background-size:cover; background-position:center; }
+  .cuadro .cod { position:absolute; left:0; top:-20px; font-size:9.5px; color:var(--sen); opacity:.8; }
+  .cuadro .marco { position:absolute; inset:-6px; border:1.5px solid var(--sen); opacity:0; transition:opacity .4s; }
+  .cuadro.act .marco { opacity:1 }
+  .lupa { position:absolute; left:50%; top:50%; width:min(86%,620px); transform:translate(-50%,-50%); z-index:2; pointer-events:none; }
+  .lupa .im { aspect-ratio:3/2; background-size:cover; background-position:center; border:1px solid rgba(242,180,42,.7); }
+  .lupa .cot { display:flex; justify-content:space-between; margin-top:10px; font-size:11px; color:#B9C0C5; }
+  .lupa .cot b { color:var(--sen); font-weight:700; }
+  .lupa .lin { position:relative; height:9px; margin-top:8px; border-left:1px solid var(--sen); border-right:1px solid var(--sen); }
+  .lupa .lin::after { content:""; position:absolute; left:0; right:0; top:4px; height:1px; background:var(--sen); }
+  .fin { padding:100px 56px; font-size:14px; color:var(--mut); }
+</style></head>
+<body>
+<div class="intro">
+  <div class="k dat">Nosotros · Línea del tiempo · v3</div>
+  <h1>58 años <span>construyendo<br>la industria</span></h1>
+  <p>Tira de negativos con las fotos reales de "Una historia de crecimiento" (sitio actual), recortadas sin la etiqueta amarilla pegada. Los hitos van por <b>década</b>, que es el dato real que tenemos; el año corre de forma continua solo como efecto. "Hoy" usa una foto actual (Columbus) de ejemplo.</p>
+</div>
+<section class="tl" id="tlB"></section>
+<div class="fin">Fin de la maqueta.</div>
+
+<template id="tpl">
+  <div class="stage">
+    <div class="grid"></div>
+    <div class="media"></div>
+    <div class="ejemplo dat">Archivo HL · Una historia de crecimiento</div>
+    <div class="anio"><div class="dig"></div></div>
+    <div class="hito"><div class="cap"><div class="et dat"><b class="n">01/06</b><span class="nm">Etapa</span><span class="pc on"></span></div><h3 class="t"></h3><p class="x"></p></div></div>
+    <div class="regla"><svg></svg></div>
+  </div>
+</template>
+
+<script>
+const A0=1968, A1=new Date().getFullYear();
+const H=[
+  {a:1968, d:'Década de los 60', l:'Apulo y Buenos Aires', t:'La idea de servicio', x:'Tras cinco años con la industria cementera (Cementos Diamante) y de manejo de materiales (Rapiscol) nace una compañía de ingeniería basada en esa experiencia. Su primer gerente es Guillermo Londoño.'},
+  {a:1970, d:'Década de los 70', l:'Cartagena y Zipaquirá', t:'Iniciando la operación', x:'Llegan los primeros clientes: Planta de Soda, American Pipe en Tibitó II, Cementos Diamante, Cementos Samper y Cementos Boyacá.'},
+  {a:1980, d:'Década de los 80', l:'Hernando Londoño', t:'Hacia la especialización', x:'Hernando Londoño asume la presidencia y orienta la compañía hacia un camino más especializado; llega el montaje del sistema de correos de Adpostal con G.E. de Inglaterra.'},
+  {a:1990, d:'Década de los 90', l:'Archivo HL', t:'El desarrollo', x:'Con Marco Arturo Muñoz llega uno de los contratos más importantes: gerencia, fabricación y montaje de una línea de cemento completa para Cementos del Norte en Cúcuta.'},
+  {a:2000, d:'Desde el 2000', l:'Archivo HL', t:'Alianzas para crecer', x:'La compañía fortalece su flujo de trabajo y establece alianzas que le permiten participar en contratos más acordes con su tamaño.'},
+  {a:A1,   d:'Presente', l:'7 países', t:'Hoy', x:'Obra civil, montaje y fabricación en 7 países, con la misma idea de servicio de 1968.'}
+];
+const IMG=['../../src/assets/historia/1-la-idea-de-servicio.jpg','../../src/assets/historia/2-iniciando-la-operacion.jpg','../../src/assets/historia/3-hacia-la-especializacion.jpg','../../src/assets/historia/4-el-desarrollo.jpg','../../src/assets/historia/5-alianzas-para-crecer.jpg','../../src/assets/proyectos/planta-columbus/2.jpg'];
+// tratamiento por época: 1968 = B/N con tono papel; hoy = color pleno
+const trat=(a,extra='')=>{ const k=(a-A0)/(A1-A0); return `grayscale(${(1-k).toFixed(2)}) sepia(${(.35*(1-k)).toFixed(2)}) contrast(${(1.12-.12*k).toFixed(2)}) ${extra}`; };
+
+function stage(host, media){
+  host.appendChild(document.getElementById('tpl').content.cloneNode(true));
+  const st=host.querySelector('.stage'), md=st.querySelector('.media');
+  const dig=st.querySelector('.dig'), cols=[];
+  for(let k=0;k<4;k++){ const s=document.createElement('span'), i=document.createElement('i');
+    for(let n=0;n<10;n++){ const b=document.createElement('b'); b.textContent=n; i.appendChild(b); } s.appendChild(i); dig.appendChild(s); cols.push(i); }
+  const setAnio=a=>String(a).split('').forEach((d,k)=>cols[k].style.transform=`translateY(${-d*10}%)`);
+  const svg=st.querySelector('svg'); let RW=0;
+  function regla(){ RW=svg.clientWidth; const X=a=>(a-A0)/(A1-A0)*RW; let h=`<line class="base" x1="0" y1="56" x2="${RW}" y2="56"/>`;
+    for(let a=A0;a<=A1;a++){ const d=a%10===0||a===A0; h+=`<line class="tk ${d?'d':''}" x1="${X(a)}" y1="${d?46:51}" x2="${X(a)}" y2="56"/>`; if(a%10===0) h+=`<text class="tx" x="${X(a)}" y="88" text-anchor="middle">${a}</text>`; }
+    h+=`<line class="cota" x1="0" y1="56" x2="0" y2="56"/>`;
+    H.forEach((e,i)=>{ h+=`<g class="bub" data-i="${i}" transform="translate(${X(e.a)},20)"><line x1="0" y1="11" x2="0" y2="36" stroke="#56606A" stroke-dasharray="2 3"/><circle r="11"/><text text-anchor="middle" y="4">${i+1}</text></g>`; });
+    h+=`<g class="cur"><line x1="0" y1="0" x2="0" y2="62"/><rect x="-22" y="62" width="44" height="16"/><text x="0" y="74" text-anchor="middle"></text></g>`; svg.innerHTML=h; }
+  regla(); addEventListener('resize',regla);
+  const cap=st.querySelector('.cap'), pc=st.querySelector('.pc'); let cur=-1;
+  function setHito(i){ if(i===cur) return; cur=i; cap.classList.add('fuera');
+    setTimeout(()=>{ const e=H[i]; cap.querySelector('.n').textContent=String(i+1).padStart(2,'0')+'/06'; cap.querySelector('.nm').textContent='Etapa';
+      cap.querySelector('.t').textContent=e.t; cap.querySelector('.x').textContent=e.x; cap.classList.remove('fuera'); },220);
+    pc.textContent=H[i].d; svg.querySelectorAll('.bub').forEach(g=>{ const k=+g.dataset.i; g.classList.toggle('act',k===i); g.classList.toggle('pas',k<i); }); }
+  const upd=media(md);
+  let pr=0, tp=0;
+  addEventListener('scroll',()=>{ const r=host.getBoundingClientRect(); tp=Math.max(0,Math.min(1,-r.top/(r.height-innerHeight))); },{passive:true});
+  (function loop(){ pr+=(tp-pr)*.12; const a=Math.round(A0+pr*(A1-A0)); setAnio(a);
+    const X=(a-A0)/(A1-A0)*RW; svg.querySelector('.cota').setAttribute('x2',X); const cu=svg.querySelector('.cur'); cu.setAttribute('transform',`translate(${X},0)`); cu.querySelector('text').textContent=a;
+    let i=0; H.forEach((e,k)=>{ if(a>=e.a) i=k; }); setHito(i);
+    // avance continuo entre hitos (fp: 0..5)
+    let fp=i; if(i<5){ fp=i+(a-H[i].a)/(H[i+1].a-H[i].a); } upd(fp,i);
+    requestAnimationFrame(loop); })();
+}
+
+/* A · pila de copias */
+function mesa(md){
+  const pila=document.createElement('div'); pila.className='pila'; md.appendChild(pila);
+  const R=[-4,3,-2,5,-3,1.5], DX=[-6,4,-2,6,-4,0], P=H.map((e,i)=>{ const f=document.createElement('figure'); f.className='print'; f.style.margin=0;
+    f.innerHTML=`<span class="cinta"></span><div class="im" style="background-image:url(${IMG[i]});filter:${trat(e.a)}"></div><div class="pie dat"><span>${e.a===A1?'Hoy':e.a} · ${e.l}</span><span>Archivo HL · ${String(i+1).padStart(3,'0')}</span></div>`;
+    pila.appendChild(f); return f; });
+  return (fp)=>{ P.forEach((f,i)=>{ const q=Math.max(0,Math.min(1,(fp-i)*1.6+1)); // 0 fuera → 1 en la mesa
+      const enc=Math.max(0,fp-i);                                   // cuánto la han tapado
+      const y=(1-q)*60, rot=R[i]*q+(1-q)*14, s=1-Math.min(enc,3)*.035;
+      f.style.transform=`translate(calc(-50% + ${DX[i]*q}% + ${y}vw), calc(-50% - ${(1-q)*8}vh)) rotate(${rot}deg) scale(${s})`;
+      f.style.opacity=q<=0?0:1; f.style.zIndex=i; f.style.filter=`brightness(${1-Math.min(enc,3)*.12})`; }); };
+}
+
+/* B · tira de negativos con ampliación */
+function negativos(md){
+  const t=document.createElement('div'); t.className='tira'; const pel=document.createElement('div'); pel.className='pel'; t.appendChild(pel); md.appendChild(t);
+  const C=H.map((e,i)=>{ const c=document.createElement('div'); c.className='cuadro';
+    c.innerHTML=`<span class="cod dat">HL ▸ ${String(i+1).padStart(2,'0')}A · ${e.a===A1?'HOY':e.d.replace('Década de los ','').replace('Desde el ','')}</span><div class="im" style="background-image:url(${IMG[i]})"></div><span class="marco"></span>`; pel.appendChild(c); return c; });
+  const lu=document.createElement('div'); lu.className='lupa'; lu.innerHTML=`<div class="im"></div><div class="lin"></div><div class="cot dat"><span class="l"></span><b class="c"></b></div>`; md.appendChild(lu);
+  const li=lu.querySelector('.im'); let last=-1, tRev=0;
+  return (fp,i)=>{ const w=320, mw=md.clientWidth; pel.style.transform=`translateX(${mw/2 - w/2 - fp*w - 10}px)`;
+    C.forEach((c,k)=>{ c.classList.toggle('act',k===i); c.querySelector('.im').style.filter = k<=i ? trat(H[k].a,'brightness(.55)') : 'invert(1) grayscale(1) brightness(.6)'; });
+    if(i!==last){ last=i; tRev=performance.now(); li.style.backgroundImage=`url(${IMG[i]})`;
+      lu.querySelector('.l').textContent=`${H[i].l} · cuadro ${String(i+1).padStart(2,'0')}A`; lu.querySelector('.c').textContent=H[i].d; }
+    const d=Math.min(1,(performance.now()-tRev)/1100);           // revelado: negativo → positivo
+    const e=1-Math.pow(1-d,3);
+    li.style.filter = `invert(${(1-e).toFixed(2)}) ${trat(H[i].a)} brightness(${(.6+.4*e).toFixed(2)})`;
+    lu.style.transform=`translate(-50%,-50%) scale(${.92+.08*e})`; lu.style.opacity=.35+.65*e; };
+}
+stage(document.getElementById('tlB'), negativos);
+</script>
+</body></html>

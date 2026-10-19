@@ -1,6 +1,6 @@
 # Especificación del sitio nuevo de HL Ingenieros
 
-Versión 1.0 · 2026-10-15 · Aprobada por secciones con Juan David Urbina.
+Versión 1.1 · 2026-10-19 · Aprobada por secciones con Juan David Urbina (1.1: D2, Inicio, Nosotros y F3).
 Complementa a [guia-visual.md](guia-visual.md) (identidad), [../design/tokens.css](../design/tokens.css)
 (valores) y [../contenido/](../contenido/) (contenido extraído). Si algo aquí contradice la propuesta
 Rev. 0, manda este documento.
@@ -30,11 +30,12 @@ S.A.** que muestre su experiencia con datos verificables.
 | D1 | El sitio es de HL Ingenieros S.A. Las empresas asociadas (por definir) van en Nosotros. |
 | D4 | **Sin CMS.** El contenido vive en el repo como colecciones de Astro; no se agregan servicios de terceros ni credenciales. |
 | D5 | Hosting actual (Apache + PHP 8.3). Despliegue manual: compilar y subir `dist/`. |
+| D2 | Lema: **"Construimos la industria con gente que cumple, desde 1968."** (EN propuesto: "Building industry with people who deliver, since 1968."; se cierra en F5). Guía §2.3. |
 | D6 | Los casos sensibles se publican con `visibilidad: discreta`. |
-| — | Stack: Astro + Tailwind (con los tokens) + islas React solo donde haga falta. |
+| — | Stack: Astro + Tailwind (con los tokens) + islas Preact solo donde haga falta. |
 
-Siguen abiertas D2 (lema; se necesita antes de F3), D3 (asistente; antes de F4), D7 (buzones; antes de
-F4) y D8 (equipo; por ahora, interno).
+Siguen abiertas D3 (asistente; antes de F4), D7 (buzones; antes de F4), D8 (equipo; por ahora,
+interno) y, de D1, qué empresas asociadas se muestran.
 
 ## 3. Arquitectura de información
 
@@ -97,9 +98,9 @@ Las colecciones de Astro se validan con esquema al compilar.
 | noticias | noticia × idioma | fecha, tipo (noticia o adjudicado), proyecto relacionado, par en el otro idioma, cuerpo |
 | sedes | sede | nombre, ciudad, país, dirección, teléfono, horario, buzón, coordenadas |
 | certificaciones | certificado | norma, ente, vence, PDF (aviso al compilar si está vencido) |
-| historia | hito | año; textos: título, texto |
-| testimonios | persona | nombre, cargo, foto, `autorizado`; textos: cita |
-| sitio | único | año de fundación (la edad se calcula), cifras de portada, redes, empresas asociadas |
+| historia | hito | año (de la década si no hay exacto), década, foto (archivo), pie verificable (opcional); textos: título, texto. "Hoy" no se guarda: se arma con el año actual |
+| testimonios | persona | nombre, cargo, foto, `autorizado`, años en la casa (opcional, solo si la cita lo dice); textos: cita completa y fragmento (palabras textuales, omisiones con "[…]") |
+| sitio | único | año de fundación (la edad se calcula), lema, países con obra (7, con código), cifras de portada, redes, empresas asociadas (logo, área, descripción opcional) |
 
 **Reglas**
 - **Relaciones derivadas.** Una página de servicio o de sector no tiene su propia lista de proyectos:
@@ -114,14 +115,18 @@ Las colecciones de Astro se validan con esquema al compilar.
 
 ## 5. Plantillas
 
-- **Inicio:**
-  - H1 con el lema (D2) y la ilustración de portada;
-  - cifras escritas en el HTML (años calculados, proyectos, países, HH);
+- **Inicio** (guía §12.1):
+  - hero con barra inmersa, H1 con el lema (D2), botón "Ver proyectos" y gemelo digital;
+  - franja P3 de sectores;
+  - "HL en cifras": años (calculados), 7 países, 4 sedes, 3 normas ISO, escritas en el HTML;
   - 3-4 proyectos destacados;
   - los 3 grupos de servicio y los sectores;
   - franja HSE con indicadores;
   - últimas noticias (si las hay);
   - logos de clientes.
+  - Del cuarto punto en adelante se diseña con maquetas al empezar F3.1.
+- **Nosotros** (guía §12.2): cabecera con mosaico, línea del tiempo en tira de negativos, misión y
+  visión con indicadores, valores, presencia, testimonios autorizados, empresas asociadas y cierre.
 - **Proyectos:** la lista completa se escribe en el HTML. Una isla React agrega los filtros (servicio,
   sector, país), el reacomodo animado y el mapa SVG propio; sin JavaScript la lista funciona igual. En
   móvil, los filtros van en una hoja inferior.
@@ -139,8 +144,8 @@ Las colecciones de Astro se validan con esquema al compilar.
   - FAQ y contacto de la línea.
 - **Sector:** introducción, servicios aplicados, proyectos y clientes del sector (derivados) y llamada a
   contacto.
-- **Nosotros, HSE y calidad, Contacto:** texto más colecciones (historia, testimonios, certificaciones,
-  sedes).
+- **HSE y calidad, Contacto:** texto más colecciones (certificaciones, sedes). HSE, Noticias,
+  Acreedores y legales se diseñan con maquetas al empezar F3.3.
 - **Formularios** (cotización, proveedores, trabaje con nosotros, buzón ético):
   - son HTML normal (sin React) que envía a un script PHP en el mismo hosting;
   - el script valida, exige la autorización de la Ley 1581, filtra el spam con un campo oculto, genera
@@ -182,13 +187,18 @@ commit, Lighthouse y capturas en la matriz de pantallas (Playwright).
 | F0 · Base | Proyecto Astro con los tokens; barra superior, menú móvil, pie, transiciones y precarga; rutas ES/EN emparejadas; fuente; componentes base (guía §7); 404 | Esqueleto navegable con la identidad |
 | F1 · Contenido | Colecciones y esquemas; migración de `contenido/` (22 fichas, 7 servicios, 6 sectores, sedes, hitos, testimonios, certificaciones); descarga y optimización de fotos; listado de pendientes | Todos los datos dentro del sitio |
 | F2 · Proyectos | Ficha, explorador, mapa SVG, páginas de servicio y sector con relaciones | El corazón del sitio |
-| F3 · Institucional | Inicio, Nosotros (línea del tiempo), HSE y calidad, Noticias (oculta si falta contenido), Acreedores, legales | Sitio completo en español |
+| F3 · Institucional | Por subpartes, cada una con su commit: **F3.0** fuente y LCP · **F3.1** Inicio (primero lo aprobado; el resto tras aprobar sus maquetas) · **F3.2** Nosotros · **F3.3** HSE y calidad, Noticias (oculta si falta contenido), Acreedores y legales | Sitio completo en español |
 | F4 · Contacto | 4 formularios + PHP + radicado; Hablar con HL | Contacto de punta a punta (probado con `php -S` de un PHP portátil; hoy no hay PHP instalado) |
 | F5 · Inglés | Traducción con el glosario, pares de páginas y `hreflang` | Sitio bilingüe |
 | F6 · Lanzamiento | En espera de la aprobación oficial: acceso al hosting, `.htaccess` 301/410, sitemap, GA4 y Search Console, control de calidad final, respaldo de WordPress, cambio y seguimiento por 2 semanas. Recompilar y publicar después de cada 1 de enero (el año del pie se fija al compilar) | Producción |
 
 **En paralelo:** redacción en español durante F1-F3 a partir de lo extraído; el inglés se traduce sobre
-textos ya cerrados. Las decisiones abiertas tienen fecha límite: D2 antes de F3; D3 y D7 antes de F4.
+textos ya cerrados. Las decisiones abiertas tienen fecha límite: D3 y D7 antes de F4.
+
+**F3.0 · Fuente y LCP.** El LCP del explorador (2,3 s) y de la ficha (2,0 s) pasa de la meta porque el
+texto se repinta al llegar Archivo (88 KB, `swap`). Se resuelve en dos frentes: reducir el archivo a los
+rangos de peso y ancho que usan los tokens, y una fuente de respaldo con métricas ajustadas
+(`size-adjust`, `ascent-override`…) para que el cambio no mueva el texto. Se mide antes y después.
 
 ## 8. Fuera de alcance
 

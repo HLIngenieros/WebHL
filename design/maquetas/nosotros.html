@@ -1,0 +1,313 @@
+<!-- Maqueta aprobada el 2026-10-19 (brainstorming F3). Referencia de composición y movimiento, no código de producción: los valores definitivos salen de design/tokens.css y la guía visual v1.3. -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nosotros v2 · más visual</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<style>
+  :root { --azul:#0B509E; --azul2:#62A0EC; --azs:#D6E2F1; --g:#14181C; --c:#E7EAEB; --paper:#F6F7F7; --ac:#8A949B; --line:#C2C9CD; --sen:#F2B42A; --mut:#56606A;
+          --ez:cubic-bezier(.2,.8,.2,1); --ep:cubic-bezier(.6,0,.2,1); }
+  * { box-sizing:border-box } html,body { margin:0; background:var(--c); color:var(--g); font-family:Archivo,sans-serif; }
+  .dat { font-stretch:72%; text-transform:uppercase; letter-spacing:.12em; font-weight:600; }
+  .w { padding:0 56px; max-width:1440px; margin:0 auto; }
+  .sec { padding:76px 0; position:relative; }
+  .kk { display:flex; align-items:center; gap:12px; font-size:12px; color:var(--azul); }
+  .kk .bb { width:28px; height:28px; border-radius:50%; border:1.5px solid currentColor; display:grid; place-items:center; font-size:11px; font-weight:800; }
+  .kk::after { content:""; flex:0 0 80px; height:1px; background:currentColor; opacity:.5; }
+  .pend { display:inline-block; font-size:10.5px; color:#805700; border:1px solid #E5C27A; background:#F5E7C2; padding:3px 7px; margin-top:16px; }
+  .rv { opacity:0; transform:translateY(18px); transition:opacity .7s var(--ez), transform .7s var(--ez); }
+  .rv.in { opacity:1; transform:none; }
+  .nota { background:var(--g); color:#8A949B; font-size:12px; padding:14px 56px; }
+
+  /* 0 · cabecera */
+  .cab { padding:64px 0 72px; }
+  .cab h1 { margin:22px 0 0; font-stretch:125%; font-weight:900; font-size:clamp(44px,4.9vw,76px); line-height:.92; letter-spacing:-.03em; }
+  .cab h1 span { font-weight:300; }
+  .cab .lead { display:grid; gap:18px; margin-top:32px; max-width:52ch; }
+  .cab .lead p { margin:0; font-size:19px; line-height:1.55; }
+  .cab .lead p + p { font-size:16px; color:var(--mut); }
+  .tlph { height:140px; background:var(--g); color:#56606A; display:grid; place-items:center; font-size:12px; }
+
+  /* cabecera: hoja de contactos */
+  .cab-g { display:grid; grid-template-columns:5fr 6fr; gap:56px; align-items:center; }
+  .hoja { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .hoja .col { display:grid; gap:10px; will-change:transform; }
+  .hoja .col:nth-child(2) { margin-top:48px; }
+  .hoja .col:nth-child(3) { margin-top:-24px; }
+  .ft { position:relative; aspect-ratio:4/5; overflow:hidden; background:var(--azul); opacity:0; transform:translateY(40px); transition:opacity .7s var(--ez), transform .9s var(--ez); }
+  .hoja.in .ft { opacity:1; transform:none; }
+  .ft .im { position:absolute; inset:0; background-size:cover; background-position:center; filter:grayscale(1) contrast(1.1); transition:filter .5s, transform 1s var(--ez); }
+  .ft .tn { position:absolute; inset:0; background:var(--azul); mix-blend-mode:multiply; opacity:.8; transition:opacity .5s; }
+  .ft:hover .im { filter:none; transform:scale(1.05); } .ft:hover .tn { opacity:0; }
+  .ft .cd { position:absolute; left:8px; bottom:6px; font-size:10px; color:#fff; }
+  .ft::after { content:""; position:absolute; inset:8px; border:1px solid rgba(255,255,255,.35); pointer-events:none; }
+
+  /* lámina con trazo */
+  .lam { position:relative; overflow:hidden; aspect-ratio:4/3; background:var(--azul); }
+  .lam .im { position:absolute; inset:0; background-size:cover; background-position:center; filter:grayscale(1) contrast(1.1); transition:filter .6s; }
+  .lam .tn { position:absolute; inset:0; background:var(--azul); mix-blend-mode:multiply; opacity:.78; transition:opacity .6s; }
+  .lam:hover .im { filter:none } .lam:hover .tn { opacity:0 }
+  .lam svg { position:absolute; inset:0; width:100%; height:100%; }
+  .lam svg .t { fill:none; stroke:#fff; stroke-width:1.5; stroke-dasharray:1; stroke-dashoffset:1; }
+  .lam.in svg .t { animation:traza 1.4s var(--ep) forwards; animation-delay:var(--d,0s); }
+  .lam svg text { font-family:Archivo; font-stretch:72%; font-size:12px; letter-spacing:.1em; fill:#fff; opacity:0; transition:opacity .4s 1.4s; }
+  .lam.in svg text { opacity:1 }
+  @keyframes traza { to{stroke-dashoffset:0} }
+  .mv-g { display:grid; grid-template-columns:6fr 6fr; gap:56px; align-items:center; margin-top:32px; }
+  .mv-g .mis { margin-top:0; }
+  /* indicadores de la visión */
+  .ind { display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line); margin-top:28px; }
+  .in1 { padding:20px 20px 0 0; }
+  .in1 + .in1 { padding-left:20px; border-left:1px solid var(--line); }
+  .in1 b { display:block; font-stretch:125%; font-weight:900; font-size:44px; line-height:1; letter-spacing:-.02em; color:var(--azul); font-variant-numeric:tabular-nums; }
+  .in1 b small { font-size:.45em; font-weight:700; letter-spacing:0; margin-left:4px; }
+  .in1 .bar { height:9px; margin:14px 0 10px; border-left:1px solid var(--azul); position:relative; }
+  .in1 .bar::after { content:""; position:absolute; left:0; top:4px; height:1px; width:var(--w); background:var(--azul); transform:scaleX(0); transform-origin:left; transition:transform 1.2s var(--ep); }
+  .ind.in .bar::after { transform:scaleX(1); }
+  .in1 span { display:block; font-size:13.5px; color:var(--mut); line-height:1.4; }
+  .in1 span.dat { font-size:10.5px; margin-top:6px; color:var(--ac); }
+
+  /* 1 · misión y visión */
+  .mv { background:var(--paper); }
+  .mis { margin-top:40px; font-stretch:125%; font-size:clamp(38px,4.8vw,72px); line-height:1; letter-spacing:-.025em; max-width:16ch; }
+  .mis span { font-weight:300; } .mis b { font-weight:900; color:var(--azul); }
+  .cota { position:relative; height:12px; margin:56px 0 36px; border-left:1px solid var(--azul); border-right:1px solid var(--azul); }
+  .cota::before { content:""; position:absolute; left:0; right:0; top:5.5px; height:1px; background:var(--azul); transform:scaleX(0); transform-origin:left; transition:transform 1.2s var(--ep); }
+  .cota.in::before { transform:scaleX(1); }
+  .cota i { position:absolute; left:50%; top:-10px; transform:translateX(-50%); background:var(--paper); padding:0 10px; font-style:normal; font-size:11px; color:var(--azul); }
+  .vis { display:grid; grid-template-columns:8fr 4fr; gap:56px; align-items:start; }
+  .vis p { margin:0; font-size:22px; line-height:1.45; }
+  .vis p mark { background:none; color:inherit; font-weight:700; box-shadow:inset 0 -.38em 0 var(--signal-soft,#F5E7C2); }
+  .metas { display:grid; grid-template-columns:1fr 1fr; border-top:1px solid var(--line); }
+  .meta { padding:22px 22px 0 0; }
+  .meta + .meta { padding-left:22px; border-left:1px solid var(--line); }
+  .meta b { display:block; font-stretch:115%; font-weight:800; font-size:24px; line-height:1.1; }
+  .meta span { display:block; margin-top:8px; font-size:11px; color:var(--mut); }
+
+  /* 2 · valores: ejes */
+  .val-g { display:grid; grid-template-columns:repeat(5,1fr); margin-top:56px; border-top:1px solid var(--line); position:relative; }
+  .val { position:relative; padding:44px 20px 24px 0; cursor:default; }
+  .val .eje { position:absolute; left:14px; top:-14px; bottom:0; width:1px; background:var(--line); transform-origin:top; }
+  .val .eje::after { content:""; position:absolute; inset:0; background:var(--azul); transform:scaleY(0); transform-origin:top; transition:transform .6s var(--ep); }
+  .val .bu { position:absolute; left:0; top:-14px; width:29px; height:29px; border-radius:50%; border:1.5px solid var(--azul); background:var(--c); display:grid; place-items:center; font-size:11px; font-weight:800; color:var(--azul); transition:background .3s, color .3s; z-index:1; }
+  .val h3 { margin:0 0 0 34px; font-stretch:62%; font-weight:700; font-size:30px; letter-spacing:.06em; text-transform:uppercase; transition:color .3s; }
+  .val p { margin:14px 0 0 34px; font-size:15px; line-height:1.5; color:var(--mut); max-width:22ch; opacity:.55; transform:none; transition:opacity .4s var(--ez), transform .4s var(--ez); }
+  .val svg { display:block; width:72px; height:72px; margin:0 0 22px 34px; overflow:visible; }
+  .val svg .t { fill:none; stroke:var(--azul); stroke-width:1.6; stroke-dasharray:1; stroke-dashoffset:1; }
+  .val svg .s { stroke:#B27900; }
+  .val-g.in .val svg .t { animation:traza 1.2s var(--ep) forwards; animation-delay:calc(var(--i) * .15s + var(--d,0s)); }
+  .val:hover svg .t { animation:retraza .9s var(--ep) forwards !important; animation-delay:var(--d,0s) !important; }
+  @keyframes retraza { from{stroke-dashoffset:1} to{stroke-dashoffset:0} }
+  .val:hover .eje::after, .val.on .eje::after { transform:scaleY(1); }
+  .val:hover .bu, .val.on .bu { background:var(--azul); color:#fff; }
+  .val:hover h3, .val.on h3 { color:var(--azul); }
+  .val:hover p, .val.on p { opacity:1; transform:none; }
+
+  /* 3 · forma diferente (oscuro) */
+  .dif { background:var(--g); color:var(--paper); overflow:hidden; }
+  .dif .kk { color:var(--azul2); }
+  .dif-g { display:grid; grid-template-columns:5fr 7fr; gap:72px; margin-top:28px; align-items:end; }
+  .dif h2 { margin:0; font-stretch:125%; font-weight:900; font-size:clamp(36px,4vw,60px); line-height:.95; letter-spacing:-.02em; }
+  .dif h2 span { font-weight:300; }
+  .dif p { color:#B9C0C5; font-size:17px; line-height:1.6; margin:24px 0 0; max-width:44ch; }
+  .estacas { position:relative; height:280px; border-bottom:1px solid rgba(138,148,155,.4); display:flex; justify-content:space-between; align-items:flex-end; padding:0 8px; }
+  .est { position:relative; display:flex; flex-direction:column; align-items:center; width:12%; transform:translateY(-60px); opacity:0; transition:transform .7s var(--ez), opacity .5s; }
+  .estacas.in .est { transform:none; opacity:1; }
+  .est .tri { width:0; height:0; border-left:8px solid transparent; border-right:8px solid transparent; border-bottom:13px solid var(--sen); }
+  .est .pal { width:1.5px; background:var(--sen); }
+  .est .co { position:absolute; bottom:-30px; font-size:11px; color:var(--sen); }
+  .est .nm { position:absolute; bottom:calc(100% + 10px); font-stretch:100%; font-size:13px; font-weight:600; white-space:nowrap; color:#E7EAEB; transform:rotate(-40deg); transform-origin:left bottom; left:50%; }
+
+  /* 4 · testimonios */
+  .tes-g { display:grid; grid-template-columns:3fr 4fr 5fr; gap:0; margin-top:32px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .tes-n { border-right:1px solid var(--line); }
+  .tes-n button { all:unset; display:block; width:100%; box-sizing:border-box; padding:20px 22px 20px 0; border-bottom:1px solid var(--line); cursor:pointer; position:relative; }
+  .tes-n button:last-child { border-bottom:0; }
+  .tes-n button b { display:block; font-stretch:108%; font-weight:700; font-size:16px; transition:color .3s; }
+  .tes-n button span { display:block; margin-top:4px; font-size:10.5px; color:var(--mut); }
+  .tes-n button::before { content:""; position:absolute; left:-56px; top:0; bottom:0; width:4px; background:var(--azul); transform:scaleY(0); transition:transform .4s var(--ep); }
+  .tes-n button[aria-pressed=true] b { color:var(--azul); }
+  .tes-n button[aria-pressed=true]::before { transform:scaleY(1); }
+  .tes-n button .pr { position:absolute; left:0; right:22px; bottom:-1px; height:2px; background:var(--azul); transform:scaleX(0); transform-origin:left; }
+  .tes-n button[aria-pressed=true] .pr { animation:pr 9s linear forwards; }
+  @keyframes pr { to{ transform:scaleX(1) } }
+  .tes-f { position:relative; overflow:hidden; border-right:1px solid var(--line); min-height:420px; }
+  .tes-f .im { position:absolute; inset:0; background-size:cover; background-position:center; filter:grayscale(1) contrast(1.05); transition:filter .6s, transform 1.2s var(--ez); }
+  .tes-f .tin { position:absolute; inset:0; background:var(--azul); mix-blend-mode:multiply; opacity:.82; transition:opacity .6s; }
+  .tes-f:hover .im { filter:none; transform:scale(1.03); } .tes-f:hover .tin { opacity:0; }
+  .tes-f .tr { position:absolute; inset:24px; pointer-events:none; }
+  .tes-f .tr::before, .tes-f .tr::after { content:""; position:absolute; width:22px; height:22px; border:1.5px solid #fff; }
+  .tes-f .tr::before { top:0; left:0; border-width:1.5px 0 0 1.5px } .tes-f .tr::after { bottom:0; right:0; border-width:0 1.5px 1.5px 0 }
+  .tes-f .ano { position:absolute; left:24px; bottom:24px; color:#fff; }
+  .tes-f .ano b { display:block; font-stretch:125%; font-weight:900; font-size:64px; line-height:.85; letter-spacing:-.03em; }
+  .tes-f .ano span { font-size:11px; }
+  .tes-q { padding:40px 0 40px 40px; display:flex; flex-direction:column; }
+  .tes-q .comi { font-stretch:125%; font-weight:900; font-size:96px; line-height:.6; color:var(--azul); height:40px; }
+  .tes-q blockquote { margin:18px 0 0; font-size:19px; line-height:1.55; }
+  .tes-q .qu { margin-top:auto; padding-top:24px; font-size:11px; color:var(--mut); }
+  .fade { transition:opacity .35s var(--ez), transform .35s var(--ez); } .fade.out { opacity:0; transform:translateY(10px); }
+
+  /* 5 · empresas del grupo */
+  .emp { background:var(--paper); }
+  .emp-g { display:grid; grid-template-columns:repeat(3,1fr); margin-top:32px; border-left:1px solid var(--line); border-top:1px solid var(--line); }
+  .em { position:relative; border-right:1px solid var(--line); border-bottom:1px solid var(--line); padding:22px 24px; min-height:180px; display:flex; flex-direction:column; background:#fff; transition:background .3s; }
+  .em .cd { font-size:10.5px; color:var(--ac); display:flex; justify-content:space-between; }
+  .em img { max-width:230px; max-height:56px; object-fit:contain; margin:18px 0 14px; filter:grayscale(1); opacity:.75; transition:filter .4s, opacity .4s; }
+  .em:hover img { filter:none; opacity:1; }
+  .em p { margin:auto 0 0; font-size:14px; color:var(--mut); line-height:1.5; }
+  .em::after { content:""; position:absolute; left:0; bottom:-1px; height:3px; width:100%; background:var(--azul); transform:scaleX(0); transform-origin:left; transition:transform .45s var(--ep); }
+  .em:hover::after { transform:scaleX(1); }
+
+  /* 6 · cierre */
+  .cie { display:grid; grid-template-columns:1fr 1fr; }
+  .cie a { position:relative; display:flex; flex-direction:column; justify-content:space-between; min-height:300px; padding:48px 56px; text-decoration:none; color:var(--paper); overflow:hidden; }
+  .cie a:first-child { background:var(--azul); } .cie a:last-child { background:var(--g); }
+  .cie a .im { position:absolute; inset:0; background-size:cover; background-position:center; filter:grayscale(1) contrast(1.1); opacity:.3; mix-blend-mode:luminosity; transition:transform 1.4s var(--ez), opacity .5s; }
+  .cie a:hover .im { transform:scale(1.06); opacity:.12; }
+  .cie a::before { content:""; position:absolute; inset:0; background:var(--sen); transform:translateY(101%); transition:transform .5s var(--ep); z-index:1; }
+  .cie a:hover::before { transform:none; } .cie a:hover { color:var(--g); }
+  .cie a > :not(.im) { position:relative; z-index:2; }
+  .cie .k2 { font-size:11px; opacity:.8; }
+  .cie h3 { margin:0; font-stretch:125%; font-weight:900; font-size:clamp(32px,3.6vw,52px); line-height:.95; letter-spacing:-.02em; }
+  .cie h3 span { font-weight:300; display:block; }
+  .cie .fl { font-size:28px; transition:transform .45s var(--ep); } .cie a:hover .fl { transform:translateX(12px); }
+</style></head>
+<body>
+<div class="nota dat">Maqueta · Nosotros completo · contenido real de src/content y contenido/institucional.md · los recuadros amarillos son pendientes</div>
+
+<!-- 0 · Cabecera -->
+<section class="cab"><div class="w">
+  <div class="cab-g"><div>
+  <div class="kk dat"><span class="bb">N</span>Nosotros</div>
+  <h1 class="rv">Gente que cumple<br><span>desde 1968</span></h1>
+  <div class="lead rv">
+    <p>Somos una compañía con experiencia desde 1968 en el mercado nacional e internacional, con proyectos en energía, aguas, minería, cemento, petróleo y gas, industria e infraestructura.</p>
+    <p>Ofrecemos soluciones completas de construcción que integran obras civiles y montajes electromecánicos, con un mismo equipo responsable de principio a fin.</p>
+  </div></div>
+  <div class="hoja" id="hoja">
+    <div class="col"><div class="ft" style="transition-delay:.05s"><div class="im" style="background-image:url(../../src/assets/proyectos/planta-chimborazo/1.jpg)"></div><div class="tn"></div><span class="cd dat">HL-01 · Chimborazo</span></div><div class="ft" style="transition-delay:.25s"><div class="im" style="background-image:url(../../src/assets/proyectos/molienda-de-cemento-sonson/1.jpg)"></div><div class="tn"></div><span class="cd dat">HL-04 · Sonsón</span></div></div>
+    <div class="col"><div class="ft" style="transition-delay:.12s"><div class="im" style="background-image:url(../../src/assets/proyectos/digestores-ptar-bello/2.jpg)"></div><div class="tn"></div><span class="cd dat">HL-02 · Bello</span></div><div class="ft" style="transition-delay:.32s"><div class="im" style="background-image:url(../../src/assets/proyectos/ptar-salitre/3.jpg)"></div><div class="tn"></div><span class="cd dat">HL-05 · Salitre</span></div></div>
+    <div class="col"><div class="ft" style="transition-delay:.19s"><div class="im" style="background-image:url(../../src/assets/proyectos/planta-diana-pet-food/1.jpg)"></div><div class="tn"></div><span class="cd dat">HL-03 · Diana</span></div><div class="ft" style="transition-delay:.39s"><div class="im" style="background-image:url(../../src/assets/proyectos/planta-cementos-progreso/2.jpg)"></div><div class="tn"></div><span class="cd dat">HL-06 · Progreso</span></div></div>
+  </div></div>
+</div></section>
+<div class="tlph dat">▲ Línea del tiempo · tira de negativos (aprobada)</div>
+
+<!-- 1 · Misión y visión -->
+<section class="sec mv"><div class="w">
+  <div class="kk dat"><span class="bb">01</span>Misión</div>
+  <div class="mv-g">
+    <div class="lam" id="lam"><div class="im" style="background-image:url(../../src/assets/generales/mejor-gente.jpg)"></div><div class="tn"></div>
+      <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+        <path class="t" pathLength="1" d="M260 470 L700 455 L720 560 L270 585 Z"/>
+        <path class="t" pathLength="1" style="--d:.4s" d="M260 440V420M700 425V405M260 430H700"/>
+        <path class="t" pathLength="1" style="--d:.2s" d="M40 40H120M40 40V120M760 560H680M760 560V480"/>
+        <text x="480" y="418" text-anchor="middle">GENTE HL · SOBRE EL PLANO</text>
+      </svg></div>
+    <p class="mis rv"><span>Gestionar proyectos de construcción</span> <b>generando valor y confianza.</b></p>
+  </div>
+  <div class="cota rv"><i class="dat">Visión</i></div>
+  <div class="vis rv">
+    <p>Nuestra propuesta de valor superará las expectativas de nuestros clientes, con la <mark>entrega anticipada</mark> de sus proyectos y con los <mark>mejores índices de seguridad</mark> del sector.</p>
+    <div></div>
+  </div>
+  <div class="ind" id="ind">
+    <div class="in1"><b data-n="1" data-s="">0<small>día</small></b><div class="bar" style="--w:25%"></div><span>Antes del plazo en Cemex Caracolito</span><span class="dat">Entrega anticipada</span></div>
+    <div class="in1"><b data-n="3" data-s="">0<small>días</small></b><div class="bar" style="--w:60%"></div><span>Antes del plazo en el cargador de barcos de Cerrejón</span><span class="dat">Entrega anticipada</span></div>
+    <div class="in1"><b data-n="64" data-s="−">0<small>%</small></b><div class="bar" style="--w:64%"></div><span>Frecuencia de accidentes</span><span class="dat">Seguridad · ECOHL</span></div>
+    <div class="in1"><b data-n="72" data-s="−">0<small>%</small></b><div class="bar" style="--w:72%"></div><span>Severidad de accidentes</span><span class="dat">Seguridad · ECOHL</span></div>
+  </div>
+  <span class="pend dat">Visión sin la meta interna de ventas y backlog (diagnóstico) · confirmar texto</span>
+</div></section>
+
+<!-- 2 · Valores -->
+<section class="sec"><div class="w">
+  <div class="kk dat"><span class="bb">02</span>Valores</div>
+  <div class="val-g" id="vals">
+    <div class="val" style="--i:0"><span class="eje"></span><span class="bu">A</span><svg viewBox="0 0 64 64"><rect class="t" pathLength="1" x="8" y="8" width="48" height="48"/><path class="t" pathLength="1" style="--d:.3s" d="M32 8V56M8 32H56"/><path class="t s" pathLength="1" style="--d:.6s" d="M14 26L26 14M38 50L50 38"/></svg><h3>Transparencia</h3><p>En todos nuestros negocios.</p></div>
+    <div class="val" style="--i:1"><span class="eje"></span><span class="bu">B</span><svg viewBox="0 0 64 64"><circle class="t" pathLength="1" cx="24" cy="32" r="16"/><circle class="t s" pathLength="1" style="--d:.3s" cx="40" cy="32" r="16"/></svg><h3>Compromiso</h3><p>Con clientes, proveedores y subcontratistas.</p></div>
+    <div class="val" style="--i:2"><span class="eje"></span><span class="bu">C</span><svg viewBox="0 0 64 64"><rect class="t" pathLength="1" x="8" y="12" width="48" height="44"/><path class="t" pathLength="1" style="--d:.2s" d="M8 24H56M20 6V16M44 6V16"/><path class="t s" pathLength="1" style="--d:.6s" d="M20 40L28 48L46 32"/></svg><h3>Cumplimiento</h3><p>De cronogramas, especificaciones y presupuestos.</p></div>
+    <div class="val" style="--i:3"><span class="eje"></span><span class="bu">D</span><svg viewBox="0 0 64 64"><path class="t" pathLength="1" d="M6 58H58"/><path class="t" pathLength="1" style="--d:.2s" d="M10 58V46H22V58M26 58V34H38V58M42 58V22H54V58"/><path class="t s" pathLength="1" style="--d:.6s" d="M10 30L32 12L48 8M40 6L48 8L46 16"/></svg><h3>Desarrollo</h3><p>Profesional y económico de nuestros trabajadores.</p></div>
+    <div class="val" style="--i:4"><span class="eje"></span><span class="bu">E</span><svg viewBox="0 0 64 64"><path class="t" pathLength="1" d="M10 42C10 24 20 14 32 14C44 14 54 24 54 42"/><path class="t" pathLength="1" style="--d:.3s" d="M4 42H60V48H4Z"/><path class="t s" pathLength="1" style="--d:.6s" d="M26 14V30M38 14V30M32 10V14"/></svg><h3>Seguridad</h3><p>Altos estándares de seguridad industrial en todos nuestros proyectos.</p></div>
+  </div>
+  <span class="pend dat">Hay dos listas de valores en el sitio actual · unificar</span>
+</div></section>
+
+<!-- 3 · Forma diferente -->
+<section class="sec dif"><div class="w">
+  <div class="kk dat"><span class="bb">03</span>Presencia</div>
+  <div class="dif-g">
+    <div class="rv">
+      <h2>Ejecutamos los proyectos <span>de forma diferente</span></h2>
+      <p>Hemos pasado décadas construyendo una reputación como uno de los principales contratistas de la región. Los clientes confían en nosotros para cumplir, y superar, sus cronogramas, especificaciones y presupuestos.</p>
+    </div>
+    <div class="estacas" id="est">
+      <div class="est" style="transition-delay:.0s"><span class="nm">Colombia</span><span class="tri"></span><span class="pal" style="height:210px"></span><span class="co dat">CO</span></div>
+      <div class="est" style="transition-delay:.08s"><span class="nm">Panamá</span><span class="tri"></span><span class="pal" style="height:150px"></span><span class="co dat">PA</span></div>
+      <div class="est" style="transition-delay:.16s"><span class="nm">Costa Rica</span><span class="tri"></span><span class="pal" style="height:120px"></span><span class="co dat">CR</span></div>
+      <div class="est" style="transition-delay:.24s"><span class="nm">Rep. Dominicana</span><span class="tri"></span><span class="pal" style="height:165px"></span><span class="co dat">DO</span></div>
+      <div class="est" style="transition-delay:.32s"><span class="nm">Guatemala</span><span class="tri"></span><span class="pal" style="height:110px"></span><span class="co dat">GT</span></div>
+      <div class="est" style="transition-delay:.4s"><span class="nm">Bolivia</span><span class="tri"></span><span class="pal" style="height:95px"></span><span class="co dat">BO</span></div>
+      <div class="est" style="transition-delay:.48s"><span class="nm">Ecuador</span><span class="tri"></span><span class="pal" style="height:130px"></span><span class="co dat">EC</span></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- 4 · Testimonios -->
+<section class="sec"><div class="w">
+  <div class="kk dat"><span class="bb">04</span>Soy parte de HL</div>
+  <div class="tes-g">
+    <div class="tes-n" id="tn"></div>
+    <div class="tes-f" id="tf"><div class="im"></div><div class="tin"></div><div class="tr"></div><div class="ano fade"><b></b><span class="dat"></span></div></div>
+    <div class="tes-q"><div class="comi">“</div><blockquote class="fade" id="tq"></blockquote><div class="qu dat">Fragmentos de las citas · “Soy parte de HL Ingenieros”</div></div>
+  </div>
+  <span class="pend dat">Ningún testimonio tiene autorización todavía · no se publican sin ella</span>
+</div></section>
+
+<!-- 5 · Empresas del grupo -->
+<section class="sec emp"><div class="w">
+  <div class="kk dat"><span class="bb">05</span>Empresas asociadas</div>
+  <div class="emp-g">
+    <div class="em"><div class="cd dat"><span>E-01</span><span>Gerencia · EPCM</span></div><img src="../../src/assets/grupo/ecohl.png" alt="ECOHL"><p>Servicios EPCM, gerencias de proyecto, interventoría, comisionamiento, administración de contratos y gerencia de riesgos.</p></div>
+    <div class="em"><div class="cd dat"><span>E-02</span><span>Infraestructura</span></div><img src="../../src/assets/grupo/hl-infraestructura.png" alt="HL Infraestructura"><p>Descripción por definir.</p></div>
+    <div class="em"><div class="cd dat"><span>E-03</span><span>Panamá</span></div><img src="../../src/assets/grupo/hl-panama.png" alt="HL Panamá"><p>Descripción por definir.</p></div>
+    <div class="em"><div class="cd dat"><span>E-04</span><span>Equipos</span></div><img src="../../src/assets/grupo/hl-rental.png" alt="HL Rental"><p>Descripción por definir.</p></div>
+    <div class="em"><div class="cd dat"><span>E-05</span><span>Izaje</span></div><img src="../../src/assets/grupo/megacranes.jpg" alt="Megacranes"><p>Descripción por definir.</p></div>
+    <div class="em"><div class="cd dat"><span>E-06</span><span>—</span></div><img src="../../src/assets/grupo/aktino.png" alt="Aktino"><p>Descripción por definir.</p></div>
+  </div>
+  <span class="pend dat">D1 · definir qué empresas se muestran y su descripción</span>
+</div></section>
+
+<!-- 6 · Cierre -->
+<section class="cie">
+  <a><span class="im" style="background-image:url(../../src/assets/proyectos/puerto-bolivar/1.jpg)"></span><span class="k2 dat">Para candidatos</span><h3>Trabaje <span>con nosotros</span></h3><span class="fl">→</span></a>
+  <a><span class="im" style="background-image:url(../../src/assets/proyectos/planta-cementos-progreso/2.jpg)"></span><span class="k2 dat">Trayectoria</span><h3>Conozca <span>nuestros proyectos</span></h3><span class="fl">→</span></a>
+</section>
+
+<script>
+const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }),{threshold:.25});
+document.querySelectorAll('.rv, .cota, #est, #hoja, #lam, #ind, #vals').forEach(el=>io.observe(el));
+// cifras de la visión
+new IntersectionObserver(es=>es.forEach(e=>{ if(!e.isIntersecting) return; e.target.querySelectorAll('b[data-n]').forEach((b,i)=>{ const n=+b.dataset.n, sm=b.querySelector('small').outerHTML, st=performance.now()+i*120;
+  (function k(t){ const p=Math.max(0,Math.min(1,(t-st)/1200)); b.innerHTML=b.dataset.s+Math.round(n*(1-Math.pow(1-p,3)))+sm; if(p<1) requestAnimationFrame(k); })(st); }); }),{threshold:.4}).observe(document.getElementById('ind'));
+// hoja de contactos: columnas con paralaje leve
+const cols=[...document.querySelectorAll('.hoja .col')];
+addEventListener('scroll',()=>{ const y=scrollY; cols.forEach((c,i)=>c.style.transform='translateY('+((i-1)*y*-.08)+'px)'); },{passive:true});
+// valores: en táctil se encienden en secuencia al entrar
+const vals=[...document.querySelectorAll('.val')];
+new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ vals.forEach((v,i)=>setTimeout(()=>{ v.classList.add('on'); setTimeout(()=>v.classList.remove('on'),900); },i*350)); } }),{threshold:.5}).observe(document.getElementById('vals'));
+// testimonios
+const T=[
+ {n:'Camilo Arturo Muñoz Mosquera', c:'Gerente General', f:'camilo-arturo-munoz-mosquera.jpg', a:'', al:'Gerencia general', q:'En el Grupo HL nos apasiona lo que hacemos. A lo largo de nuestra trayectoria hemos desarrollado una amplia gama de proyectos, siempre con el compromiso de ofrecer a nuestros clientes soluciones integrales y de alta calidad; nos involucramos en cada proyecto desde el inicio.'},
+ {n:'Carlos Humberto Triana Herrera', c:'Gerente de ECOHL', f:'carlos-humberto-triana-herrera.jpg', a:'28', al:'años en el Grupo HL', q:'Con más de 37 años de experiencia en el sector de la construcción pesada; 28 años en el Grupo HL, donde me he desempeñado como gerente de proyecto, gerente Colombia, vicepresidente de operaciones y ahora gerente de ECOHL.'},
+ {n:'Carlos Abel León Martínez', c:'Director de Operaciones', f:'carlos-abel-leon-martinez.jpg', a:'+15', al:'años en la compañía', q:'Han pasado más de 15 años desde que entré a la compañía. Hoy entiendo que todo este recorrido ha valido la pena: he logrado una estabilidad económica y emocional gracias a las oportunidades laborales y profesionales que me ha brindado.'},
+ {n:'Jairo Armando Sáenz', c:'Coordinador de Compras', f:'jairo-armando-saenz.jpg', a:'', al:'Compras', q:'Es un orgullo para mí hacer parte de esta organización, en la cual he crecido y me he sentido en familia. En el Grupo HL sí nos ven como seres humanos. Vamos para adelante.'}
+];
+const tn=document.getElementById('tn'), tf=document.getElementById('tf'), tq=document.getElementById('tq'), ano=tf.querySelector('.ano'); let ti=0, tm;
+T.forEach((t,i)=>{ const b=document.createElement('button'); b.innerHTML=`<b>${t.n}</b><span class="dat">${t.c}</span><i class="pr"></i>`; b.onclick=()=>show(i); tn.appendChild(b); });
+function show(i){ ti=i; [...tn.children].forEach((b,k)=>{ b.setAttribute('aria-pressed',k===i); const p=b.querySelector('.pr'); p.style.animation='none'; void p.offsetWidth; p.style.animation=''; });
+  tq.classList.add('out'); ano.classList.add('out');
+  setTimeout(()=>{ const t=T[i]; tf.querySelector('.im').style.backgroundImage=`url(../../src/assets/testimonios/${t.f})`; tq.textContent=t.q;
+    ano.querySelector('b').textContent=t.a; ano.querySelector('span').textContent=t.al; tq.classList.remove('out'); ano.classList.remove('out'); },300);
+  clearTimeout(tm); tm=setTimeout(()=>show((ti+1)%T.length),9000); }
+show(0);
+</script>
+</body></html>
