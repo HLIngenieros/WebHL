@@ -59,6 +59,8 @@
   confirmar:
     - "D7: confirmar que existen los buzones cotizaciones@, proveedores@, talento@ y buzonetico@ (o indicar los reales)."
     - "Vacantes: crear la lista \"Vacantes\" en SharePoint y el flujo de Power Automate que publica /api/vacantes.json en el hosting (requiere acceso FTP/SFTP)."
+    - "Remitente no-reply@hlingenieros.com autorizado en SPF/DKIM y prueba de envío (mail) en el hosting."
+    - "Copilot Studio (D3): confirmar la capacidad de mensajes para visitantes anónimos y publicar el agente (canal web, Direct Line)."
     - "Número de WhatsApp comercial al que deriva el asistente (y si es uno por país)."
     - "Cifras de portada de 2020 (+530 proyectos, +4.000.000 HH al año): actualizar."
     - "¿Bolsa y Mercados de Valores de la República Dominicana es cliente?"

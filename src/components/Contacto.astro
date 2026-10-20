@@ -26,7 +26,7 @@ const agente: DatosAgente = {
 <div id="agente" data-agente={JSON.stringify(agente)} transition:persist={`agente-${lang}`}></div>
 <a id="hablar" href={ruta('contacto', lang)} aria-controls="agente" aria-expanded="false" transition:name="hablar" transition:animate="none" transition:persist={`hablar-${lang}`}>
   <span class="ico" aria-hidden="true">
-    <svg class="burbuja" viewBox="0 0 16 16" width="16" height="16"><path d="M2 2h12v9H7l-3 3v-3H2z" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+    <svg class="ico-chat" viewBox="0 0 16 16" width="16" height="16"><path d="M2 2h12v9H7l-3 3v-3H2z" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
     <svg class="x" viewBox="0 0 16 16" width="16" height="16"><path d="M3 3l10 10M13 3L3 13" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
   </span>
   <span>{t(lang, 'hablar')}</span>
@@ -63,10 +63,10 @@ const agente: DatosAgente = {
   .ico { position: relative; display: inline-block; flex: none; width: 16px; height: 16px; }
   .ico svg { position: absolute; inset: 0; width: 100%; height: 100%; transition: transform var(--t-izaje) var(--ease-izaje), opacity var(--t-rapido); }
   .x { opacity: 0; transform: rotate(-90deg) scale(.5); }
-  #hablar.abierto .burbuja { opacity: 0; transform: rotate(90deg) scale(.5); }
+  #hablar.abierto .ico-chat { opacity: 0; transform: rotate(90deg) scale(.5); }
   #hablar.abierto .x { opacity: 1; transform: none; }
-  #hablar.cargando .burbuja { animation: latido var(--t-aparece) var(--ease-izaje) infinite alternate; }
-  .punto { width: 8px; height: 8px; border-radius: 50%; background: var(--signal); animation: pulso 2.4s var(--ease-izaje) infinite; }
+  #hablar.cargando .ico-chat { animation: latido var(--t-aparece) var(--ease-izaje) infinite alternate; }
+  .punto { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-ink); animation: pulso 2.4s var(--ease-izaje) infinite; }
   #hablar.abierto .punto { animation: none; opacity: 0; }
   @keyframes pulso { 0%, 60%, 100% { transform: scale(1); opacity: 1; } 30% { transform: scale(1.7); opacity: .45; } }
   @keyframes latido { to { transform: scale(.75); } }
@@ -75,7 +75,7 @@ const agente: DatosAgente = {
     #hablar:hover { transform: none; }
     :global(body) { padding-bottom: var(--bar-h); }
   }
-  @media (prefers-reduced-motion: reduce) { .punto, #hablar.cargando .burbuja { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { .punto, #hablar.cargando .ico-chat { animation: none; } }
 
   /* Panel del agente (lo pinta Agente.tsx): sube desde el botón como una carga izada. */
   :global(.ag) {

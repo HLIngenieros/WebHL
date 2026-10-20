@@ -157,8 +157,10 @@ una sola lista de valores; proyectos 2020-2026 (cliente, año, alcance, cifras);
 16 casos y confirmación de cifras de Columbus (web: 42 meses, 8.300 t estructura, 18.600 t equipos vs.
 PDF ECOHL: 18 meses, 12.000 t, 10.500 t; el PDF habla de *fabricación*, así que probablemente son
 alcances distintos); certificaciones vigentes en PDF; indicadores HSE de 3 años; fotos recientes de
-obra; lista vigente de empresas del grupo; acceso a Zoho PageSense y Search Console. Lista detallada
-en [contenido/README.md](contenido/README.md).
+obra; lista vigente de empresas del grupo; acceso a Zoho PageSense y Search Console. **De F4 (en espera):**
+buzones por función (D7), SPF/DKIM de `no-reply@`, acceso FTP/SFTP al hosting, lista "Vacantes" en SharePoint
+con su flujo de Power Automate, número de WhatsApp, capacidad de Copilot Studio para visitantes anónimos (D3)
+y el agente en Copilot Studio. Lista detallada (con responsable) en [contenido/README.md](contenido/README.md).
 
 ## Datos de referencia
 - 58 años (desde 1968; calcular dinámicamente, nunca fijo), 7 países con obra (CO, PA, CR, DO, GT, BO, EC,
@@ -249,9 +251,13 @@ en [contenido/README.md](contenido/README.md).
     194 bloqueantes (+2: buzones D7 y número de WhatsApp).
     **Ampliación (20-oct):** tablero de vacantes en Trabaje con nosotros (`Vacantes.tsx`), alimentado por una
     lista de SharePoint vía Power Automate → `/api/vacantes.json` (contrato en plan-f4 §F4.7); "Postularme"
-    lleva la vacante al formulario y al correo. D3 pasa a Copilot Studio. 195 bloqueantes (+1: flujo de vacantes).
+    lleva la vacante al formulario y al correo. D3 pasa a Copilot Studio. 197 bloqueantes (+3: flujo de vacantes, SPF/DKIM y Copilot Studio). Contraste del botón y del chip "Nueva" corregido.
   - **Siguiente paso:** F5 · Inglés (traducción con el glosario; los formularios ya traen su EN), o
     conectar el agente (requiere decidir modelo y dónde vive la clave: el PHP sirve de intermediario).
+  - **Ojo F4 (contraste, 20-oct):** nada de texto ni marcas sobre `--signal` dentro de un fondo `--accent`
+    (2,1:1 en claro, 1,5:1 en oscuro): sobre el azul va `--accent-ink`; un chip de aviso es `--signal-soft` +
+    borde `--signal` + texto `--ink`. Las clases de un componente llevan prefijo propio (`fm-`, `vc-`, `ag-`):
+    `.burbuja` global (P2) le cambiaba color y tamaño al ícono del botón.
   - **Ojo F4:** el PHP se prueba con un PHP portátil (`HL_FORM_PRUEBA=1 php -S 127.0.0.1:8080 -t dist`;
     escribe los correos en el temporal en vez de enviarlos). En el hosting, el remitente
     `no-reply@hlingenieros.com` debe quedar autorizado en SPF/DKIM o los correos caerán en spam.

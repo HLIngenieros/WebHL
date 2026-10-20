@@ -11,7 +11,8 @@
 @keyframes vc-gira { 50% { transform: scaleY(.1); } }
 .vc-vivo { display: flex; align-items: center; gap: var(--s1); color: var(--muted); }
 .vc-vivo i, .vc-nueva i { width: 7px; height: 7px; border-radius: 50%; background: var(--good); animation: vc-pulso 2.4s var(--ease-izaje) infinite; }
-.vc-nueva i { background: var(--signal); }
+.vc-nueva i { width: 6px; height: 6px; background: var(--signal); animation-name: vc-latido; }
+@keyframes vc-latido { 30% { transform: scale(1.25); opacity: .55; } 60% { transform: none; opacity: 1; } }
 @keyframes vc-pulso { 30% { transform: scale(1.7); opacity: .4; } 60% { transform: none; opacity: 1; } }
 
 /* Filtros en placas que se rellenan desde abajo */

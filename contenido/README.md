@@ -50,3 +50,19 @@ página `/pendientes/` (`npm run dev`), generada al compilar; la lista de abajo 
 6. Lista vigente de empresas del grupo (D1) y nombres de los 19 logos de clientes.
 7. Proyectos 2020-2026 y casos de Costa Rica y Bolivia, si existen.
 8. Si los 4 testimonios siguen vigentes y autorizados.
+
+### Contacto, vacantes y agente (F4, 20-oct · en espera)
+
+Todo figura también en `/pendientes/` (sale de `confirmar` en `src/content/sitio.yaml`) y bloquea
+`npm run build:lanzamiento`.
+
+| # | Pendiente | Quién | Bloquea |
+|---|---|---|---|
+| 9 | Buzones por función (D7): confirmar o crear `cotizaciones@`, `proveedores@`, `talento@` y `buzonetico@` como buzones compartidos de M365 | TI | Envío de formularios |
+| 10 | Remitente `no-reply@hlingenieros.com` autorizado en SPF/DKIM del dominio y prueba de `mail()` en el hosting | TI | Que los correos no caigan en spam |
+| 11 | Acceso al hosting (FTP/SFTP o panel): publicar el sitio y permitir que Power Automate escriba `/api/vacantes.json` | TI | Lanzamiento y vacantes |
+| 12 | Lista "Vacantes" en SharePoint (campos en `docs/plan-f4.md` §F4.7) y flujo de Power Automate que la publica | Talento Humano + Transformación Digital | Vacantes en vivo |
+| 13 | Número de WhatsApp comercial al que deriva el agente (¿uno por país?) | Comercial | Derivación a WhatsApp |
+| 14 | Capacidad de mensajes de Copilot Studio para visitantes anónimos del sitio (D3) | TI | Conectar el agente |
+| 15 | Construir y publicar el agente en Copilot Studio (canal web sin autenticación, Direct Line) | Transformación Digital | Conectar el agente |
+| 16 | ¿El celular +507 6781 0368 de Panamá es institucional o personal? | Panamá | Publicar ese teléfono |

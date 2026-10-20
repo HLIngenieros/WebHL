@@ -68,3 +68,13 @@ test('las vacantes se filtran y "Postularme" entrega la vacante al formulario', 
   await vacantes.first().getByRole('button', { name: 'Postularme a esta vacante' }).click();
   await expect(page.locator('.fm-vacante strong')).toContainText(/^V-\d+/);
 });
+
+test('el ícono y el punto de "Hablar con HL" usan el color del botón (sin choques de clases globales)', async ({ page }) => {
+  await page.goto('/');
+  const [boton, icono, punto] = await page.evaluate(() => {
+    const h = document.getElementById('hablar')!;
+    return [getComputedStyle(h).color, getComputedStyle(h.querySelector('.ico svg')!).color, getComputedStyle(h.querySelector('.punto')!).backgroundColor];
+  });
+  expect(icono).toBe(boton);
+  expect(punto).toBe(boton);
+});
