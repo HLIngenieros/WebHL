@@ -14,7 +14,8 @@
     - { valor: 7, etiqueta: { es: Países con obra, en: Countries with projects } }
     - { valor: 4, etiqueta: { es: Sedes, en: Offices } }
   # Empresas del grupo (D1: falta decidir cuáles se muestran). Ninguna se publica hasta `aprobada: true`.
-  # Megacranes y Aktino ya salieron del grupo (20-oct): no se incluyen.
+  # Megacranes y Aktino ya salieron del grupo (20-oct): no se incluyen. HL Infraestructura ejecuta las obras y
+  # tendrá el protagonismo (falta su información); HL Panamá y HL Rental siguen, con protagonismo muy reducido.
   # Logos del sitio actual; descripción solo si existe (la de ECOHL, del testimonio de su gerente).
   asociadas:
     - nombre: ECOHL
@@ -64,4 +65,5 @@
     - "Cifras de portada de 2020 (+530 proyectos, +4.000.000 HH al año): actualizar."
     - "¿Bolsa y Mercados de Valores de la República Dominicana es cliente?"
     - "Logos de clientes: ¿se mantienen los 18 y se agregan clientes 2020-2026?"
+    - "HL Infraestructura (la empresa que ejecuta las obras): desde cuándo existe, qué hace, personal y equipos propios, y qué proyectos ejecutó."
     - "Proyectos 2020-2026: ninguna ficha publicada es posterior a enero de 2020. Enviar cliente, años, alcance y cifras de los recientes."

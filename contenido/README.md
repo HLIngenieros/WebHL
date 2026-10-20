@@ -33,7 +33,9 @@ página `/pendientes/` (`npm run dev`), generada al compilar; la lista de abajo 
 - **Certificaciones:** el texto solo menciona SST, pero hay sellos SGS ISO 9001, 14001 y 45001 subidos
   en 2025.
 - **Empresas del grupo:** la lista cambia por idioma. En español aparece HL Rental; en inglés aparecen
-  Megacranes y Aktino.
+  Megacranes y Aktino. **Aclarado (20-oct):** Megacranes y Aktino ya salieron del grupo; HL Panamá y HL
+  Rental siguen, con protagonismo muy reducido; HL Infraestructura es la que ejecuta las obras y tendrá el
+  protagonismo (falta su información).
 - **Presencia:** la portada nombra 7 países, pero no hay fichas de Costa Rica ni de Bolivia.
 - **Datos que no se deben reutilizar:** correos personales en Contacto, el celular personal en el PDF
   de ECOHL y la meta de ventas en la visión.
@@ -47,7 +49,8 @@ página `/pendientes/` (`npm run dev`), generada al compilar; la lista de abajo 
    de Chimborazo (¿de crudo o de cemento?).
 4. Años de las 5 etapas de la historia, para la línea del tiempo.
 5. Certificados vigentes en PDF y lista única de valores (hoy hay una de 5 y otra de 6).
-6. Lista vigente de empresas del grupo (D1) y nombres de los 19 logos de clientes.
+6. Lista vigente de empresas del grupo (D1) y nombres de los 19 logos de clientes. **HL Infraestructura**
+   (la consigue Juan David): desde cuándo existe, qué hace, con qué personal y equipos, y qué proyectos ejecutó.
 7. Proyectos 2020-2026 y casos de Costa Rica y Bolivia, si existen.
 8. Si los 4 testimonios siguen vigentes y autorizados.
 
