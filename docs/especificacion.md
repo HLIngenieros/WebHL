@@ -174,8 +174,11 @@ Las colecciones de Astro se validan con esquema al compilar.
   - el buzón ético va a su propio buzón, fuera de ese flujo.
 - **Hablar con HL (D3, 20-oct):** sin asesores en vivo. Un solo agente IA que conversa y, según lo
   aprendido en la conversación, deriva a WhatsApp, a un correo por función o a un teléfono. En F4 solo
-  la interfaz (visual completa, no funcional: respuestas de muestra marcadas como tal); la conexión
-  del agente es una etapa posterior.
+  la interfaz (visual completa, no funcional: respuestas de muestra marcadas como tal). El agente se
+  construye en Copilot Studio y se conecta por Direct Line a esa interfaz (decisión del 20-oct).
+- **Vacantes (20-oct):** Trabaje con nosotros muestra las vacantes abiertas, leídas al abrir la página de
+  `/api/vacantes.json`, que publica Power Automate desde una lista de SharePoint de Talento Humano
+  (contrato en [plan-f4.md](plan-f4.md)). "Postularme" lleva la vacante al formulario F-03.
 - **Buzones (D7, 20-oct):** direcciones por función en un solo archivo de configuración, marcadas como
   pendientes en `/pendientes/` hasta confirmarlas.
 

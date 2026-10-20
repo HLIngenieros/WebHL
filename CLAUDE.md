@@ -141,11 +141,11 @@ de 5+ fotos con pie.
 |---|---|---|
 | D1 | ¿Sitio del grupo o de HL Ingenieros? Qué empresas se muestran (en EN aparecen Megacranes y Aktino, no en ES) | **Decidido (15-oct):** el sitio es de HL Ingenieros S.A. Falta definir qué empresas se muestran como asociadas (ECOHL…) |
 | D2 | Lema único | **Decidido (19-oct):** "Construimos la industria con gente que cumple, desde 1968." (A ampliado: integral y humano). EN propuesto: "Building industry with people who deliver, since 1968." (se cierra en F5) |
-| D3 | Agente: bot nativo de Zoho SalesIQ o agente propio con IA que entrega a Zoho | **Decidido (20-oct):** agente propio, sin asesores en vivo; deriva a WhatsApp, correo o teléfono según la conversación. En F4 solo la interfaz (no funcional); se conecta después |
+| D3 | Agente: bot nativo de Zoho SalesIQ o agente propio con IA que entrega a Zoho | **Decidido (20-oct):** sin asesores en vivo; agente de **Copilot Studio** (licencia del tenant) publicado sin autenticación y conectado por Direct Line a la interfaz propia (F4), con tarjetas de derivación (Adaptive Cards) a WhatsApp, correo o teléfono. Conocimiento: archivos generados al compilar y, tras el lanzamiento, el sitio. **Por confirmar con TI:** capacidad de mensajes de Copilot Studio para visitantes anónimos |
 | D4 | CMS: Sanity, Decap o Payload | **Decidido (15-oct): sin CMS.** Sin terceros ni credenciales nuevas: el contenido vive en el repo como colecciones de Astro (Markdown/JSON con esquema validado al compilar). Despliegue manual (compilar y subir `dist/`). Salida futura si otros deben editar: Decap CMS sobre los mismos archivos |
 | D5 | Hosting: Vercel/Netlify o Azure Static Web Apps (tenant M365); Power Automate premium o Graph | **Hosting decidido (15-oct):** el actual (Apache + PHP 8.3, IP 107.180.21.17, al parecer GoDaddy; por confirmar), con despliegue estático que reemplaza a WordPress. Integración de correo: pendiente |
 | D6 | Casos sensibles: Odebrecht (Patio de Carbón), Minera Panamá (cerrada desde 2023); nombres actuales de clientes (Zijin Mining, thyssenkrupp Polysius, OHLA) | **Decidido (15-oct):** se mantienen con `visibilidad: discreta`: ficha propia y visible en el explorador, pero fuera de portada, destacados, páginas de servicio/sector y logos de clientes; sí se indexa. Nombres actuales de clientes: pendiente |
-| D7 | Buzones comerciales por sede/función | **Decidido en parte (20-oct):** por función, en un archivo de configuración; direcciones por confirmar (en `/pendientes/`) |
+| D7 | Buzones comerciales por sede/función | **En espera (20-oct):** por función (buzones compartidos de M365), en `sitio.yaml`; las 4 direcciones son propuesta y se confirman con TI más adelante (en `/pendientes/`) |
 | D8 | Equipo de ejecución: interno, proveedor o mixto | Pendiente |
 
 ## Insumos que debe aportar HL (pendientes)
@@ -247,6 +247,9 @@ en [contenido/README.md](contenido/README.md).
     Agente "Hablar con HL" solo interfaz (guion de muestra, derivación a WhatsApp/correo/teléfono), cargado
     al primer clic. Cierre: 449 pruebas, presupuesto OK, Lighthouse móvil de Contacto 98 (LCP 2,0 s).
     194 bloqueantes (+2: buzones D7 y número de WhatsApp).
+    **Ampliación (20-oct):** tablero de vacantes en Trabaje con nosotros (`Vacantes.tsx`), alimentado por una
+    lista de SharePoint vía Power Automate → `/api/vacantes.json` (contrato en plan-f4 §F4.7); "Postularme"
+    lleva la vacante al formulario y al correo. D3 pasa a Copilot Studio. 195 bloqueantes (+1: flujo de vacantes).
   - **Siguiente paso:** F5 · Inglés (traducción con el glosario; los formularios ya traen su EN), o
     conectar el agente (requiere decidir modelo y dónde vive la clave: el PHP sirve de intermediario).
   - **Ojo F4:** el PHP se prueba con un PHP portátil (`HL_FORM_PRUEBA=1 php -S 127.0.0.1:8080 -t dist`;

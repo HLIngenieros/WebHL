@@ -115,3 +115,11 @@
 @media (prefers-reduced-motion: reduce) {
   .fm *, .fm *::before, .fm *::after { animation: none !important; transition: none !important; }
 }
+
+/* Vacante elegida en el tablero: aterriza sobre la hoja. */
+.fm-vacante { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s1) var(--s3); margin-bottom: var(--s3); padding: var(--s2) var(--s3); border: var(--stroke-mid) solid var(--accent); animation: fm-aterriza var(--t-izaje) var(--ease-izaje) both; }
+.fm-vacante > .voz-datos { color: var(--accent); }
+.fm-vacante button { margin-left: auto; border: 0; background: none; color: var(--muted); cursor: pointer; }
+@keyframes fm-aterriza { from { opacity: 0; transform: translateY(-24px) scale(1.04); } }
+.fm-campo input[type="file"]::file-selector-button { margin-right: var(--s3); padding: var(--s1) var(--s3); border: var(--stroke-thin) solid var(--ink); background: var(--bg); color: var(--ink); font: inherit; cursor: pointer; transition: background var(--t-rapido), color var(--t-rapido); }
+.fm-campo input[type="file"]::file-selector-button:hover { background: var(--ink); color: var(--bg); }

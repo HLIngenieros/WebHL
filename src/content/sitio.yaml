@@ -58,6 +58,7 @@
     confirmado: false
   confirmar:
     - "D7: confirmar que existen los buzones cotizaciones@, proveedores@, talento@ y buzonetico@ (o indicar los reales)."
+    - "Vacantes: crear la lista \"Vacantes\" en SharePoint y el flujo de Power Automate que publica /api/vacantes.json en el hosting (requiere acceso FTP/SFTP)."
     - "Número de WhatsApp comercial al que deriva el asistente (y si es uno por país)."
     - "Cifras de portada de 2020 (+530 proyectos, +4.000.000 HH al año): actualizar."
     - "¿Bolsa y Mercados de Valores de la República Dominicana es cliente?"

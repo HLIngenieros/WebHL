@@ -33,6 +33,7 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, e
   const [ley, setLey] = useState(false);
   const [estado, setEstado] = useState<Estado>('editando');
   const [radicado, setRadicado] = useState('');
+  const [vacante, setVacante] = useState<{ id: string; titulo: string; sede: string } | null>(null);
   const archivo = useRef<File | null>(null);
   const trampa = useRef<HTMLInputElement>(null);
   const titulo = useRef<HTMLHeadingElement>(null);
@@ -40,6 +41,13 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, e
   const movido = useRef(false);
 
   useEffect(() => { setJs(true); desde.current = Math.floor(Date.now() / 1000); }, []);
+  // "Postularme" en el tablero de vacantes (Vacantes.tsx) entrega aquí la vacante elegida.
+  useEffect(() => {
+    if (inicial !== 'empleo') return;
+    const tomar = (e: Event) => { setVacante((e as CustomEvent).detail); setEstado((s) => (s === 'ok' ? 'editando' : s)); };
+    addEventListener('hl:postular', tomar);
+    return () => removeEventListener('hl:postular', tomar);
+  }, []);
   useEffect(() => { if (movido.current) titulo.current?.focus(); movido.current = true; }, [paso, estado]);
 
   const def = FORMULARIOS.find((f) => f.id === (int ?? 'cotizacion'))!;
@@ -81,6 +89,7 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, e
     fd.append('intencion', def.id); fd.append('lang', lang); fd.append('t', String(desde.current));
     fd.append('sitio_web', trampa.current?.value ?? ''); fd.append('ley', ley ? 'si' : '');
     if (anon) fd.append('anonimo', 'si');
+    if (vacante) fd.append('vacante', `${vacante.id} · ${vacante.titulo} · ${vacante.sede}`);
     for (const c of visibles) c.tipo === 'file' ? archivo.current && fd.append(c.id, archivo.current) : fd.append(c.id, val[c.id] ?? '');
     fd.append('mensaje', val.mensaje ?? '');
     try {
@@ -91,7 +100,7 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, e
     } catch { setEstado('error'); }
   }
 
-  function reiniciar() { setVal({}); setErr({}); setLey(false); setAnon(false); archivo.current = null; setEstado('editando'); setAtras(true); setPaso(0); if (elegir) setInt(null); }
+  function reiniciar() { setVacante(null); setVal({}); setErr({}); setLey(false); setAnon(false); archivo.current = null; setEstado('editando'); setAtras(true); setPaso(0); if (elegir) setInt(null); }
 
   const control = (c: Campo) => {
     const props: Record<string, unknown> = {
@@ -207,6 +216,12 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, e
       </div>
 
       <div class="fm-hojas">
+        {vacante && estado !== 'ok' && (
+          <div class="fm-vacante" key={vacante.id}>
+            <span class="voz-datos">{tx.postulacion}</span><strong>{vacante.id} · {vacante.titulo} · {vacante.sede}</strong>
+            <button type="button" class="voz-datos" onClick={() => setVacante(null)}>{tx.quitar}</button>
+          </div>
+        )}
         {estado === 'ok' ? (
           <div class="fm-radicado">
             <p class="voz-datos fm-recibida" ref={titulo as never} tabIndex={-1}>{tx.recibida}</p>
@@ -236,7 +251,7 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, e
             {hoja === 'envio' && (
               <>
                 <dl class="fm-resumen voz-datos">
-                  {[[tx.motivo, def.nombre[lang]], ...(anon ? [[tx.identidad, tx.anonimoSi]] : []),
+                  {[[tx.motivo, def.nombre[lang]], ...(vacante ? [[tx.vacante, `${vacante.id} · ${vacante.titulo}`]] : []), ...(anon ? [[tx.identidad, tx.anonimoSi]] : []),
                     ...visibles.map((c) => [c.label[lang], val[c.id] || '—']),
                     [tx.mensaje, (val.mensaje ?? '').slice(0, 90) + (n > 90 ? '…' : '')]].map(([k, v], i) => (
                     <div key={k} style={`--i:${i}`}><dt>{k}</dt><dd>{v}</dd></div>

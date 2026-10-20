@@ -4,6 +4,7 @@
 import Base from '../layouts/Base.astro';
 import Pod from '../components/Pod.astro';
 import Formulario from '../components/Formulario';
+import Vacantes from '../components/Vacantes';
 import { cargar } from '../lib/datos';
 import { bloque, txt } from '../lib/contenido';
 import { FORMULARIOS, PAGINAS, formulario, type Intencion } from '../lib/formularios';
@@ -55,7 +56,13 @@ const tel = (t: string) => `tel:${t.split(/[,/]/)[0].replace(/[^\d+]/g, '')}`;
       )}
     </header>
 
-    <div class="caja-form aparece" style="--i:3">
+    {intencion === 'empleo' && (
+      <div class="tablero-vacantes" id="vacantes">
+        <Vacantes client:load lang={lang} fuente="/api/vacantes.json" />
+      </div>
+    )}
+
+    <div class="caja-form aparece" id="formulario" style="--i:3">
       <Formulario client:load lang={lang} accion="/api/enviar.php" politica={ruta('datos', lang)}
         inicial={esContacto ? null : intencion} buzones={buzones} enlaces={enlaces} opciones={opciones} />
     </div>
@@ -76,4 +83,8 @@ const tel = (t: string) => `tel:${t.split(/[,/]/)[0].replace(/[^\d+]/g, '')}`;
   .sedes a:hover, .buzon a:hover, .redes a:hover { text-decoration: underline; }
   .buzon { margin: 0; padding: var(--s2) var(--s3); border-left: var(--stroke-heavy) solid var(--accent); color: var(--muted); }
   .redes { display: flex; gap: var(--s3); margin: 0; }
+  /* Trabaje con nosotros: el tablero de vacantes ocupa el ancho y el formulario queda debajo. */
+  .tablero-vacantes { grid-column: 1 / -1; }
+  .solicitud:has(.tablero-vacantes) .cab { grid-column: 1 / -1; position: static; }
+  .solicitud:has(.tablero-vacantes) .caja-form { grid-column: 1 / -1; width: 100%; max-width: 860px; scroll-margin-top: calc(var(--bar-h) + var(--s3)); }
 </style>

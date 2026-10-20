@@ -130,6 +130,7 @@ export const TEXTOS = {
     anonimo: 'Enviar de forma anónima (sin nombre ni correo)', anonimoSi: 'Anónimo', identidad: 'Identidad',
     etica: 'Canal confidencial. HL no toma represalias contra quien reporta de buena fe.',
     recibida: 'Solicitud recibida', radicado: 'Radicado', buzon: 'Buzón', otraVez: 'Enviar otra solicitud',
+    postulacion: 'Postulación a', quitar: 'Quitar ×', vacante: 'Vacante',
     fallo: 'No se pudo enviar. Revise su conexión e intente de nuevo, o escriba a', otros: '¿Es proveedor, busca empleo o quiere hacer un reporte ético?', otro: 'Otro',
   },
   en: {
@@ -143,6 +144,7 @@ export const TEXTOS = {
     anonimo: 'Send anonymously (no name or email)', anonimoSi: 'Anonymous', identidad: 'Identity',
     etica: 'Confidential channel. HL does not retaliate against anyone reporting in good faith.',
     recibida: 'Request received', radicado: 'Reference', buzon: 'Inbox', otraVez: 'Send another request',
+    postulacion: 'Applying for', quitar: 'Remove ×', vacante: 'Position',
     fallo: 'The request could not be sent. Check your connection and try again, or write to', otros: 'Supplier, job seeker or ethics report?', otro: 'Other',
   },
 } as const;

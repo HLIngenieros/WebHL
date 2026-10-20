@@ -37,8 +37,12 @@ function falla(string $es, string $en, array $campos = [], int $codigo = 422): n
   responder($codigo, ['ok' => false, 'error' => $lang === 'es' ? $es : $en, 'campos' => $campos]);
 }
 /** Texto de una línea: sin controles ni saltos (evita inyección de cabeceras) y acotado. */
+function utf8(mixed $v): string {
+  $v = is_string($v) ? $v : '';
+  return mb_check_encoding($v, 'UTF-8') ? $v : mb_convert_encoding($v, 'UTF-8', 'Windows-1252');
+}
 function linea(mixed $v, int $max = 200): string {
-  return mb_substr(trim(preg_replace('/[\x00-\x1F\x7F]+/u', ' ', is_string($v) ? $v : '') ?? ''), 0, $max);
+  return mb_substr(trim(preg_replace('/[\x00-\x1F\x7F]+/u', ' ', utf8($v)) ?? ''), 0, $max);
 }
 function radicado(string $prefijo): string {
   return $prefijo . '-' . date('Ymd') . '-' . strtoupper(bin2hex(random_bytes(3)));
@@ -87,7 +91,10 @@ foreach ($def['campos'] as $c) {
   elseif ($v !== '' && $c['tipo'] === 'email' && !filter_var($v, FILTER_VALIDATE_EMAIL)) $malos[] = $id;
   $valores[$id] = ['label' => $c['label'], 'valor' => $v];
 }
-$mensaje = trim(str_replace("\0", '', (string) ($_POST['mensaje'] ?? '')));
+// Postulación a una vacante del tablero (Vacantes.tsx): va de primera en el correo y en el asunto.
+$vacante = $intencion === 'empleo' ? linea($_POST['vacante'] ?? '', 160) : '';
+if ($vacante !== '') $valores = ['vacante' => ['label' => 'Vacante', 'valor' => $vacante]] + $valores;
+$mensaje = trim(str_replace("\0", '', utf8($_POST['mensaje'] ?? '')));
 $largo = mb_strlen($mensaje);
 if ($largo < $config['mensaje']['min'] || $largo > $config['mensaje']['max']) $malos[] = 'mensaje';
 if ($malos) falla('Revise los campos marcados.', 'Check the highlighted fields.', $malos);
@@ -123,7 +130,7 @@ function enviar(string $para, string $asunto, string $texto, ?string $responder 
   return mail($para, $asunto, $cuerpo, implode("\r\n", $cab));
 }
 
-$asunto = "[{$def['codigo']} {$def['nombre']}] $rad" . ($quien !== '' ? " · $quien" : '');
+$asunto = "[{$def['codigo']} {$def['nombre']}] $rad" . ($vacante !== '' ? ' · ' . strtok($vacante, ' ') : '') . ($quien !== '' ? " · $quien" : '');
 if (!enviar($buzon, $asunto, $texto, $correo !== '' && !$anonimo ? $correo : null, $adjunto)) {
   falla('No se pudo enviar. Intente de nuevo más tarde.', 'Could not send. Please try again later.', [], 500);
 }
