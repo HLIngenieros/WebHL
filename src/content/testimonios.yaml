@@ -16,17 +16,18 @@
 - id: carlos-humberto-triana-herrera
   orden: 2
   nombre: Carlos Humberto Triana Herrera
-  cargo: { es: Gerente de ECOHL, en: ECOHL Manager }
+  # Ya no está en la compañía (se jubiló): se mantiene el testimonio sin sus años en la casa ni su cargo actual
+  # (decisión del 20-oct). Fragmento y cita recortados del original, con las omisiones marcadas.
+  cargo: { es: Exgerente de ECOHL, en: Former ECOHL Manager }
   foto: ../assets/testimonios/carlos-humberto-triana-herrera.jpg
   autorizado: false
-  anios: 28
   fragmento:
-    es: "[…] Con más de 37 años de experiencia en el sector de la construcción pesada; 28 años en el Grupo HL, donde me he desempeñado como gerente de proyecto durante 11 años, gerente Colombia durante 3 años, vicepresidente de operaciones durante 10 años y ahora gerente de ECOHL […]"
-    en: "[…] With more than 37 years of experience in heavy construction; 28 years at Grupo HL, where I have served as project manager for 11 years, Colombia manager for 3 years, vice president of operations for 10 years and now ECOHL manager […]"
-  confirmar: ["Fragmento y años en la casa: validar con la autorización"]
+    es: Ingeniero mecánico con maestría en administración con especialización en gerencia y dirección de proyectos. Con más de 37 años de experiencia en el sector de la construcción pesada […]
+    en: Mechanical engineer with a master's in business administration specializing in project management. With more than 37 years of experience in heavy construction […]
+  confirmar: ["Fragmento: validar con la autorización (ya no está en la compañía)"]
   cita:
-    es: Ingeniero mecánico con maestría en administración con especialización en gerencia y dirección de proyectos. Con más de 37 años de experiencia en el sector de la construcción pesada; 28 años en el Grupo HL, donde me he desempeñado como gerente de proyecto durante 11 años, gerente Colombia durante 3 años, vicepresidente de operaciones durante 10 años y ahora gerente de ECOHL durante 4 años, empresa del grupo encargada de atender nuestros clientes en servicios EPCM, gerencias de proyecto, interventoría, comisionamiento, administración de contratos y gerencia de riesgos.
-    en: "Mechanical engineer with a master's in business administration specializing in project management. With more than 37 years of experience in heavy construction; 28 years at Grupo HL, where I have served as project manager for 11 years, Colombia manager for 3 years, vice president of operations for 10 years and now ECOHL manager for 4 years, the group company that serves our clients with EPCM services, project management, inspection and oversight, commissioning, contract administration and risk management."
+    es: "Ingeniero mecánico con maestría en administración con especialización en gerencia y dirección de proyectos. Con más de 37 años de experiencia en el sector de la construcción pesada; […] gerente de ECOHL […], empresa del grupo encargada de atender nuestros clientes en servicios EPCM, gerencias de proyecto, interventoría, comisionamiento, administración de contratos y gerencia de riesgos."
+    en: "Mechanical engineer with a master's in business administration specializing in project management. With more than 37 years of experience in heavy construction; […] ECOHL manager […], the group company that serves our clients with EPCM services, project management, inspection and oversight, commissioning, contract administration and risk management."
 - id: carlos-abel-leon-martinez
   orden: 3
   nombre: Carlos Abel León Martínez

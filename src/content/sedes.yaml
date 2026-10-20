@@ -22,6 +22,7 @@
   coordenadas: [8.983, -79.517]
   confirmar:
     - "¿El 6781 0368 de Panamá es un celular institucional o personal?"
+    - "La dirección dice \"Patio MegaCranes\" y Megacranes ya salió del grupo: ¿sigue siendo la dirección de la oficina?"
 - id: republica-dominicana
   nombre: { es: Oficina República Dominicana, en: Dominican Republic office }
   ciudad: Santo Domingo

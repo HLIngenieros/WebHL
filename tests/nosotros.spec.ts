@@ -125,11 +125,11 @@ test.describe('página Nosotros', () => {
     expect(ns).toEqual(ns.map((_, i) => String(i + 1).padStart(2, '0')));
   });
 
-  test('en desarrollo se ven los 4 testimonios marcados sin autorizar y las 6 asociadas por confirmar', async ({ page }) => {
+  test('en desarrollo se ven los 4 testimonios marcados sin autorizar y las 4 empresas del grupo por confirmar', async ({ page }) => {
     await page.goto('/nosotros/');
     await expect(page.locator('.testimonios [aria-pressed]')).toHaveCount(4);
     await expect(page.locator('.testimonios .chip-pendiente')).toContainText('sin autorizar');
-    await expect(page.locator('.asociada')).toHaveCount(6);
+    await expect(page.locator('.asociada')).toHaveCount(4); // sin Megacranes ni Aktino (20-oct)
     await expect(page.locator('.asociadas .chip-pendiente')).toContainText('por confirmar');
   });
 
