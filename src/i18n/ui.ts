@@ -31,6 +31,7 @@ const es = {
   correo: 'Correo',
   trayectoria: 'Trayectoria',
   navegacion: 'Navegación',
+  pieConHl: 'Con HL',
   legal: 'Información legal',
   // F2 · Proyectos
   cliente: 'Cliente',
@@ -261,6 +262,7 @@ const en: Record<keyof typeof es, string> = {
   correo: 'Email',
   trayectoria: 'Track record',
   navegacion: 'Navigation',
+  pieConHl: 'Work with HL',
   legal: 'Legal information',
   cliente: 'Client',
   duenoFinal: 'Owner',

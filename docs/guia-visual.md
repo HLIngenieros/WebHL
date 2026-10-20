@@ -430,8 +430,14 @@ barra pasa a la variante normal pegajosa. En móvil: marca + botón de menú, co
 
 ### Rótulo de pie
 
-Bloque final de cada página con estructura de rótulo de plano: razón social, NIT, sede, contacto y
-año, en celdas con borde `--ink`.
+Bloque final de cada página (20-oct, maqueta B de `design/maquetas/pie.html`, sin el lema): cierra el sitio
+en grafito con la retícula azul, como lo abre el héroe del inicio, igual en los dos temas (primitivos
+`--hl-*`; para los acentos de sección sobre grafito, `--hl-cian`, `--hl-violeta` y `--hl-oxido`). Arriba,
+una planta en línea estructural (torre precalentadora, horno, silos, banda, grúa) que se traza al llegar
+sobre la línea de terreno, con sus ejes y una cota; en móvil se recorta a la torre, el horno y los silos.
+Debajo: monograma, rótulo de plano (razón social, teléfono, correo y las 4 sedes de `sedes.yaml`, en
+celdas con borde claro), navegación con número y acento de sección como el menú, enlaces "Con HL", y una
+base con ©, trayectoria 1968 — hoy, las ISO y LinkedIn. El NIT sigue pendiente.
 
 ### Botón de contacto único ("Hablar con HL")
 

@@ -1,64 +1,145 @@
 ---
-// Pie (guía §7): navegación completa y rótulo de plano con los datos de la empresa.
-// Datos tomados de contenido/institucional.md. Pendiente de confirmar con HL: NIT (no se publica aún).
-import { NAVEGACION, PIE, ruta, type Lang } from '../i18n/rutas';
-import { t } from '../i18n/ui';
+// Pie (guía §7, maqueta B de design/maquetas/pie.html, aprobada 20-oct sin el lema): cierra el sitio en
+// grafito como lo abre el héroe del inicio, igual en los dos temas. Una planta en línea estructural se
+// traza al llegar; debajo, marca y rótulo con los datos y las 4 sedes, navegación completa y certificaciones.
+// Pendiente de confirmar con HL: NIT (no se publica aún).
+import Marca from './Marca.astro';
+import { NAVEGACION, PIE, MENU, ruta, type Lang } from '../i18n/rutas';
+import { t, PAISES } from '../i18n/ui';
+import { cargar } from '../lib/datos';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const anio = new Date().getFullYear();
-const navegacion = NAVEGACION;
-const celdas = [
-  { etiqueta: t(lang, 'razonSocial'), valor: 'HL Ingenieros S.A.' },
-  { etiqueta: t(lang, 'sede'), valor: 'Calle 127A # 53A-45, Torre 2, Of. 1002 · Bogotá, Colombia' },
-  { etiqueta: t(lang, 'telefono'), valor: '+57 601 518 5777', href: 'tel:+576015185777' },
-  { etiqueta: t(lang, 'correo'), valor: 'hlisa@hlingenieros.com', href: 'mailto:hlisa@hlingenieros.com' },
-  { etiqueta: t(lang, 'trayectoria'), valor: `1968 — ${anio}` },
-];
+const { datos } = await cargar();
+const sitio = datos.sitio[0]?.data;
+const sedes = datos.sedes.map(({ data: s }) => ({
+  nombre: s.nombre[lang] ?? s.nombre.es,
+  lugar: [s.ciudad, PAISES[s.pais]?.[lang]].filter(Boolean).join(', '),
+  direccion: s.direccion,
+}));
+const iso = datos.certificaciones.filter((c) => c.id.startsWith('iso')).sort((a, b) => parseInt(a.id.slice(4)) - parseInt(b.id.slice(4))).map((c) => c.data.norma[lang] ?? c.data.norma.es);
+// Número y acento de cada sección, como en el menú (guía §3.5): Servicios y Sectores no van en el menú.
+const ACENTO: Partial<Record<string, string>> = { proyectos: 'proyectos', servicios: 'servicios', sectores: 'sectores', hse: 'hse', noticias: 'noticias' };
+const numero = (k: (typeof NAVEGACION)[number]) => (MENU.includes(k) ? String(MENU.indexOf(k) + 1).padStart(2, '0') : '');
 ---
 <footer class="pie">
-  <div class="wrap pie-in">
-    <nav id="navegacion-pie" aria-label={t(lang, 'navegacion')}>
-      <ul>{navegacion.map((k) => <li><a href={ruta(k, lang)}>{t(lang, k)}</a></li>)}</ul>
-      <ul aria-label={t(lang, 'legal')}>{PIE.map((k) => <li><a href={ruta(k, lang)}>{t(lang, k)}</a></li>)}</ul>
-    </nav>
-    <dl class="rotulo">
-      {celdas.map((c) => (
-        <div>
-          <dt class="voz-datos">{c.etiqueta}</dt>
-          <dd>{c.href ? <a href={c.href}>{c.valor}</a> : c.valor}</dd>
-        </div>
-      ))}
-    </dl>
+  <div class="pie-escena trazo" aria-hidden="true">
+    <svg viewBox="0 0 1240 150" preserveAspectRatio="xMinYMax slice" focusable="false">
+      <path class="capa-ejes" d="M150 33.3V140M520 33.3V140M760 33.3V140M1040 33.3V140" />
+      <path class="t" style="--i:1" d="M120 140V60.8H180V140M120 82.8H180M120 104.8H180M120 126.8H180M132 60.8V44.3H168V60.8M150 44.3V33.3" />
+      <g class="t" style="--i:1"><circle cx="138" cy="75.1" r="7" /><circle cx="162" cy="97.1" r="7" /><circle cx="138" cy="119.1" r="7" /></g>
+      <path class="t" style="--i:2" d="M180 130.1L470 119.1M180 140L470 129M470 119.1V140M200 140V129M300 140V125.7M400 140V122.4" />
+      <path class="t" style="--i:2" d="M490 140V75.1Q505 68.5 520 75.1V140M530 140V75.1Q545 68.5 560 75.1V140M490 88.3H560M490 110.3H560" />
+      <path class="t" style="--i:3" d="M560 88.3L740 46.5M572 91.6L752 49.8M640 72.9V140M700 58.6V140" />
+      <path class="t" style="--i:3" d="M740 140V46.5H780V140M740 68.5H780M740 90.5H780M740 112.5H780" />
+      <path class="t" style="--i:4" d="M890 140V46.5M906 140V46.5M890 140L906 126.8L890 113.6L906 100.4L890 87.2L906 74L890 60.8L906 47.6M840 46.5H1030M840 53.1H1030M840 46.5V57.5H870V53.1M898 46.5V34.4M898 34.4L840 46.5M898 34.4L1030 46.5M1000 53.1V83.9M992 83.9H1008M996 83.9V89.4" />
+      <path class="t" style="--i:4" d="M1080 140V88.3H1160V140M1080 104.8H1160M1100 88.3V66.3H1140V88.3M1120 66.3V44.3" />
+      <path class="t terreno" style="--i:0" d="M0 140H1240" />
+      <path class="t cota-t" style="--i:5" d="M120 146H180M120 142V150M180 142V150M116 149L124 143M176 149L184 143" />
+    </svg>
   </div>
-  <p class="wrap legal voz-datos">© {anio} HL Ingenieros S.A.</p>
+
+  <div class="wrap pie-in">
+    <div class="pie-datos">
+      <a class="pie-marca" href={ruta('inicio', lang)} aria-label={`HL Ingenieros · ${t(lang, 'inicio')}`}><Marca tono="blanco" /></a>
+      <dl class="pie-rotulo">
+        <div class="c2"><dt class="voz-datos">{t(lang, 'razonSocial')}</dt><dd>HL Ingenieros S.A.</dd></div>
+        <div class="c2"><dt class="voz-datos">{t(lang, 'telefono')}</dt><dd><a href="tel:+576015185777">+57 601 518 5777</a></dd></div>
+        <div class="c2"><dt class="voz-datos">{t(lang, 'correo')}</dt><dd><a href="mailto:hlisa@hlingenieros.com">hlisa@hlingenieros.com</a></dd></div>
+        {sedes.map((s) => (
+          <div class="c3 sede"><dt class="voz-datos">{s.nombre}</dt><dd><b>{s.lugar}</b>{s.direccion}</dd></div>
+        ))}
+      </dl>
+    </div>
+
+    <nav id="navegacion-pie" aria-label={t(lang, 'navegacion')}>
+      <div>
+        <p class="voz-datos tit">{t(lang, 'navegacion')}</p>
+        <ul class="secciones">{NAVEGACION.map((k) => (
+          <li><a href={ruta(k, lang)} data-acento={ACENTO[k]}><span class="num voz-datos" aria-hidden="true">{numero(k)}</span><span class="q" aria-hidden="true"></span>{t(lang, k)}</a></li>
+        ))}</ul>
+      </div>
+      <div>
+        <p class="voz-datos tit">{t(lang, 'pieConHl')}</p>
+        <ul class="otros" aria-label={t(lang, 'legal')}>{PIE.map((k) => <li><a href={ruta(k, lang)}>{t(lang, k)}</a></li>)}</ul>
+      </div>
+    </nav>
+  </div>
+
+  <div class="wrap pie-base voz-datos">
+    <p>© {anio} HL Ingenieros S.A. · {t(lang, 'trayectoria')} 1968 — {anio}</p>
+    <p class="der">
+      {iso.length > 0 && <span class="iso">{iso.map((n) => <span>{n}</span>)}</span>}
+      {sitio?.redes?.map((r) => <a href={r.url} rel="noopener" target="_blank">{r.red} <i aria-hidden="true">↗</i></a>)}
+    </p>
+  </div>
 </footer>
 
 <style>
-  .pie { margin-top: var(--s7); border-top: var(--border-strong) solid var(--ink); background: var(--paper); }
-  .pie-in { display: grid; gap: var(--s5); padding-block: var(--s6) var(--s5); }
-  nav { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); }
-  nav ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s1); align-content: start; }
-  nav a { display: inline-block; padding-block: 6px; color: var(--ink); text-decoration: none; font-size: var(--fs-sm); }
-  nav a:hover { color: var(--accent); }
-  nav ul + ul a { color: var(--muted); }
-
-  .rotulo { margin: 0; display: grid; grid-template-columns: 1fr 1fr; border: var(--border-strong) solid var(--ink); }
-  .rotulo div { padding: var(--s2) var(--s3); border: 0 solid var(--ink); border-right-width: var(--border); border-bottom-width: var(--border); min-width: 0; }
-  .rotulo div:nth-child(2n) { border-right-width: 0; }
-  .rotulo div:first-child, .rotulo div:nth-child(2) { grid-column: 1 / -1; border-right-width: 0; }
-  .rotulo div:last-child { border-bottom-width: 0; border-right-width: 0; grid-column: 1 / -1; }
-  @media (max-width: 519.98px) {
-    .rotulo { grid-template-columns: 1fr; }
-    .rotulo div { border-right-width: 0; }
+  /* Grafito con la retícula azul del héroe; los colores son primitivos de marca (no cambian con el tema). */
+  .pie {
+    --pie-linea: color-mix(in srgb, var(--hl-azul-claro) 7%, transparent);
+    margin-top: var(--s7); color: var(--hl-concreto);
+    background:
+      linear-gradient(var(--pie-linea) 1px, transparent 1px) 0 0 / 100% var(--s4),
+      linear-gradient(90deg, var(--pie-linea) 1px, transparent 1px) 0 0 / var(--s4) 100%,
+      var(--hl-grafito);
   }
-  dt { color: var(--muted); }
-  dd { margin: 2px 0 0; font-weight: var(--fw-strong); font-size: var(--fs-sm); overflow-wrap: anywhere; }
-  dd a { color: inherit; text-decoration: none; }
-  dd a:hover { color: var(--accent); }
-  .legal { color: var(--muted); padding-block: var(--s3) var(--s4); border-top: var(--border) solid var(--line); }
+  .pie a { color: inherit; text-decoration: none; }
+  .pie a:hover { color: var(--hl-azul-claro); }
+  .pie :focus-visible { outline: 2px solid var(--hl-azul-claro); outline-offset: 2px; }
 
+  .pie-escena svg { display: block; width: 100%; height: auto; }
+  .pie-escena :is(path, circle) { fill: none; stroke: var(--hl-azul-claro); stroke-width: var(--stroke-thin); vector-effect: non-scaling-stroke; stroke-linecap: square; }
+  .pie-escena .capa-ejes { stroke-dasharray: 2 4; stroke-opacity: .6; }
+  .pie-escena .terreno { stroke: var(--hl-concreto); stroke-width: var(--stroke-mid); }
+  .pie-escena .cota-t { stroke: var(--hl-senal); }
+  @media (max-width: 639.98px) { .pie-escena svg { height: var(--s7); } }
+
+  .pie-in { display: grid; gap: var(--s5); padding-block: var(--s4) var(--s5); }
+  .pie-marca { display: inline-block; margin-bottom: var(--s3); }
+  .pie .pie-marca:hover { color: var(--hl-concreto); }
+
+  .pie-rotulo { margin: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border: var(--border-strong) solid var(--hl-concreto); }
+  .pie-rotulo div { padding: var(--s2) var(--s3); border: 0 solid var(--hl-acero); border-right-width: var(--border); border-bottom-width: var(--border); min-width: 0; }
+  .pie-rotulo .c2 { grid-column: span 2; }
+  .pie-rotulo .c3 { grid-column: span 3; }
+  .pie-rotulo .c2:nth-child(3), .pie-rotulo .c3:nth-child(2n) { border-right-width: 0; }
+  .pie-rotulo div:nth-last-child(-n + 2) { border-bottom-width: 0; }
+  dt { color: var(--hl-acero); }
+  dd { margin: 2px 0 0; font-weight: var(--fw-strong); font-size: var(--fs-sm); overflow-wrap: anywhere; }
+  .sede dd { font-weight: var(--fw-text); color: var(--hl-acero); }
+  .sede dd b { display: block; color: var(--hl-concreto); font-weight: var(--fw-strong); }
+
+  nav { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); align-content: start; }
+  .tit { margin: 0 0 var(--s2); color: var(--hl-acero); }
+  nav ul { list-style: none; margin: 0; padding: 0; display: grid; align-content: start; }
+  nav a { display: inline-flex; align-items: baseline; gap: var(--s1); padding-block: 6px; font-size: var(--fs-sm); }
+  .num { width: 2.2em; color: var(--k, var(--hl-azul-claro)); }
+  .q { width: 8px; height: 8px; align-self: center; margin-right: var(--s1); background: var(--k, var(--hl-azul-claro)); transition: transform var(--t-rapido) var(--ease-izaje); }
+  .secciones a:hover { color: var(--k, var(--hl-azul-claro)); }
+  .secciones a:hover .q { transform: scale(1.5); }
+  [data-acento='proyectos'] { --k: var(--hl-senal); }
+  [data-acento='servicios'] { --k: var(--hl-cian); }
+  [data-acento='sectores'] { --k: var(--hl-violeta); }
+  [data-acento='hse'] { --k: var(--hl-verde); }
+  [data-acento='noticias'] { --k: var(--hl-oxido); }
+  .otros a { color: var(--hl-acero); }
+
+  .pie-base { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s2) var(--s4); padding-block: var(--s3) var(--s4); border-top: var(--border) solid color-mix(in srgb, var(--hl-acero) 35%, transparent); color: var(--hl-acero); }
+  .pie-base p { margin: 0; }
+  .der { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3); }
+  .iso { display: flex; flex-wrap: wrap; gap: var(--s1); }
+  .iso span { border: var(--border) solid currentColor; padding: 3px 7px; }
+
+  /* En móvil: razón social, teléfono y correo a todo el ancho; las sedes en dos columnas. */
+  @media (max-width: 639.98px) {
+    .pie-rotulo .c2 { grid-column: 1 / -1; border-right-width: 0; }
+    .pie-rotulo div { padding: var(--s1) var(--s2); }
+    .sede dd { font-size: var(--fs-xs); }
+  }
   @media (min-width: 900px) {
-    .pie-in { grid-template-columns: 5fr 7fr; gap: var(--s6); }
+    .pie-in { grid-template-columns: 7fr 5fr; gap: var(--s6); }
   }
 </style>

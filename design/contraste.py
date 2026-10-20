@@ -33,6 +33,11 @@ PARES = [
     ("hl-grafito", "hl-verde", 4.5, "botón HSE sobre grafito"),
     ("hl-concreto", "hl-grafito", 4.5, "texto sobre grafito"),
     ("hl-acero", "hl-grafito", 4.5, "fuente sobre grafito"),
+    ("hl-azul-claro", "hl-grafito", 4.5, "número de sección en el pie"),
+    ("hl-senal", "hl-grafito", 4.5, "número de Proyectos en el pie"),
+    ("hl-oxido", "hl-grafito", 4.5, "número de Noticias en el pie"),
+    ("hl-cian", "hl-grafito", 3.0, "marca de Servicios en el pie (no texto)"),
+    ("hl-violeta", "hl-grafito", 3.0, "marca de Sectores en el pie (no texto)"),
 ]
 
 # Acentos de sección (guía §3.5): texto sobre fondo y papel, texto sobre el acento y chip.
