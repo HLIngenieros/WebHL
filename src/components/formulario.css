@@ -1,0 +1,117 @@
+/* Formulario por intención (guía §7 Campos, §9 Movimiento). Solo se anima transform, opacity y clip-path. */
+.fm { container-type: inline-size; border: var(--stroke-thin) solid var(--ink); background: var(--bg); }
+.fm-sr, .fm-trampa { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.fm-rotulo { display: grid; grid-template-columns: auto 1fr auto; border-bottom: var(--stroke-thin) solid var(--ink); }
+.fm-rotulo > * { padding: var(--s2) var(--s3); }
+.fm-rotulo > * + * { border-left: var(--stroke-thin) solid var(--ink); }
+.fm-cod { background: var(--accent); color: var(--accent-ink); }
+
+/* Ejes: burbujas unidas por una cota que se mide hasta la hoja actual. */
+.fm-ejes { position: relative; padding: var(--s4) var(--s3) var(--s3); }
+.fm-ejes ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--n), 1fr); position: relative; }
+.fm-ejes::before, .fm-cota { content: ""; position: absolute; top: calc(var(--s4) + 15px); left: calc(var(--s3) + (100% - 2 * var(--s3)) / var(--n) / 2); right: calc(var(--s3) + (100% - 2 * var(--s3)) / var(--n) / 2); height: var(--stroke-mid); background: var(--line); }
+.fm-cota { background: var(--accent); transform-origin: left; transition: transform var(--t-cota) var(--ease-plano); }
+.fm-eje { width: 100%; display: grid; justify-items: center; gap: var(--s1); background: none; border: 0; padding: 0; color: var(--muted); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
+.fm-eje:disabled { cursor: default; }
+.fm-eje i { font-style: normal; position: relative; width: 32px; height: 32px; border-radius: 50%; border: var(--stroke-mid) solid var(--line); background: var(--bg); display: grid; place-items: center; transition: background var(--t-rapido), border-color var(--t-rapido), color var(--t-rapido), transform var(--t-izaje) var(--ease-izaje); }
+.fm-eje i svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; animation: fm-trazo var(--t-aparece) var(--ease-plano) both; }
+.fm-eje[data-estado="hecho"] i { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
+.fm-eje[data-estado="hecho"]:not(:disabled):hover i { transform: scale(1.12); }
+.fm-eje[data-estado="actual"] { color: var(--ink); }
+.fm-eje[data-estado="actual"] i { border-color: var(--accent); color: var(--accent); transform: scale(1.12); }
+.fm-eje[data-estado="actual"] i::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: var(--stroke-thin) solid var(--accent); animation: fm-onda var(--t-trazo) var(--ease-izaje) 2 both; }
+@keyframes fm-onda { from { opacity: .9; transform: scale(.7); } to { opacity: 0; transform: scale(1.35); } }
+@container (max-width: 480px) { .fm-eje:not([data-estado="actual"]) .fm-eje-txt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } }
+
+/* Hojas: entran izadas (adelante) o de lado (atrás); sus campos suben escalonados. */
+.fm-hojas { padding: var(--s3) var(--s4) var(--s4); min-height: 380px; }
+@container (max-width: 640px) { .fm-hojas { padding: var(--s3); min-height: 0; } }
+.fm-hoja { border: 0; margin: 0; padding: 0; min-width: 0; animation: fm-izaje var(--t-izaje) var(--ease-izaje) both; }
+.fm-hoja.fm-atras { animation-name: fm-lado; }
+.fm-hoja h2 { font-family: var(--f-ancha); font-stretch: var(--wdth-title); font-weight: var(--fw-title); font-size: var(--fs-h3); margin: 0 0 var(--s3); outline: none; }
+.fm-hoja .fm-campo, .fm-int, .fm-resumen > div { animation: fm-sube var(--t-izaje) var(--ease-izaje) both; animation-delay: calc(var(--i, 0) * 50ms); }
+@keyframes fm-izaje { from { opacity: 0; transform: translateY(24px); clip-path: inset(0 0 100% 0); } to { opacity: 1; transform: none; clip-path: inset(0); } }
+@keyframes fm-lado { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
+@keyframes fm-sube { from { opacity: 0; transform: translateY(12px); } }
+@keyframes fm-trazo { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
+@keyframes fm-aparece { from { opacity: 0; transform: translateY(-4px); } }
+@keyframes fm-empuje { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+.fm-estatico { display: grid; gap: var(--s4); }
+
+/* Motivos: placas con pictograma que se traza al elegir o al pasar. */
+.fm-intenciones { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s2); }
+@container (max-width: 640px) { .fm-intenciones { grid-template-columns: 1fr; } }
+.fm-int { position: relative; text-align: left; border: var(--stroke-thin) solid var(--line); background: var(--bg); color: var(--ink); padding: var(--s3); cursor: pointer; display: grid; grid-template-columns: 40px 1fr; gap: var(--s1) var(--s3); align-items: start; font: inherit; transition: border-color var(--t-rapido), transform var(--t-rapido) var(--ease-izaje); }
+.fm-int::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--accent); transform: scaleY(0); transform-origin: bottom; transition: transform var(--t-izaje) var(--ease-izaje); }
+.fm-int:hover { border-color: var(--ink); transform: translateY(-3px); }
+.fm-int[aria-checked="true"] { border-color: var(--accent); }
+.fm-int[aria-checked="true"]::before { transform: none; }
+.fm-int svg { grid-row: span 2; width: 40px; height: 40px; fill: none; stroke: currentColor; stroke-width: var(--stroke-mid); transition: stroke var(--t-rapido); }
+.fm-int:hover svg path, .fm-int[aria-checked="true"] svg path { animation: fm-trazo var(--t-trazo) var(--ease-plano) both; }
+.fm-int[aria-checked="true"] svg { stroke: var(--accent); }
+.fm-int strong { font-stretch: var(--wdth-subtitle); font-weight: var(--fw-subtitle); }
+.fm-int small { color: var(--muted); font-size: var(--fs-sm); }
+.fm-int-etico { border-style: dashed; }
+
+/* Campos (guía §7): etiqueta visible, línea de escritura, ✓ que se dibuja, error que empuja. */
+.fm-campos { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s3); }
+@container (max-width: 640px) { .fm-campos { grid-template-columns: 1fr; } }
+.fm-campo { display: grid; gap: var(--s1); align-content: start; }
+.fm-ancho { grid-column: 1 / -1; }
+.fm-campo label { color: var(--muted); }
+.fm-caja { position: relative; }
+.fm-campo input, .fm-campo select, .fm-campo textarea { width: 100%; box-sizing: border-box; background: var(--bg); color: var(--ink); font: inherit; border: var(--stroke-thin) solid var(--line); border-bottom: 1.5px solid var(--ink); border-radius: 0; padding: var(--s2) calc(var(--s2) + 20px) var(--s2) var(--s2); min-height: 44px; transition: border-color var(--t-rapido); }
+.fm-campo textarea { min-height: 160px; resize: vertical; padding-right: var(--s2); }
+.fm-campo input[type="file"] { padding: var(--s2); }
+.fm-campo :is(input, select, textarea):focus-visible { outline: var(--stroke-thin) solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+.fm-ok { position: absolute; right: var(--s2); top: 50%; translate: 0 -50%; width: 16px; height: 16px; fill: none; stroke: var(--good); stroke-width: 2; opacity: 0; pointer-events: none; }
+.fm-bien .fm-ok { opacity: 1; animation: fm-trazo var(--t-aparece) var(--ease-plano) both; }
+.fm-mal :is(input, select, textarea) { border-color: var(--bad); }
+.fm-mal .fm-caja, .fm-mal textarea { animation: fm-empuje var(--t-rapido) var(--ease-izaje) 2; }
+.fm-error { color: var(--bad); font-size: var(--fs-sm); animation: fm-aparece var(--t-rapido) var(--ease-izaje); }
+.fm-fallo { margin-top: var(--s3); }
+.fm-medidor { height: var(--stroke-mid); background: var(--line-soft); position: relative; overflow: hidden; }
+.fm-medidor i { position: absolute; inset: 0; background: var(--accent); transform-origin: left; transition: transform var(--t-rapido); }
+.fm-medidor-txt { display: flex; justify-content: space-between; color: var(--muted); }
+.fm-etica { border-left: var(--stroke-heavy) solid var(--good); padding: var(--s2) var(--s3); margin: 0 0 var(--s3); font-size: var(--fs-sm); color: var(--muted); }
+.fm-anon { display: flex; gap: var(--s2); align-items: center; padding: var(--s2) var(--s3); border: var(--stroke-thin) dashed var(--line); margin-bottom: var(--s3); cursor: pointer; }
+.fm-anon input, .fm-ley input { accent-color: var(--accent); width: 18px; height: 18px; flex: none; }
+.fm-otros { margin: 0; color: var(--muted); display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); }
+.fm-otros a, .fm-ley a, .fm-fallo a { color: var(--accent); }
+
+/* Resumen como despiece de plano y autorización Ley 1581. */
+.fm-resumen { border: var(--stroke-thin) solid var(--line); margin: 0 0 var(--s3); }
+.fm-resumen > div { display: grid; grid-template-columns: minmax(110px, 30%) 1fr; border-bottom: var(--stroke-thin) solid var(--line-soft); }
+.fm-resumen > div:last-child { border-bottom: 0; }
+.fm-resumen dt, .fm-resumen dd { margin: 0; padding: var(--s2) var(--s3); overflow-wrap: anywhere; }
+.fm-resumen dt { color: var(--muted); border-right: var(--stroke-thin) solid var(--line-soft); }
+.fm-resumen dd { text-transform: none; letter-spacing: 0; font-stretch: var(--wdth-text); font-weight: var(--fw-text); }
+.fm-ley { display: flex; gap: var(--s2); align-items: flex-start; font-size: var(--fs-sm); cursor: pointer; }
+.fm-ley input { margin-top: 2px; }
+
+/* Pie: atrás, pista y continuar; al enviar, la cinta P3 corre dentro del botón. */
+.fm-pie { display: flex; justify-content: space-between; align-items: center; gap: var(--s2); padding: var(--s3) var(--s4); border-top: var(--stroke-thin) solid var(--ink); }
+@container (max-width: 640px) { .fm-pie { padding: var(--s3); flex-wrap: wrap; } .fm-pista { order: -1; width: 100%; } }
+.fm-pista { color: var(--muted); text-align: center; }
+.fm-btn { position: relative; overflow: hidden; min-height: 44px; border: var(--stroke-thin) solid var(--ink); background: var(--bg); color: var(--ink); padding: var(--s2) var(--s4); cursor: pointer; font: inherit; font-weight: var(--fw-boton); font-size: var(--fs-boton); transition: transform var(--t-rapido) var(--ease-izaje), filter var(--t-rapido); }
+.fm-btn:hover:not(:disabled) { transform: translateY(-2px); }
+.fm-btn:active:not(:disabled) { transform: translateY(1px); }
+.fm-btn:disabled { opacity: .45; cursor: not-allowed; }
+.fm-primario { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.fm-cargando::after { content: ""; position: absolute; inset: auto -32px 0 -32px; height: 4px; background: repeating-linear-gradient(-45deg, var(--signal) 0 8px, var(--ink) 8px 16px); animation: fm-cinta .6s linear infinite; }
+@keyframes fm-cinta { to { transform: translateX(22.6px); } }
+
+/* Radicado: el sello cae, los caracteres ruedan y la línea se traza. */
+.fm-radicado { text-align: center; padding: var(--s5) var(--s3); display: grid; justify-items: center; gap: var(--s2); }
+.fm-radicado p { margin: 0; color: var(--muted); max-width: 46ch; }
+.fm-recibida { color: var(--good) !important; outline: none; }
+.fm-sello { border: var(--stroke-heavy) solid var(--signal); padding: var(--s3) var(--s4); margin: var(--s3) 0 var(--s1); rotate: -3deg; animation: fm-sello var(--t-izaje) var(--ease-izaje) both .15s; }
+.fm-sello b { display: block; font-family: var(--f-ancha); font-stretch: var(--wdth-stat); font-weight: var(--fw-negra); font-size: clamp(20px, 5cqi, 34px); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+@keyframes fm-sello { from { opacity: 0; transform: scale(1.7); } 60% { opacity: 1; transform: scale(.95); } to { transform: none; } }
+.fm-traza { width: min(240px, 60%); height: 2px; background: var(--accent); margin-bottom: var(--s2); animation: fm-trazo var(--t-cota) var(--ease-plano) both .6s; }
+.fm-radicado .fm-btn { margin-top: var(--s3); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fm *, .fm *::before, .fm *::after { animation: none !important; transition: none !important; }
+}

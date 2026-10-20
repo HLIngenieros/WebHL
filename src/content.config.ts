@@ -144,6 +144,12 @@ const sitio = defineCollection({
     redes: z.array(z.object({ red: z.string(), url: z.url() })),
     asociadas: z.array(z.object({ nombre: z.string(), logo: image().optional(), area: texto.optional(), descripcion: texto.optional(), aprobada: z.boolean() })).optional(),
     clientes: z.array(z.object({ nombre: z.string().optional(), logo: image() })).default([]),
+    // D7 (20-oct): buzones por función y canales a los que deriva el agente. `confirmado: false` = pendiente.
+    contacto: z.object({
+      buzones: z.object({ cotizacion: z.email(), proveedor: z.email(), empleo: z.email(), etico: z.email() }),
+      whatsapp: z.string().regex(/^\d{8,15}$/).optional(),
+      confirmado: z.boolean(),
+    }),
     confirmar,
   }),
 });

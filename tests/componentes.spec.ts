@@ -39,11 +39,6 @@ test('a 360 px la tabla se desplaza sola y la página no', async ({ page }) => {
   expect(r.tabla).toBe(true);
 });
 
-test('las páginas provisionales usan la Nota de la guía', async ({ page }) => {
-  await page.goto('/contacto/'); // provisional hasta F4
-  await expect(page.locator('main .nota')).toHaveCount(1);
-});
-
 test('el campo con error lo anuncia con aria-describedby', async ({ page }) => {
   await page.goto('/muestra/');
   const campo = page.locator('input[aria-invalid=true]').first();

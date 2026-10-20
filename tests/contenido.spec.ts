@@ -274,7 +274,7 @@ test.describe('contenido migrado', () => {
   });
 
   test('el contenido no publica correos personales, solo buzones por función', () => {
-    const permitidos = ['buzonetico@hlingenieros.com', 'hlisa@hlingenieros.com', 'administracionpanama@hlingenieros.com'];
+    const permitidos = ['buzonetico@hlingenieros.com', 'cotizaciones@hlingenieros.com', 'proveedores@hlingenieros.com', 'talento@hlingenieros.com', 'hlisa@hlingenieros.com', 'administracionpanama@hlingenieros.com'];
     const raiz = path.join(process.cwd(), 'src', 'content');
     const archivos = fs.readdirSync(raiz, { recursive: true }).map(String).filter((f) => /\.(ya?ml|md)$/.test(f));
     const correos = archivos.flatMap((f) => fs.readFileSync(path.join(raiz, f), 'utf8').match(/[\w.+-]+@[\w-]+\.[\w.]+/g) ?? []);

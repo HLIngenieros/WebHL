@@ -141,11 +141,11 @@ de 5+ fotos con pie.
 |---|---|---|
 | D1 | ¿Sitio del grupo o de HL Ingenieros? Qué empresas se muestran (en EN aparecen Megacranes y Aktino, no en ES) | **Decidido (15-oct):** el sitio es de HL Ingenieros S.A. Falta definir qué empresas se muestran como asociadas (ECOHL…) |
 | D2 | Lema único | **Decidido (19-oct):** "Construimos la industria con gente que cumple, desde 1968." (A ampliado: integral y humano). EN propuesto: "Building industry with people who deliver, since 1968." (se cierra en F5) |
-| D3 | Agente: bot nativo de Zoho SalesIQ o agente propio con IA que entrega a Zoho | Pendiente |
+| D3 | Agente: bot nativo de Zoho SalesIQ o agente propio con IA que entrega a Zoho | **Decidido (20-oct):** agente propio, sin asesores en vivo; deriva a WhatsApp, correo o teléfono según la conversación. En F4 solo la interfaz (no funcional); se conecta después |
 | D4 | CMS: Sanity, Decap o Payload | **Decidido (15-oct): sin CMS.** Sin terceros ni credenciales nuevas: el contenido vive en el repo como colecciones de Astro (Markdown/JSON con esquema validado al compilar). Despliegue manual (compilar y subir `dist/`). Salida futura si otros deben editar: Decap CMS sobre los mismos archivos |
 | D5 | Hosting: Vercel/Netlify o Azure Static Web Apps (tenant M365); Power Automate premium o Graph | **Hosting decidido (15-oct):** el actual (Apache + PHP 8.3, IP 107.180.21.17, al parecer GoDaddy; por confirmar), con despliegue estático que reemplaza a WordPress. Integración de correo: pendiente |
 | D6 | Casos sensibles: Odebrecht (Patio de Carbón), Minera Panamá (cerrada desde 2023); nombres actuales de clientes (Zijin Mining, thyssenkrupp Polysius, OHLA) | **Decidido (15-oct):** se mantienen con `visibilidad: discreta`: ficha propia y visible en el explorador, pero fuera de portada, destacados, páginas de servicio/sector y logos de clientes; sí se indexa. Nombres actuales de clientes: pendiente |
-| D7 | Buzones comerciales por sede/función | Pendiente |
+| D7 | Buzones comerciales por sede/función | **Decidido en parte (20-oct):** por función, en un archivo de configuración; direcciones por confirmar (en `/pendientes/`) |
 | D8 | Equipo de ejecución: interno, proveedor o mixto | Pendiente |
 
 ## Insumos que debe aportar HL (pendientes)
@@ -176,8 +176,22 @@ en [contenido/README.md](contenido/README.md).
 
 ## Convenciones de trabajo
 - Responder en español.
-- Flujo: brainstorming → spec → plan → ejecución. Aprobar el diseño antes de implementar.
-- Ahorrar tokens: procesos livianos, planes sin código completo.
+- **Método austero (20-oct): el proceso se escala al tamaño de la tarea, no al revés.**
+  | Tamaño | Ejemplos | Proceso | Verificación | Cierre |
+  |---|---|---|---|---|
+  | **S** (≤ 3 archivos, sin decisión nueva) | ajuste de estilo, texto, bug acotado | directo, sin plan ni brainstorming | `npm run check` + la prueba del archivo tocado si existe | se acumula al commit de la etapa |
+  | **M** (un módulo o página) | un formulario, una plantilla | plan de 5-10 líneas en el chat (sin archivo); una maqueta solo si hay decisión visual | `check` + `npx playwright test <archivo>` + `tests/humo.spec.ts` | commit propio |
+  | **L** (fase) | F4, F5 | spec breve → `docs/plan-fN.md` con tabla de tareas (sin código) → ejecución nativa | suite completa, `npm run presupuesto` y Lighthouse **una vez**, al cerrar | commit, merge y registro en este archivo |
+  - **Leer lo mínimo:** `grep` antes de abrir; abrir solo el rango que hace falta; no releer lo que se acaba de
+    editar ni lo que ya está en este archivo o en la guía.
+  - **Sin vueltas:** si un arreglo falla dos veces, parar y diagnosticar la causa (no un tercer intento a
+    ciegas); una medición por cambio, sin repetir para confirmar márgenes; las maquetas se presentan
+    agrupadas y se construye solo lo aprobado; un desacuerdo de diseño se resuelve preguntando, no
+    probando variantes.
+  - **Revisión de código:** solo al cerrar una fase L y enfocada en el riesgo (formularios, seguridad, PHP),
+    no en todo el diff.
+  - **Documentar al cerrar, no durante:** CLAUDE.md, el plan y la memoria se actualizan una vez por etapa.
+  - **Respuestas cortas:** resultado, lo que falta y la siguiente decisión; sin resúmenes de lo ya dicho.
 - **Trabajo por etapas.** El alcance de cada etapa (fase, módulo o tarea) se define sobre la marcha,
   según avance el desarrollo. Al cerrar cada etapa se hace su commit. Si se trabajó en una rama, se
   hace merge fast-forward a `main` y se borra la rama. Registro de etapas:
@@ -226,7 +240,18 @@ en [contenido/README.md](contenido/README.md).
     explorador 98 (1,96 s), acreedores y datos 99; **Nosotros 94 (LCP 2,95 s): pendiente para F6** (el resto
     es estilo y diseño de la página: ~940 ms con CPU simulada). Sin revisión de código con subagente (ahorro
     de tokens).
-  - **Siguiente paso:** F4 · Contacto (formularios, "Hablar con HL"; requiere D3 y D7).
+  - **Etapa 8 (2026-10-20): F4 · Contacto** ([docs/plan-f4.md](docs/plan-f4.md)). Método austero S/M/L.
+    Formularios por hojas y animados (isla Preact, mejora progresiva) en Contacto, Proveedores, Trabaje con
+    nosotros y Buzón ético (ES/EN); `public/api/enviar.php` con radicado, trampa, límite por IP y acuse;
+    reglas y buzones en una sola fuente (`src/lib/formularios.ts` + `sitio.yaml` → `/api/config.json`).
+    Agente "Hablar con HL" solo interfaz (guion de muestra, derivación a WhatsApp/correo/teléfono), cargado
+    al primer clic. Cierre: 449 pruebas, presupuesto OK, Lighthouse móvil de Contacto 98 (LCP 2,0 s).
+    194 bloqueantes (+2: buzones D7 y número de WhatsApp).
+  - **Siguiente paso:** F5 · Inglés (traducción con el glosario; los formularios ya traen su EN), o
+    conectar el agente (requiere decidir modelo y dónde vive la clave: el PHP sirve de intermediario).
+  - **Ojo F4:** el PHP se prueba con un PHP portátil (`HL_FORM_PRUEBA=1 php -S 127.0.0.1:8080 -t dist`;
+    escribe los correos en el temporal en vez de enviarlos). En el hosting, el remitente
+    `no-reply@hlingenieros.com` debe quedar autorizado en SPF/DKIM o los correos caerán en spam.
   - **Decisiones de F3 con efecto visible:** sin precarga de fuente (primera visita: un instante con el
     respaldo); indicadores de la visión con reglas a ancho completo (mezclan días y %); logos de asociadas
     sobre placa blanca (modo oscuro); sedes con su ciudad real (Santo Domingo).
@@ -237,9 +262,8 @@ en [contenido/README.md](contenido/README.md).
     va entre comillas. Las reglas de `global.css` están en capas de Tailwind: un estilo sin capa (el de un
     componente) les gana aunque sea menos específico. La colección `file()` se lee por id: el orden va en un
     campo `orden`. Correr `npm run check` en cada tarea.
-- **Pruebas por fase (19-oct, ahorro de tokens):** durante una fase solo `npm run check` y las pruebas del
-  archivo tocado; la suite completa, `npm run presupuesto` y Lighthouse se corren una vez al cerrar la fase.
-  Pruebas nuevas solo para riesgos reales; capturas solo para decisiones visuales.
+- **Pruebas:** ver "Método austero". Pruebas nuevas solo para riesgos reales; capturas solo para decisiones
+  visuales.
 - No usar prettier.
 - Mantener pocos directorios y archivos: la información va primero, la estructura después.
 - El repo se gestiona con GitHub Desktop.

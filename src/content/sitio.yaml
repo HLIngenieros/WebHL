@@ -48,7 +48,17 @@
     - { nombre: Grupo Prodeco, logo: ../assets/clientes/prodeco.png }
     - { nombre: Oxy, logo: ../assets/clientes/oxy.png }
     - { nombre: Chevron, logo: ../assets/clientes/chevron.png }
+  # D7: buzones por función (sin correos personales). El PHP los lee de /api/config.json al compilar.
+  contacto:
+    buzones:
+      cotizacion: cotizaciones@hlingenieros.com
+      proveedor: proveedores@hlingenieros.com
+      empleo: talento@hlingenieros.com
+      etico: buzonetico@hlingenieros.com
+    confirmado: false
   confirmar:
+    - "D7: confirmar que existen los buzones cotizaciones@, proveedores@, talento@ y buzonetico@ (o indicar los reales)."
+    - "Número de WhatsApp comercial al que deriva el asistente (y si es uno por país)."
     - "Cifras de portada de 2020 (+530 proyectos, +4.000.000 HH al año): actualizar."
     - "¿Bolsa y Mercados de Valores de la República Dominicana es cliente?"
     - "Logos de clientes: ¿se mantienen los 18 y se agregan clientes 2020-2026?"

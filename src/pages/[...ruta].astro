@@ -18,7 +18,7 @@ export async function getStaticPaths() {
   // getStaticPaths corre aislado del resto del archivo: sus constantes van aquí dentro.
   const CONTENIDO: ClaveRuta[] = ['proyectos', 'servicios', 'sectores'];
   // Con archivo propio; noticias vive en src/pages/noticias/ y solo se genera con 3 o más entradas.
-  const PROPIAS: ClaveRuta[] = ['inicio', 'nosotros', 'hse', 'acreedores', 'datos', 'terminos', 'noticias'];
+  const PROPIAS: ClaveRuta[] = ['inicio', 'nosotros', 'hse', 'acreedores', 'datos', 'terminos', 'noticias', 'contacto', 'trabaje', 'proveedores', 'buzon'];
   const provisionales = (Object.keys(RUTAS) as ClaveRuta[])
     .filter((clave) => !CONTENIDO.includes(clave) && !PROPIAS.includes(clave))
     .flatMap((clave) =>

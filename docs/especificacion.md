@@ -35,7 +35,7 @@ S.A.** que muestre su experiencia con datos verificables.
 | D6 | Los casos sensibles se publican con `visibilidad: discreta`. |
 | — | Stack: Astro + Tailwind (con los tokens) + islas Preact solo donde haga falta. |
 
-Siguen abiertas D3 (asistente; antes de F4), D7 (buzones; antes de F4), D8 (equipo; por ahora,
+D3 y D7 se decidieron el 20-oct (ver Formularios y Hablar con HL). Siguen abiertas D8 (equipo; por ahora,
 interno) y, de D1, qué empresas asociadas se muestran.
 
 ## 3. Arquitectura de información
@@ -164,13 +164,20 @@ Las colecciones de Astro se validan con esquema al compilar.
 - **HSE y calidad, Contacto:** texto más colecciones (certificaciones, sedes). HSE, Noticias,
   Acreedores y legales se diseñan con maquetas al empezar F3.3.
 - **Formularios** (cotización, proveedores, trabaje con nosotros, buzón ético):
-  - son HTML normal (sin React) que envía a un script PHP en el mismo hosting;
+  - **dinámicos y animados (20-oct):** isla Preact por pasos (intención → datos → mensaje → autorización),
+    campos que cambian según intención y país, validación en vivo y firma de movimiento propia; sin JS
+    sigue siendo un formulario HTML que envía (mejora progresiva). Envía a un script PHP en el mismo hosting;
   - el script valida, exige la autorización de la Ley 1581, filtra el spam con un campo oculto, genera
     un radicado y envía al buzón de la función;
   - Power Automate toma los correos con el disparador estándar "Cuando llega un correo nuevo" (no
     premium);
   - el buzón ético va a su propio buzón, fuera de ese flujo.
-- **Hablar con HL:** WhatsApp y asesor de Zoho en horario de oficina; el asistente IA queda sujeto a D3.
+- **Hablar con HL (D3, 20-oct):** sin asesores en vivo. Un solo agente IA que conversa y, según lo
+  aprendido en la conversación, deriva a WhatsApp, a un correo por función o a un teléfono. En F4 solo
+  la interfaz (visual completa, no funcional: respuestas de muestra marcadas como tal); la conexión
+  del agente es una etapa posterior.
+- **Buzones (D7, 20-oct):** direcciones por función en un solo archivo de configuración, marcadas como
+  pendientes en `/pendientes/` hasta confirmarlas.
 
 ## 6. Rendimiento, movimiento y pantallas
 

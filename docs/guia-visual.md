@@ -436,7 +436,8 @@ año, en celdas con borde `--ink`.
 ### Botón de contacto único ("Hablar con HL")
 
 Reemplaza las dos burbujas actuales (Zoho y WhatsApp). Es un solo botón, cuadrado, en `--accent`, que
-abre el panel con los tres caminos (asistente, asesor y WhatsApp). Los mensajes del asistente usan
+abre el panel del agente (20-oct: sin asesor en vivo; el agente deriva a WhatsApp, correo o teléfono
+como tarjetas de acción dentro de la conversación). Los mensajes del asistente usan
 `--bg` con borde `--line`, y los del usuario usan `--ink` con texto `--bg`.
 
 ---
