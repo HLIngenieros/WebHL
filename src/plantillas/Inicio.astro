@@ -26,7 +26,7 @@ const numeroIso = (c: { data: { norma: { es: string } } }) => Number(c.data.norm
 const iso = datos.certificaciones.filter((c) => c.data.norma.es.startsWith('ISO')).sort((a, b) => numeroIso(a) - numeroIso(b));
 const cifras = cifrasInicio({ fundacion: sitio.fundacion, paises: sitio.paises, sedes: datos.sedes.length, certificaciones: iso.length }, lang);
 ---
-<Base titulo="HL Ingenieros" descripcion={lema} lang={lang} alterno={alterno} barra="inmersa">
+<Base titulo="Grupo HL" descripcion={lema} lang={lang} alterno={alterno} barra="inmersa">
   <Hero lang={lang} lema={lema} />
   <FranjaSectores lang={lang} />
   <FichasCifras lang={lang} cifras={cifras} paises={sitio.paises} sedes={datos.sedes.map((s) => s.data.ciudad)} normas={iso.map((c) => c.data.norma.es.replace('ISO ', ''))} />

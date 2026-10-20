@@ -1,6 +1,6 @@
 # WebHL — Rediseño del sitio corporativo de Grupo HL
 
-Reconstrucción de **hlingenieros.com**, el sitio de Grupo HL / HL Ingenieros S.A. (contratista
+Reconstrucción de **hlingenieros.com**, el sitio del **Grupo HL** (HL Ingenieros es su nombre anterior y la razón social es HL Ingenieros S.A.; contratista
 colombiano de construcción, montaje electromecánico y fabricación, fundado en 1968 por Guillermo
 Londoño). Es un proyecto **no urgente** que se avanza de forma ocasional y **aún no está lanzado oficialmente**:
 se adelanta con discreción mientras se aprueba su priorización, para tener mucho hecho cuando se
@@ -139,7 +139,7 @@ de 5+ fotos con pie.
 
 | # | Decisión | Estado |
 |---|---|---|
-| D1 | ¿Sitio del grupo o de HL Ingenieros? Qué empresas se muestran (en EN aparecen Megacranes y Aktino, no en ES) | **Decidido (15-oct):** el sitio es de HL Ingenieros S.A. Falta definir qué empresas se muestran como asociadas (ECOHL…) |
+| D1 | ¿Sitio del grupo o de HL Ingenieros? Qué empresas se muestran (en EN aparecen Megacranes y Aktino, no en ES) | **Cambiado (20-oct):** el sitio es del **Grupo HL** (mismo logo, "GRUPO HL"); "antes HL Ingenieros" con discreción en Nosotros y en buscadores; razón social y menciones legales siguen como HL Ingenieros S.A. (guía §2.1). Falta definir qué empresas del grupo se muestran (ECOHL…) |
 | D2 | Lema único | **Decidido (19-oct):** "Construimos la industria con gente que cumple, desde 1968." (A ampliado: integral y humano). EN (cerrado en F5, 20-oct): "Building industry with people who deliver, since 1968." |
 | D3 | Agente: bot nativo de Zoho SalesIQ o agente propio con IA que entrega a Zoho | **Decidido (20-oct):** sin asesores en vivo; agente de **Copilot Studio** (licencia del tenant) publicado sin autenticación y conectado por Direct Line a la interfaz propia (F4), con tarjetas de derivación (Adaptive Cards) a WhatsApp, correo o teléfono. Conocimiento: archivos generados al compilar y, tras el lanzamiento, el sitio. **Por confirmar con TI:** capacidad de mensajes de Copilot Studio para visitantes anónimos |
 | D4 | CMS: Sanity, Decap o Payload | **Decidido (15-oct): sin CMS.** Sin terceros ni credenciales nuevas: el contenido vive en el repo como colecciones de Astro (Markdown/JSON con esquema validado al compilar). Despliegue manual (compilar y subir `dist/`). Salida futura si otros deben editar: Decap CMS sobre los mismos archivos |

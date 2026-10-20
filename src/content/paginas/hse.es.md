@@ -2,7 +2,7 @@
 pagina: hse
 lang: es
 titulo: HSE y calidad
-descripcion: Sistema de gestión integral de HL Ingenieros, certificado en ISO 9001, ISO 14001 e ISO 45001, con Reglas de Oro HSE, PIENSA® y una cultura de seguridad medible.
+descripcion: Sistema de gestión integral del Grupo HL, con HL Ingenieros S.A. certificada en ISO 9001, ISO 14001 e ISO 45001, con Reglas de Oro HSE, PIENSA® y una cultura de seguridad medible.
 # Indicadores (guía §12.1-4 y §12.5). Fuente: PDF de ECOHL, casos 1 a 5. `donde` dice en qué página va cada uno.
 indicadores:
   - { valor: 64, signo: "−", unidad: "%", etiqueta: Frecuencia de accidentes incapacitantes en 8 años, fuente: Programa de cultura de seguridad · ECOHL }

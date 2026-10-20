@@ -28,7 +28,7 @@ function responder(int $codigo, array $datos): never {
     ? ($es ? 'Su radicado es' : 'Your reference number is') . ' <b>' . htmlspecialchars($datos['radicado']) . '</b>.'
     : htmlspecialchars($datos['error']) . ' ' . ($es ? 'Vuelva atrás y revise los datos.' : 'Go back and check your details.');
   echo "<!doctype html><html lang=\"$lang\"><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
-    . "<title>$titulo · HL Ingenieros</title><body style=\"font-family:system-ui,sans-serif;max-width:40rem;margin:4rem auto;padding:0 1rem\">"
+    . "<title>$titulo · Grupo HL</title><body style=\"font-family:system-ui,sans-serif;max-width:40rem;margin:4rem auto;padding:0 1rem\">"
     . "<h1>$titulo</h1><p>$cuerpo</p><p><a href=\"$volver\">" . ($es ? 'Volver' : 'Back') . '</a></p></body></html>';
   exit;
 }
@@ -110,7 +110,7 @@ foreach ($valores as $x) $texto .= "{$x['label']}: " . ($x['valor'] !== '' ? $x[
 $texto .= "\nMensaje:\n$mensaje\n\nAutorización Ley 1581: sí\n";
 
 function enviar(string $para, string $asunto, string $texto, ?string $responder = null, ?array $adjunto = null): bool {
-  $cab = ['From: HL Ingenieros <no-reply@hlingenieros.com>', 'MIME-Version: 1.0'];
+  $cab = ['From: Grupo HL <no-reply@hlingenieros.com>', 'MIME-Version: 1.0'];
   if ($responder) $cab[] = "Reply-To: $responder";
   if ($adjunto) {
     $limite = 'hl-' . bin2hex(random_bytes(8));
@@ -141,7 +141,7 @@ if ($correo !== '' && !$anonimo) {
   $acuse = $lang === 'es'
     ? "Recibimos su solicitud en HL Ingenieros S.A.\n\nRadicado: $rad\n\nConsérvelo para cualquier consulta. Este es un mensaje automático; no lo responda."
     : "We received your request at HL Ingenieros S.A.\n\nReference: $rad\n\nKeep it for any follow-up. This is an automatic message; please do not reply.";
-  enviar($correo, ($lang === 'es' ? 'Radicado ' : 'Reference ') . $rad . ' · HL Ingenieros', $acuse);
+  enviar($correo, ($lang === 'es' ? 'Radicado ' : 'Reference ') . $rad . ' · Grupo HL', $acuse);
 }
 
 responder(200, ['ok' => true, 'radicado' => $rad]);

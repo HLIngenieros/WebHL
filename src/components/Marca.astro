@@ -1,5 +1,6 @@
 ---
-// Marca provisional (guía §2.2): monograma vectorial + "HL INGENIEROS", hasta tener el logotipo completo.
+// Marca provisional (guía §2.2): monograma vectorial + "GRUPO HL" (el sitio es del grupo; HL Ingenieros
+// es el nombre anterior y la razón social), hasta tener el logotipo completo.
 // Usa la versión calada (una tinta): en `acento` sigue al tema (azul en claro, azul claro en oscuro, con
 // las letras dejando ver el fondo); en `blanco`, sobre el grafito del hero del inicio.
 import calado from '../assets/marca/monograma-hl-calado.svg?raw';
@@ -11,7 +12,7 @@ const svg = calado.replace(/<!--[\s\S]*?-->\s*/, '').replace(' role="img" aria-l
 <span class:list={['marca', `marca-${tono}`]}>
   <span class="marca-mono" set:html={svg} />
   <span class="marca-txt">
-    <span class="marca-nombre">HL Ingenieros</span>
+    <span class="marca-nombre">Grupo HL</span>
     {lema && <span class="marca-lema voz-datos">Desde 1968</span>}
   </span>
 </span>

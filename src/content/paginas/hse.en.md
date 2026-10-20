@@ -2,7 +2,7 @@
 pagina: hse
 lang: en
 titulo: HSE and quality
-descripcion: HL Ingenieros' integrated management system, certified to ISO 9001, ISO 14001 and ISO 45001, with HSE Golden Rules, PIENSA® and a measurable safety culture.
+descripcion: Grupo HL's integrated management system, with HL Ingenieros S.A. certified to ISO 9001, ISO 14001 and ISO 45001, with HSE Golden Rules, PIENSA® and a measurable safety culture.
 # Traducción de hse.es.md (F5). Las dudas de contenido se registran solo en la versión en español.
 indicadores:
   - { valor: 64, signo: "−", unidad: "%", etiqueta: Lost-time injury frequency over 8 years, fuente: Safety culture program · ECOHL }

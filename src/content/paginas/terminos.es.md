@@ -2,7 +2,7 @@
 pagina: terminos
 lang: es
 titulo: Términos y condiciones
-descripcion: Términos y condiciones de uso del sitio web de HL Ingenieros.
+descripcion: Términos y condiciones de uso del sitio web del Grupo HL.
 revisionJuridica: false
 confirmar:
   - "No existen en el sitio actual (el diagnóstico los reporta en 404). Redactarlos con el área jurídica."

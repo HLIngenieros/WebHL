@@ -22,13 +22,13 @@ type Msg = { de: 'hl' | 'yo'; texto: string; fuente?: string } | { de: 'derivar'
 const T = {
   es: {
     titulo: 'Asistente HL', vista: 'Vista previa · sin conectar', cerrar: 'Cerrar',
-    hola: 'Hola, soy el asistente de HL Ingenieros. Respondo con lo publicado en este sitio y le indico con quién hablar. No cotizo ni comprometo plazos.',
+    hola: 'Hola, soy el asistente del Grupo HL. Respondo con lo publicado en este sitio y le indico con quién hablar. No cotizo ni comprometo plazos.',
     escriba: 'Escriba su pregunta…', enviar: 'Enviar', nota: 'Respuestas de muestra · el agente se conecta en una etapa posterior',
     fuente: 'Fuente', recomiendo: 'Le recomiendo', obien: 'O bien:', porConfirmar: 'número por confirmar',
   },
   en: {
     titulo: 'HL Assistant', vista: 'Preview · not connected', cerrar: 'Close',
-    hola: "Hi, I'm the HL Ingenieros assistant. I answer from what is published on this site and point you to the right contact. I don't quote prices or commit to schedules.",
+    hola: "Hi, I'm the Grupo HL assistant. I answer from what is published on this site and point you to the right contact. I don't quote prices or commit to schedules.",
     escriba: 'Type your question…', enviar: 'Send', nota: 'Sample answers · the agent will be connected at a later stage',
     fuente: 'Source', recomiendo: 'I recommend', obien: 'Or:', porConfirmar: 'number to be confirmed',
   },
@@ -66,7 +66,7 @@ function guion(d: DatosAgente): Record<string, Respuesta> {
         principal: { texto: es ? 'Abrir el buzón' : 'Open the ethics line', href: d.rutas.buzon }, otras: [] },
     },
     [es ? '¿Desde cuándo existe HL?' : 'How long has HL been around?']: {
-      texto: es ? `HL Ingenieros fue fundada en 1968 por Guillermo Londoño: ${d.edad} años construyendo la industria.` : `HL Ingenieros was founded in 1968 by Guillermo Londoño: ${d.edad} years building industry.`,
+      texto: es ? `Grupo HL nació en 1968 como HL Ingenieros, fundada por Guillermo Londoño: ${d.edad} años construyendo la industria.` : `Grupo HL was born in 1968 as HL Ingenieros, founded by Guillermo Londoño: ${d.edad} years building industry.`,
       fuente: d.rutas.nosotros,
     },
   };

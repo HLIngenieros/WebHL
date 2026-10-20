@@ -50,7 +50,7 @@ test.describe('hero del inicio', () => {
     await expect(page.locator('h1')).toHaveCount(1);
     expect(texto(await page.locator('h1').textContent())).toBe(LEMA);
     await expect(page.locator('meta[name=description]')).toHaveAttribute('content', LEMA);
-    await expect(page).toHaveTitle('HL Ingenieros');
+    await expect(page).toHaveTitle('Grupo HL');
   });
 
   test('en inglés, el lema en inglés', async ({ page }) => {

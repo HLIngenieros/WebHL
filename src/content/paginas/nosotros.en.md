@@ -2,10 +2,10 @@
 pagina: nosotros
 lang: en
 titulo: About us
-descripcion: Since 1968, HL Ingenieros has delivered complete construction solutions for industry, integrating civil works and electromechanical installation.
+descripcion: Since 1968, Grupo HL, formerly HL Ingenieros, has delivered complete construction solutions for industry, integrating civil works and electromechanical installation.
 # Traducción de nosotros.es.md (F5). Las dudas de contenido se registran solo en la versión en español.
 quienes:
-  - We are a company with experience since 1968 in the domestic and international market, with projects in energy, water, mining, cement, oil and gas, industry and infrastructure.
+  - "We are Grupo HL, formerly HL Ingenieros: a company with experience since 1968 in the domestic and international market, with projects in energy, water, mining, cement, oil and gas, industry and infrastructure."
   - We offer complete construction solutions that integrate civil works and electromechanical installation, with a single team accountable from start to finish.
 mision: { antes: Managing construction projects, clave: creating value and trust. }
 vision:

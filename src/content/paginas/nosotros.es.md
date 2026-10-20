@@ -2,10 +2,10 @@
 pagina: nosotros
 lang: es
 titulo: Nosotros
-descripcion: HL Ingenieros ofrece desde 1968 soluciones completas de construcción para la industria, que integran obras civiles y montajes electromecánicos.
+descripcion: Grupo HL, antes HL Ingenieros, ofrece desde 1968 soluciones completas de construcción para la industria, que integran obras civiles y montajes electromecánicos.
 # Cabecera (guía §12.2-0): "Quiénes somos", de contenido/institucional.md §2.
 quienes:
-  - Somos una compañía con experiencia desde 1968 en el mercado nacional e internacional, con proyectos en energía, aguas, minería, cemento, petróleo y gas, industria e infraestructura.
+  - "Somos el Grupo HL, antes HL Ingenieros: una compañía con experiencia desde 1968 en el mercado nacional e internacional, con proyectos en energía, aguas, minería, cemento, petróleo y gas, industria e infraestructura."
   - Ofrecemos soluciones completas de construcción que integran obras civiles y montajes electromecánicos, con un mismo equipo responsable de principio a fin.
 # Misión y visión (§2.1). La visión va sin la meta interna de ventas y backlog (diagnóstico).
 mision: { antes: Gestionar proyectos de construcción, clave: generando valor y confianza. }

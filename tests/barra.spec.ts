@@ -117,7 +117,7 @@ test.describe('marca con el monograma', () => {
     const logo = page.locator('header.barra a.logo');
     await expect(logo.locator(`svg[viewBox="${VIEWBOX}"]`)).toHaveCount(1);
     await expect(logo.locator('svg')).toHaveAttribute('aria-hidden', 'true');
-    await expect(logo).toContainText('HL Ingenieros');
+    await expect(logo).toContainText('Grupo HL');
     await expect(page.locator('.logo-hl')).toHaveCount(0);
   });
 

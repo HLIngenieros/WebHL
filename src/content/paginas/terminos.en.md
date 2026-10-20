@@ -2,7 +2,7 @@
 pagina: terminos
 lang: en
 titulo: Terms and conditions
-descripcion: Terms and conditions of use of the HL Ingenieros website.
+descripcion: Terms and conditions of use of the Grupo HL website.
 revisionJuridica: false
 ---
 

@@ -2,7 +2,7 @@
 pagina: acreedores
 lang: es
 titulo: Información para acreedores
-descripcion: Convocatorias y avisos de HL Ingenieros para sus acreedores, en el marco de la Ley 1116 de 2006.
+descripcion: Convocatorias y avisos de HL Ingenieros S.A. para sus acreedores, en el marco de la Ley 1116 de 2006.
 revisionJuridica: false
 # Los 3 PDF que publica el sitio actual (descargados a public/documentos/). Estado por confirmar con HL.
 documentos:

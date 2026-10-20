@@ -53,12 +53,17 @@ recurso de demostración de The7 que hoy aparece como logo en el pie.
 
 ### 2.1 Arquitectura de marca · D1 decidido en parte
 
-Hoy conviven Grupo HL, HL Ingenieros, HL Ingenieros S.A. y ECOHL sin jerarquía. D1 (15-oct): el sitio es
-de **HL Ingenieros S.A.**; falta definir qué empresas se muestran como asociadas.
+Hoy conviven Grupo HL, HL Ingenieros, HL Ingenieros S.A. y ECOHL sin jerarquía. D1 (cambio del 20-oct): el
+sitio es del **Grupo HL**, con el mismo logo; HL Ingenieros es el nombre anterior del grupo, que aún usan
+los clientes antiguos. Falta definir qué empresas del grupo se muestran.
 
-- Nombre visible en cabecera y títulos: **HL Ingenieros** (marca provisional, §2.2). "Grupo HL" solo
-  aparece en citas textuales (testimonios).
-- Razón social (pie, legales, responsable de datos): **HL Ingenieros S.A.** con NIT.
+- Nombre visible en cabecera, títulos, asistente y remitente de correos: **Grupo HL** (marca provisional,
+  §2.2: monograma + "GRUPO HL").
+- El nombre anterior se menciona con discreción: "Grupo HL, antes HL Ingenieros" en Nosotros y en las
+  descripciones para buscadores. Hitos históricos y citas textuales conservan "HL Ingenieros".
+- Razón social y menciones legales (pie, Acreedores, acuse del radicado, Política de datos): **HL
+  Ingenieros S.A.** con NIT. La autorización Ley 1581 nombra al Grupo HL con sus tres sociedades, como la
+  Política de datos (por validar con jurídica).
 - ECOHL y demás empresas se presentan como líneas o empresas del grupo, nunca como marca paralela en
   la cabecera.
 

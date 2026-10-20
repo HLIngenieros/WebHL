@@ -548,7 +548,7 @@ test.describe('accesibilidad de F2 (Lighthouse)', () => {
   test('el texto visible del logo está en su nombre accesible', async ({ page }) => {
     await page.goto('/proyectos/');
     const visible = ((await page.locator('a.logo').textContent()) ?? '').replace(/\s+/g, ' ').trim();
-    expect(visible).toBe('HL Ingenieros');
+    expect(visible).toBe('Grupo HL');
     expect(await page.locator('a.logo').getAttribute('aria-label')).toContain(visible);
   });
 

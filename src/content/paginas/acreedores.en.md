@@ -2,7 +2,7 @@
 pagina: acreedores
 lang: en
 titulo: Creditor information
-descripcion: HL Ingenieros notices and meeting calls for its creditors, under Colombian Law 1116 of 2006.
+descripcion: HL Ingenieros S.A. notices and meeting calls for its creditors, under Colombian Law 1116 of 2006.
 revisionJuridica: false
 # Traducción de acreedores.es.md (F5). Los PDF están en español.
 documentos:
