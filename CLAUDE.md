@@ -252,8 +252,9 @@ y el agente en Copilot Studio. Lista detallada (con responsable) en [contenido/R
     **Ampliación (20-oct):** tablero de vacantes en Trabaje con nosotros (`Vacantes.tsx`), alimentado por una
     lista de SharePoint vía Power Automate → `/api/vacantes.json` (contrato en plan-f4 §F4.7); "Postularme"
     lleva la vacante al formulario y al correo. D3 pasa a Copilot Studio. 197 bloqueantes (+3: flujo de vacantes, SPF/DKIM y Copilot Studio). Contraste del botón y del chip "Nueva" corregido.
-  - **Siguiente paso:** F5 · Inglés (traducción con el glosario; los formularios ya traen su EN), o
-    conectar el agente (requiere decidir modelo y dónde vive la clave: el PHP sirve de intermediario).
+  - **Siguiente paso (elegido 20-oct): F5 · Inglés**, empezando por inventariar lo que falta traducir y escribir
+    `docs/plan-f5.md` (los formularios y el tablero ya traen su EN). Después, la guía del agente de Copilot Studio
+    (D3: ya no se usa una clave propia en el PHP).
   - **Ojo F4 (contraste, 20-oct):** nada de texto ni marcas sobre `--signal` dentro de un fondo `--accent`
     (2,1:1 en claro, 1,5:1 en oscuro): sobre el azul va `--accent-ink`; un chip de aviso es `--signal-soft` +
     borde `--signal` + texto `--ink`. Las clases de un componente llevan prefijo propio (`fm-`, `vc-`, `ag-`):
