@@ -10,22 +10,26 @@ hh: 210000
 sector: agua-y-energia
 servicios: [obras-civiles]
 cifras:
-  - { valor: 93, unidad: mw, etiqueta: { es: Capacidad de generación } }
-  - { valor: 4500, unidad: m3, etiqueta: { es: Concreto } }
-  - { valor: 475, unidad: t, etiqueta: { es: Estructura metálica } }
-  - { valor: 210000, unidad: hh, etiqueta: { es: Horas hombre } }
+  - { valor: 93, unidad: mw, etiqueta: { es: Capacidad de generación, en: Generating capacity } }
+  - { valor: 4500, unidad: m3, etiqueta: { es: Concreto, en: Concrete } }
+  - { valor: 475, unidad: t, etiqueta: { es: Estructura metálica, en: Structural steel } }
+  - { valor: 210000, unidad: hh, etiqueta: { es: Horas hombre, en: Man-hours } }
 cantidades:
-  - { valor: 13100, unidad: m3, concepto: { es: Excavaciones } }
-  - { valor: 8100, unidad: m3, concepto: { es: Rellenos } }
-  - { valor: 4500, unidad: m3, concepto: { es: Concreto } }
-  - { valor: 343000, unidad: kg, concepto: { es: Acero de refuerzo } }
-  - { valor: 6700, unidad: m, concepto: { es: Tubería de PVC } }
-  - { valor: 475, unidad: t, concepto: { es: Estructura metálica } }
-  - { valor: 7200, unidad: m2, concepto: { es: Paneles de techo y laterales } }
-  - { valor: 10, unidad: u, concepto: { es: Tanques de almacenamiento (peso total 250 t) } }
+  - { valor: 13100, unidad: m3, concepto: { es: Excavaciones, en: Excavation } }
+  - { valor: 8100, unidad: m3, concepto: { es: Rellenos, en: Backfill } }
+  - { valor: 4500, unidad: m3, concepto: { es: Concreto, en: Concrete } }
+  - { valor: 343000, unidad: kg, concepto: { es: Acero de refuerzo, en: Reinforcing steel } }
+  - { valor: 6700, unidad: m, concepto: { es: Tubería de PVC, en: PVC piping } }
+  - { valor: 475, unidad: t, concepto: { es: Estructura metálica, en: Structural steel } }
+  - { valor: 7200, unidad: m2, concepto: { es: Paneles de techo y laterales, en: Roof and wall panels } }
+  - { valor: 10, unidad: u, concepto: { es: Tanques de almacenamiento (peso total 250 t), en: Storage tanks (total weight 250 t) } }
 visibilidad: normal
 fuente: web
 es:
   titulo: Central térmica Termonorte
   resumen: Obras civiles y construcción de una central de generación de 93 MW de combustible dual y ciclo abierto.
   descripcion: Obras civiles y construcción del proyecto de generación de combustible dual y ciclo abierto Termonorte, de 93 MW.
+en:
+  titulo: Termonorte Thermal Power Plant
+  resumen: Civil works and construction of a 93 MW dual-fuel, open-cycle power plant.
+  descripcion: Civil works and construction of Termonorte, a 93 MW dual-fuel, open-cycle power generation project.

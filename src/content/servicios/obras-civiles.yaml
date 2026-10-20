@@ -17,3 +17,17 @@ es:
       texto: Deslizado de edificios y silos, pilotaje y obras de urbanismo, que completan la oferta integral en la especialidad civil.
   propios: Movimientos de tierras, rellenos, cimentaciones, estructuras de concreto, placas de nivelación y mampostería.
   aliados: Pilotaje, deslizado de edificios y silos, y obras de urbanismo, mediante alianzas estratégicas.
+en:
+  nombre: Industrial civil works
+  resumen: We directly execute the civil works for industrial plants and for public and private projects.
+  alcance:
+    - subcapacidad: Earthworks
+      texto: Excavation and backfill.
+    - subcapacidad: Foundations and concrete structures
+      texto: Foundations for all types of equipment and buildings, concrete structures and leveling slabs.
+    - subcapacidad: Masonry
+      texto: Masonry for industrial buildings.
+    - subcapacidad: Slipform construction, piling and site development
+      texto: Slipform construction of buildings and silos, piling and site development works, which round out our full civil offering.
+  propios: Earthworks, backfill, foundations, concrete structures, leveling slabs and masonry.
+  aliados: Piling, slipform construction of buildings and silos, and site development works, through strategic alliances.

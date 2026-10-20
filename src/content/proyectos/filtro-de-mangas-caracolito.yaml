@@ -4,7 +4,7 @@ cliente: Cemex
 sector: cemento
 servicios: [montaje-mecanico, mantenimiento]
 cifras:
-  - { valor: 1, unidad: dias, etiqueta: { es: Antes de lo previsto, se reinició la producción } }
+  - { valor: 1, unidad: dias, etiqueta: { es: Reinicio de la producción antes de lo previsto, en: Production restarted ahead of schedule } }
 visibilidad: normal
 fuente: ecohl
 confirmar:
@@ -15,3 +15,8 @@ es:
   resumen: Conversión de un electrofiltro a filtro de mangas; la producción se reinició un día antes.
   descripcion: Conversión del electrofiltro a filtro de mangas en la planta Caracolito de Cemex.
   reto: La producción se reinició un día antes de lo previsto.
+en:
+  titulo: Caracolito Baghouse
+  resumen: Conversion of an electrostatic precipitator into a baghouse; production restarted one day early.
+  descripcion: Conversion of the electrostatic precipitator into a baghouse at Cemex's Caracolito plant.
+  reto: Production restarted one day ahead of schedule.

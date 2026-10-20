@@ -15,3 +15,15 @@ es:
       texto: Aplicación de recubrimientos, aislamientos y refractarios.
     - subcapacidad: Tubería
       texto: Prefabricación y montaje de tuberías en todos los diámetros y en los materiales de la industria (acero al carbono, acero inoxidable, HDPE, entre otros), con el proceso de soldadura adecuado a los requisitos de cada cliente.
+en:
+  nombre: Mechanical and piping installation
+  resumen: We install process equipment and its structures to build new plants or upgrade existing production lines.
+  alcance:
+    - subcapacidad: Process equipment
+      texto: Installation, alignment and calibration of process equipment.
+    - subcapacidad: Steel structure
+      texto: Erection of all supporting steel structures.
+    - subcapacidad: Coatings, insulation and refractories
+      texto: Application of coatings, insulation and refractories.
+    - subcapacidad: Piping
+      texto: Prefabrication and installation of piping in every diameter and in industrial materials (carbon steel, stainless steel, HDPE, among others), with the welding process suited to each client's requirements.

@@ -5,3 +5,6 @@ slug: { es: mineria, en: mining }
 es:
   nombre: Minería
   intro: Obras de expansión de puertos y construcción de plantas de proceso para proyectos mineros.
+en:
+  nombre: Mining
+  intro: Port expansion works and process plant construction for mining projects.

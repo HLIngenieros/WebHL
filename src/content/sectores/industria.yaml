@@ -4,5 +4,8 @@ slug: { es: industria, en: industrial }
 es:
   nombre: Industria
   intro: Construcción y montaje de plantas y ampliaciones para la industria de alimentos, consumo y manufactura.
+en:
+  nombre: Industrial
+  intro: Construction and installation of new plants and expansions for the food, consumer goods and manufacturing industries.
 confirmar:
   - "Validar la introducción del sector Industria (nuevo; no existe en el sitio actual)."

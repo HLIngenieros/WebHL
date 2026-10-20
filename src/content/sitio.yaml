@@ -1,7 +1,7 @@
 # Datos generales del sitio. La edad se calcula desde `fundacion`; nunca se escribe fija.
 - id: hl
   fundacion: 1968
-  # Lema único (D2, guía §2.3). El EN es propuesta: se cierra en F5.
+  # Lema único (D2, guía §2.3). El EN se cerró en F5 (20-oct).
   lema:
     es: Construimos la industria con gente que cumple, desde 1968.
     en: Building industry with people who deliver, since 1968.
@@ -9,17 +9,17 @@
   # (contenido/institucional.md §1). Las fichas solo registran CO, EC, GT y PA.
   paises: [CO, PA, CR, DO, GT, BO, EC]
   cifras:
-    - { valor: 530, prefijo: '+', etiqueta: { es: Proyectos ejecutados } }
-    - { valor: 4000000, prefijo: '+', unidad: hh, etiqueta: { es: Horas hombre al año } }
-    - { valor: 7, etiqueta: { es: Países con obra } }
-    - { valor: 4, etiqueta: { es: Sedes } }
+    - { valor: 530, prefijo: '+', etiqueta: { es: Proyectos ejecutados, en: Projects completed } }
+    - { valor: 4000000, prefijo: '+', unidad: hh, etiqueta: { es: Horas hombre al año, en: Man-hours per year } }
+    - { valor: 7, etiqueta: { es: Países con obra, en: Countries with projects } }
+    - { valor: 4, etiqueta: { es: Sedes, en: Offices } }
   # Empresas asociadas (D1: falta decidir cuáles se muestran). Ninguna se publica hasta `aprobada: true`.
   # Logos del sitio actual; descripción solo si existe (la de ECOHL, del testimonio de su gerente).
   asociadas:
     - nombre: ECOHL
       logo: ../assets/grupo/ecohl.png
       area: { es: Gerencia · EPCM, en: Management · EPCM }
-      descripcion: { es: "Servicios EPCM, gerencias de proyecto, interventoría, comisionamiento, administración de contratos y gerencia de riesgos." }
+      descripcion: { es: "Servicios EPCM, gerencias de proyecto, interventoría, comisionamiento, administración de contratos y gerencia de riesgos.", en: "EPCM services, project management, inspection and oversight, commissioning, contract administration and risk management." }
       aprobada: false
     - { nombre: HL Infraestructura, logo: ../assets/grupo/hl-infraestructura.png, area: { es: Infraestructura, en: Infrastructure }, aprobada: false }
     - { nombre: HL Panamá, logo: ../assets/grupo/hl-panama.png, area: { es: Panamá, en: Panama }, aprobada: false }

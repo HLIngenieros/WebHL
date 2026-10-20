@@ -9,14 +9,14 @@ hh: 102481
 sector: mineria
 servicios: [montaje-mecanico]
 cifras:
-  - { valor: 16, unidad: u, etiqueta: { es: Tanques de almacenamiento } }
-  - { valor: 26000, unidad: m3, etiqueta: { es: Almacenamiento total } }
-  - { valor: 1000, unidad: t, etiqueta: { es: Peso total } }
-  - { valor: 102481, unidad: hh, etiqueta: { es: Horas hombre } }
+  - { valor: 16, unidad: u, etiqueta: { es: Tanques de almacenamiento, en: Storage tanks } }
+  - { valor: 26000, unidad: m3, etiqueta: { es: Almacenamiento total, en: Total storage } }
+  - { valor: 1000, unidad: t, etiqueta: { es: Peso total, en: Total weight } }
+  - { valor: 102481, unidad: hh, etiqueta: { es: Horas hombre, en: Man-hours } }
 cantidades:
-  - { valor: 16, unidad: u, concepto: { es: Tanques de almacenamiento (API 650 y AWWA D-100) } }
-  - { valor: 26000, unidad: m3, concepto: { es: Almacenamiento total } }
-  - { valor: 1000, unidad: t, concepto: { es: Peso total } }
+  - { valor: 16, unidad: u, concepto: { es: Tanques de almacenamiento (API 650 y AWWA D-100), en: Storage tanks (API 650 and AWWA D-100) } }
+  - { valor: 26000, unidad: m3, concepto: { es: Almacenamiento total, en: Total storage } }
+  - { valor: 1000, unidad: t, concepto: { es: Peso total, en: Total weight } }
 fotos:
   - archivo: ../../assets/proyectos/tanques-cobre-panama/1.jpg
   - archivo: ../../assets/proyectos/tanques-cobre-panama/2.jpg
@@ -29,3 +29,7 @@ es:
   titulo: Tanques de Cobre Panamá
   resumen: Montaje de 16 tanques de almacenamiento para el proyecto Cobre Panamá.
   descripcion: Montaje de 16 tanques de almacenamiento de distintos fluidos y capacidades para el proyecto Cobre Panamá.
+en:
+  titulo: Cobre Panamá Tanks
+  resumen: Erection of 16 storage tanks for the Cobre Panamá project.
+  descripcion: Erection of 16 storage tanks for different fluids and capacities for the Cobre Panamá project.

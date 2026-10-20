@@ -10,11 +10,15 @@ hh: 37000
 sector: infraestructura
 servicios: [montaje-mecanico, montaje-electrico]
 cifras:
-  - { valor: 37000, unidad: hh, etiqueta: { es: Horas hombre } }
-  - { valor: 14, unidad: meses, etiqueta: { es: Duración } }
+  - { valor: 37000, unidad: hh, etiqueta: { es: Horas hombre, en: Man-hours } }
+  - { valor: 14, unidad: meses, etiqueta: { es: Duración, en: Duration } }
 visibilidad: normal
 fuente: web
 es:
   titulo: Terminal de Barrancabermeja
   resumen: Montaje del sistema contra incendios y del alumbrado de la terminal de Impala en Barrancabermeja.
   descripcion: Montaje de los equipos de bombeo, la estación de bombeo y la red principal de distribución de agua del sistema contra incendios, y suministro y montaje de postes, mástiles y luminarias.
+en:
+  titulo: Barrancabermeja Terminal
+  resumen: Installation of the fire protection and lighting systems at Impala's terminal in Barrancabermeja.
+  descripcion: Installation of the pumping equipment, the pump station and the main water distribution network of the fire protection system, plus supply and installation of poles, masts and light fixtures.

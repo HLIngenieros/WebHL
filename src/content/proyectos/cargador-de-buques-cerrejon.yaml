@@ -4,7 +4,7 @@ cliente: Carbones del Cerrejón
 sector: mineria
 servicios: [mantenimiento]
 cifras:
-  - { valor: 3, unidad: dias, etiqueta: { es: Antes de lo previsto, se entregó } }
+  - { valor: 3, unidad: dias, etiqueta: { es: Entrega antes de lo previsto, en: Delivered ahead of schedule } }
 visibilidad: normal
 fuente: ecohl
 confirmar:
@@ -15,3 +15,8 @@ es:
   resumen: Reparación del cargador de buques, entregada 3 días antes.
   descripcion: Reparación del cargador de buques de Cerrejón.
   reto: El cargador se entregó 3 días antes de lo previsto.
+en:
+  titulo: Cerrejón Shiploader Repair
+  resumen: Repair of the shiploader, delivered 3 days early.
+  descripcion: Repair of the Cerrejón shiploader.
+  reto: The shiploader was delivered 3 days ahead of schedule.

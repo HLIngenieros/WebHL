@@ -14,7 +14,7 @@ indicadores:
 politica:
   intro: Como organizaciones dedicadas a la gestión de proyectos, que materializan nuestras ideas y las de nuestros clientes, nos comprometemos con la generación de valor.
   compromisos:
-    - { titulo: Nuestros clientes, corto: Clientes, texto: Superando sus expectativas en el acompañamiento técnico, en la gestión de riesgos y en la gestión del plazo. }
+    - { titulo: Nuestros clientes, corto: Clientes, texto: "Superando sus expectativas en el acompañamiento técnico, en la gestión de riesgos y en la gestión del plazo." }
     - { titulo: Nuestra gente extraordinaria, corto: Gente, texto: "Asegurando su consulta y participación, su desarrollo, condiciones justas, y un ambiente y una cultura de trabajo seguros." }
     - { titulo: Las comunidades, corto: Comunidades, texto: Asegurando el mejoramiento de sus condiciones económicas y minimizando el impacto en el medio ambiente. }
     - { titulo: Nuestro grupo, corto: Grupo, texto: Asegurando su trascendencia en el tiempo. }

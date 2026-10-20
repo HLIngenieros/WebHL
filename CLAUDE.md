@@ -140,7 +140,7 @@ de 5+ fotos con pie.
 | # | Decisión | Estado |
 |---|---|---|
 | D1 | ¿Sitio del grupo o de HL Ingenieros? Qué empresas se muestran (en EN aparecen Megacranes y Aktino, no en ES) | **Decidido (15-oct):** el sitio es de HL Ingenieros S.A. Falta definir qué empresas se muestran como asociadas (ECOHL…) |
-| D2 | Lema único | **Decidido (19-oct):** "Construimos la industria con gente que cumple, desde 1968." (A ampliado: integral y humano). EN propuesto: "Building industry with people who deliver, since 1968." (se cierra en F5) |
+| D2 | Lema único | **Decidido (19-oct):** "Construimos la industria con gente que cumple, desde 1968." (A ampliado: integral y humano). EN (cerrado en F5, 20-oct): "Building industry with people who deliver, since 1968." |
 | D3 | Agente: bot nativo de Zoho SalesIQ o agente propio con IA que entrega a Zoho | **Decidido (20-oct):** sin asesores en vivo; agente de **Copilot Studio** (licencia del tenant) publicado sin autenticación y conectado por Direct Line a la interfaz propia (F4), con tarjetas de derivación (Adaptive Cards) a WhatsApp, correo o teléfono. Conocimiento: archivos generados al compilar y, tras el lanzamiento, el sitio. **Por confirmar con TI:** capacidad de mensajes de Copilot Studio para visitantes anónimos |
 | D4 | CMS: Sanity, Decap o Payload | **Decidido (15-oct): sin CMS.** Sin terceros ni credenciales nuevas: el contenido vive en el repo como colecciones de Astro (Markdown/JSON con esquema validado al compilar). Despliegue manual (compilar y subir `dist/`). Salida futura si otros deben editar: Decap CMS sobre los mismos archivos |
 | D5 | Hosting: Vercel/Netlify o Azure Static Web Apps (tenant M365); Power Automate premium o Graph | **Hosting decidido (15-oct):** el actual (Apache + PHP 8.3, IP 107.180.21.17, al parecer GoDaddy; por confirmar), con despliegue estático que reemplaza a WordPress. Integración de correo: pendiente |
@@ -252,9 +252,12 @@ y el agente en Copilot Studio. Lista detallada (con responsable) en [contenido/R
     **Ampliación (20-oct):** tablero de vacantes en Trabaje con nosotros (`Vacantes.tsx`), alimentado por una
     lista de SharePoint vía Power Automate → `/api/vacantes.json` (contrato en plan-f4 §F4.7); "Postularme"
     lleva la vacante al formulario y al correo. D3 pasa a Copilot Studio. 197 bloqueantes (+3: flujo de vacantes, SPF/DKIM y Copilot Studio). Contraste del botón y del chip "Nueva" corregido.
-  - **Siguiente paso (elegido 20-oct): F5 · Inglés**, empezando por inventariar lo que falta traducir y escribir
-    `docs/plan-f5.md` (los formularios y el tablero ya traen su EN). Después, la guía del agente de Copilot Studio
-    (D3: ya no se usa una clave propia en el PHP).
+  - **Etapa 9 (2026-10-20): F5 · Inglés** ([docs/plan-f5.md](docs/plan-f5.md)). Inglés de EE. UU.; la interfaz ya
+    era bilingüe: se tradujo el contenido (51 entradas + testimonios) y las 5 páginas `.en.md`; legales EN completas
+    con aviso de prevalencia del español (`prevalece`). D2 cerrado en EN. De paso: 8 textos truncados por comas en
+    YAML en línea y H1 con guiones automáticos. 451 pruebas, presupuesto OK, Lighthouse `/en/` 95 (LCP 2,1 s; se
+    revisa en F6). 149 bloqueantes.
+  - **Siguiente paso:** la guía del agente de Copilot Studio (D3) o F6 (QA, migración y lanzamiento), a elegir.
   - **Ojo F4 (contraste, 20-oct):** nada de texto ni marcas sobre `--signal` dentro de un fondo `--accent`
     (2,1:1 en claro, 1,5:1 en oscuro): sobre el azul va `--accent-ink`; un chip de aviso es `--signal-soft` +
     borde `--signal` + texto `--ink`. Las clases de un componente llevan prefijo propio (`fm-`, `vc-`, `ag-`):

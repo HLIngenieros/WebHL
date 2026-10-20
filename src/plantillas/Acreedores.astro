@@ -44,7 +44,7 @@ const [t1, ...t2] = pagina.titulo.split(' ');
 
     <p class="aviso">
       <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M6 10h28v22H6zM6 16h28M14 24h12" /></svg>
-      <span><b>{t(lang, 'acreedoresAviso1')}</b> {t(lang, 'acreedoresAviso2')}</span>
+      <span><b>{t(lang, 'acreedoresAviso1')}</b> {t(lang, 'acreedoresAviso2')}{lang === 'en' && <> {t(lang, 'prevaleceTxt')}</>}</span>
     </p>
   </section>
 </Base>

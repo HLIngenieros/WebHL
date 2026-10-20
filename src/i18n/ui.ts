@@ -115,6 +115,9 @@ const es = {
   norma: 'Norma',
   revisionPendiente: 'Revisión jurídica pendiente',
   revisionPendienteTxt: 'Este texto lo valida el área jurídica antes del lanzamiento.',
+  // Solo se muestra en inglés: las páginas legales EN son traducción de cortesía.
+  prevalece: 'Traducción de cortesía',
+  prevaleceTxt: 'En caso de discrepancia prevalece la versión en español; los documentos están en español.',
   hseIndicadores1: 'Indicadores',
   hseIndicadores2: 'que respaldan la cultura',
   fuenteEcohl: 'Fuente: PDF de ECOHL',
@@ -341,6 +344,8 @@ const en: Record<keyof typeof es, string> = {
   norma: 'Law',
   revisionPendiente: 'Legal review pending',
   revisionPendienteTxt: 'The legal team validates this text before launch.',
+  prevalece: 'Courtesy translation',
+  prevaleceTxt: 'In case of discrepancy, the Spanish version prevails; documents are in Spanish.',
   hseIndicadores1: 'Indicators',
   hseIndicadores2: 'that back the culture',
   fuenteEcohl: 'Source: ECOHL portfolio',

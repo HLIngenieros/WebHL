@@ -4,8 +4,8 @@ cliente: Chevron
 sector: petroleo-y-gas
 servicios: [gerencia-de-proyectos]
 cifras:
-  - { valor: 0, unidad: pct, etiqueta: { es: Pérdida de tiempo } }
-  - { valor: 0, etiqueta: { es: Incidentes } }
+  - { valor: 0, unidad: pct, etiqueta: { es: Pérdida de tiempo, en: Lost time } }
+  - { valor: 0, etiqueta: { es: Incidentes, en: Incidents } }
 visibilidad: normal
 fuente: ecohl
 confirmar:
@@ -15,3 +15,8 @@ es:
   resumen: Planeación por cadena crítica de los trabajos costa afuera en las plataformas Chuchupa A y B, sin pérdida de tiempo ni incidentes.
   descripcion: Planeación de los trabajos costa afuera en las plataformas Chuchupa A y B con el método de cadena crítica (teoría de restricciones, TOC).
   reto: 0 % de pérdida de tiempo y 0 incidentes.
+en:
+  titulo: Chuchupa A and B Platforms
+  resumen: Critical chain planning of the offshore work on the Chuchupa A and B platforms, with no lost time and no incidents.
+  descripcion: Planning of the offshore work on the Chuchupa A and B platforms using the critical chain method (theory of constraints, TOC).
+  reto: 0% lost time and 0 incidents.

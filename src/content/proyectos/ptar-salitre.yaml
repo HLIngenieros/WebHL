@@ -9,14 +9,14 @@ hh: 305000
 sector: agua-y-energia
 servicios: [montaje-mecanico, fabricacion]
 cifras:
-  - { valor: 92000, unidad: pd, etiqueta: { es: Tubería de acero al carbono e inoxidable } }
-  - { valor: 770, unidad: t, etiqueta: { es: Equipos } }
-  - { valor: 183, unidad: u, etiqueta: { es: Compuertas } }
-  - { valor: 305000, unidad: hh, etiqueta: { es: Horas hombre } }
+  - { valor: 92000, unidad: pd, etiqueta: { es: Tubería de acero al carbono e inoxidable, en: Carbon and stainless steel piping } }
+  - { valor: 770, unidad: t, etiqueta: { es: Equipos, en: Equipment } }
+  - { valor: 183, unidad: u, etiqueta: { es: Compuertas, en: Gates } }
+  - { valor: 305000, unidad: hh, etiqueta: { es: Horas hombre, en: Man-hours } }
 cantidades:
-  - { valor: 92000, unidad: pd, concepto: { es: Tubería de acero al carbono e inoxidable } }
-  - { valor: 770, unidad: t, concepto: { es: Equipos, incluidos 183 compuertas, 99 bombas y 5 puentes desarenadores } }
-  - { valor: 67, unidad: t, concepto: { es: Soportes } }
+  - { valor: 92000, unidad: pd, concepto: { es: Tubería de acero al carbono e inoxidable, en: Carbon and stainless steel piping } }
+  - { valor: 770, unidad: t, concepto: { es: "Equipos, incluidos 183 compuertas, 99 bombas y 5 puentes desarenadores", en: "Equipment, including 183 gates, 99 pumps and 5 grit removal bridges" } }
+  - { valor: 67, unidad: t, concepto: { es: Soportes, en: Supports } }
 fotos:
   - archivo: ../../assets/proyectos/ptar-salitre/1.jpg
   - archivo: ../../assets/proyectos/ptar-salitre/2.jpg
@@ -30,3 +30,7 @@ es:
   titulo: PTAR Salitre, fases 1, 3 y 4
   resumen: Montaje mecánico de tuberías y equipos de las fases 1, 3 y 4 de la planta de tratamiento de aguas residuales El Salitre.
   descripcion: Montaje e instalación de las tuberías de alimentación y descarga de los decantadores, instalación de equipos mecánicos y suministro, fabricación y montaje de soportes de tubería, con pruebas hidrostáticas y pruebas en vacío de los equipos.
+en:
+  titulo: El Salitre WWTP, Phases 1, 3 and 4
+  resumen: Mechanical installation of piping and equipment for phases 1, 3 and 4 of the El Salitre wastewater treatment plant.
+  descripcion: Installation of the clarifier feed and discharge piping, installation of mechanical equipment, and supply, fabrication and installation of pipe supports, with hydrostatic testing and no-load equipment testing.

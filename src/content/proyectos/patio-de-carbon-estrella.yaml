@@ -6,12 +6,12 @@ hh: 340000
 sector: agua-y-energia
 servicios: [montaje-mecanico]
 cifras:
-  - { valor: 6400, unidad: t, etiqueta: { es: Estructura metálica } }
-  - { valor: 61000, unidad: m2, etiqueta: { es: Paneles de techo y laterales } }
-  - { valor: 340000, unidad: hh, etiqueta: { es: Horas hombre } }
+  - { valor: 6400, unidad: t, etiqueta: { es: Estructura metálica, en: Structural steel } }
+  - { valor: 61000, unidad: m2, etiqueta: { es: Paneles de techo y laterales, en: Roof and wall panels } }
+  - { valor: 340000, unidad: hh, etiqueta: { es: Horas hombre, en: Man-hours } }
 cantidades:
-  - { valor: 6400, unidad: t, concepto: { es: Estructura metálica } }
-  - { valor: 61000, unidad: m2, concepto: { es: Paneles de techo y laterales } }
+  - { valor: 6400, unidad: t, concepto: { es: Estructura metálica, en: Structural steel } }
+  - { valor: 61000, unidad: m2, concepto: { es: Paneles de techo y laterales, en: Roof and wall panels } }
 fotos:
   - archivo: ../../assets/proyectos/patio-de-carbon-estrella/1.jpg
   - archivo: ../../assets/proyectos/patio-de-carbon-estrella/2.jpg
@@ -26,3 +26,7 @@ es:
   titulo: Patio de carbón
   resumen: Montaje de la estructura metálica de un patio de carbón y de sus estructuras auxiliares.
   descripcion: Montaje de la estructura metálica del patio de carbón y de las estructuras auxiliares.
+en:
+  titulo: Coal Storage Yard
+  resumen: Erection of the structural steel for a coal storage yard and its auxiliary structures.
+  descripcion: Erection of the structural steel for the coal storage yard and the auxiliary structures.

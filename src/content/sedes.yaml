@@ -1,20 +1,20 @@
 # Fuente: contenido/institucional.md §4. Sin correos personales: los buzones por sede se definen en D7.
 - id: bogota
-  nombre: { es: Sede principal }
+  nombre: { es: Sede principal, en: Headquarters }
   ciudad: Bogotá
   pais: CO
   direccion: "Calle 127A # 53A-45, oficina 1002, torre 2, Edificio Empresarial Colpatria"
   telefono: +57 601 518 5777
   coordenadas: [4.711, -74.072]
 - id: el-rosal
-  nombre: { es: Sede El Rosal }
+  nombre: { es: Sede El Rosal, en: El Rosal facility }
   ciudad: El Rosal
   pais: CO
   direccion: Km 18,5 Autopista Bogotá-Medellín, El Rosal (Cundinamarca)
   telefono: +57 601 518 5777, ext. 115
   coordenadas: [4.853, -74.262]
 - id: panama
-  nombre: { es: Oficina Panamá }
+  nombre: { es: Oficina Panamá, en: Panama office }
   ciudad: Panamá
   pais: PA
   direccion: Vía Transístmica, milla 9, Patio MegaCranes
@@ -23,7 +23,7 @@
   confirmar:
     - "¿El 6781 0368 de Panamá es un celular institucional o personal?"
 - id: republica-dominicana
-  nombre: { es: Oficina República Dominicana }
+  nombre: { es: Oficina República Dominicana, en: Dominican Republic office }
   ciudad: Santo Domingo
   pais: DO
   direccion: Plaza Don Alfonso, calle Manuel de Jesús Troncoso, local 2A

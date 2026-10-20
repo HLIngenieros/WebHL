@@ -15,3 +15,15 @@ es:
       texto: Todo el cableado y las canalizaciones necesarios.
     - subcapacidad: Instrumentación y control
       texto: Instalación de la instrumentación para el control integrado del proceso productivo.
+en:
+  nombre: Electrical installation and instrumentation
+  resumen: We install the electrical power and control system and the instrumentation needed to commission each project.
+  alcance:
+    - subcapacidad: Power
+      texto: Medium- and low-voltage installations, electrical substations, distribution boards, switchgear and motor control centers (MCC).
+    - subcapacidad: Grounding and lightning protection
+      texto: Grounding grids and lightning protection.
+    - subcapacidad: Cabling and raceways
+      texto: All required cabling and raceways.
+    - subcapacidad: Instrumentation and control
+      texto: Installation of instrumentation for integrated control of the production process.

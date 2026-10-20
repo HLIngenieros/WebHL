@@ -10,15 +10,15 @@ hh: 90000
 sector: industria
 servicios: [obras-civiles]
 cifras:
-  - { valor: 2300, unidad: m3, etiqueta: { es: Concreto } }
-  - { valor: 5900, unidad: m3, etiqueta: { es: Excavaciones } }
-  - { valor: 357, unidad: t, etiqueta: { es: Estructura metálica } }
-  - { valor: 90000, unidad: hh, etiqueta: { es: Horas hombre } }
+  - { valor: 2300, unidad: m3, etiqueta: { es: Concreto, en: Concrete } }
+  - { valor: 5900, unidad: m3, etiqueta: { es: Excavaciones, en: Excavation } }
+  - { valor: 357, unidad: t, etiqueta: { es: Estructura metálica, en: Structural steel } }
+  - { valor: 90000, unidad: hh, etiqueta: { es: Horas hombre, en: Man-hours } }
 cantidades:
-  - { valor: 5900, unidad: m3, concepto: { es: Excavaciones } }
-  - { valor: 3000, unidad: m3, concepto: { es: Rellenos } }
-  - { valor: 2300, unidad: m3, concepto: { es: Concreto } }
-  - { valor: 357, unidad: t, concepto: { es: Estructura metálica } }
+  - { valor: 5900, unidad: m3, concepto: { es: Excavaciones, en: Excavation } }
+  - { valor: 3000, unidad: m3, concepto: { es: Rellenos, en: Backfill } }
+  - { valor: 2300, unidad: m3, concepto: { es: Concreto, en: Concrete } }
+  - { valor: 357, unidad: t, concepto: { es: Estructura metálica, en: Structural steel } }
 fotos:
   - archivo: ../../assets/proyectos/planta-diana-pet-food/1.jpg
   - archivo: ../../assets/proyectos/planta-diana-pet-food/2.jpg
@@ -31,3 +31,7 @@ es:
   titulo: Planta de producción Diana Pet Food
   resumen: Obras civiles de la nueva planta industrial y de sus oficinas en Tocancipá.
   descripcion: Obras civiles de la nueva planta industrial de Diana Pet Food y de sus oficinas.
+en:
+  titulo: Diana Pet Food Production Plant
+  resumen: Civil works for the new industrial plant and its offices in Tocancipá.
+  descripcion: Civil works for Diana Pet Food's new industrial plant and its offices.

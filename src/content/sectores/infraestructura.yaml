@@ -4,5 +4,8 @@ slug: { es: infraestructura, en: infrastructure }
 es:
   nombre: Infraestructura
   intro: Proyectos con empresas de los sectores siderúrgico y de infraestructura.
+en:
+  nombre: Infrastructure
+  intro: Projects with companies in the steel and infrastructure sectors.
 confirmar:
   - "Ampliar la introducción de Infraestructura: el texto actual es de una línea y no describe el alcance."

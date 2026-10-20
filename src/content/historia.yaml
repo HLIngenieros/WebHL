@@ -10,6 +10,9 @@
   es:
     titulo: La idea de servicio
     texto: Después de 5 años de trabajo con la industria cementera (Cementos Diamante, en Apulo y Buenos Aires) y con la industria de equipos para manejo de materiales (Rapiscol), nace una compañía de ingeniería basada en esa experiencia. Su primer gerente es Guillermo Londoño.
+  en:
+    titulo: The idea of service
+    texto: After five years working with the cement industry (Cementos Diamante, in Apulo and Buenos Aires) and the material handling equipment industry (Rapiscol), an engineering company is born from that experience. Its first general manager is Guillermo Londoño.
 - id: iniciando-la-operacion
   orden: 2
   anio: 1970
@@ -18,6 +21,9 @@
   es:
     titulo: Iniciando la operación
     texto: Los primeros clientes son Planta de Soda (Cartagena y Zipaquirá), American Pipe (construcción de Tibitó II), Cementos Diamante (conversión a carbón y rediseño de las empacadoras de cemento), Cementos Samper, Cementos Boyacá y otros menores, con diseños de plantas de agregados y mejoras de eficiencia en sistemas de trituración.
+  en:
+    titulo: Getting started
+    texto: The first clients are Planta de Soda (Cartagena and Zipaquirá), American Pipe (construction of Tibitó II), Cementos Diamante (conversion to coal and redesign of the cement packing machines), Cementos Samper, Cementos Boyacá and other smaller ones, with aggregate plant designs and efficiency improvements in crushing systems.
 - id: hacia-la-especializacion
   orden: 3
   anio: 1980
@@ -27,6 +33,9 @@
   es:
     titulo: Hacia la especialización
     texto: Hernando Londoño asume la presidencia y orienta la compañía hacia un camino más especializado. Los clientes y los contratos crecen, y a HL Ingenieros se le encomienda el montaje del sistema de correos que Adpostal contrató con G.E. de Inglaterra.
+  en:
+    titulo: Toward specialization
+    texto: Hernando Londoño becomes president and steers the company toward a more specialized path. Clients and contracts grow, and HL Ingenieros is entrusted with installing the mail-sorting system that Adpostal contracted from G.E. of England.
 - id: el-desarrollo
   orden: 4
   anio: 1990
@@ -35,6 +44,9 @@
   es:
     titulo: El desarrollo
     texto: En ese contrato la compañía se encuentra con Marco Arturo Muñoz, parte integral de su desarrollo desde entonces, que pronto trae uno de los contratos más importantes de su historia, la gerencia de proyecto, la fabricación de equipos y estructuras y el montaje mecánico y eléctrico de una línea de cemento completa para Cementos del Norte en Cúcuta.
+  en:
+    titulo: Growth
+    texto: "On that contract the company meets Marco Arturo Muñoz, an integral part of its growth ever since, who soon brings in one of the most important contracts in its history: project management, fabrication of equipment and structures, and mechanical and electrical installation of a complete cement line for Cementos del Norte in Cúcuta."
 - id: alianzas-para-crecer
   orden: 5
   anio: 2000
@@ -43,3 +55,6 @@
   es:
     titulo: Alianzas para crecer
     texto: Ante nuevos retos, la compañía busca fortalecer su flujo de trabajo para garantizar planes a largo plazo y establecer alianzas que fortalezcan su posición financiera para participar en contratos más acordes con su tamaño.
+  en:
+    titulo: Partnering to grow
+    texto: Facing new challenges, the company seeks to strengthen its workflow to secure long-term plans and to build alliances that reinforce its financial position, so it can bid on contracts better suited to its size.

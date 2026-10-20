@@ -16,7 +16,7 @@
   codigo: CO24/00000107
   sello: ../assets/certificaciones/sgs-iso-45001.png
 - id: bpi
-  norma: { es: Buenas Prácticas de Innovación (BPI) }
+  norma: { es: Buenas Prácticas de Innovación (BPI), en: Good Innovation Practices (BPI) }
   ente: Icontec / Cámara de Comercio de Bogotá
   sello: ../assets/certificaciones/bpi-icontec.png
   confirmar:

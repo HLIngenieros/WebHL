@@ -10,15 +10,15 @@ hh: 750000
 sector: agua-y-energia
 servicios: [montaje-mecanico]
 cifras:
-  - { valor: 6, unidad: u, etiqueta: { es: Digestores ovoidales } }
-  - { valor: 3000, unidad: t, etiqueta: { es: Láminas de tanques y equipos auxiliares } }
-  - { valor: 46000, unidad: pd, etiqueta: { es: Tuberías } }
-  - { valor: 750000, unidad: hh, etiqueta: { es: Horas hombre } }
+  - { valor: 6, unidad: u, etiqueta: { es: Digestores ovoidales, en: Egg-shaped digesters } }
+  - { valor: 3000, unidad: t, etiqueta: { es: Láminas de tanques y equipos auxiliares, en: Tank plates and auxiliary equipment } }
+  - { valor: 46000, unidad: pd, etiqueta: { es: Tuberías, en: Piping } }
+  - { valor: 750000, unidad: hh, etiqueta: { es: Horas hombre, en: Man-hours } }
 cantidades:
-  - { valor: 6, unidad: u, concepto: { es: Tanques ovoidales digestores y tuberías de interconexión } }
-  - { valor: 3000, unidad: t, concepto: { es: Láminas de tanques y equipos auxiliares } }
-  - { valor: 65, unidad: t, concepto: { es: Estructuras } }
-  - { valor: 46000, unidad: pd, concepto: { es: Tuberías } }
+  - { valor: 6, unidad: u, concepto: { es: Tanques ovoidales digestores y tuberías de interconexión, en: Egg-shaped digester tanks and interconnecting piping } }
+  - { valor: 3000, unidad: t, concepto: { es: Láminas de tanques y equipos auxiliares, en: Tank plates and auxiliary equipment } }
+  - { valor: 65, unidad: t, concepto: { es: Estructuras, en: Structures } }
+  - { valor: 46000, unidad: pd, concepto: { es: Tuberías, en: Piping } }
 fotos:
   - archivo: ../../assets/proyectos/digestores-ptar-bello/1.jpg
   - archivo: ../../assets/proyectos/digestores-ptar-bello/2.jpg
@@ -31,3 +31,7 @@ es:
   titulo: Digestores de la PTAR Bello
   resumen: Montaje, pruebas y asistencia a la puesta en marcha de 6 digestores de lodos metálicos ovoidales.
   descripcion: Montaje, pruebas y asistencia a la puesta en marcha de 6 digestores de lodos metálicos ovoidales para la planta de tratamiento de aguas residuales de Bello.
+en:
+  titulo: Bello WWTP Digesters
+  resumen: Installation, testing and commissioning support for 6 egg-shaped steel sludge digesters.
+  descripcion: Installation, testing and commissioning support for 6 egg-shaped steel sludge digesters at the Bello wastewater treatment plant.

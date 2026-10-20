@@ -245,9 +245,9 @@ test.describe('contenido migrado', () => {
     await expect(conteo(page, 'historia')).toHaveText('5');
     await expect(conteo(page, 'testimonios')).toHaveText('4');
     await expect(conteo(page, 'sitio')).toHaveText('1');
-    await expect(conteo(page, 'paginas')).toHaveText('5');
+    await expect(conteo(page, 'paginas')).toHaveText('10'); // 5 ES + 5 EN (F5)
     await expect(page.locator('tr[data-coleccion="testimonios"] li[data-campo="autorizado"]')).toHaveCount(4);
-    await expect(page.locator('tr[data-coleccion="paginas"] li[data-campo="revisión jurídica"]')).toHaveCount(3);
+    await expect(page.locator('tr[data-coleccion="paginas"] li[data-campo="revisión jurídica"]')).toHaveCount(6); // 3 legales en ES y EN
   });
 
   test('los testimonios son textuales: ninguna palabra que no esté en el original', () => {
@@ -274,7 +274,7 @@ test.describe('contenido migrado', () => {
   });
 
   test('el contenido no publica correos personales, solo buzones por función', () => {
-    const permitidos = ['buzonetico@hlingenieros.com', 'cotizaciones@hlingenieros.com', 'proveedores@hlingenieros.com', 'talento@hlingenieros.com', 'hlisa@hlingenieros.com', 'administracionpanama@hlingenieros.com'];
+    const permitidos = ['buzonetico@hlingenieros.com', 'cotizaciones@hlingenieros.com', 'proveedores@hlingenieros.com', 'talento@hlingenieros.com', 'hlisa@hlingenieros.com', 'administracionpanama@hlingenieros.com', 'no-reply@hlingenieros.com'];
     const raiz = path.join(process.cwd(), 'src', 'content');
     const archivos = fs.readdirSync(raiz, { recursive: true }).map(String).filter((f) => /\.(ya?ml|md)$/.test(f));
     const correos = archivos.flatMap((f) => fs.readFileSync(path.join(raiz, f), 'utf8').match(/[\w.+-]+@[\w-]+\.[\w.]+/g) ?? []);

@@ -11,3 +11,11 @@ es:
       texto: Mantenimientos mayores de plantas de producción, concebidos como proyectos de altas exigencias con límites de tiempo muy cortos.
     - subcapacidad: Mantenimiento rutinario
       texto: Personal de campo que refuerza el equipo de mantenimiento del cliente en sus labores rutinarias.
+en:
+  nombre: Maintenance and plant shutdowns
+  resumen: We carry out major maintenance of production plants and treat every shutdown as a project with very tight deadlines.
+  alcance:
+    - subcapacidad: Plant shutdowns
+      texto: Major maintenance of production plants, conceived as highly demanding projects with very short time limits.
+    - subcapacidad: Routine maintenance
+      texto: Field staff who reinforce the client's maintenance team in routine work.

@@ -12,22 +12,22 @@ hh: 9470000
 sector: cemento
 servicios: [epc-llave-en-mano, obras-civiles, montaje-mecanico, montaje-electrico]
 cifras:
-  - { valor: 9470000, unidad: hh, etiqueta: { es: Horas hombre } }
-  - { valor: 5250, unidad: tpd, etiqueta: { es: Capacidad de producción de cemento } }
-  - { valor: 95000, unidad: m3, etiqueta: { es: Concreto } }
-  - { valor: 8300, unidad: t, etiqueta: { es: Estructura metálica } }
+  - { valor: 9470000, unidad: hh, etiqueta: { es: Horas hombre, en: Man-hours } }
+  - { valor: 5250, unidad: tpd, etiqueta: { es: Capacidad de producción de cemento, en: Cement production capacity } }
+  - { valor: 95000, unidad: m3, etiqueta: { es: Concreto, en: Concrete } }
+  - { valor: 8300, unidad: t, etiqueta: { es: Estructura metálica, en: Structural steel } }
 cantidades:
-  - { valor: 442000, unidad: m3, concepto: { es: Excavaciones } }
-  - { valor: 117000, unidad: m3, concepto: { es: Rellenos } }
-  - { valor: 95000, unidad: m3, concepto: { es: Concreto } }
-  - { valor: 12000, unidad: t, concepto: { es: Acero de refuerzo } }
-  - { valor: 8300, unidad: t, concepto: { es: Estructura metálica } }
-  - { valor: 23000, unidad: m2, concepto: { es: Aislamiento térmico } }
-  - { valor: 18600, unidad: t, concepto: { es: Equipos } }
-  - { valor: 36000, unidad: m, concepto: { es: Bandejas portacables } }
-  - { valor: 56000, unidad: m, concepto: { es: Tubería conduit } }
-  - { valor: 353000, unidad: m, concepto: { es: Cables de baja y media tensión y de control } }
-  - { valor: 3300, unidad: u, concepto: { es: Luminarias } }
+  - { valor: 442000, unidad: m3, concepto: { es: Excavaciones, en: Excavation } }
+  - { valor: 117000, unidad: m3, concepto: { es: Rellenos, en: Backfill } }
+  - { valor: 95000, unidad: m3, concepto: { es: Concreto, en: Concrete } }
+  - { valor: 12000, unidad: t, concepto: { es: Acero de refuerzo, en: Reinforcing steel } }
+  - { valor: 8300, unidad: t, concepto: { es: Estructura metálica, en: Structural steel } }
+  - { valor: 23000, unidad: m2, concepto: { es: Aislamiento térmico, en: Thermal insulation } }
+  - { valor: 18600, unidad: t, concepto: { es: Equipos, en: Equipment } }
+  - { valor: 36000, unidad: m, concepto: { es: Bandejas portacables, en: Cable trays } }
+  - { valor: 56000, unidad: m, concepto: { es: Tubería conduit, en: Conduit } }
+  - { valor: 353000, unidad: m, concepto: { es: Cables de baja y media tensión y de control, en: Low- and medium-voltage and control cables } }
+  - { valor: 3300, unidad: u, concepto: { es: Luminarias, en: Light fixtures } }
 fotos:
   - archivo: ../../assets/proyectos/planta-columbus/1.jpg
   - archivo: ../../assets/proyectos/planta-columbus/2.jpg
@@ -44,3 +44,7 @@ es:
   titulo: Planta Columbus
   resumen: Diseño, construcción, montaje y puesta en marcha de una planta de cemento de 5.250 t/día en Cartagena.
   descripcion: Diseño, construcción, montaje, pruebas y puesta en marcha de una nueva planta productora de cemento con una producción de 5.250 t/día y 1.764.000 t/año en Cartagena. Proyecto ejecutado en consorcio.
+en:
+  titulo: Columbus Plant
+  resumen: Design, construction, installation and commissioning of a 5,250 t/day cement plant in Cartagena.
+  descripcion: Design, construction, installation, testing and commissioning of a new cement plant producing 5,250 t/day and 1,764,000 t/year in Cartagena. Project executed in a consortium.

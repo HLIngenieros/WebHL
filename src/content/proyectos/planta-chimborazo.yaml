@@ -10,15 +10,15 @@ hh: 390000
 sector: cemento
 servicios: [obras-civiles]
 cifras:
-  - { valor: 105, unidad: m, etiqueta: { es: Torre precalentadora deslizada } }
-  - { valor: 8100, unidad: m3, etiqueta: { es: Concreto } }
-  - { valor: 1900, unidad: t, etiqueta: { es: Acero de refuerzo } }
-  - { valor: 390000, unidad: hh, etiqueta: { es: Horas hombre } }
+  - { valor: 105, unidad: m, etiqueta: { es: Torre precalentadora deslizada, en: Slipformed preheater tower } }
+  - { valor: 8100, unidad: m3, etiqueta: { es: Concreto, en: Concrete } }
+  - { valor: 1900, unidad: t, etiqueta: { es: Acero de refuerzo, en: Reinforcing steel } }
+  - { valor: 390000, unidad: hh, etiqueta: { es: Horas hombre, en: Man-hours } }
 cantidades:
-  - { concepto: { es: Deslizado de 105 m de torre precalentadora y 65 m de silo de cemento } }
-  - { valor: 1900, unidad: t, concepto: { es: Acero de refuerzo } }
-  - { valor: 8100, unidad: m3, concepto: { es: Concreto } }
-  - { valor: 16000, unidad: m2, concepto: { es: Encofrado } }
+  - { concepto: { es: Deslizado de 105 m de torre precalentadora y 65 m de silo de cemento, en: Slipforming of a 105 m preheater tower and a 65 m cement silo } }
+  - { valor: 1900, unidad: t, concepto: { es: Acero de refuerzo, en: Reinforcing steel } }
+  - { valor: 8100, unidad: m3, concepto: { es: Concreto, en: Concrete } }
+  - { valor: 16000, unidad: m2, concepto: { es: Encofrado, en: Formwork } }
 fotos:
   - archivo: ../../assets/proyectos/planta-chimborazo/1.jpg
   - archivo: ../../assets/proyectos/planta-chimborazo/2.jpg
@@ -34,3 +34,7 @@ es:
   titulo: Planta de cemento Chimborazo
   resumen: Construcción con formaleta deslizante de la torre precalentadora de 105 m y de un silo de 65 m.
   descripcion: Construcción y montaje de la obra civil del paquete 2 de la planta de cemento Chimborazo, la torre precalentadora y el silo de crudo.
+en:
+  titulo: Chimborazo Cement Plant
+  resumen: Slipform construction of the 105 m preheater tower and a 65 m silo.
+  descripcion: Construction and installation of the civil works for package 2 of the Chimborazo cement plant, the preheater tower and the raw meal silo.

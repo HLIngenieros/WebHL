@@ -93,7 +93,7 @@
     line-height: var(--lh-text);
   }
   h1, h2, h3, h4 { text-wrap: balance; margin: 0; }
-  h1 { font-size: var(--fs-h1); font-stretch: var(--wdth-display); font-family: var(--f-ancha); font-weight: var(--fw-display); line-height: var(--lh-display); letter-spacing: var(--ls-display); }
+  h1 { font-size: var(--fs-h1); font-stretch: var(--wdth-display); font-family: var(--f-ancha); font-weight: var(--fw-display); line-height: var(--lh-display); letter-spacing: var(--ls-display); hyphens: auto; overflow-wrap: break-word; }
   h2 { font-size: var(--fs-h2); font-stretch: var(--wdth-title); font-family: var(--f-ancha); font-weight: var(--fw-title); line-height: var(--lh-title); }
   h3 { font-size: var(--fs-h3); font-stretch: var(--wdth-subtitle); font-weight: var(--fw-subtitle); line-height: var(--lh-title); }
   p { max-width: var(--measure); }

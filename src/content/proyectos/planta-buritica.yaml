@@ -10,19 +10,19 @@ hh: 750000
 sector: mineria
 servicios: [montaje-mecanico, montaje-electrico]
 cifras:
-  - { valor: 750000, unidad: hh, etiqueta: { es: Horas hombre } }
-  - { valor: 2900, unidad: t, etiqueta: { es: Equipos } }
-  - { valor: 2200, unidad: t, etiqueta: { es: Estructura metálica } }
-  - { valor: 2400, unidad: u, etiqueta: { es: Instrumentos } }
+  - { valor: 750000, unidad: hh, etiqueta: { es: Horas hombre, en: Man-hours } }
+  - { valor: 2900, unidad: t, etiqueta: { es: Equipos, en: Equipment } }
+  - { valor: 2200, unidad: t, etiqueta: { es: Estructura metálica, en: Structural steel } }
+  - { valor: 2400, unidad: u, etiqueta: { es: Instrumentos, en: Instruments } }
 cantidades:
-  - { valor: 2200, unidad: t, concepto: { es: Estructura metálica } }
-  - { valor: 2900, unidad: t, concepto: { es: Equipos, incluidos 2 molinos horizontales (550 t) y 1 filtro prensa (400 t) } }
-  - { valor: 10500, unidad: m, concepto: { es: Tuberías } }
-  - { valor: 160000, unidad: m, concepto: { es: Cables de potencia } }
-  - { valor: 25000, unidad: m, concepto: { es: Canalizaciones eléctricas (bandejas y conduit) } }
-  - { valor: 1100, unidad: u, concepto: { es: Luminarias } }
-  - { valor: 26000, unidad: m, concepto: { es: Cables de instrumentación } }
-  - { valor: 2400, unidad: u, concepto: { es: Instrumentos } }
+  - { valor: 2200, unidad: t, concepto: { es: Estructura metálica, en: Structural steel } }
+  - { valor: 2900, unidad: t, concepto: { es: "Equipos, incluidos 2 molinos horizontales (550 t) y 1 filtro prensa (400 t)", en: "Equipment, including 2 horizontal mills (550 t) and 1 filter press (400 t)" } }
+  - { valor: 10500, unidad: m, concepto: { es: Tuberías, en: Piping } }
+  - { valor: 160000, unidad: m, concepto: { es: Cables de potencia, en: Power cables } }
+  - { valor: 25000, unidad: m, concepto: { es: Canalizaciones eléctricas (bandejas y conduit), en: Electrical raceways (trays and conduit) } }
+  - { valor: 1100, unidad: u, concepto: { es: Luminarias, en: Light fixtures } }
+  - { valor: 26000, unidad: m, concepto: { es: Cables de instrumentación, en: Instrumentation cables } }
+  - { valor: 2400, unidad: u, concepto: { es: Instrumentos, en: Instruments } }
 visibilidad: destacado
 fuente: web
 confirmar:
@@ -31,3 +31,7 @@ es:
   titulo: Planta de proceso Buriticá
   resumen: Montaje mecánico, eléctrico y de instrumentación de la planta de proceso del proyecto minero Buriticá.
   descripcion: Montaje de equipos mecánicos, eléctricos y de instrumentación, y suministro de los materiales de tubería para la planta de procesos del proyecto minero Buriticá, además del montaje de los campamentos.
+en:
+  titulo: Buriticá Process Plant
+  resumen: Mechanical, electrical and instrumentation installation for the Buriticá mining project process plant.
+  descripcion: Installation of mechanical, electrical and instrumentation equipment and supply of piping materials for the Buriticá mining project process plant, plus installation of the camps.

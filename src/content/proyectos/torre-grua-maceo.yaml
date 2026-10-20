@@ -3,7 +3,7 @@ slug: { es: torre-grua-maceo, en: maceo-tower-crane }
 sector: cemento
 servicios: [montaje-mecanico]
 cifras:
-  - { valor: 30, unidad: pct, etiqueta: { es: Menos tiempo de montaje } }
+  - { valor: 30, unidad: pct, etiqueta: { es: Menos tiempo de montaje, en: Less installation time } }
 visibilidad: normal
 fuente: ecohl
 confirmar:
@@ -15,3 +15,8 @@ es:
   resumen: Montaje de la torre grúa para la nueva planta Maceo, con un 30 % menos de tiempo.
   descripcion: Montaje de la torre grúa para la nueva planta Maceo.
   reto: El montaje tomó un 30 % menos de tiempo.
+en:
+  titulo: Maceo Plant Tower Crane
+  resumen: Erection of the tower crane for the new Maceo plant, in 30% less time.
+  descripcion: Erection of the tower crane for the new Maceo plant.
+  reto: Erection took 30% less time.

@@ -5,3 +5,6 @@ slug: { es: cemento, en: cement }
 es:
   nombre: Cemento
   intro: Montaje electromecánico y obras civiles de líneas productoras de cemento, en Colombia y en el exterior.
+en:
+  nombre: Cement
+  intro: Electromechanical installation and civil works for cement production lines, in Colombia and abroad.

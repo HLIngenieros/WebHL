@@ -31,7 +31,7 @@ S.A.** que muestre su experiencia con datos verificables.
 | D1 | El sitio es de HL Ingenieros S.A. Las empresas asociadas (por definir) van en Nosotros. |
 | D4 | **Sin CMS.** El contenido vive en el repo como colecciones de Astro; no se agregan servicios de terceros ni credenciales. |
 | D5 | Hosting actual (Apache + PHP 8.3). Despliegue manual: compilar y subir `dist/`. |
-| D2 | Lema: **"Construimos la industria con gente que cumple, desde 1968."** (EN propuesto: "Building industry with people who deliver, since 1968."; se cierra en F5). Guía §2.3. |
+| D2 | Lema: **"Construimos la industria con gente que cumple, desde 1968."** (EN cerrado en F5, 20-oct: "Building industry with people who deliver, since 1968."). Guía §2.3. |
 | D6 | Los casos sensibles se publican con `visibilidad: discreta`. |
 | — | Stack: Astro + Tailwind (con los tokens) + islas Preact solo donde haga falta. |
 

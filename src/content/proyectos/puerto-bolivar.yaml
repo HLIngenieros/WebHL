@@ -10,18 +10,18 @@ hh: 390000
 sector: mineria
 servicios: [montaje-mecanico, montaje-electrico]
 cifras:
-  - { valor: 1100, unidad: m, etiqueta: { es: Banda transportadora en tierra y en el mar } }
-  - { valor: 1300, unidad: t, etiqueta: { es: Estructura } }
-  - { valor: 77000, unidad: m, etiqueta: { es: Cables de baja y media tensión y de control } }
-  - { valor: 390000, unidad: hh, etiqueta: { es: Horas hombre } }
+  - { valor: 1100, unidad: m, etiqueta: { es: Banda transportadora en tierra y en el mar, en: Onshore and offshore conveyor } }
+  - { valor: 1300, unidad: t, etiqueta: { es: Estructura, en: Structure } }
+  - { valor: 77000, unidad: m, etiqueta: { es: Cables de baja y media tensión y de control, en: Low- and medium-voltage and control cables } }
+  - { valor: 390000, unidad: hh, etiqueta: { es: Horas hombre, en: Man-hours } }
 cantidades:
-  - { valor: 1100, unidad: m, concepto: { es: Banda de 2.400 y 2.100 mm (en tierra y en el mar), 1 estación de muestreo y 2 torres de transferencia } }
-  - { concepto: { es: Tubería de agua de servicios y contra incendios } }
-  - { valor: 1300, unidad: t, concepto: { es: Estructura } }
-  - { valor: 660, unidad: t, concepto: { es: Equipos } }
-  - { valor: 5000, unidad: m, concepto: { es: Tuberías } }
-  - { valor: 4000, unidad: m, concepto: { es: Bandejas portacables } }
-  - { valor: 77000, unidad: m, concepto: { es: Cables de baja y media tensión y de control } }
+  - { valor: 1100, unidad: m, concepto: { es: "Banda de 2.400 y 2.100 mm (en tierra y en el mar), 1 estación de muestreo y 2 torres de transferencia", en: "2,400 and 2,100 mm conveyor (onshore and offshore), 1 sampling station and 2 transfer towers" } }
+  - { concepto: { es: Tubería de agua de servicios y contra incendios, en: Service water and fire protection piping } }
+  - { valor: 1300, unidad: t, concepto: { es: Estructura, en: Structure } }
+  - { valor: 660, unidad: t, concepto: { es: Equipos, en: Equipment } }
+  - { valor: 5000, unidad: m, concepto: { es: Tuberías, en: Piping } }
+  - { valor: 4000, unidad: m, concepto: { es: Bandejas portacables, en: Cable trays } }
+  - { valor: 77000, unidad: m, concepto: { es: Cables de baja y media tensión y de control, en: Low- and medium-voltage and control cables } }
 fotos:
   - archivo: ../../assets/proyectos/puerto-bolivar/1.jpg
   - archivo: ../../assets/proyectos/puerto-bolivar/2.jpg
@@ -34,3 +34,7 @@ es:
   titulo: Obras marinas en Puerto Bolívar
   resumen: Montaje electromecánico de bandas transportadoras, torres de transferencia y obras marinas en el puerto de Cerrejón.
   descripcion: Montaje electromecánico de los elementos 6, 7 y 8, las obras marinas (sin vigas cuadrantes) y los trabajos remanentes en Puerto Bolívar, que incluyen las bandas transportadoras BC 508 y BC 509, las torres de transferencia TS 59 y TS 60 y la estación de muestreo.
+en:
+  titulo: Puerto Bolívar Marine Works
+  resumen: Electromechanical installation of conveyors, transfer towers and marine works at Cerrejón's port.
+  descripcion: Electromechanical installation of elements 6, 7 and 8, the marine works (excluding the quadrant beams) and the remaining work at Puerto Bolívar, including conveyors BC 508 and BC 509, transfer towers TS 59 and TS 60 and the sampling station.

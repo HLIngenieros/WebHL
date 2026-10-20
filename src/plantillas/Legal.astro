@@ -47,6 +47,7 @@ const [t1, ...t2] = pagina.titulo.split(' ');
           </dl>
         )}
         {!pagina.revisionJuridica && <p class="juridica"><span class="voz-datos">{t(lang, 'revisionPendiente')}</span> {t(lang, 'revisionPendienteTxt')}</p>}
+        {lang === 'en' && <p class="juridica"><span class="voz-datos">{t(lang, 'prevalece')}</span> {t(lang, 'prevaleceTxt')}</p>}
         <article class="texto"><Content /></article>
       </div>
     </div>

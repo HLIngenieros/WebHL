@@ -16,3 +16,16 @@ es:
     - subcapacidad: Comisionamiento y arranque
       texto: Comisionamiento, pruebas y acompañamiento al personal de operación hasta convertir el proyecto de inversión en una planta completamente operativa.
   aliados: Las ingenierías básicas y de detalle se realizan a través de aliados y contratistas; el esquema llave en mano se apoya en asociaciones estratégicas.
+en:
+  nombre: EPC and turnkey
+  resumen: We deliver the complete project, from engineering to commissioning, handing over a fully operational production plant.
+  alcance:
+    - subcapacidad: Basic and detailed engineering
+      texto: Basic and detailed engineering in the civil, mechanical and electrical disciplines, supporting the execution of our construction projects for every industrial sector.
+    - subcapacidad: Procurement
+      texto: Management of project purchasing and supply as part of the full integration of its phases.
+    - subcapacidad: Construction and installation
+      texto: Civil works and electromechanical installation for the project.
+    - subcapacidad: Commissioning and start-up
+      texto: Commissioning, testing and support to the operating staff until the investment project becomes a fully operational plant.
+  aliados: Basic and detailed engineering is carried out through partners and contractors; the turnkey model is backed by strategic alliances.

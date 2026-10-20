@@ -1,49 +1,57 @@
 # Fuente: "Soy parte de HL Ingenieros" (contenido/institucional.md §2). Citas textuales: solo se corrige la
-# ortografía. No se publican hasta tener la autorización de cada persona. Orden: el de la maqueta aprobada.
+# ortografía; el EN es traducción fiel (F5). No se publican hasta tener la autorización de cada persona. Orden: el de la maqueta aprobada.
 - id: camilo-arturo-munoz-mosquera
   orden: 1
   nombre: Camilo Arturo Muñoz Mosquera
-  cargo: { es: Gerente General }
+  cargo: { es: Gerente General, en: General Manager }
   foto: ../assets/testimonios/camilo-arturo-munoz-mosquera.jpg
   autorizado: false
   fragmento:
     es: En el Grupo HL nos apasiona lo que hacemos. A lo largo de nuestra trayectoria hemos desarrollado una amplia gama de proyectos, siempre con el compromiso de ofrecer a nuestros clientes soluciones integrales y de alta calidad; nos involucramos en cada proyecto desde el inicio […]
+    en: At Grupo HL we are passionate about what we do. Throughout our history we have carried out a wide range of projects, always committed to offering our clients comprehensive, high-quality solutions; we get involved in every project from the start […]
   confirmar: ["Fragmento: validar con la autorización"]
   cita:
     es: En el Grupo HL nos apasiona lo que hacemos. A lo largo de nuestra trayectoria hemos desarrollado una amplia gama de proyectos, siempre con el compromiso de ofrecer a nuestros clientes soluciones integrales y de alta calidad; nos involucramos en cada proyecto desde el inicio, trabajando en estrecha colaboración con nuestros clientes para entender sus necesidades y expectativas.
+    en: At Grupo HL we are passionate about what we do. Throughout our history we have carried out a wide range of projects, always committed to offering our clients comprehensive, high-quality solutions; we get involved in every project from the start, working closely with our clients to understand their needs and expectations.
 - id: carlos-humberto-triana-herrera
   orden: 2
   nombre: Carlos Humberto Triana Herrera
-  cargo: { es: Gerente de ECOHL }
+  cargo: { es: Gerente de ECOHL, en: ECOHL Manager }
   foto: ../assets/testimonios/carlos-humberto-triana-herrera.jpg
   autorizado: false
   anios: 28
   fragmento:
     es: "[…] Con más de 37 años de experiencia en el sector de la construcción pesada; 28 años en el Grupo HL, donde me he desempeñado como gerente de proyecto durante 11 años, gerente Colombia durante 3 años, vicepresidente de operaciones durante 10 años y ahora gerente de ECOHL […]"
+    en: "[…] With more than 37 years of experience in heavy construction; 28 years at Grupo HL, where I have served as project manager for 11 years, Colombia manager for 3 years, vice president of operations for 10 years and now ECOHL manager […]"
   confirmar: ["Fragmento y años en la casa: validar con la autorización"]
   cita:
     es: Ingeniero mecánico con maestría en administración con especialización en gerencia y dirección de proyectos. Con más de 37 años de experiencia en el sector de la construcción pesada; 28 años en el Grupo HL, donde me he desempeñado como gerente de proyecto durante 11 años, gerente Colombia durante 3 años, vicepresidente de operaciones durante 10 años y ahora gerente de ECOHL durante 4 años, empresa del grupo encargada de atender nuestros clientes en servicios EPCM, gerencias de proyecto, interventoría, comisionamiento, administración de contratos y gerencia de riesgos.
+    en: "Mechanical engineer with a master's in business administration specializing in project management. With more than 37 years of experience in heavy construction; 28 years at Grupo HL, where I have served as project manager for 11 years, Colombia manager for 3 years, vice president of operations for 10 years and now ECOHL manager for 4 years, the group company that serves our clients with EPCM services, project management, inspection and oversight, commissioning, contract administration and risk management."
 - id: carlos-abel-leon-martinez
   orden: 3
   nombre: Carlos Abel León Martínez
-  cargo: { es: Director de Operaciones }
+  cargo: { es: Director de Operaciones, en: Director of Operations }
   foto: ../assets/testimonios/carlos-abel-leon-martinez.jpg
   autorizado: false
   anios: 15
   aniosMas: true
   fragmento:
     es: Han pasado más de 15 años desde que entré a la compañía […] Hoy entiendo que todo este recorrido ha valido la pena, he logrado una estabilidad económica y emocional gracias a las oportunidades laborales y profesionales que me ha brindado la compañía […]
+    en: It has been more than 15 years since I joined the company […] Today I understand that the whole journey has been worth it; I have achieved financial and emotional stability thanks to the work and professional opportunities the company has given me […]
   confirmar: ["Fragmento y años en la casa: validar con la autorización"]
   cita:
     es: Han pasado más de 15 años desde que entré a la compañía, nunca he escrito un testimonio y a decir verdad hoy siento la necesidad de hacerlo y expresar la admiración que siento por quienes forjaron e inculcaron dentro de la organización unos inquebrantables valores corporativos. Hoy entiendo que todo este recorrido ha valido la pena, he logrado una estabilidad económica y emocional gracias a las oportunidades laborales y profesionales que me ha brindado la compañía, agradezco a los accionistas, directivos y a todos los conformantes de la organización por permitirme ser parte de ella.
+    en: "It has been more than 15 years since I joined the company. I have never written a testimonial, and to be honest, today I feel the need to do so and to express my admiration for those who forged and instilled unbreakable corporate values within the organization. Today I understand that the whole journey has been worth it; I have achieved financial and emotional stability thanks to the work and professional opportunities the company has given me. I thank the shareholders, the executives and everyone in the organization for letting me be part of it."
 - id: jairo-armando-saenz
   orden: 4
   nombre: Jairo Armando Sáenz
-  cargo: { es: Coordinador de Compras }
+  cargo: { es: Coordinador de Compras, en: Purchasing Coordinator }
   foto: ../assets/testimonios/jairo-armando-saenz.jpg
   autorizado: false
   fragmento:
     es: "[…] es un orgullo para mí hacer parte de esta importante organización en la cual he crecido y me he sentido en familia […] En el Grupo HL sí nos ven como seres humanos. Vamos para adelante."
+    en: "[…] I am proud to be part of this important organization, where I have grown and felt like family […] At Grupo HL they truly see us as human beings. Onward."
   confirmar: ["Fragmento: validar con la autorización"]
   cita:
     es: Durante el tiempo que llevo trabajando para el Grupo HL, considero que es la única organización de nuestro tipo que antes de pensar en su beneficio, piensa en el beneficio de sus empleados, de sus clientes y su buen nombre; por tal motivo es un orgullo para mí hacer parte de esta importante organización en la cual he crecido y me he sentido en familia, me ha dado múltiples oportunidades de desarrollarme como un gran ser humano, un gran profesional y el afianzar los principios y respetos por los demás. En el Grupo HL sí nos ven como seres humanos. Vamos para adelante.
+    en: "In my time working for Grupo HL, I believe it is the only organization of its kind that, before thinking of its own benefit, thinks of the benefit of its employees, its clients and its good name; that is why I am proud to be part of this important organization, where I have grown and felt like family. It has given me many opportunities to develop as a human being and as a professional, and to strengthen my principles and respect for others. At Grupo HL they truly see us as human beings. Onward."

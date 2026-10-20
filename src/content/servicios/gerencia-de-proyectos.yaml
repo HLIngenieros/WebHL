@@ -25,5 +25,26 @@ es:
     - subcapacidad: Formación y modelo de seguridad
       texto: Formación en el sistema de gestión de seguridad y salud en el trabajo (talleres, seminarios y diplomado) y diseño e implementación de modelos de gestión de seguridad industrial.
   capacidad: 394.200 horas de gerencia de proyectos (portafolio de ECOHL).
+en:
+  nombre: Project management
+  resumen: We plan, schedule and control every project as a whole, from concept to commissioning.
+  alcance:
+    - subcapacidad: Project management (PMC and EPCM)
+      texto: Our teams take the client's requirements and integrate every knowledge area to plan, schedule and control the project, from conceptual design through execution and commissioning.
+    - subcapacidad: Cost control
+      texto: Cost control with early warnings and periodic reports for decision-making.
+    - subcapacidad: Technical control
+      texto: Schedule updates, measurement of actual and contractual physical progress, productivity and S-curve.
+    - subcapacidad: Contract administration
+      texto: Support in managing and administering subcontractors, progress certificates and contract control, with alerts for scope and schedule deviations.
+    - subcapacidad: Risk management
+      texto: Identification and qualitative analysis of risks and success factors, root cause analysis, response actions and owners.
+    - subcapacidad: Inspection and oversight
+      texto: Technical, administrative, HSE, environmental and quality inspection and oversight.
+    - subcapacidad: Owner's team support
+      texto: Our specialized staff joins the client's organization, advising on and taking part in the execution of its projects with experience from major construction works.
+    - subcapacidad: Training and safety model
+      texto: Training in the occupational health and safety management system (workshops, seminars and a certificate program) and design and implementation of industrial safety management models.
+  capacidad: 394,200 hours of project management (ECOHL portfolio).
 confirmar:
   - "Actualizar las horas de gerencia de proyectos: la cifra (394.200 h) es del portafolio de ECOHL de 2020."
