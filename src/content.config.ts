@@ -149,6 +149,8 @@ const sitio = defineCollection({
       buzones: z.object({ cotizacion: z.email(), proveedor: z.email(), empleo: z.email(), etico: z.email() }),
       whatsapp: z.string().regex(/^\d{8,15}$/).optional(),
       confirmado: z.boolean(),
+      // D3 (21-oct): Zoho SalesIQ solo para lo comercial. Sin `widgetcode`, lo comercial va al formulario.
+      salesiq: z.object({ widgetcode: z.string().min(10), dominio: z.string().default('salesiq.zohopublic.com'), departamento: z.string().default('Comercial') }).optional(),
     }),
     confirmar,
   }),

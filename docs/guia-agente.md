@@ -171,11 +171,18 @@ Para cada fila de la tabla:
 | `VigenteHasta` | Vigente hasta | **Fecha y hora** | Incluir hora: **No**. No obligatoria |
 | `Descripcion` | Descripción | **Una línea de texto** | Máximo 160 caracteres. Qué es, en palabras simples |
 | `DatosClave` | Datos clave | **Varias líneas de texto** | Texto sin formato. Lo esencial en 1-3 líneas: es lo que el agente lee |
+| `Codigo` | Código | **Una línea de texto** | Opcional. Número del certificado o código interno (`CO24/00000107`, `M-TI-001`). Va en el cajetín de la lámina |
+| `Emisor` | Emisor | **Una línea de texto** | Opcional. Quién lo emite: `SGS`, `Grupo HL`, `ECOHL`… |
+
+Además, la columna **Título** ya existe en toda biblioteca, pero viene oculta. Muéstrala: en la vista,
+**+ Agregar columna** → **Mostrar u ocultar columnas** → marca **Título** → **Aplicar**. Es el nombre que el
+sitio muestra en grande (`ISO 45001:2018`, `Política de gestión integral`). Si la dejas vacía, el sitio usa el
+nombre del archivo.
 
 Ejemplo de **Datos clave** para un certificado:
-> ISO 45001:2018 · Emitido por ICONTEC · Certificado CO-SST-0000 · Vigente hasta 03-2027 · Alcance: construcción, montaje electromecánico y fabricación metalmecánica en Colombia.
+> ISO 45001:2018 · Emitido por SGS · Certificado CO24/00000107 · Vigente hasta 03-2027 · Alcance: construcción, montaje electromecánico y fabricación metalmecánica en Colombia.
 
-- [ ] Las 6 columnas creadas con su nombre interno exacto y renombradas.
+- [ ] Las 8 columnas creadas con su nombre interno exacto y renombradas, y **Título** visible.
 
 **Publicar en la web = No** retira el documento del sitio sin borrarlo de la biblioteca, por ejemplo mientras se revisa.
 
@@ -311,7 +318,7 @@ Pestaña **Configuración** del desencadenador:
 **Acción B · HTTP "Enviar al sitio"**
 1. **+** → busca `HTTP` → **HTTP** (conector premium, ícono verde).
 2. Renómbrala `Enviar al sitio`.
-3. **URI**: `https://www.hlingenieros.com/api/documentos.php`
+3. **URI**: `https://hlingenieros.com/api/documentos.php`
 4. **Método**: `POST`
 5. **Encabezados**: dos filas
    - `Content-Type` → `application/json`
@@ -330,6 +337,9 @@ Pestaña **Configuración** del desencadenador:
   "vigenteHasta": "@{triggerBody()?['VigenteHasta']}",
   "descripcion": "@{triggerBody()?['Descripcion']}",
   "datosClave": "@{triggerBody()?['DatosClave']}",
+  "titulo": "@{triggerBody()?['Title']}",
+  "codigo": "@{triggerBody()?['Codigo']}",
+  "emisor": "@{triggerBody()?['Emisor']}",
   "modificado": "@{triggerBody()?['Modified']}",
   "contenido": "@{body('Obtener_contenido_de_archivo')?['$content']}"
 }
@@ -430,6 +440,9 @@ o si algo quedó desfasado. Se ejecuta a mano.
   "vigenteHasta": "@{items('Cada_archivo')?['VigenteHasta']}",
   "descripcion": "@{items('Cada_archivo')?['Descripcion']}",
   "datosClave": "@{items('Cada_archivo')?['DatosClave']}",
+  "titulo": "@{items('Cada_archivo')?['Title']}",
+  "codigo": "@{items('Cada_archivo')?['Codigo']}",
+  "emisor": "@{items('Cada_archivo')?['Emisor']}",
   "modificado": "@{items('Cada_archivo')?['Modified']}",
   "contenido": "@{body('Contenido')?['$content']}"
 }
@@ -464,8 +477,8 @@ Con **/** o **+ Agregar contenido** → **Texto**, crea estas seis entradas de t
 | `idioma` | `es` |
 | `pagina` | `/hse/` |
 | `historial` | *(vacío o)* `Visitante: Hola` |
-| `contexto` | `[Nosotros · https://www.hlingenieros.com/nosotros/] Grupo HL, antes HL Ingenieros, fue fundado en 1968 por Guillermo Londoño. Sedes: Bogotá, El Rosal, Panamá y Santo Domingo.` |
-| `documentos` | `[Certificaciones · https://www.hlingenieros.com/documentos/certificaciones/hl-certificado-iso-45001.pdf] ISO 45001:2018 · ICONTEC · vigente hasta 03-2027` |
+| `contexto` | `[Nosotros · https://hlingenieros.com/nosotros/] Grupo HL, antes HL Ingenieros, fue fundado en 1968 por Guillermo Londoño. Sedes: Bogotá, El Rosal, Panamá y Santo Domingo.` |
+| `documentos` | `[Certificaciones · https://hlingenieros.com/documentos/certificaciones/hl-certificado-iso-45001.pdf] ISO 45001:2018 · SGS · CO24/00000107 · vigente hasta 03-2027` |
 | `pregunta` | `¿Tienen certificación ISO 45001?` |
 
 ### 8.3 Instrucción (copiar y pegar)
@@ -523,7 +536,7 @@ PREGUNTA:
 
 ### 8.5 Probar y guardar
 1. **Probar**. Debe salir algo como:
-   `{"respuesta":"Sí. El Grupo HL tiene certificación ISO 45001:2018 emitida por ICONTEC, vigente hasta marzo de 2027.","intencion":"informativa","fuentes":[{"titulo":"Certificaciones","url":"https://www.hlingenieros.com/documentos/certificaciones/hl-certificado-iso-45001.pdf"}]}`
+   `{"respuesta":"Sí. El Grupo HL tiene certificación ISO 45001:2018 emitida por SGS (certificado CO24/00000107), vigente hasta marzo de 2027.","intencion":"informativa","fuentes":[{"titulo":"Certificaciones","url":"https://hlingenieros.com/documentos/certificaciones/hl-certificado-iso-45001.pdf"}]}`
 2. Cambia `pregunta` y prueba:
    - `¿Cuánto cuesta montar 500 t de estructura?` → `"intencion":"comercial"` y ninguna cifra.
    - `¿Quién ganó el partido ayer?` → `"fuera_de_alcance"`.
@@ -602,7 +615,7 @@ $url = 'PEGA-AQUI-LA-URL-DEL-FLUJO-4'
 $h = @{ 'X-HL-Clave' = 'PEGA-AQUI-LA-CLAVE-DEL-AGENTE' }
 $cuerpo = @{
   idioma = 'es'; pagina = '/'; historial = ''
-  contexto = '[Nosotros · https://www.hlingenieros.com/nosotros/] Grupo HL, antes HL Ingenieros, fue fundado en 1968 por Guillermo Londoño.'
+  contexto = '[Nosotros · https://hlingenieros.com/nosotros/] Grupo HL, antes HL Ingenieros, fue fundado en 1968 por Guillermo Londoño.'
   documentos = ''
   pregunta = '¿Desde qué año existe HL?'
 } | ConvertTo-Json
@@ -624,12 +637,14 @@ La ubicación exacta de algunos menús cambia según el plan de Zoho. Si un nomb
 clave en el buscador de **Configuración**.
 
 1. **Marca del sitio:** ⚙️ **Configuración** → **Marcas** → la marca del sitio web (o **+ Agregar marca** → `Grupo HL`, dominio `hlingenieros.com`).
-2. **Código del widget:** en la marca → **Instalación** → **Sitio web** → copia el bloque de código. Lo que necesito es el valor de **`widgetcode`** (un texto largo). Pásamelo; va en `sitio.yaml`, no es secreto.
+2. **Código del widget:** en la marca → **Instalación** → **Sitio web** → copia el bloque de código. Lo que necesito es el valor de **`widgetcode`** (o el parámetro `wc=` de la URL del script, un texto largo) y el dominio del script (por ejemplo `salesiq.zohopublic.com`). Pásamelos; van en `sitio.yaml`, no son secretos.
 3. **Departamento:** **Configuración** → **Departamentos** → **+ Agregar** → `Comercial` → asigna los asesores de ventas.
+   Luego, en **Configuración** → **Enrutamiento** (*Routing*), crea una regla: los chats de la marca del sitio van a `Comercial`.
+   El sitio no elige el departamento por código (la API web de SalesIQ no lo documenta), así que esta regla es la que lo garantiza.
 4. **Horario:** **Configuración** → **Horario de atención** → L-V con el horario de oficina, zona **America/Bogota**. Fuera de ese horario, SalesIQ queda "fuera de línea" y el sitio ofrece el formulario de cotización.
 5. **Sin bot propio:** **Configuración** → **Zobot**: no actives ninguno para esta marca. El agente del sitio hace ese papel.
 6. **Botón propio de SalesIQ:** déjalo como está; el sitio lo oculta por código. El único botón es "Hablar con HL".
-7. **Privacidad:** en la marca → opciones de **consentimiento/GDPR** o **formulario previo al chat**. Activa el aviso de tratamiento de datos con el enlace a `https://www.hlingenieros.com/legal/datos/` (Ley 1581).
+7. **Privacidad:** en la marca → opciones de **consentimiento/GDPR** o **formulario previo al chat**. Activa el aviso de tratamiento de datos con el enlace a `https://hlingenieros.com/legal/datos/` (Ley 1581).
 8. **Prueba:** cuando el panel esté conectado (plan AG.5), escribe "quiero una cotización" en horario y fuera de horario.
 
 - [ ] Marca, `widgetcode`, departamento Comercial, horario, sin Zobot, aviso de datos.

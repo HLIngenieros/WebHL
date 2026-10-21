@@ -14,6 +14,7 @@ export const RUTAS = {
   proveedores: { es: '/proveedores/', en: '/en/suppliers/' },
   buzon: { es: '/buzon-etico/', en: '/en/ethics-line/' },
   acreedores: { es: '/acreedores/', en: '/en/creditors/' },
+  documentos: { es: '/documentos/', en: '/en/documents/' },
   datos: { es: '/legal/datos/', en: '/en/legal/privacy/' },
   terminos: { es: '/legal/terminos/', en: '/en/legal/terms/' },
 } as const satisfies Record<string, Record<Lang, string>>;
@@ -26,7 +27,7 @@ export const MENU: ClaveRuta[] = ['nosotros', 'proyectos', 'hse', 'noticias', 'c
 export const NAVEGACION: ClaveRuta[] = ['nosotros', 'proyectos', 'servicios', 'sectores', 'hse', 'noticias', 'contacto'];
 /** Secciones que cuelgan de Proyectos en la barra. */
 export const BAJO_PROYECTOS: ClaveRuta[] = ['servicios', 'sectores'];
-export const PIE: ClaveRuta[] = ['trabaje', 'proveedores', 'buzon', 'acreedores', 'datos', 'terminos'];
+export const PIE: ClaveRuta[] = ['trabaje', 'proveedores', 'buzon', 'acreedores', 'documentos', 'datos', 'terminos'];
 
 export const ruta = (clave: ClaveRuta, lang: Lang): string => RUTAS[clave][lang];
 

@@ -1,0 +1,7 @@
+# /api (D3, plan AG.1-AG.3): el conocimiento del agente solo lo lee agente.php desde el disco.
+<Files "conocimiento.json">
+  Require all denied
+</Files>
+<FilesMatch "\.(tmp|lock)$">
+  Require all denied
+</FilesMatch>

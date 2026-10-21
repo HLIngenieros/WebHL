@@ -1,0 +1,110 @@
+---
+// Documentos públicos (D3, plan AG.6, maqueta aprobada 21-oct): página del pie, acento azul. La lista la pinta la
+// isla Documentos.tsx desde /api/documentos.json (lo mantienen Power Automate y documentos.php); aquí van la
+// cabecera con la planoteca de alambre que se dibuja y el cierre que abre el asistente.
+import Base from '../layouts/Base.astro';
+import Pod from '../components/Pod.astro';
+import Documentos from '../components/Documentos';
+import { ruta, type Lang } from '../i18n/rutas';
+import { t } from '../i18n/ui';
+
+interface Props { lang: Lang; alterno: string }
+const { lang, alterno } = Astro.props;
+const T = {
+  es: {
+    titulo: 'Documentos públicos', l1: 'Documentos', l2: 'públicos',
+    lead: 'Certificaciones, políticas y material del Grupo HL, siempre en su versión vigente.',
+    sinJs: 'Los documentos se muestran con JavaScript activo. Si necesita uno, escríbanos desde Contacto.',
+    cierre: '¿No encuentra un documento?', cierreTxt: 'Pregúntele al asistente: responde con lo publicado y le indica con quién hablar.', boton: 'Hablar con HL',
+  },
+  en: {
+    titulo: 'Public documents', l1: 'Public', l2: 'documents',
+    lead: 'Certifications, policies and materials from Grupo HL, always in their current version.',
+    sinJs: 'Documents are shown with JavaScript enabled. If you need one, write to us from Contact.',
+    cierre: "Can't find a document?", cierreTxt: 'Ask the assistant: it answers from what we publish and tells you who to talk to.', boton: 'Talk to HL',
+  },
+}[lang];
+---
+<Base titulo={T.titulo} descripcion={T.lead} lang={lang} alterno={alterno}>
+  <section class="wrap documentos">
+    <header class="cab">
+      <div>
+        <Pod forma="rotulo" codigo="P-06" nombre={t(lang, 'documentos')} />
+        <h1><span class="l"><span>{T.l1}</span></span> <span class="l"><span>{T.l2}</span></span></h1>
+        <p class="lead aparece" style="--i:2">{T.lead}</p>
+      </div>
+      <svg class="planoteca" viewBox="0 0 360 200" aria-hidden="true">
+        <rect class="fn" x="40" y="70" width="280" height="120" />
+        <path class="tr" style="--i:0;--l:800" d="M40 190 V70 H320 V190 Z" />
+        <path class="tr" style="--i:1;--l:300" d="M40 110 H320 M40 150 H320" />
+        <path class="tr" style="--i:2;--l:60" d="M165 90 h30 M165 130 h30 M165 170 h30" />
+        <g class="hoja">
+          <path class="tr" style="--i:3;--l:700" d="M70 70 V20 H280 V70" />
+          <path class="tr" style="--i:4;--l:300" d="M200 20 V62 H280" />
+          <path class="tr" style="--i:5;--l:200" d="M200 34 H280 M200 48 H280 M240 48 V62" />
+          <path class="tr sg" style="--i:6;--l:300" d="M86 34 H180 M86 30 v8 M180 30 v8" />
+        </g>
+        <path class="tr sg" style="--i:7;--l:400" d="M20 70 V190 M16 70 h8 M16 190 h8" />
+        <text x="40" y="62">ISO</text><text x="292" y="62">PDF</text>
+      </svg>
+    </header>
+
+    <Documentos client:load lang={lang} fuente="/api/documentos.json" />
+    <noscript><p class="sin-js">{T.sinJs}</p></noscript>
+
+    <aside class="cierre">
+      <div><b>{T.cierre}</b><span>{T.cierreTxt}</span></div>
+      <a href={ruta('contacto', lang)} data-abre-agente>{T.boton}</a>
+    </aside>
+  </section>
+</Base>
+
+<script>
+  // "Hablar con HL" del cierre abre el mismo panel que el botón fijo (sin JavaScript, lleva a Contacto).
+  document.addEventListener('click', (e) => {
+    const a = (e.target as Element).closest('[data-abre-agente]');
+    const hablar = document.getElementById('hablar');
+    if (!a || !hablar) return;
+    e.preventDefault();
+    hablar.click();
+  });
+</script>
+
+<style>
+  .documentos { padding-block: var(--s5) var(--s7); }
+  .cab { display: grid; gap: var(--s4); align-items: end; }
+  h1 { margin: var(--s3) 0 0; font-size: var(--fs-h1); line-height: var(--lh-display); }
+  h1 .l { display: block; overflow: hidden; padding-bottom: .06em; }
+  h1 .l > span { display: block; animation: linea var(--t-izaje) var(--ease-izaje) both; }
+  h1 .l + .l > span { font-weight: var(--fw-fina); color: var(--sec); animation-delay: 120ms; }
+  @keyframes linea { from { transform: translateY(105%); } }
+  .lead { margin: var(--s3) 0 0; max-width: 46ch; color: var(--muted); font-size: var(--fs-lead); }
+
+  /* Planoteca: tres gavetas y una lámina que sale y vuelve */
+  .planoteca { width: 100%; max-width: 420px; height: auto; overflow: visible; justify-self: end; }
+  .planoteca .fn { fill: none; stroke: var(--line); stroke-width: 1; }
+  .planoteca .tr { fill: none; stroke: var(--accent); stroke-width: 1.4; stroke-dasharray: var(--l); stroke-dashoffset: var(--l); animation: traza var(--t-trazo) var(--ease-plano) forwards; animation-delay: calc(var(--i) * 140ms); }
+  .planoteca .sg { stroke: var(--signal); }
+  .planoteca text { fill: var(--muted); font-stretch: var(--wdth-data); font-size: var(--fs-cota); letter-spacing: var(--ls-data); font-weight: var(--fw-data); }
+  .planoteca .hoja { animation: sale 3.6s var(--ease-izaje) infinite 1.6s; }
+  @keyframes traza { to { stroke-dashoffset: 0; } }
+  @keyframes sale { 0%, 20% { transform: translateY(0); } 45%, 70% { transform: translateY(-26px); } 95%, 100% { transform: translateY(0); } }
+
+  .sin-js { margin-top: var(--s5); color: var(--muted); }
+  .cierre { display: grid; gap: var(--s3); align-items: center; margin-top: var(--s6); padding: var(--s3) var(--s4); background: var(--paper); border: var(--border-strong) solid var(--ink); }
+  .cierre b { display: block; font-size: var(--fs-lead); font-stretch: var(--wdth-subtitle); font-weight: var(--fw-subtitle); }
+  .cierre span { color: var(--muted); font-size: var(--fs-sm); }
+  .cierre a { justify-self: start; padding: 10px var(--s3); background: var(--accent); color: var(--accent-ink); text-decoration: none; font-weight: var(--fw-boton); white-space: nowrap; transition: transform var(--t-rapido) var(--ease-izaje); }
+  .cierre a:hover { transform: translateY(-2px); }
+  @media (min-width: 760px) {
+    .cierre { grid-template-columns: 1fr auto; }
+  }
+  @media (min-width: 900px) {
+    .cab { grid-template-columns: 7fr 5fr; gap: var(--s5); }
+  }
+  @media (max-width: 899.98px) { .planoteca { max-width: 300px; justify-self: start; } }
+  @media (prefers-reduced-motion: reduce) {
+    h1 .l > span, .planoteca .hoja { animation: none; }
+    .planoteca .tr { animation: none; stroke-dashoffset: 0; }
+  }
+</style>

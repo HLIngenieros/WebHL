@@ -260,8 +260,19 @@ y el agente en Copilot Studio. Lista detallada (con responsable) en [contenido/R
   - Etapa 10 (2026-10-21): guía del agente Rev. 1 ([docs/guia-agente.md](docs/guia-agente.md)): agente propio con
     Power Automate (4 flujos y prompt, clic por clic), biblioteca en sitio existente con permisos propios, claves,
     SalesIQ, costos y pruebas; plan de código en [docs/plan-agente.md](docs/plan-agente.md) (AG.0-AG.8).
-  - **Siguiente paso:** Juan David arma biblioteca, prompt y flujos con la guía; yo, el plan del agente (empieza
-    por la puerta de maquetas AG.0) o F6.
+  - **Etapa 11 (2026-10-21): agente propio y Documentos** ([docs/plan-agente.md](docs/plan-agente.md); maqueta
+    `design/maquetas/agente-documentos.html`). Conocimiento sacado del HTML compilado (`src/lib/conocimiento.mjs` →
+    `dist/api/conocimiento.json`, negado por `.htaccess`); `public/api/documentos.php` (recibe los flujos, PDF real,
+    carpetas fijas, lote) y `public/api/agente.php` (filtro ético sin IA, límites por IP y por día, búsqueda por
+    términos, lista blanca de fuentes, modo prueba `HL_AGENTE_PRUEBA=1`); panel conectado (`Agente.tsx`, 4,2 KB gz) y
+    SalesIQ diferido (`salesiq.ts`, falta `widgetcode`); página Documentos (P-06, pie; muestra en desarrollo) y enlace
+    desde HSE. Claves en `privado/.env` (ignorado); en el hosting, `hl-privado/.env`. 466 pruebas (con `HL_PHP`),
+    presupuesto OK, Lighthouse móvil: Documentos 98 (LCP 1,97 s, CLS 0,001), Contacto 98. 156 bloqueantes.
+  - **Siguiente paso:** Juan David arma biblioteca, prompt y flujo 4 con la guía (con la URL del flujo se prueba el
+    agente real en local) y consigue el `widgetcode` de SalesIQ; yo, F6 cuando se decida.
+  - **Ojo agente:** al desplegar no borrar `/documentos/<carpeta>/`, `/api/documentos.json` ni `/api/vacantes.json`
+    (los escriben los flujos). El sitio es `https://hlingenieros.com` sin www: un POST redirigido llega como GET.
+    Las pruebas de PHP corren con `HL_PHP=C:/Users/jurbina/herramientas/php/php.exe npm test`.
   - **Ojo F4 (contraste, 20-oct):** nada de texto ni marcas sobre `--signal` dentro de un fondo `--accent`
     (2,1:1 en claro, 1,5:1 en oscuro): sobre el azul va `--accent-ink`; un chip de aviso es `--signal-soft` +
     borde `--signal` + texto `--ink`. Las clases de un componente llevan prefijo propio (`fm-`, `vc-`, `ag-`):

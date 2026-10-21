@@ -1,0 +1,66 @@
+/* Documentos (plan AG.6, maqueta aprobada 21-oct): herramientas, carpetas con burbuja de eje y láminas con
+   cajetín, cota de vigencia y descarga que se llena de azul. Prefijo dc- (ver CLAUDE.md, ojo F4). */
+.dc-estado { margin: var(--s5) 0 0; padding: var(--s4); border: var(--border) dashed var(--line); color: var(--muted); }
+.dc-cargando { min-height: 100svh; border: 0; }
+
+.dc-herr { display: grid; gap: var(--s3); margin-top: var(--s5); padding-top: var(--s3); border-top: var(--border-strong) solid var(--ink); }
+.dc-fila { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s3); align-items: center; justify-content: space-between; }
+.dc-act { display: inline-flex; align-items: center; gap: var(--s2); color: var(--muted); }
+.dc-act i { width: 7px; height: 7px; border-radius: 50%; background: var(--good); }
+.dc-buscar { display: flex; flex: 0 1 320px; min-width: 0; border: var(--border) solid var(--ink); background: var(--paper); }
+.dc-buscar input { flex: 1; min-width: 0; border: 0; background: none; color: var(--ink); font: inherit; padding: 9px 12px; outline: none; }
+.dc-buscar:focus-within { outline: var(--focus-ring); outline-offset: 2px; }
+.dc-buscar span { padding: 9px 12px; border-left: var(--border) solid var(--ink); color: var(--muted); }
+.dc-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.dc-chips button { display: inline-flex; align-items: center; gap: var(--s2); padding: 5px 10px; border: var(--border) solid var(--line); background: var(--paper); color: var(--ink); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; transition: border-color var(--t-rapido), background var(--t-rapido); }
+.dc-chips button sup { top: 0; font-size: var(--fs-cota); color: var(--muted); }
+.dc-chips button:hover { border-color: var(--accent); }
+.dc-chips button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+
+.dc-grupo { margin-top: var(--s5); scroll-margin-top: calc(var(--bar-h) + var(--s3)); }
+.dc-cab { display: flex; align-items: center; gap: 12px; margin-bottom: var(--s3); }
+.dc-p2 { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border: var(--stroke-mid) solid var(--sec); border-radius: 50%; color: var(--sec); font-weight: var(--fw-title); }
+.dc-cab h2 { margin: 0; font-size: var(--fs-h3); font-stretch: var(--wdth-title); }
+.dc-eje { flex: 1; border-top: var(--border) dashed var(--sec); transform-origin: left; animation: dc-cota var(--t-cota) var(--ease-plano) both .2s; }
+.dc-n { color: var(--muted); }
+
+.dc-laminas { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--s3); }
+.dc-lam { position: relative; display: grid; grid-template-rows: auto 1fr auto auto; background: var(--paper); border: var(--border) solid var(--ink); transition: transform var(--t-rapido) var(--ease-izaje), border-color var(--t-rapido); animation: dc-izaje var(--t-izaje) var(--ease-izaje) both; animation-delay: calc(var(--i) * 70ms); }
+.dc-lam:hover, .dc-lam:focus-within { transform: translateY(-4px); border-color: var(--accent); }
+.dc-lam::before { content: ""; position: absolute; right: -1px; top: -1px; width: 22px; height: 22px; background: linear-gradient(225deg, var(--bg) 50%, var(--line) 50% calc(50% + 1px), var(--paper) calc(50% + 1px)); transition: width var(--t-rapido) var(--ease-izaje), height var(--t-rapido) var(--ease-izaje); }
+.dc-lam:hover::before { width: 34px; height: 34px; }
+.dc-lam-cab { display: grid; grid-template-columns: auto 1fr; border-bottom: var(--border) solid var(--ink); color: var(--muted); }
+.dc-lam-cab span { padding: 5px 10px; }
+.dc-lam-cab span + span { border-left: var(--border) solid var(--ink); padding-right: 30px; }
+.dc-lam-cu { display: grid; gap: 6px; align-content: start; padding: 14px 14px 10px; }
+.dc-lam-cu h3 { margin: 0; font-size: var(--fs-h3); font-stretch: var(--wdth-subtitle); font-weight: var(--fw-subtitle); line-height: 1.15; }
+.dc-lam-cu p { margin: 0; color: var(--muted); font-size: var(--fs-sm); }
+.dc-meta { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 4px; color: var(--muted); }
+.dc-meta b { color: var(--ink); font-weight: var(--fw-strong); }
+
+.dc-vig { display: grid; gap: 6px; padding: 8px 14px 12px; }
+.dc-vig-l { display: flex; justify-content: space-between; gap: var(--s2); color: var(--muted); }
+.dc-vig-l b { color: var(--ink); }
+.dc-regla { position: relative; height: 12px; }
+.dc-regla::before { content: ""; position: absolute; left: 0; right: 0; top: 5px; height: 1px; background: var(--line); }
+.dc-f { position: absolute; left: 0; top: 4px; height: 3px; width: var(--p); background: var(--good); transform-origin: left; animation: dc-cota var(--t-cota) var(--ease-plano) both .4s; }
+.dc-f::after { content: ""; position: absolute; right: -1px; top: -4px; width: 1px; height: 11px; background: var(--ink); }
+.dc-regla i { position: absolute; top: 2px; width: 1px; height: 7px; background: var(--steel); }
+.dc-pronto .dc-f { background: var(--signal); }
+.dc-aviso { padding: 0 6px; background: var(--signal-soft); border: var(--border) solid var(--signal); color: var(--ink); }
+
+.dc-bajar { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: var(--s2); padding: 10px 14px; border-top: var(--border) solid var(--ink); color: var(--ink); text-decoration: none; font-size: var(--fs-boton); font-weight: var(--fw-boton); }
+.dc-bajar::before { content: ""; position: absolute; inset: 0; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease-barrido); }
+.dc-bajar > * { position: relative; transition: color .2s .1s; }
+.dc-lam:hover .dc-bajar::before, .dc-bajar:focus-visible::before { transform: none; }
+.dc-lam:hover .dc-bajar > *, .dc-bajar:focus-visible > * { color: var(--accent-ink); }
+.dc-bajar:focus-visible { outline: none; }
+.dc-fl { display: inline-block; transition: transform .3s var(--ease-izaje); }
+.dc-lam:hover .dc-fl { transform: translateY(3px); }
+
+@keyframes dc-cota { from { transform: scaleX(0); } }
+@keyframes dc-izaje { from { opacity: 0; transform: translateY(-14px); } 70% { transform: translateY(2px); } }
+@media (prefers-reduced-motion: reduce) {
+  .dc-lam, .dc-eje, .dc-f { animation: none; }
+  .dc-lam, .dc-lam::before, .dc-bajar::before, .dc-fl { transition: none; }
+}

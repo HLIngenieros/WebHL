@@ -52,7 +52,7 @@ test('Hablar con HL abre el agente sin navegar y Escape lo cierra', async ({ pag
   await expect(page).toHaveURL(/\/hse\/$/);
   await expect(page.locator('.ag')).toHaveClass(/ag-abierto/);
   await expect(page.locator('#hablar')).toHaveAttribute('aria-expanded', 'true');
-  await expect(page.locator('.ag-vista')).toBeVisible();
+  await expect(page.locator('.ag-ia')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.locator('.ag')).not.toHaveClass(/ag-abierto/);
 });

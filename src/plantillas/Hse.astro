@@ -73,6 +73,7 @@ const ICONOS: Record<string, [string, number][]> = {
           </li>
         ))}
       </ul>
+      <a class="cert-docs" href={`${ruta('documentos', lang)}#certificaciones`}>{t(lang, 'hseCertDocs')} <span aria-hidden="true">↓</span></a>
     </div>
   </section>
 
@@ -190,6 +191,8 @@ const ICONOS: Record<string, [string, number][]> = {
 
   /* 3 · Certificaciones */
   .certificaciones { padding-block: var(--s7); background: var(--bg); }
+  .cert-docs { display: inline-flex; gap: var(--s2); margin-top: var(--s4); color: var(--sec); font-weight: var(--fw-boton); text-decoration: none; border-bottom: var(--border) solid currentColor; }
+  .cert-docs:hover span { display: inline-block; transform: translateY(3px); transition: transform var(--t-rapido) var(--ease-izaje); }
   .certs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s3); }
   .cert {
     position: relative; display: grid; grid-template-rows: auto auto 1fr auto; gap: var(--s2); padding: var(--s4); overflow: hidden;
