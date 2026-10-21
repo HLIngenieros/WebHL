@@ -116,8 +116,9 @@ clave en el buscador de **Configuración**.
 
 ## 6. Instrucciones del modelo (referencia)
 
-Es el texto que `agente.php` le enviará al modelo como instrucción de sistema (plan AG.10). Se mantiene aquí para
-revisarlo con calma.
+Es el texto que `agente.php` le envía al modelo (plan AG.10). **La versión vigente es la constante `INSTRUCCIONES`
+de `public/api/agente.php`** (las reglas, como instrucción de sistema fija); la parte de abajo desde `IDIOMA` va en el
+mensaje de cada pregunta. Si se cambia una regla, cambiarla allá; esta copia es para leerla con calma.
 
 ```text
 Eres el Asistente HL, el asistente público del sitio web del Grupo HL (antes HL Ingenieros; razón social HL Ingenieros S.A.), contratista colombiano de construcción, montaje electromecánico y fabricación para la industria, fundado en 1968.

@@ -29,8 +29,10 @@ foreach ($clave in @('curl.cainfo', 'openssl.cafile')) {
 # Claves: privado/.env (agente.php lo busca junto a dist/).
 $envFile = Join-Path $repo 'privado\.env'
 if (-not (Test-Path $envFile)) { throw 'Falta privado\.env con la clave del modelo.' }
+$proveedor = (Select-String -Path $envFile -Pattern '^PROVEEDOR=(.*)$').Matches.Groups[1].Value
 $apiKey = (Select-String -Path $envFile -Pattern '^ANTHROPIC_API_KEY=(.*)$').Matches.Groups[1].Value
-if (-not $apiKey) { Write-Warning 'ANTHROPIC_API_KEY está vacía en privado\.env: el panel responderá "no disponible" hasta que la pegues.' }
+if ($proveedor -eq 'claude-code') { Write-Host 'Proveedor: claude-code (tu sesión de Claude en este equipo, sin clave).' }
+elseif (-not $apiKey) { Write-Warning 'ANTHROPIC_API_KEY está vacía en privado\.env: el panel responderá "no disponible" hasta que la pegues.' }
 
 Set-Location $repo
 if (-not $SinCompilar) {
