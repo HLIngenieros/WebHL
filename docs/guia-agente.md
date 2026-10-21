@@ -16,7 +16,7 @@ Esta guía cubre **lo que haces tú**, clic por clic. Lo que programo yo está e
 ```
                 ┌──────────────────────── TU TENANT DE MICROSOFT 365 ────────────────────────┐
                 │                                                                             │
- Tú subes un    │  Biblioteca "Documentos públicos"  ──►  Flujo 1 "Documentos al sitio"       │
+ Tú subes un    │  Biblioteca "Conocimiento Web HL" ──►  Flujo 1 "Documentos al sitio"       │
  PDF ───────────┼─► (SharePoint, sitio existente)          (al crear o modificar un PDF)      │
                 │                                              │ POST HTTPS + clave            │
                 │                                              ▼                               │
@@ -121,7 +121,11 @@ deja de encontrarla.
 
 ---
 
-## 3. Biblioteca "Documentos públicos" (ya creada en un sitio existente)
+## 3. Biblioteca "Conocimiento Web HL" (ya creada en un sitio existente)
+
+Solo lleva **PDF aprobados**, en las 6 carpetas. La información difusa (Word, Excel, fotos, borradores) no va aquí:
+va a `insumos/entrada/` del proyecto, y de ahí salen el contenido del sitio y los PDF listos en `documentos-web/`
+(ver `insumos/README.md`).
 
 ### 3.1 Obtener las direcciones correctas
 
@@ -130,7 +134,7 @@ deja de encontrarla.
    `https://hlingenierossa.sharepoint.com/sites/Calidad/Documentos%20publicos/Forms/AllItems.aspx`.
 3. Anota dos cosas:
    - **Dirección del sitio**: hasta el nombre del sitio → `https://hlingenierossa.sharepoint.com/sites/Calidad`
-   - **Nombre de la biblioteca**: el que se ve en el título de la página (por ejemplo *Documentos públicos*). En Power Automate lo eliges de una lista.
+   - **Nombre de la biblioteca**: el que se ve en el título de la página (*Conocimiento Web HL*). En Power Automate lo eliges de una lista.
 4. El enlace que me pasaste (`/:f:/g/…?e=…`) es un **vínculo para compartir**, no la dirección. No lo uses en los flujos.
 
 - [ ] Anoté la dirección del sitio y el nombre de la biblioteca.
@@ -311,7 +315,7 @@ Send an email (V2) "Notify failure"   ← solo si algo falló
 ### 5.2 Disparador
 Clic en la tarjeta del disparador → pestaña **Parameters**:
 - **Site Address**: elígelo de la lista, o **Enter custom value** y pega la dirección del sitio (§3.1).
-- **Library Name**: `Documentos públicos`.
+- **Library Name**: `Conocimiento Web HL`.
 - **Folder**: vacío (vigila toda la biblioteca, con subcarpetas).
 
 Pestaña **Settings** → **Trigger conditions** → **+ Add** dos veces y pega una en cada caja:
@@ -378,7 +382,7 @@ Aparecen dos ramas: **True** y **False**.
    - **Retry policy** → **Type**: **Exponential interval** · **Count**: `4` · **Interval**: `PT20S`.
    - **Action timeout** → **Duration**: `PT2M`.
 
-> **Por qué `split(... '{Path}' ...)[1]`:** `{Path}` llega como `Documentos publicos/Certificaciones/`. Al
+> **Por qué `split(... '{Path}' ...)[1]`:** `{Path}` llega como `Conocimiento Web HL/Certificaciones/`. Al
 > partirlo por `/`, la posición 1 es la carpeta. Un archivo en la raíz deja la carpeta vacía y el sitio lo rechaza.
 
 ### 5.5 Rama **False**: retirar del sitio

@@ -273,6 +273,10 @@ y el agente en Copilot Studio. Lista detallada (con responsable) en [contenido/R
   - **Ojo agente:** al desplegar no borrar `/documentos/<carpeta>/`, `/api/documentos.json` ni `/api/vacantes.json`
     (los escriben los flujos). El sitio es `https://hlingenieros.com` sin www: un POST redirigido llega como GET.
     Las pruebas de PHP corren con `HL_PHP=C:/Users/jurbina/herramientas/php/php.exe npm test`.
+  - **Información difusa (21-oct):** entra por `insumos/entrada/` (ignorada en git) y se registra en
+    [insumos/README.md](insumos/README.md); sale al sitio (`src/content/`) o en PDF con `node design/documentos.mjs` →
+    `documentos-web/<carpeta>/` + `LEEME.md` (ignorado; se regenera). La biblioteca de SharePoint es
+    **"Conocimiento Web HL"** y solo recibe PDF aprobados por Juan David.
   - **Ojo F4 (contraste, 20-oct):** nada de texto ni marcas sobre `--signal` dentro de un fondo `--accent`
     (2,1:1 en claro, 1,5:1 en oscuro): sobre el azul va `--accent-ink`; un chip de aviso es `--signal-soft` +
     borde `--signal` + texto `--ink`. Las clases de un componente llevan prefijo propio (`fm-`, `vc-`, `ag-`):
