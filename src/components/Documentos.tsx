@@ -1,5 +1,5 @@
 // Documentos públicos (D3, plan AG.6, maqueta aprobada 21-oct). Lee /api/documentos.json al abrir: lo mantiene
-// documentos.php con lo que Power Automate trae de la biblioteca de SharePoint, así el sitio no se recompila por
+// el catálogo de muestra en desarrollo; en AG.11 pasa a datos del repo (colección + public/documentos/), sin recompilar por
 // cada documento. Carpetas con burbuja de eje, láminas con cajetín y cota de vigencia, filtro y búsqueda.
 // Los documentos vencidos no se muestran.
 import { useEffect, useMemo, useState } from 'preact/hooks';

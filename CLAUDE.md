@@ -141,7 +141,7 @@ de 5+ fotos con pie.
 |---|---|---|
 | D1 | ¿Sitio del grupo o de HL Ingenieros? Qué empresas se muestran (en EN aparecen Megacranes y Aktino, no en ES) | **Cambiado (20-oct):** el sitio es del **Grupo HL** (mismo logo, "GRUPO HL"); "antes HL Ingenieros" con discreción en Nosotros y en buscadores; razón social y menciones legales siguen como HL Ingenieros S.A. (guía §2.1). Megacranes y Aktino ya salieron del grupo y no se incluyen (20-oct). HL Infraestructura ejecuta las obras y tendrá el protagonismo (en espera de su información: Juan David la consigue; propuesta: esquema del grupo en Nosotros, recursos propios en Servicios y "Ejecución" en las fichas); ECOHL como gerencia/EPCM; HL Panamá y HL Rental siguen, con protagonismo muy reducido |
 | D2 | Lema único | **Decidido (19-oct):** "Construimos la industria con gente que cumple, desde 1968." (A ampliado: integral y humano). EN (cerrado en F5, 20-oct): "Building industry with people who deliver, since 1968." |
-| D3 | Agente: bot nativo de Zoho SalesIQ o agente propio con IA que entrega a Zoho | **Cambiado (21-oct, [guía Rev. 1](docs/guia-agente.md), [plan](docs/plan-agente.md)):** sale Copilot Studio (con anónimos no lee SharePoint ni sincronizado). **Agente propio:** panel → `agente.php` → flujo de Power Automate (disparador HTTP + "Ejecutar un prompt"; modelo intercambiable) → JSON con respuesta, intención y fuentes. Conocimiento: contenido del sitio (al compilar) + **biblioteca de SharePoint** publicada por flujos en `/documentos/` y `/api/documentos.json` (nueva página Documentos en el pie). **SalesIQ solo para lo comercial**, cargado por intención; sin asesor, formulario de cotización. Buzón ético sin IA (filtro previo en el PHP). **Por confirmar con TI:** créditos de IA (los de AI Builder de Premium no se renuevan desde el 1-nov-2026) y que el tenant permita el disparador HTTP "Cualquiera" |
+| D3 | Agente: bot nativo de Zoho SalesIQ o agente propio con IA que entrega a Zoho | **Cambiado (21-oct, [guía Rev. 3](docs/guia-agente.md), [plan Rev. 2](docs/plan-agente.md)):** **agente propio**, sin Copilot Studio, Power Automate ni SharePoint: panel → `agente.php` → modelo de IA directo (proveedor configurable en `privado/.env`; **Claude API en desarrollo**; producción la deciden Gerencia y TI: Claude en Microsoft Foundry o Azure OpenAI, ver [comparativo](https://claude.ai/artifact/KiawaMKCaj4UDX8bMUrQSJ)). Conocimiento: el HTML compilado del sitio + documentos del repo (página Documentos en el pie). **SalesIQ solo para lo comercial**, cargado por intención; sin asesor, formulario de cotización. Buzón ético sin IA (filtro previo en el PHP) |
 | D4 | CMS: Sanity, Decap o Payload | **Decidido (15-oct): sin CMS.** Sin terceros ni credenciales nuevas: el contenido vive en el repo como colecciones de Astro (Markdown/JSON con esquema validado al compilar). Despliegue manual (compilar y subir `dist/`). Salida futura si otros deben editar: Decap CMS sobre los mismos archivos |
 | D5 | Hosting: Vercel/Netlify o Azure Static Web Apps (tenant M365); Power Automate premium o Graph | **Hosting decidido (15-oct):** el actual (Apache + PHP 8.3, IP 107.180.21.17, al parecer GoDaddy; por confirmar), con despliegue estático que reemplaza a WordPress. Integración de correo: pendiente |
 | D6 | Casos sensibles: Odebrecht (Patio de Carbón), Minera Panamá (cerrada desde 2023); nombres actuales de clientes (Zijin Mining, thyssenkrupp Polysius, OHLA) | **Decidido (15-oct):** se mantienen con `visibilidad: discreta`: ficha propia y visible en el explorador, pero fuera de portada, destacados, páginas de servicio/sector y logos de clientes; sí se indexa. Nombres actuales de clientes: pendiente |
@@ -159,8 +159,8 @@ PDF ECOHL: 18 meses, 12.000 t, 10.500 t; el PDF habla de *fabricación*, así qu
 alcances distintos); certificaciones vigentes en PDF; indicadores HSE de 3 años; fotos recientes de
 obra; lista vigente de empresas del grupo; acceso a Zoho PageSense y Search Console. **De F4 (en espera):**
 buzones por función (D7), SPF/DKIM de `no-reply@`, acceso FTP/SFTP al hosting, lista "Vacantes" en SharePoint
-con su flujo de Power Automate, número de WhatsApp, capacidad de Copilot Studio para visitantes anónimos (D3)
-y el agente en Copilot Studio. Lista detallada (con responsable) en [contenido/README.md](contenido/README.md).
+con su flujo de Power Automate, número de WhatsApp. **De D3:** proveedor de IA de producción (Gerencia y TI),
+clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF. Lista detallada (con responsable) en [contenido/README.md](contenido/README.md).
 
 ## Datos de referencia
 - 58 años (desde 1968; calcular dinámicamente, nunca fijo), 7 países con obra (CO, PA, CR, DO, GT, BO, EC,
@@ -268,15 +268,22 @@ y el agente en Copilot Studio. Lista detallada (con responsable) en [contenido/R
     SalesIQ diferido (`salesiq.ts`, falta `widgetcode`); página Documentos (P-06, pie; muestra en desarrollo) y enlace
     desde HSE. Claves en `privado/.env` (ignorado); en el hosting, `hl-privado/.env`. 466 pruebas (con `HL_PHP`),
     presupuesto OK, Lighthouse móvil: Documentos 98 (LCP 1,97 s, CLS 0,001), Contacto 98. 156 bloqueantes.
-  - **Siguiente paso:** Juan David arma biblioteca, prompt y flujo 4 con la guía (con la URL del flujo se prueba el
-    agente real en local) y consigue el `widgetcode` de SalesIQ; yo, F6 cuando se decida.
-  - **Ojo agente:** al desplegar no borrar `/documentos/<carpeta>/`, `/api/documentos.json` ni `/api/vacantes.json`
-    (los escriben los flujos). El sitio es `https://hlingenieros.com` sin www: un POST redirigido llega como GET.
+  - **Etapa 12 (2026-10-21, tarde): simplificación del agente** ([plan Rev. 2](docs/plan-agente.md), [guía Rev. 3](docs/guia-agente.md)).
+    Fuera Power Automate, SharePoint y Copilot Studio: `agente.php` llamará directo al modelo (Claude API en
+    desarrollo; producción la deciden Gerencia y TI con el [comparativo](https://claude.ai/artifact/KiawaMKCaj4UDX8bMUrQSJ)),
+    y los documentos vivirán en el repo. Retirados `documentos.php`, sus pruebas, las claves de los flujos y el túnel.
+    Generador de PDF `design/documentos.mjs` (13 PDF ES/EN en `documentos-web/`, borrador) e inventario en
+    [insumos/README.md](insumos/README.md). `design/local.ps1` sirve el sitio con PHP en el 8080 para probar el agente.
+  - **Siguiente paso (próxima sesión):** AG.9 página de carga local (con maqueta), luego AG.10 (`agente.php` → modelo
+    directo; Juan David pega `ANTHROPIC_API_KEY` en `privado/.env`) y AG.11 (Documentos desde el repo). F6 después.
+  - **Ojo agente:** al desplegar no borrar `/api/vacantes.json` (lo escribe el flujo de Vacantes de F4, que sigue
+    en Power Automate: confirmar con Juan David si se mantiene). El sitio es `https://hlingenieros.com` sin www.
+    `agente.php` aún usa `AGENTE_URL` (flujo retirado): hasta AG.10 responde "sin servicio" con la clave real.
     Las pruebas de PHP corren con `HL_PHP=C:/Users/jurbina/herramientas/php/php.exe npm test`.
-  - **Información difusa (21-oct):** entra por `insumos/entrada/` (ignorada en git) y se registra en
-    [insumos/README.md](insumos/README.md); sale al sitio (`src/content/`) o en PDF con `node design/documentos.mjs` →
-    `documentos-web/<carpeta>/` + `LEEME.md` (ignorado; se regenera). La biblioteca de SharePoint es
-    **"Conocimiento Web HL"** y solo recibe PDF aprobados por Juan David.
+  - **Información difusa (21-oct):** entra por la página de carga local (AG.9) o a mano en `insumos/entrada/`
+    (ignorada en git) y se registra en [insumos/README.md](insumos/README.md); sale al sitio (`src/content/`) o en PDF
+    con `node design/documentos.mjs` → `documentos-web/<carpeta>/` (borrador, ignorado); lo aprobado por Juan David
+    pasa a `public/documentos/<carpeta>/`.
   - **Ojo F4 (contraste, 20-oct):** nada de texto ni marcas sobre `--signal` dentro de un fondo `--accent`
     (2,1:1 en claro, 1,5:1 en oscuro): sobre el azul va `--accent-ink`; un chip de aviso es `--signal-soft` +
     borde `--signal` + texto `--ink`. Las clases de un componente llevan prefijo propio (`fm-`, `vc-`, `ag-`):

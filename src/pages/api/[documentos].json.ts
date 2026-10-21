@@ -1,5 +1,5 @@
-// Documentos de MUESTRA para desarrollo. En producción, /api/documentos.json lo mantiene documentos.php con lo
-// que envía Power Automate desde la biblioteca de SharePoint; por eso `--mode lanzamiento` no lo genera: subir
+// Documentos de MUESTRA para desarrollo (se retira en AG.11, cuando el catálogo salga de la colección del repo);
+// `--mode lanzamiento` no lo genera: subir
 // `dist/` nunca pisa el catálogo real ni publica el de muestra.
 import type { APIRoute } from 'astro';
 import muestra from '../../lib/documentos-muestra.json';

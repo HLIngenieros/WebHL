@@ -1,22 +1,24 @@
 # Insumos: la información difusa del Grupo HL
 
 Aquí entra todo lo que llega suelto (PDF de trabajo, Word, Excel, fotos, presentaciones, correos guardados) y sale
-convertido en dos cosas: **contenido del sitio** (`src/content/`, que el agente aprende al compilar) y **PDF listos**
-para la biblioteca de SharePoint "Conocimiento Web HL" (`documentos-web/`). La biblioteca solo recibe PDF aprobados.
+convertido en dos cosas: **contenido del sitio** (`src/content/`, que el agente aprende al compilar) y **PDF
+aprobados** en `public/documentos/<carpeta>/` (página Documentos). Sin SharePoint ni flujos (D3, Rev. 2).
 
 ## Cómo funciona
 
-1. **Juan David deja los archivos** en `insumos/entrada/`, como lleguen (con subcarpetas si ayuda: por área,
-   por proyecto). Esa carpeta **no se sube a git**: puede traer información interna.
-2. **Claude los lee y los registra** en la tabla de abajo: qué es, qué dato sirve, a dónde va y qué falta.
+1. **Juan David sube los archivos** con la página de carga local (`/carga/` en `npm run dev`; plan AG.9) o los
+   deja a mano en `insumos/entrada/`. Esa carpeta **no se sube a git**: puede traer información interna.
+2. **Claude los lee y los registra** en la tabla de abajo (y en `insumos/entrada/estado.json` cuando exista la
+   página de carga): qué es, qué dato sirve, a dónde va y qué falta.
 3. **Lo útil se convierte:**
    - **Al sitio:** datos de proyectos, cifras, certificaciones, empresas del grupo, textos → `src/content/`
      (revisado y en ES/EN). Cada cambio cierra pendientes de `/pendientes/`.
    - **A PDF:** las piezas de `design/documentos.mjs` (portafolio, brochures, políticas, directorio) se regeneran con
-     `node design/documentos.mjs` y quedan en `documentos-web/<carpeta>/` con su `LEEME.md` (las columnas que se
-     llenan al subir). Un original que ya es un PDF oficial (un certificado de SGS) se copia tal cual.
-4. **Juan David revisa** los PDF de `documentos-web/` y sube a la biblioteca los que apruebe.
-5. Los flujos de Power Automate los publican en la página Documentos y el agente los cita.
+     `node design/documentos.mjs` en `documentos-web/<carpeta>/` (borrador, con su `LEEME.md`). Un original que ya es
+     un PDF oficial (un certificado de SGS) se copia tal cual.
+4. **Juan David revisa** `documentos-web/`; lo que apruebe pasa a `public/documentos/<carpeta>/` y a la colección de
+   documentos (plan AG.11).
+5. Se compila y se despliega: la página Documentos lo muestra y el agente lo cita.
 
 **Reglas:** nada con datos personales, tarifas, contratos, nómina ni información confidencial sale a la web; una
 versión vieja se marca como tal y no reemplaza a la vigente; una cifra que se contradice se deja en pendientes

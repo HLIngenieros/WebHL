@@ -1,7 +1,7 @@
 <?php
 // Agente "Hablar con HL" (D3, plan AG.3, guía del agente §9). Recibe la pregunta del panel, busca en el
 // contenido del sitio (conocimiento.json, generado al compilar), en el catálogo de documentos y en las
-// vacantes, y se la pasa al flujo 4 de Power Automate ("Ejecutar un prompt"). Devuelve la respuesta con
+// vacantes, y se la pasa al modelo de IA (hoy por la URL de AGENTE_URL; AG.10: directo al proveedor). Devuelve la respuesta con
 // su intención y solo las fuentes que el sitio publica. Los temas éticos se responden aquí, sin IA.
 // No guarda conversaciones: solo cuenta preguntas por día (TOPE_DIARIO) y por IP.
 // Prueba local: HL_ENV=<ruta del .env> HL_AGENTE_PRUEBA=1 php -S localhost:8080 -t dist (respuestas simuladas).
@@ -28,8 +28,12 @@ function entorno(): array {
   $raiz = dirname((string) ($_SERVER['DOCUMENT_ROOT'] ?? __DIR__ . '/..'));
   foreach ([getenv('HL_ENV') ?: '', "$raiz/hl-privado/.env", "$raiz/privado/.env"] as $ruta) {
     if ($ruta !== '' && is_file($ruta)) {
-      $v = parse_ini_file($ruta, false, INI_SCANNER_RAW);
-      if (is_array($v)) return $v + ['_ruta' => $ruta];
+      // CLAVE=valor por línea; las líneas con # son comentarios (parse_ini_file no los acepta).
+      $v = [];
+      foreach (file($ruta, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $l) {
+        if (preg_match('/^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.*?)\s*$/', $l, $m)) $v[$m[1]] = trim($m[2], "\"'");
+      }
+      return $v + ['_ruta' => $ruta];
     }
   }
   return [];
@@ -153,7 +157,7 @@ foreach ($elegidos as $k) {
   $contexto .= $bloque;
 }
 
-// Documentos (catálogo vivo de Power Automate) y vacantes abiertas.
+// Documentos (catálogo del sitio) y vacantes abiertas.
 $docs = json_decode((string) @file_get_contents(__DIR__ . '/documentos.json'), true) ?: [];
 $permitidas = [];
 foreach ($base as $f) $permitidas[(string) parse_url((string) $f['url'], PHP_URL_PATH)] = (string) $f['titulo'];

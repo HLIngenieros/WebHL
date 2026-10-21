@@ -1,7 +1,7 @@
-// Documentos para la biblioteca "Conocimiento Web HL" (D3). Arma en PDF, en español e inglés, lo que el sitio ya
+// Documentos para la página Documentos (D3, plan AG.11). Arma en PDF, en español e inglés, lo que el sitio ya
 // publica: portafolio de proyectos, brochure corporativo, líneas de servicio, política de gestión integral, Reglas
 // de Oro y directorio de sedes; copia la política de datos M-TI-001 tal cual. Salen en documentos-web/<carpeta>/
-// con documentos-web/LEEME.md (las columnas que se llenan al subirlos). Juan David los revisa y los sube.
+// con documentos-web/LEEME.md (sus datos). Juan David los revisa; lo aprobado pasa a public/documentos/<carpeta>/.
 // Uso: node design/documentos.mjs        (necesita Playwright, ya instalado para las pruebas)
 import { readFileSync, readdirSync, writeFileSync, mkdirSync, copyFileSync, rmSync, existsSync } from 'node:fs';
 import { join, dirname, extname } from 'node:path';
@@ -314,11 +314,11 @@ if (existsSync(m)) {
   filas.push({ carpeta: 'Politicas', archivo: 'HL-Politica-de-tratamiento-de-datos-M-TI-001.pdf', titulo: 'Política de tratamiento de datos personales', idioma: 'ES', area: 'Jurídica', emisor: 'HL Ingenieros S.A.', codigo: 'M-TI-001', desc: 'Manual de políticas y procedimientos de protección de datos (Ley 1581 de 2012)' });
 }
 
-const leeme = `# Documentos para "Conocimiento Web HL"
+const leeme = `# Documentos para la página Documentos (borrador)
 
 Generados el ${FECHA} con \`node design/documentos.mjs\` a partir del contenido del sitio (\`src/content/\`).
-**Revísalos antes de subirlos**: al subirlos quedan públicos en la página Documentos y el agente los cita.
-Al subir cada uno, llena las columnas de la biblioteca como dice la tabla (Publicar en la web = **Sí**).
+**Revísalos antes de aprobarlos**: lo aprobado pasa a \`public/documentos/<carpeta>/\` y a la colección de documentos
+(plan AG.11), queda público en la página Documentos y el agente lo cita. La tabla trae los datos de cada uno.
 
 | Carpeta | Archivo | Título | Idioma | Área | Emisor | Código | Descripción |
 |---|---|---|---|---|---|---|---|
