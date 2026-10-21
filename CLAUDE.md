@@ -274,10 +274,15 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     y los documentos vivirán en el repo. Retirados `documentos.php`, sus pruebas, las claves de los flujos y el túnel.
     Generador de PDF `design/documentos.mjs` (13 PDF ES/EN en `documentos-web/`, borrador) e inventario en
     [insumos/README.md](insumos/README.md). `design/local.ps1` sirve el sitio con PHP en el 8080 para probar el agente.
-  - **Siguiente paso (próxima sesión):** AG.9 página de carga local (con maqueta), luego AG.10 (`agente.php` → modelo
-    directo; Juan David pega `ANTHROPIC_API_KEY` en `privado/.env`) y AG.11 (Documentos desde el repo). F6 después.
-  - **Ojo agente:** al desplegar no borrar `/api/vacantes.json` (lo escribe el flujo de Vacantes de F4, que sigue
-    en Power Automate: confirmar con Juan David si se mantiene). El sitio es `https://hlingenieros.com` sin www.
+  - Etapa 13 (2026-10-21): AG.9 página de carga local (maqueta `design/maquetas/carga.html`). La integración
+    `src/lib/carga.mjs` inyecta `/carga/` (`src/lib/carga.astro`) y el middleware `/__carga` **solo en `astro dev`**:
+    nada llega a `dist/` (prueba en `humo.spec.ts`). Un archivo por petición en crudo → `insumos/entrada/AAAA-MM-DD/`
+    con nombre seguro; registro en `insumos/entrada/estado.json` (`archivo, nota, bytes, subido, estado, destino,
+    detalle`; estados recibido · revisado · publicado · descartado, los cambia Claude). Solo loopback y mismo origen.
+  - **Siguiente paso:** AG.10 (`agente.php` → modelo directo; Juan David pega `ANTHROPIC_API_KEY` en
+    `privado/.env`) y AG.11 (Documentos desde el repo). F6 después.
+  - **Ojo agente:** al desplegar no borrar `/api/vacantes.json` (lo escribe el flujo de Vacantes de F4 en Power
+    Automate; **congelado por decisión de Juan David, 21-oct**: no se toca hasta nuevo aviso). El sitio es `https://hlingenieros.com` sin www.
     `agente.php` aún usa `AGENTE_URL` (flujo retirado): hasta AG.10 responde "sin servicio" con la clave real.
     Las pruebas de PHP corren con `HL_PHP=C:/Users/jurbina/herramientas/php/php.exe npm test`.
   - **Información difusa (21-oct):** entra por la página de carga local (AG.9) o a mano en `insumos/entrada/`

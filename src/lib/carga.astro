@@ -1,0 +1,311 @@
+---
+// Carga de insumos (plan AG.9; maqueta design/maquetas/carga.html). La inyecta src/lib/carga.mjs solo en `astro dev`:
+// no existe en dist/. Página suelta, sin barra ni pie: es una herramienta de este equipo, no parte del sitio.
+import '../styles/global.css';
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Carga de insumos · Grupo HL</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      try { const t = localStorage.getItem('tema'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}
+    </script>
+  </head>
+  <body class="cg">
+    <div class="cg-local"><span class="cg-cinta"></span><p class="dat"><b>Solo en este equipo</b> · lo que subas va a <b>insumos/entrada/</b>, fuera de git y del sitio</p></div>
+
+    <main class="cg-w">
+      <section class="cg-cab">
+        <div>
+          <span class="cg-eje dat"><i>A</i> Insumos · Transformación Digital</span>
+          <h1>Carga de insumos</h1>
+          <p class="cg-lead">Suelta aquí lo que llegue de las áreas: certificados, fotos de obra, Excel con cifras, presentaciones. Una nota corta ayuda a saber de dónde viene y para qué sirve.</p>
+        </div>
+        <div class="cg-rotulo dat" aria-label="Resumen">
+          <div><span class="k">Carpeta</span><span class="v">insumos/entrada</span></div>
+          <div><span class="k">Último</span><span class="v" id="cg-ultimo">—</span></div>
+          <div class="cg-cifras">
+            <span><b id="c-recibido">0</b><span class="k">Recibidos</span></span>
+            <span><b id="c-revisado">0</b><span class="k">Revisados</span></span>
+            <span><b id="c-publicado">0</b><span class="k">Publicados</span></span>
+            <span><b id="c-descartado">0</b><span class="k">Descartados</span></span>
+          </div>
+          <div class="ancho"><span class="k">Proyecto</span><span class="v">Grupo HL · sitio web</span></div>
+        </div>
+      </section>
+
+      <label class="cg-zona" id="cg-zona">
+        <input type="file" multiple hidden id="cg-elegir" accept=".pdf,.jpg,.jpeg,.png,.webp,.xlsx,.csv,.docx,.pptx,.txt,.md" />
+        <span class="cg-flecha" aria-hidden="true"><i></i><b></b></span>
+        <strong>Arrastra los archivos aquí</strong>
+        <p>o <u>elígelos de tu equipo</u> · puedes soltar varios a la vez</p>
+        <span class="cg-tipos dat"><span>PDF</span><span>JPG · PNG · WEBP</span><span>XLSX · CSV</span><span>DOCX</span><span>PPTX</span><span>TXT · MD</span></span>
+        <span class="cg-cota dat"><span>≤ 50 MB por archivo</span></span>
+      </label>
+
+      <section class="cg-cola" id="cg-cola" aria-live="polite">
+        <div class="cg-cola-cab"><span class="dat" id="cg-cola-t">Por subir</span><button type="button" class="cg-sec dat" id="cg-vaciar">Vaciar</button></div>
+        <div id="cg-items"></div>
+        <div class="cg-cola-pie">
+          <small>Se guardan en <b>insumos/entrada/<span id="cg-hoy"></span>/</b> con un nombre seguro. Nada se ejecuta ni se publica.</small>
+          <button type="button" class="cg-btn" id="cg-subir">Subir archivos <span aria-hidden="true">→</span></button>
+        </div>
+      </section>
+
+      <div class="cg-reg-cab">
+        <h2>Registro</h2>
+        <div class="cg-filtros dat" role="group" aria-label="Filtrar por estado" id="cg-filtros"></div>
+      </div>
+      <table class="cg-tabla">
+        <thead class="dat"><tr><th>#</th><th>Archivo</th><th>Nota</th><th class="fh">Subido</th><th>Estado</th><th>Destino</th></tr></thead>
+        <tbody id="cg-reg"><tr><td colspan="6" class="cg-vacio">Cargando…</td></tr></tbody>
+      </table>
+      <div class="cg-pie"><span>Estado en <code>insumos/entrada/estado.json</code> · lo actualiza Claude al procesar</span><span>Inventario completo en <code>insumos/README.md</code></span></div>
+    </main>
+
+    <script>
+      const ESTADOS: Record<string, string> = { recibido: 'Recibido', revisado: 'Revisado', publicado: 'Publicado', descartado: 'Descartado' };
+      const OK = /\.(pdf|jpe?g|png|webp|xlsx|csv|docx|pptx|txt|md)$/i, MAX = 50 * 1024 * 1024;
+      type Fila = { archivo: string; nota: string; bytes: number; subido: string; estado: string; destino: string; detalle: string };
+      type EnCola = { file: File; nota: string; err: string };
+
+      const $ = (s: string) => document.querySelector(s) as HTMLElement;
+      const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+      const ext = (n: string) => (n.split('.').pop() || '').slice(0, 4).toUpperCase();
+      const peso = (b: number) => (b > 1048576 ? (b / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB');
+      let registro: Fila[] = [], filtro = 'todos', cola: EnCola[] = [];
+      $('#cg-hoy').textContent = new Date().toLocaleDateString('sv-SE');
+
+      async function cargarRegistro() {
+        try {
+          const r = await fetch('/__carga');
+          if (!r.ok) throw new Error();
+          registro = await r.json();
+        } catch {
+          $('#cg-reg').innerHTML = '<tr><td colspan="6" class="cg-vacio">Sin servidor de carga: abre esta página con <code>npm run dev</code>.</td></tr>';
+          return;
+        }
+        pintarRegistro();
+      }
+
+      function pintarRegistro() {
+        for (const k in ESTADOS) $('#c-' + k).textContent = String(registro.filter((r) => r.estado === k).length);
+        $('#cg-ultimo').textContent = registro[0]?.subido.slice(0, 10) ?? '—';
+        const opciones: [string, string, number][] = [['todos', 'Todos', registro.length], ...Object.entries(ESTADOS).map(([k, v]) => [k, v, registro.filter((r) => r.estado === k).length] as [string, string, number])];
+        $('#cg-filtros').innerHTML = opciones.map(([k, v, n]) => `<button type="button" aria-pressed="${filtro === k}" data-f="${k}">${k !== 'todos' ? `<i class="e-${k}"></i>` : ''}${v} ${n}</button>`).join('');
+        let dia = '', i = 0, html = '';
+        registro.forEach((r, idx) => {
+          if (filtro !== 'todos' && r.estado !== filtro) return;
+          const d = r.subido.slice(0, 10), nombre = r.archivo.split('/').pop()!;
+          if (d !== dia) { dia = d; html += `<tr class="dia"><td colspan="6" class="dat">${d}</td></tr>`; }
+          html += `<tr class="${esc(r.estado)}" style="--d:${i++ * 50}">
+            <td class="n dat">${String(registro.length - idx).padStart(2, '0')}</td>
+            <td><span class="arch"><b>${esc(nombre)}</b><span class="dat">${ext(nombre)} · ${peso(r.bytes)}</span></span></td>
+            <td class="nota-c">${esc(r.nota) || '—'}</td>
+            <td class="fh dat">${r.subido.slice(11)}</td>
+            <td class="est"><span class="chip dat e-${esc(r.estado)}"><i></i>${ESTADOS[r.estado] ?? esc(r.estado)}</span></td>
+            <td class="dest">${r.destino ? `<code>${esc(r.destino)}</code>` : ''}${r.detalle ? `${r.destino ? '<br>' : ''}<span>${esc(r.detalle)}</span>` : r.destino ? '' : '<span>—</span>'}</td></tr>`;
+        });
+        $('#cg-reg').innerHTML = html || `<tr><td colspan="6" class="cg-vacio">${registro.length ? 'Nada en este estado.' : 'Aún no hay archivos.'}</td></tr>`;
+      }
+      $('#cg-filtros').addEventListener('click', (e) => {
+        const b = (e.target as HTMLElement).closest('button');
+        if (b) { filtro = b.dataset.f!; pintarRegistro(); }
+      });
+
+      function pintarCola() {
+        $('#cg-cola').classList.toggle('on', cola.length > 0);
+        const buenos = cola.filter((f) => !f.err).length;
+        $('#cg-cola-t').textContent = `Por subir · ${buenos} ${buenos === 1 ? 'archivo' : 'archivos'}`;
+        ($('#cg-subir') as HTMLButtonElement).disabled = !buenos;
+        $('#cg-items').innerHTML = cola.map((f, i) => `<div class="item ${f.err ? 'malo' : ''}" data-i="${i}">
+          <span class="ext dat">${esc(ext(f.file.name))}</span>
+          <span class="nom"><b>${esc(f.file.name)}</b><span class="dat">${f.err || peso(f.file.size)}</span></span>
+          <input placeholder="Nota opcional: de dónde viene, para qué sirve" value="${esc(f.nota)}" maxlength="300" aria-label="Nota para ${esc(f.file.name)}">
+          <button type="button" class="quitar" aria-label="Quitar ${esc(f.file.name)}">×</button><span class="barra"></span></div>`).join('');
+      }
+      function agregar(files: FileList) {
+        for (const file of Array.from(files)) {
+          const err = !OK.test(file.name) ? 'Tipo no admitido' : file.size > MAX ? 'Pasa de 50 MB' : !file.size ? 'Archivo vacío' : '';
+          cola.push({ file, nota: '', err });
+        }
+        pintarCola();
+      }
+      $('#cg-items').addEventListener('input', (e) => {
+        const it = (e.target as HTMLElement).closest('.item') as HTMLElement | null;
+        if (it) cola[Number(it.dataset.i)].nota = (e.target as HTMLInputElement).value;
+      });
+      $('#cg-items').addEventListener('click', (e) => {
+        const b = (e.target as HTMLElement).closest('.quitar');
+        if (b) { cola.splice(Number((b.parentElement as HTMLElement).dataset.i), 1); pintarCola(); }
+      });
+      $('#cg-vaciar').onclick = () => { cola = []; pintarCola(); };
+
+      // Un archivo por petición, con el cuerpo en crudo: el middleware no necesita interpretar multipart.
+      function subirUno(f: EnCola, barra: HTMLElement) {
+        return new Promise<string>((ok) => {
+          const x = new XMLHttpRequest();
+          x.open('POST', `/__carga?nombre=${encodeURIComponent(f.file.name)}&nota=${encodeURIComponent(f.nota.trim())}`);
+          x.setRequestHeader('X-Carga', '1');
+          x.upload.onprogress = (e) => { if (e.lengthComputable) barra.style.width = `${(e.loaded / e.total) * 100}%`; };
+          x.onload = () => ok(x.status === 201 ? '' : (JSON.parse(x.responseText || '{}').error ?? 'No se pudo subir'));
+          x.onerror = () => ok('Sin conexión con el servidor');
+          x.send(f.file);
+        });
+      }
+      $('#cg-subir').onclick = async () => {
+        ($('#cg-subir') as HTMLButtonElement).disabled = true;
+        const filas = [...document.querySelectorAll<HTMLElement>('#cg-items .item')];
+        const fallidos: EnCola[] = [];
+        for (const [i, f] of cola.entries()) {
+          if (f.err) continue;
+          const fila = filas[i];
+          fila.classList.add('sube');
+          const err = await subirUno(f, fila.querySelector('.barra')!);
+          fila.classList.add(err ? 'malo' : 'listo');
+          if (err) { fallidos.push({ ...f, err }); (fila.querySelector('.nom .dat') as HTMLElement).textContent = err; }
+        }
+        setTimeout(() => { cola = fallidos; filtro = 'todos'; pintarCola(); cargarRegistro(); }, 500);
+      };
+
+      const zona = $('#cg-zona');
+      ['dragenter', 'dragover'].forEach((t) => zona.addEventListener(t, (e) => { e.preventDefault(); zona.classList.add('sobre'); }));
+      ['dragleave', 'drop'].forEach((t) => zona.addEventListener(t, (e) => { e.preventDefault(); zona.classList.remove('sobre'); }));
+      zona.addEventListener('drop', (e) => { if ((e as DragEvent).dataTransfer) agregar((e as DragEvent).dataTransfer!.files); });
+      $('#cg-elegir').addEventListener('change', (e) => { const i = e.target as HTMLInputElement; agregar(i.files!); i.value = ''; });
+      cargarRegistro();
+    </script>
+
+    <style is:global>
+      .cg { margin: 0; background-color: var(--bg); color: var(--ink); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: var(--grid-cell) var(--grid-cell) }
+      .cg .dat { font-stretch: var(--wdth-data); text-transform: uppercase; letter-spacing: var(--ls-data); font-weight: var(--fw-data); font-size: var(--fs-data) }
+      .cg code { font-family: var(--f); font-stretch: var(--wdth-data); color: var(--ink) }
+      .cg-w { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter) }
+      .cg-local p, .cg-zona p { max-width: none }
+
+      .cg-local { display: flex; align-items: center; gap: var(--s3); border-bottom: 1px solid var(--ink); background: var(--paper) }
+      .cg-cinta { width: 64px; align-self: stretch; background: repeating-linear-gradient(-45deg, var(--signal) 0 8px, var(--ink) 8px 16px) }
+      .cg-local p { margin: 0; padding: 10px var(--s3) 10px 0; color: var(--muted) }
+      .cg-local p b { color: var(--ink) }
+
+      .cg-cab { display: grid; grid-template-columns: 1fr minmax(280px, 380px); gap: var(--s5); align-items: end; padding: var(--s6) 0 var(--s5) }
+      .cg-eje { display: inline-flex; align-items: center; gap: var(--s2); color: var(--accent) }
+      .cg-eje i { width: 26px; height: 26px; border: var(--stroke-mid) solid var(--accent); border-radius: 50%; display: grid; place-items: center; font-style: normal; font-weight: var(--fw-title) }
+      .cg h1 { margin: var(--s3) 0; font-family: var(--f-ancha); font-stretch: var(--wdth-display); font-weight: var(--fw-display); font-size: var(--fs-h1); line-height: var(--lh-display); letter-spacing: var(--ls-display) }
+      .cg-lead { margin: 0; font-size: var(--fs-lead); color: var(--muted); max-width: 56ch }
+      .cg-rotulo { border: var(--stroke-mid) solid var(--ink); background: var(--paper); display: grid; grid-template-columns: 1fr 1fr }
+      .cg-rotulo > div { padding: var(--s2) var(--s3); border-top: 1px solid var(--ink); display: grid }
+      .cg-rotulo > div:nth-child(-n+2) { border-top: 0 }
+      .cg-rotulo > div:nth-child(odd) { border-right: 1px solid var(--ink) }
+      .cg-rotulo .k { color: var(--muted); font-size: var(--fs-chip) }
+      .cg-rotulo .v { font-weight: var(--fw-strong); font-size: var(--fs-sm) }
+      .cg-rotulo .ancho, .cg-rotulo .cg-cifras { grid-column: 1 / -1; border-right: 0 !important }
+      .cg-rotulo .cg-cifras { grid-template-columns: repeat(4, 1fr); padding: 0 }
+      .cg-cifras > span { padding: var(--s2) var(--s3); border-right: 1px solid var(--line); display: grid }
+      .cg-cifras > span:last-child { border-right: 0 }
+      .cg-cifras b { font-family: var(--f-ancha); font-stretch: var(--wdth-stat); font-weight: var(--fw-title); font-size: var(--fs-stat); line-height: 1 }
+
+      .cg-zona { display: block; position: relative; border: var(--stroke-mid) dashed var(--steel); background: var(--paper); padding: var(--s6) var(--s4) var(--s5); text-align: center; cursor: pointer; transition: border-color var(--t-rapido), background var(--t-rapido) }
+      .cg-zona::before, .cg-zona::after { content: ""; position: absolute; width: 18px; height: 18px; border: var(--stroke-heavy) solid var(--ink) }
+      .cg-zona::before { left: -3px; top: -3px; border-right: 0; border-bottom: 0 }
+      .cg-zona::after { right: -3px; bottom: -3px; border-left: 0; border-top: 0 }
+      .cg-zona:hover, .cg-zona.sobre, .cg-zona:focus-within { border-color: var(--accent); background: var(--accent-soft) }
+      .cg-flecha { display: block; width: 56px; height: 56px; margin: 0 auto var(--s3); position: relative }
+      .cg-flecha i { position: absolute; left: 50%; top: 0; bottom: 14px; width: 3px; margin-left: -1.5px; background: var(--accent) }
+      .cg-flecha i::before { content: ""; position: absolute; left: 50%; bottom: -2px; width: 18px; height: 18px; border-right: 3px solid var(--accent); border-bottom: 3px solid var(--accent); transform: translateX(-50%) rotate(45deg) }
+      .cg-flecha b { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--ink) }
+      .cg-zona.sobre .cg-flecha i { animation: cg-baja .8s var(--ease-izaje) infinite }
+      .cg-zona strong { display: block; font-family: var(--f-ancha); font-stretch: var(--wdth-title); font-weight: var(--fw-title); font-size: var(--fs-h3) }
+      .cg-zona p { margin: var(--s1) 0 var(--s4); color: var(--muted); font-size: var(--fs-sm) }
+      .cg-zona p u { color: var(--accent); text-underline-offset: 3px }
+      .cg-tipos { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s1) }
+      .cg-tipos span { border: 1px solid var(--line); padding: 2px 8px; font-size: var(--fs-chip); color: var(--muted); background: var(--bg) }
+      .cg-cota { position: absolute; left: var(--s4); right: var(--s4); bottom: -26px; height: 14px; border-left: 1px solid var(--signal); border-right: 1px solid var(--signal) }
+      .cg-cota::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--signal); transform-origin: left; animation: cg-cota var(--t-cota) var(--ease-plano) both .2s }
+      .cg-cota span { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--bg); padding: 0 8px; color: var(--signal-ink); font-size: var(--fs-cota); white-space: nowrap }
+
+      .cg-cola { margin-top: var(--s6); border: 1px solid var(--ink); background: var(--paper); display: none }
+      .cg-cola.on { display: block; animation: cg-izaje var(--t-izaje) var(--ease-izaje) both }
+      .cg-cola-cab { display: flex; justify-content: space-between; align-items: center; padding: var(--s2) var(--s3); border-bottom: 1px solid var(--ink) }
+      .cg-cola .item { display: grid; grid-template-columns: 44px minmax(0, 1.2fr) minmax(0, 1.5fr) auto; gap: var(--s3); align-items: center; padding: var(--s2) var(--s3); border-bottom: 1px solid var(--line-soft); position: relative }
+      .cg-cola .item:last-child { border-bottom: 0 }
+      .cg-cola .ext { width: 36px; height: 44px; border: var(--stroke-mid) solid var(--accent); position: relative; display: grid; place-items: end center; padding-bottom: 4px; font-size: var(--fs-cota); color: var(--accent) }
+      .cg-cola .ext::after { content: ""; position: absolute; right: -1.6px; top: -1.6px; width: 10px; height: 10px; background: var(--paper); border-left: var(--stroke-mid) solid var(--accent); border-bottom: var(--stroke-mid) solid var(--accent) }
+      .cg-cola .nom { display: grid; min-width: 0 }
+      .cg-cola .nom b { font-weight: var(--fw-strong); font-size: var(--fs-sm); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+      .cg-cola .nom span { color: var(--muted) }
+      .cg-cola input { width: 100%; border: 1px solid var(--line); background: var(--bg); padding: 7px 10px; font: inherit; font-size: var(--fs-sm); color: inherit; border-radius: 0 }
+      .cg-cola input:focus { outline: var(--focus-ring); outline-offset: -1px; border-color: var(--accent) }
+      .cg-cola .quitar { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: var(--fs-h3); width: 32px; height: 32px }
+      .cg-cola .quitar:hover { color: var(--bad) }
+      .cg-cola .item.malo .nom span { color: var(--bad) }
+      .cg-cola .item.malo input { visibility: hidden }
+      .cg-cola .barra { position: absolute; left: 0; bottom: -1px; height: 3px; width: 0; background: var(--accent); transition: width var(--t-rapido) linear }
+      .cg-cola .item.listo .barra { width: 100%; background: var(--good) }
+      .cg-cola .item.listo .ext { border-color: var(--good); color: var(--good) }
+      .cg-cola .item.listo .ext::after { border-color: var(--good) }
+      .cg-cola-pie { display: flex; justify-content: space-between; align-items: center; gap: var(--s3); padding: var(--s3); border-top: 1px solid var(--ink); background: var(--bg) }
+      .cg-cola-pie small { color: var(--muted) }
+      .cg-btn { background: var(--accent); color: var(--accent-ink); border: 0; padding: 12px var(--s4); font: inherit; font-weight: var(--fw-boton); font-size: var(--fs-boton); cursor: pointer; display: inline-flex; gap: var(--s2); align-items: center; transition: transform var(--t-rapido) var(--ease-izaje) }
+      .cg-btn:hover { transform: translateY(-2px) }
+      .cg-btn:disabled { opacity: .5; cursor: default; transform: none }
+      .cg-sec { background: none; border: 1px solid var(--ink); color: var(--ink); padding: 8px 14px; cursor: pointer }
+
+      .cg-reg-cab { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--s3); border-bottom: 2px solid var(--ink); padding: var(--s6) 0 var(--s2) }
+      .cg-reg-cab h2 { margin: 0; font-family: var(--f-ancha); font-stretch: var(--wdth-title); font-weight: var(--fw-title); font-size: var(--fs-h2); line-height: var(--lh-title) }
+      .cg-filtros { display: flex; flex-wrap: wrap; gap: var(--s1) }
+      .cg-filtros button { border: 1px solid var(--line); background: var(--paper); color: var(--ink); padding: 5px 10px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; font: inherit }
+      .cg-filtros button[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--bg) }
+      .cg-filtros button i { width: 8px; height: 8px; border-radius: 50% }
+      .cg-tabla { width: 100%; border-collapse: collapse; background: var(--paper); border: 1px solid var(--ink); border-top: 0 }
+      .cg-tabla th { text-align: left; padding: var(--s2) var(--s3); border-bottom: 1px solid var(--ink); background: var(--bg); color: var(--muted); font-weight: var(--fw-data) }
+      .cg-tabla td { padding: 12px var(--s3); border-bottom: 1px solid var(--line-soft); vertical-align: top; font-size: var(--fs-sm) }
+      .cg-tabla tr:last-child td { border-bottom: 0 }
+      .cg-tabla tbody tr { animation: cg-aparece var(--t-aparece) var(--ease-izaje) both; animation-delay: calc(var(--d, 0) * 1ms); transition: background var(--t-rapido) }
+      .cg-tabla tbody tr:hover { background: var(--bg) }
+      .cg-tabla td.n { color: var(--muted); width: 52px }
+      .cg-tabla .arch { display: grid }
+      .cg-tabla .arch b { font-weight: var(--fw-strong); word-break: break-all }
+      .cg-tabla .arch span, .cg-tabla td.nota-c, .cg-tabla td.dest span, .cg-vacio { color: var(--muted) }
+      .cg-tabla td.nota-c { max-width: 30ch }
+      .cg-tabla td.dest code { font-size: var(--fs-xs); color: var(--accent); word-break: break-all }
+      .cg-tabla .chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border: 1px solid; font-size: var(--fs-chip); white-space: nowrap }
+      .cg-tabla .chip i { width: 7px; height: 7px; border-radius: 50% }
+      .cg .e-recibido { background: var(--signal-soft); border-color: var(--signal); color: var(--ink) }
+      .cg .e-revisado { background: var(--accent-soft); border-color: var(--accent); color: var(--ink) }
+      .cg .e-publicado { background: var(--good-soft); border-color: var(--good); color: var(--ink) }
+      .cg .e-descartado { background: transparent; border-color: var(--line); color: var(--muted) }
+      .cg .e-recibido i, .cg i.e-recibido { background: var(--signal) }
+      .cg .e-revisado i, .cg i.e-revisado { background: var(--accent) }
+      .cg .e-publicado i, .cg i.e-publicado { background: var(--good) }
+      .cg .e-descartado i, .cg i.e-descartado { background: var(--steel) }
+      .cg-tabla tr.descartado .arch b { text-decoration: line-through; text-decoration-color: var(--steel); color: var(--muted) }
+      .cg-tabla .dia td { background: var(--bg); padding: 6px var(--s3); color: var(--muted); border-bottom: 1px solid var(--line) }
+      .cg-pie { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s3); padding: var(--s3) 0 var(--s6); color: var(--muted); font-size: var(--fs-xs) }
+
+      @keyframes cg-cota { from { transform: scaleX(0) } }
+      @keyframes cg-izaje { from { opacity: 0; transform: translateY(-16px) } }
+      @keyframes cg-aparece { from { opacity: 0; transform: translateY(8px) } }
+      @keyframes cg-baja { 0% { transform: translateY(-10px); opacity: 0 } 60% { opacity: 1 } 100% { transform: translateY(0) } }
+      @media (prefers-reduced-motion: reduce) { .cg *, .cg *::before, .cg *::after { animation: none !important; transition: none !important } }
+
+      @media (max-width: 860px) {
+        .cg-cab { grid-template-columns: 1fr; gap: var(--s4); padding-top: var(--s5) }
+        .cg-cola .item { grid-template-columns: 40px 1fr auto }
+        .cg-cola input { grid-column: 2 / -1 }
+        .cg-tabla thead { display: none }
+        .cg-tabla, .cg-tabla tbody, .cg-tabla tr, .cg-tabla td { display: block }
+        .cg-tabla tbody tr:not(.dia) { display: grid; grid-template-columns: auto 1fr; gap: 4px var(--s2); padding: var(--s3); border-bottom: 1px solid var(--line) }
+        .cg-tabla tbody td { border: 0; padding: 0 }
+        .cg-tabla td.n { grid-row: span 3 }
+        .cg-tabla td.nota-c, .cg-tabla td.dest, .cg-tabla td.est { grid-column: 2 }
+        .cg-tabla td.fh { display: none }
+        .cg-cola-pie { flex-direction: column; align-items: stretch }
+      }
+    </style>
+  </body>
+</html>

@@ -21,3 +21,8 @@ test('el ícono declarado existe', async ({ page }) => {
   expect(href).toBeTruthy();
   expect((await page.request.get(href!)).status()).toBe(200);
 });
+
+test('la carga de insumos solo existe en desarrollo', async ({ request }) => {
+  expect((await request.get('/carga/')).status()).toBe(404);
+  expect((await request.post('/__carga?nombre=a.txt', { headers: { 'X-Carga': '1' }, data: 'x' })).status()).not.toBe(201);
+});
