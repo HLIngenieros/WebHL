@@ -95,7 +95,7 @@ Transición de vista; sin preloader, cifras escritas en el HTML, respeta reduced
 | `/hse` | `/en/hse` | HSE y calidad |
 | `/noticias`, `/noticias/[slug]` | `/en/news/...` | Incluye adjudicados; mínimo 3 entradas al lanzar o se oculta |
 | `/contacto` | `/en/contact` | Sedes, formulario de cotización, asistente, redes |
-| Pie: `/trabaje-con-nosotros`, `/proveedores`, `/buzon-etico`, `/acreedores`, `/legal/datos`, `/legal/terminos` | `/en/careers`, `/en/suppliers`, `/en/ethics-line`, `/en/creditors`, `/en/legal/privacy`, `/en/legal/terms` | Formularios por intención; ERP/BI/correo/campus salen al portal interno |
+| Pie: `/trabaje-con-nosotros`, `/proveedores`, `/buzon-etico`, `/acreedores`, `/documentos`, `/legal/datos`, `/legal/terminos` | `/en/careers`, `/en/suppliers`, `/en/ethics-line`, `/en/creditors`, `/en/documents`, `/en/legal/privacy`, `/en/legal/terms` | Formularios por intención; ERP/BI/correo/campus salen al portal interno |
 
 - Servicios (de 9 a 7 líneas en 3 grupos):
   - A · Gestión: EPC / Llave en mano (absorbe Ingeniería y diseños); Gerencia de proyectos (PMC/EPCM,
@@ -141,7 +141,7 @@ de 5+ fotos con pie.
 |---|---|---|
 | D1 | ¿Sitio del grupo o de HL Ingenieros? Qué empresas se muestran (en EN aparecen Megacranes y Aktino, no en ES) | **Cambiado (20-oct):** el sitio es del **Grupo HL** (mismo logo, "GRUPO HL"); "antes HL Ingenieros" con discreción en Nosotros y en buscadores; razón social y menciones legales siguen como HL Ingenieros S.A. (guía §2.1). Megacranes y Aktino ya salieron del grupo y no se incluyen (20-oct). HL Infraestructura ejecuta las obras y tendrá el protagonismo (en espera de su información: Juan David la consigue; propuesta: esquema del grupo en Nosotros, recursos propios en Servicios y "Ejecución" en las fichas); ECOHL como gerencia/EPCM; HL Panamá y HL Rental siguen, con protagonismo muy reducido |
 | D2 | Lema único | **Decidido (19-oct):** "Construimos la industria con gente que cumple, desde 1968." (A ampliado: integral y humano). EN (cerrado en F5, 20-oct): "Building industry with people who deliver, since 1968." |
-| D3 | Agente: bot nativo de Zoho SalesIQ o agente propio con IA que entrega a Zoho | **Ajustado (21-oct, [docs/guia-agente.md](docs/guia-agente.md)):** agente de **Copilot Studio** publicado sin autenticación y conectado por Direct Line (token endpoint, REST + WebSocket sin Web Chat) a la interfaz propia (F4); atiende lo informativo, cita la fuente y lleva a páginas del sitio. **Zoho SalesIQ solo para lo comercial** (cotizaciones, ventas, prospectos, atención humana): el agente lo pasa según la intención y el script se carga en ese momento; sin asesor conectado, formulario de cotización. Buzón ético solo por formulario. Conocimiento: el sitio (archivos generados al compilar; tras el lanzamiento, el sitio público) y la biblioteca de SharePoint "Documentación Pública" como archivos sincronizados o cargados (la fuente SharePoint en vivo exige autenticación). **Por confirmar con TI:** capacidad de mensajes para visitantes anónimos |
+| D3 | Agente: bot nativo de Zoho SalesIQ o agente propio con IA que entrega a Zoho | **Cambiado (21-oct, [guía Rev. 1](docs/guia-agente.md), [plan](docs/plan-agente.md)):** sale Copilot Studio (con anónimos no lee SharePoint ni sincronizado). **Agente propio:** panel → `agente.php` → flujo de Power Automate (disparador HTTP + "Ejecutar un prompt"; modelo intercambiable) → JSON con respuesta, intención y fuentes. Conocimiento: contenido del sitio (al compilar) + **biblioteca de SharePoint** publicada por flujos en `/documentos/` y `/api/documentos.json` (nueva página Documentos en el pie). **SalesIQ solo para lo comercial**, cargado por intención; sin asesor, formulario de cotización. Buzón ético sin IA (filtro previo en el PHP). **Por confirmar con TI:** créditos de IA (los de AI Builder de Premium no se renuevan desde el 1-nov-2026) y que el tenant permita el disparador HTTP "Cualquiera" |
 | D4 | CMS: Sanity, Decap o Payload | **Decidido (15-oct): sin CMS.** Sin terceros ni credenciales nuevas: el contenido vive en el repo como colecciones de Astro (Markdown/JSON con esquema validado al compilar). Despliegue manual (compilar y subir `dist/`). Salida futura si otros deben editar: Decap CMS sobre los mismos archivos |
 | D5 | Hosting: Vercel/Netlify o Azure Static Web Apps (tenant M365); Power Automate premium o Graph | **Hosting decidido (15-oct):** el actual (Apache + PHP 8.3, IP 107.180.21.17, al parecer GoDaddy; por confirmar), con despliegue estático que reemplaza a WordPress. Integración de correo: pendiente |
 | D6 | Casos sensibles: Odebrecht (Patio de Carbón), Minera Panamá (cerrada desde 2023); nombres actuales de clientes (Zijin Mining, thyssenkrupp Polysius, OHLA) | **Decidido (15-oct):** se mantienen con `visibilidad: discreta`: ficha propia y visible en el explorador, pero fuera de portada, destacados, páginas de servicio/sector y logos de clientes; sí se indexa. Nombres actuales de clientes: pendiente |
@@ -257,10 +257,11 @@ y el agente en Copilot Studio. Lista detallada (con responsable) en [contenido/R
     con aviso de prevalencia del español (`prevalece`). D2 cerrado en EN. De paso: 8 textos truncados por comas en
     YAML en línea y H1 con guiones automáticos. 451 pruebas, presupuesto OK, Lighthouse `/en/` 95 (LCP 2,1 s; se
     revisa en F6). 149 bloqueantes.
-  - Etapa 10 (2026-10-21): guía del agente ([docs/guia-agente.md](docs/guia-agente.md)): reparto agente/SalesIQ,
-    biblioteca "Documentación Pública", instrucciones para Copilot Studio, conexión Direct Line y paso a SalesIQ.
-  - **Siguiente paso:** configurar el agente y la biblioteca con la guía (Juan David); luego la etapa de código
-    de la conexión (guía §4-5) o F6.
+  - Etapa 10 (2026-10-21): guía del agente Rev. 1 ([docs/guia-agente.md](docs/guia-agente.md)): agente propio con
+    Power Automate (4 flujos y prompt, clic por clic), biblioteca en sitio existente con permisos propios, claves,
+    SalesIQ, costos y pruebas; plan de código en [docs/plan-agente.md](docs/plan-agente.md) (AG.0-AG.8).
+  - **Siguiente paso:** Juan David arma biblioteca, prompt y flujos con la guía; yo, el plan del agente (empieza
+    por la puerta de maquetas AG.0) o F6.
   - **Ojo F4 (contraste, 20-oct):** nada de texto ni marcas sobre `--signal` dentro de un fondo `--accent`
     (2,1:1 en claro, 1,5:1 en oscuro): sobre el azul va `--accent-ink`; un chip de aviso es `--signal-soft` +
     borde `--signal` + texto `--ink`. Las clases de un componente llevan prefijo propio (`fm-`, `vc-`, `ag-`):
