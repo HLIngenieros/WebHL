@@ -1,0 +1,449 @@
+<!-- Maqueta AG.0 aprobada el 2026-10-21: estados del panel "Hablar con HL" conectado y página Documentos.
+     Contenido real de certificaciones.yaml (SGS) y de la guía del agente; los documentos de muestra que no existen aún
+     van marcados. Referencia de composición y movimiento; los valores salen de design/tokens.css. -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agente y Documentos · maqueta</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  * { box-sizing: border-box }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f); font-size: var(--fs-body); line-height: var(--lh-text) }
+  a { color: inherit; text-decoration: none } button, input { font: inherit; color: inherit }
+  .dat { font-stretch: var(--wdth-data); text-transform: uppercase; letter-spacing: var(--ls-data); font-weight: var(--fw-data); font-size: var(--fs-data) }
+  .w { max-width: 1240px; margin: 0 auto; padding: 0 40px } @media (max-width: 640px) { .w { padding: 0 16px } }
+  .nota { background: #14181C; color: #AEB6BC; font-size: 13px; padding: 14px 40px; line-height: 1.55 }
+  .nota b { color: var(--hl-senal); font-weight: 600 } .nota i { color: #fff; font-style: normal }
+  .ctl { position: fixed; right: 16px; top: 16px; z-index: 20; display: flex; gap: 6px }
+  .ctl button { background: #14181C; color: #fff; border: 1px solid #444; padding: 8px 12px; cursor: pointer }
+  .titulo-parte { display: flex; align-items: baseline; gap: 16px; border-bottom: 2px solid var(--ink); padding: 48px 0 10px; margin-bottom: 24px }
+  .titulo-parte h2 { margin: 0; font-family: var(--f-ancha); font-stretch: var(--wdth-title); font-weight: var(--fw-title); font-size: 30px; letter-spacing: -.01em }
+  .titulo-parte span { color: var(--muted) }
+
+  /* ================= A · Panel del agente (mismo lenguaje que Contacto.astro, ahora conectado) ================= */
+  .estados { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 32px 24px }
+  .estado > .cap { display: flex; gap: 10px; align-items: baseline; margin-bottom: 10px }
+  .estado > .cap b { font-family: var(--f-ancha); font-stretch: var(--wdth-subtitle); font-weight: var(--fw-subtitle); font-size: 16px }
+  .estado > .cap .n { width: 26px; height: 26px; border: 1.6px solid var(--accent); border-radius: 50%; display: grid; place-items: center; color: var(--accent); font-weight: 800; font-size: 13px; flex: none; align-self: center }
+  .estado > p { margin: 10px 0 0; color: var(--muted); font-size: var(--fs-sm) }
+
+  .ag { background: var(--bg); border: var(--stroke-thin) solid var(--ink); height: 660px; display: grid; grid-template-rows: auto 1fr auto auto; overflow: hidden }
+  .ag-cab { display: grid; grid-template-columns: 1fr auto; border-bottom: 1px solid var(--ink); position: relative }
+  .ag-cab::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: repeating-linear-gradient(-45deg, var(--signal) 0 8px, var(--ink) 8px 16px); transform-origin: left; animation: cota var(--t-cota) var(--ease-plano) both .15s }
+  .ag-cab > div { padding: var(--s2) var(--s3); display: grid; gap: var(--s1); justify-items: start }
+  .ag-cab strong { font-family: var(--f-ancha); font-stretch: var(--wdth-title); font-weight: var(--fw-title) }
+  .ag-ia { display: inline-flex; align-items: center; gap: 6px; color: var(--muted) }
+  .ag-ia i { width: 7px; height: 7px; background: var(--good); border-radius: 50%; box-shadow: 0 0 0 0 var(--good); animation: latido 2.4s ease-out infinite }
+  .ag-cerrar { border: 0; border-left: 1px solid var(--ink); background: none; width: 52px; font-size: var(--fs-h3); cursor: pointer }
+  .ag-hilo { overflow-y: auto; padding: var(--s3); display: flex; flex-direction: column; gap: var(--s2) }
+  .ag-msg { max-width: 88%; padding: var(--s2) var(--s3); font-size: var(--fs-sm); animation: aparece-ag var(--t-aparece) var(--ease-izaje) both; animation-delay: calc(var(--d, 0) * 1ms) }
+  .ag-hl { background: var(--bg); border: 1px solid var(--line); align-self: flex-start; transform-origin: left bottom }
+  .ag-yo { background: var(--ink); color: var(--bg); align-self: flex-end; transform-origin: right bottom }
+  .ag-hl.ag-fijo { border-left: 4px solid var(--ink) }
+  .ag-hl.ag-falla { border-left: 4px solid var(--bad) }
+
+  /* Pensando: barras + cota que barre el contenido */
+  .ag-piensa { align-self: flex-start; display: grid; gap: 8px; padding: var(--s2) var(--s3); border: 1px dashed var(--line); min-width: 240px; animation: aparece-ag var(--t-aparece) var(--ease-izaje) both }
+  .ag-piensa .b { display: flex; gap: 4px; align-items: flex-end; height: 18px }
+  .ag-piensa .b i { width: 3px; height: 16px; background: var(--accent); transform-origin: bottom; animation: barra .9s var(--ease-izaje) infinite }
+  .ag-piensa .b i:nth-child(2) { animation-delay: .15s } .ag-piensa .b i:nth-child(3) { animation-delay: .3s }
+  .ag-piensa .t { color: var(--muted) }
+  .ag-piensa .c { position: relative; height: 10px; border-left: 1px solid var(--signal); border-right: 1px solid var(--signal) }
+  .ag-piensa .c::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--line) }
+  .ag-piensa .c::after { content: ""; position: absolute; top: 1px; bottom: 1px; width: 22%; background: var(--accent-soft); border-left: 2px solid var(--accent); animation: barre 1.6s var(--ease-plano) infinite alternate }
+
+  /* Fuentes */
+  .ag-fuentes { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: var(--s2); max-width: 100% }
+  .ag-fuentes a { display: grid; grid-template-columns: 20px 1fr auto; gap: 8px; align-items: center; padding: 7px 10px; background: var(--paper); transition: background var(--t-rapido), transform var(--t-rapido) var(--ease-izaje) }
+  .ag-fuentes a:hover { background: var(--accent-soft); }
+  .ag-fuentes a:hover .fl { transform: translateX(3px) }
+  .ag-fuentes .ic { width: 16px; height: 20px; border: 1.4px solid var(--accent); position: relative }
+  .ag-fuentes .ic.pdf::after { content: ""; position: absolute; right: -1.4px; top: -1.4px; width: 6px; height: 6px; background: var(--paper); border-left: 1.4px solid var(--accent); border-bottom: 1.4px solid var(--accent) }
+  .ag-fuentes .ic.pag::before { content: ""; position: absolute; left: 3px; right: 3px; top: 5px; height: 1.4px; background: var(--accent); box-shadow: 0 4px 0 var(--accent), 0 8px 0 var(--accent) }
+  .ag-fuentes .tx { display: grid; min-width: 0 }
+  .ag-fuentes .tx b { font-size: var(--fs-xs); font-weight: var(--fw-strong) }
+  .ag-fuentes .tx span { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+  .ag-fuentes .fl { color: var(--accent); transition: transform var(--t-rapido) var(--ease-izaje) }
+  .ag-titfuente { color: var(--muted); margin-top: var(--s2); display: block }
+
+  /* Tarjeta de derivación (como F4) */
+  .ag-derivar { border: 1px solid var(--ink); animation: izaje-ag var(--t-izaje) var(--ease-izaje) both; animation-delay: calc(var(--d, 0) * 1ms); background: var(--bg) }
+  .ag-p3 { height: 8px; overflow: hidden; position: relative }
+  .ag-p3::before { content: ""; position: absolute; inset: 0 -24px; background: repeating-linear-gradient(-45deg, var(--signal) 0 8px, var(--ink) 8px 16px); animation: cinta 1.2s linear infinite }
+  .ag-princ { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s2); padding: var(--s2) var(--s3) }
+  .ag-princ > span { display: grid }
+  .ag-princ .dat, .ag-princ small { color: var(--muted) }
+  .ag-estado { display: inline-flex; align-items: center; gap: 6px }
+  .ag-estado i { width: 8px; height: 8px; border-radius: 50% }
+  .ag-estado.on i { background: var(--good); animation: latido 2.4s ease-out infinite } .ag-estado.on { color: var(--good) }
+  .ag-estado.off i { background: var(--steel) }
+  .ag-btn { background: var(--accent); color: var(--accent-ink); padding: var(--s2) var(--s3); font-weight: var(--fw-boton); white-space: nowrap; position: relative; overflow: hidden; transition: transform var(--t-rapido) var(--ease-izaje) }
+  .ag-btn::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent-ink) 22%, transparent), transparent); transform: translateX(-100%); transition: transform .6s var(--ease-barrido) }
+  .ag-btn:hover { transform: translateY(-2px) } .ag-btn:hover::after { transform: translateX(100%) }
+  .ag-otras { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); padding: var(--s2) var(--s3); border-top: 1px solid var(--line-soft); color: var(--muted) }
+  .ag-link { color: var(--accent) }
+  .ag-sinia { display: inline-block; margin-top: var(--s2); padding: 0 6px; border: 1px solid var(--ink); color: var(--ink) }
+
+  .ag-sug { display: flex; flex-wrap: wrap; gap: var(--s1); padding: var(--s2) var(--s3); border-top: 1px solid var(--line-soft) }
+  .ag-sug:empty { display: none }
+  .ag-sug button { border: 1px solid var(--line); background: var(--bg); padding: var(--s1) var(--s2); cursor: pointer; transition: border-color var(--t-rapido), color var(--t-rapido), transform var(--t-rapido) var(--ease-izaje) }
+  .ag-sug button:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px) }
+  .ag-entrada { display: grid; grid-template-columns: 1fr auto; border-top: 1px solid var(--ink) }
+  .ag-entrada input { border: 0; padding: var(--s3); background: var(--paper); min-width: 0; outline: none }
+  .ag-entrada input:focus { box-shadow: inset 0 -2px 0 var(--accent) }
+  .ag-entrada button { border: 0; border-left: 1px solid var(--ink); background: var(--accent); color: var(--accent-ink); padding: 0 var(--s3); cursor: pointer }
+  .ag-entrada button[disabled] { background: var(--paper); color: var(--muted); cursor: default }
+  .ag-entrada small { grid-column: 1 / -1; padding: var(--s1) var(--s3); color: var(--muted); border-top: 1px solid var(--line-soft); display: flex; justify-content: space-between; gap: 8px }
+  .ag-entrada small .cnt { font-variant-numeric: tabular-nums }
+
+  @keyframes cota { from { transform: scaleX(0) } }
+  @keyframes cinta { to { transform: translateX(22.6px) } }
+  @keyframes barra { 50% { transform: scaleY(.3) } }
+  @keyframes barre { from { left: 0 } to { left: 78% } }
+  @keyframes latido { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--good) 60%, transparent) } 70%, 100% { box-shadow: 0 0 0 7px transparent } }
+  @keyframes aparece-ag { from { opacity: 0; transform: translateY(8px) scale(.98) } }
+  @keyframes izaje-ag { from { opacity: 0; transform: translateY(-18px) } 70% { transform: translateY(2px) } }
+
+  /* ================= B · Página Documentos ================= */
+  .marcos { display: grid; grid-template-columns: minmax(0, 1fr) 390px; gap: 32px; align-items: start }
+  @media (max-width: 1100px) { .marcos { grid-template-columns: 1fr } .marco.movil { max-width: 390px } }
+  .marco { border: 1px solid var(--line); background: var(--bg); container-type: inline-size; overflow: hidden }
+  .marco .cap { padding: 6px 12px; border-bottom: 1px solid var(--line); background: var(--paper); color: var(--muted) }
+
+  .barra-sitio { display: flex; align-items: center; gap: 16px; height: 52px; padding: 0 24px; border-bottom: 1px solid var(--ink); background: var(--paper) }
+  .barra-sitio b, .barra-sitio nav span { white-space: nowrap } .barra-sitio b { font-family: var(--f-ancha); font-stretch: 115%; font-weight: 850; letter-spacing: .02em }
+  .barra-sitio nav { display: flex; gap: 18px; margin-left: auto; color: var(--muted); font-size: 14px }
+  .barra-sitio .hl { background: var(--accent); color: var(--accent-ink); padding: 6px 12px; font-size: 13px }
+  @container (max-width: 700px) { .barra-sitio nav { display: none } .barra-sitio { padding: 0 16px } .barra-sitio .hl { margin-left: auto } }
+
+  .doc { padding: 40px 40px 56px; background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; background-position: -1px -1px }
+  @container (max-width: 700px) { .doc { padding: 24px 16px 40px } }
+
+  .hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 40px; align-items: end }
+  @container (max-width: 600px) { .hero { grid-template-columns: 1fr; gap: 16px } .hero svg { max-width: 320px } }
+  .p1 { display: inline-grid; grid-template-columns: 6px auto auto; border: 1.5px solid var(--ink); background: var(--paper); margin-bottom: 20px }
+  .p1 i { background: var(--sec) } .p1 span { padding: 4px 10px } .p1 span + span { border-left: 1.5px solid var(--ink) }
+  .hero h1 { margin: 0; font-family: var(--f-ancha); font-stretch: var(--wdth-display); font-weight: var(--fw-display); font-size: clamp(40px, 7cqi, 76px); line-height: var(--lh-display); letter-spacing: var(--ls-display) }
+  .hero h1 span { display: block; overflow: hidden; padding-bottom: .05em }
+  .hero h1 span > i { display: block; font-style: normal; animation: sube .9s var(--ease-izaje) both; animation-delay: calc(var(--i) * 110ms) }
+  .hero h1 .f { font-weight: var(--fw-fina) }
+  .hero p { margin: 16px 0 0; font-size: var(--fs-lead); max-width: 46ch; color: var(--muted) }
+  @keyframes sube { from { transform: translateY(105%) } }
+
+  /* Ilustración: planoteca de alambre que se dibuja */
+  .hero svg { width: 100%; height: auto; overflow: visible }
+  .hero svg .tr { fill: none; stroke: var(--accent); stroke-width: 1.4; stroke-dasharray: var(--l, 600); stroke-dashoffset: var(--l, 600); animation: traza var(--t-trazo) var(--ease-plano) forwards; animation-delay: calc(var(--i, 0) * 140ms) }
+  .hero svg .sg { stroke: var(--signal) }
+  .hero svg .fn { fill: none; stroke: var(--line); stroke-width: 1 }
+  .hero svg text { fill: var(--muted); font-family: var(--f); font-stretch: 72%; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; font-weight: 600 }
+  .hero svg .hoja { animation: sale 3.6s var(--ease-izaje) infinite 1.6s }
+  @keyframes traza { to { stroke-dashoffset: 0 } }
+  @keyframes sale { 0%, 20% { transform: translateY(0) } 45%, 70% { transform: translateY(-26px) } 95%, 100% { transform: translateY(0) } }
+
+  .herramientas { margin-top: 36px; display: grid; gap: 12px; border-top: 1.5px solid var(--ink); padding-top: 14px }
+  .herr-fila { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between }
+  .actualizado { color: var(--muted); display: flex; gap: 8px; align-items: center }
+  .actualizado i { width: 7px; height: 7px; border-radius: 50%; background: var(--good) }
+  .buscar { display: flex; border: 1px solid var(--ink); background: var(--paper); min-width: 0; flex: 0 1 320px }
+  .buscar input { border: 0; background: none; padding: 9px 12px; flex: 1; min-width: 0; outline: none }
+  .buscar span { padding: 9px 12px; border-left: 1px solid var(--ink); color: var(--muted) }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px }
+  .chips button { border: 1px solid var(--line); background: var(--paper); padding: 5px 10px; cursor: pointer; display: inline-flex; gap: 8px; align-items: center; transition: border-color var(--t-rapido), background var(--t-rapido) }
+  .chips button sup { color: var(--muted); font-size: 10px; top: 0 }
+  .chips button:hover { border-color: var(--accent) }
+  .chips button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--ink) }
+
+  .grupo { margin-top: 40px }
+  .grupo-cab { display: flex; align-items: center; gap: 12px; margin-bottom: 16px }
+  .p2 { width: 34px; height: 34px; border: 1.6px solid var(--sec); border-radius: 50%; display: grid; place-items: center; color: var(--sec); font-weight: 800; flex: none }
+  .grupo-cab h2 { margin: 0; font-family: var(--f-ancha); font-stretch: var(--wdth-title); font-weight: var(--fw-title); font-size: 24px }
+  .grupo-cab .eje { flex: 1; height: 0; border-top: 1px dashed var(--sec); transform-origin: left; animation: cota var(--t-cota) var(--ease-plano) both .3s }
+  .grupo-cab .dat { color: var(--muted) }
+
+  .laminas { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px }
+  .lam { position: relative; background: var(--paper); border: 1px solid var(--ink); display: grid; grid-template-rows: auto 1fr auto auto; transition: transform var(--t-rapido) var(--ease-izaje), border-color var(--t-rapido); animation: izaje-lam var(--t-izaje) var(--ease-izaje) both; animation-delay: calc(var(--i) * 70ms) }
+  .lam:hover { transform: translateY(-4px); border-color: var(--accent) }
+  .lam::before { content: ""; position: absolute; right: -1px; top: -1px; width: 22px; height: 22px; background: linear-gradient(225deg, var(--bg) 50%, var(--line) 50% calc(50% + 1px), var(--paper) calc(50% + 1px)); transition: width var(--t-rapido) var(--ease-izaje), height var(--t-rapido) var(--ease-izaje) }
+  .lam:hover::before { width: 34px; height: 34px }
+  @keyframes izaje-lam { from { opacity: 0; transform: translateY(-14px) } 70% { transform: translateY(2px) } }
+  .lam-cab { display: grid; grid-template-columns: auto 1fr; border-bottom: 1px solid var(--ink) }
+  .lam-cab span { padding: 5px 10px; color: var(--muted) } .lam-cab span + span { border-left: 1px solid var(--ink); padding-right: 30px }
+  .lam-cu { padding: 14px 14px 10px; display: grid; gap: 6px; align-content: start }
+  .lam-cu h3 { margin: 0; font-family: var(--f-ancha); font-stretch: var(--wdth-subtitle); font-weight: var(--fw-subtitle); font-size: 20px; line-height: 1.15 }
+  .lam-cu p { margin: 0; font-size: var(--fs-sm); color: var(--muted) }
+  .lam-meta { display: flex; flex-wrap: wrap; gap: 4px 12px; color: var(--muted); margin-top: 4px }
+  .lam-meta b { color: var(--ink); font-weight: 600 }
+
+  .vig { padding: 8px 14px 12px; display: grid; gap: 6px }
+  .vig-l { display: flex; justify-content: space-between; gap: 8px; color: var(--muted) }
+  .vig-l b { color: var(--ink) }
+  .vig-r { position: relative; height: 12px }
+  .vig-r::before { content: ""; position: absolute; left: 0; right: 0; top: 5px; height: 1px; background: var(--line) }
+  .vig-r .f { position: absolute; left: 0; top: 4px; height: 3px; width: var(--p); background: var(--good); transform-origin: left; animation: cota var(--t-cota) var(--ease-plano) both .4s }
+  .vig-r .f::after { content: ""; position: absolute; right: -1px; top: -4px; width: 1px; height: 11px; background: var(--ink) }
+  .vig-r i { position: absolute; top: 2px; width: 1px; height: 7px; background: var(--steel) }
+  .vig.pronto .vig-r .f { background: var(--signal) }
+  .chip-aviso { display: inline-block; padding: 0 6px; background: var(--signal-soft); border: 1px solid var(--signal); color: var(--ink) }
+  .chip-muestra { display: inline-block; padding: 0 6px; border: 1px dashed var(--line); color: var(--muted) }
+
+  .lam-bajar { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-top: 1px solid var(--ink); padding: 10px 14px; position: relative; overflow: hidden; font-weight: var(--fw-boton); font-size: var(--fs-boton) }
+  .lam-bajar::before { content: ""; position: absolute; inset: 0; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease-barrido) }
+  .lam-bajar > * { position: relative; transition: color .2s .1s }
+  .lam:hover .lam-bajar::before, .lam-bajar:focus-visible::before { transform: none }
+  .lam:hover .lam-bajar > *, .lam-bajar:focus-visible > * { color: var(--accent-ink) }
+  .lam-bajar .fl { display: inline-block; transition: transform .3s var(--ease-izaje) }
+  .lam:hover .lam-bajar .fl { transform: translateY(3px) }
+
+  .cierre { margin-top: 48px; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; border: 1.5px solid var(--ink); background: var(--paper); padding: 16px 20px }
+  @container (max-width: 620px) { .cierre { grid-template-columns: 1fr } }
+  .cierre b { font-family: var(--f-ancha); font-stretch: var(--wdth-subtitle); font-weight: var(--fw-subtitle); font-size: 18px; display: block }
+  .cierre span { color: var(--muted); font-size: var(--fs-sm) }
+  .cierre a { background: var(--accent); color: var(--accent-ink); padding: 10px 16px; font-weight: var(--fw-boton); white-space: nowrap; justify-self: start }
+
+  .vacia { margin-top: 24px; border: 1px dashed var(--line); padding: 20px; color: var(--muted); display: none }
+  .lam[hidden], .grupo[hidden] { display: none }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important } .hero svg .tr { stroke-dashoffset: 0 } }
+</style></head>
+<body>
+<div class="ctl"><button type="button" data-t="light">Claro</button><button type="button" data-t="dark">Oscuro</button><button type="button" id="repetir">Repetir</button></div>
+<div class="nota"><div class="w" style="padding:0">
+  <b>Puerta de maquetas AG.0</b> · <i>A</i>: los seis estados del panel "Hablar con HL" ya conectado (mismo lenguaje del panel de F4: rótulo con cota, tarjeta con cinta P3). Cambios: entrada activa, chip "IA" en vez de "Vista previa", indicador que barre lo publicado mientras busca, fuentes como lista (página o PDF) y estado del asesor en la tarjeta comercial.
+  <i>B</i>: página Documentos (pie del sitio, acento azul) en escritorio y móvil, con datos de <i>certificaciones.yaml</i>; los documentos que aún no existen van marcados "muestra". Los chips de carpeta y la búsqueda filtran de verdad.
+</div></div>
+
+<div class="w">
+  <div class="titulo-parte"><h2>A · Panel conectado</h2><span class="dat">6 estados · 380 × 660</span></div>
+  <div class="estados">
+
+    <!-- 1 · Buscando -->
+    <div class="estado">
+      <div class="cap"><span class="n">1</span><b>Buscando</b></div>
+      <div class="ag">
+        <div class="ag-cab"><div><strong>Asistente HL</strong><span class="ag-ia dat"><i></i>IA · responde con lo publicado</span></div><button class="ag-cerrar" aria-label="Cerrar">×</button></div>
+        <div class="ag-hilo">
+          <div class="ag-msg ag-hl">Hola, soy el asistente del Grupo HL. Respondo con lo publicado en este sitio y le indico con quién hablar. No cotizo ni comprometo plazos.</div>
+          <div class="ag-msg ag-yo" style="--d:150">¿Tienen certificación ISO 45001?</div>
+          <div class="ag-piensa"><div class="b"><i></i><i></i><i></i></div><span class="t dat">Buscando en 52 páginas y 9 documentos</span><div class="c"></div></div>
+        </div>
+        <div class="ag-sug dat"></div>
+        <div class="ag-entrada"><input placeholder="Escriba su pregunta…" aria-label="Pregunta"><button type="button" disabled class="dat">Enviar</button><small class="dat"><span>Respuestas con IA a partir de lo publicado · verifique en la fuente</span></small></div>
+      </div>
+      <p>Mientras espera el flujo (3-8 s), una cota barre "lo publicado". Si pasan 30 s, el sitio corta y muestra el estado 6.</p>
+    </div>
+
+    <!-- 2 · Respuesta con fuentes -->
+    <div class="estado">
+      <div class="cap"><span class="n">2</span><b>Respuesta con fuentes</b></div>
+      <div class="ag">
+        <div class="ag-cab"><div><strong>Asistente HL</strong><span class="ag-ia dat"><i></i>IA · responde con lo publicado</span></div><button class="ag-cerrar" aria-label="Cerrar">×</button></div>
+        <div class="ag-hilo">
+          <div class="ag-msg ag-yo">¿Tienen certificación ISO 45001?</div>
+          <div class="ag-msg ag-hl" style="--d:120">Sí. El Grupo HL tiene certificado su sistema de seguridad y salud en el trabajo con la norma ISO 45001, emitido por SGS (certificado CO24/00000107). Puede descargarlo en Documentos.
+            <span class="ag-titfuente dat">Fuentes</span>
+            <div class="ag-fuentes">
+              <a href="#"><span class="ic pdf"></span><span class="tx"><b>Certificado ISO 45001 · SGS</b><span class="dat">PDF · /documentos/certificaciones/</span></span><span class="fl">↓</span></a>
+              <a href="#"><span class="ic pag"></span><span class="tx"><b>HSE y calidad</b><span class="dat">/hse/</span></span><span class="fl">→</span></a>
+            </div>
+          </div>
+        </div>
+        <div class="ag-sug dat"><button>¿Y la ISO 14001?</button><button>Proyectos de cemento</button><button>Quiero cotizar</button></div>
+        <div class="ag-entrada"><input placeholder="Escriba su pregunta…" aria-label="Pregunta"><button type="button" class="dat">Enviar</button><small class="dat"><span>Respuestas con IA a partir de lo publicado · verifique en la fuente</span><span class="cnt">3 / 20</span></small></div>
+      </div>
+      <p>Cada fuente dice si es página o PDF. Solo salen enlaces que el sitio verificó (lista blanca). Las sugerencias siguen la conversación.</p>
+    </div>
+
+    <!-- 3 · Comercial con asesor -->
+    <div class="estado">
+      <div class="cap"><span class="n">3</span><b>Comercial · asesor en línea</b></div>
+      <div class="ag">
+        <div class="ag-cab"><div><strong>Asistente HL</strong><span class="ag-ia dat"><i></i>IA · responde con lo publicado</span></div><button class="ag-cerrar" aria-label="Cerrar">×</button></div>
+        <div class="ag-hilo">
+          <div class="ag-msg ag-yo">Necesito cotizar el montaje de 500 t de estructura en Cartagena</div>
+          <div class="ag-msg ag-hl" style="--d:120">Con gusto. Para una cotización lo mejor es hablar con el equipo comercial: le paso su mensaje para que no tenga que repetirlo.</div>
+          <div class="ag-derivar" style="--d:320"><div class="ag-p3"></div>
+            <div class="ag-princ"><span><span class="dat">Le recomiendo</span><strong>Asesor comercial</strong><small class="ag-estado on dat"><i></i>En línea · responde en minutos</small></span><a class="ag-btn" href="#">Chatear con un asesor</a></div>
+            <div class="ag-otras dat"><span>O bien:</span><a class="ag-link" href="#">Formulario de cotización</a><a class="ag-link" href="#">WhatsApp</a></div>
+          </div>
+        </div>
+        <div class="ag-sug dat"></div>
+        <div class="ag-entrada"><input placeholder="Escriba su pregunta…" aria-label="Pregunta"><button type="button" class="dat">Enviar</button><small class="dat"><span>Respuestas con IA a partir de lo publicado · verifique en la fuente</span></small></div>
+      </div>
+      <p>"Chatear con un asesor" carga SalesIQ en ese momento, cierra este panel y abre el chat del departamento Comercial con la pregunta ya escrita.</p>
+    </div>
+
+    <!-- 4 · Comercial sin asesor -->
+    <div class="estado">
+      <div class="cap"><span class="n">4</span><b>Comercial · fuera de horario</b></div>
+      <div class="ag">
+        <div class="ag-cab"><div><strong>Asistente HL</strong><span class="ag-ia dat"><i></i>IA · responde con lo publicado</span></div><button class="ag-cerrar" aria-label="Cerrar">×</button></div>
+        <div class="ag-hilo">
+          <div class="ag-msg ag-yo">Necesito cotizar el montaje de 500 t de estructura en Cartagena</div>
+          <div class="ag-msg ag-hl" style="--d:120">Con gusto. En este momento los asesores no están conectados. Déjenos su solicitud en el formulario: recibe un radicado y el equipo comercial le responde el siguiente día hábil.</div>
+          <div class="ag-derivar" style="--d:320"><div class="ag-p3"></div>
+            <div class="ag-princ"><span><span class="dat">Le recomiendo</span><strong>Formulario de cotización</strong><small class="ag-estado off dat"><i></i>Asesores fuera de línea · L-V, hora de Bogotá</small></span><a class="ag-btn" href="#">Ir al formulario</a></div>
+            <div class="ag-otras dat"><span>O bien:</span><a class="ag-link" href="#">comercial@hlingenieros.com</a><a class="ag-link" href="#">Llamar a Bogotá</a></div>
+          </div>
+        </div>
+        <div class="ag-sug dat"></div>
+        <div class="ag-entrada"><input placeholder="Escriba su pregunta…" aria-label="Pregunta"><button type="button" class="dat">Enviar</button><small class="dat"><span>Respuestas con IA a partir de lo publicado · verifique en la fuente</span></small></div>
+      </div>
+      <p>El estado del asesor lo da SalesIQ al momento. El buzón es la propuesta de D7 (por confirmar con TI).</p>
+    </div>
+
+    <!-- 5 · Ético -->
+    <div class="estado">
+      <div class="cap"><span class="n">5</span><b>Tema ético · sin IA</b></div>
+      <div class="ag">
+        <div class="ag-cab"><div><strong>Asistente HL</strong><span class="ag-ia dat"><i></i>IA · responde con lo publicado</span></div><button class="ag-cerrar" aria-label="Cerrar">×</button></div>
+        <div class="ag-hilo">
+          <div class="ag-msg ag-yo">Quiero denunciar a un supervisor por acoso</div>
+          <div class="ag-msg ag-hl ag-fijo" style="--d:120">Este asistente no recibe reportes éticos. Para su tranquilidad, se atienden solo por el Buzón ético: es confidencial, llega directo al Comité de Ética y puede ser anónimo.
+            <span class="ag-sinia dat">Su mensaje no se envió a la IA</span></div>
+          <div class="ag-derivar" style="--d:320"><div class="ag-p3"></div>
+            <div class="ag-princ"><span><span class="dat">Le recomiendo</span><strong>Buzón ético</strong><small class="dat">Confidencial · sin represalias</small></span><a class="ag-btn" href="#">Abrir el buzón</a></div>
+          </div>
+        </div>
+        <div class="ag-sug dat"></div>
+        <div class="ag-entrada"><input placeholder="Escriba su pregunta…" aria-label="Pregunta"><button type="button" class="dat">Enviar</button><small class="dat"><span>Respuestas con IA a partir de lo publicado · verifique en la fuente</span></small></div>
+      </div>
+      <p>Lo decide el PHP antes del modelo, con un texto fijo (borde grafito = respuesta fija, no generada).</p>
+    </div>
+
+    <!-- 6 · Sin servicio / sin respuesta -->
+    <div class="estado">
+      <div class="cap"><span class="n">6</span><b>Sin servicio o sin respuesta</b></div>
+      <div class="ag">
+        <div class="ag-cab"><div><strong>Asistente HL</strong><span class="ag-ia dat"><i></i>IA · responde con lo publicado</span></div><button class="ag-cerrar" aria-label="Cerrar">×</button></div>
+        <div class="ag-hilo">
+          <div class="ag-msg ag-yo">¿Cuál fue el primer proyecto en Bolivia?</div>
+          <div class="ag-msg ag-hl" style="--d:120">No encuentro eso en lo publicado por HL. Le sugiero ver los proyectos por país o escribirnos.</div>
+          <div class="ag-msg ag-yo" style="--d:260">¿Y en Ecuador?</div>
+          <div class="ag-msg ag-hl ag-falla" style="--d:380">El asistente no está disponible en este momento. Puede escribirnos o llamarnos y le respondemos.</div>
+          <div class="ag-derivar" style="--d:520"><div class="ag-p3"></div>
+            <div class="ag-princ"><span><span class="dat">Le recomiendo</span><strong>Contacto</strong><small class="dat">Sedes, formulario y teléfonos</small></span><a class="ag-btn" href="#">Ir a Contacto</a></div>
+            <div class="ag-otras dat"><span>O bien:</span><a class="ag-link" href="#">WhatsApp</a><a class="ag-link" href="#">Llamar a Bogotá</a></div>
+          </div>
+        </div>
+        <div class="ag-sug dat"><button>Proyectos por país</button><button>Reintentar</button></div>
+        <div class="ag-entrada"><input placeholder="Escriba su pregunta…" aria-label="Pregunta"><button type="button" class="dat">Enviar</button><small class="dat"><span>Respuestas con IA a partir de lo publicado · verifique en la fuente</span></small></div>
+      </div>
+      <p>"Sin respuesta" lo dice el modelo. La falla (flujo caído, sin créditos, tope diario o 20 preguntas por conversación) la marca el sitio con borde de error y los contactos de siempre.</p>
+    </div>
+  </div>
+
+  <div class="titulo-parte"><h2>B · Página Documentos</h2><span class="dat">/documentos · /en/documents · pie del sitio</span></div>
+  <div class="marcos">
+    <div class="marco"><div class="cap dat">Escritorio</div><div class="pagina"></div></div>
+    <div class="marco movil"><div class="cap dat">Móvil · 390 px</div><div class="pagina"></div></div>
+  </div>
+  <div style="height:64px"></div>
+</div>
+
+<template id="tpl-pagina">
+  <div class="barra-sitio"><b>GRUPO HL</b><nav><span>Nosotros</span><span>Proyectos ▾</span><span>HSE y calidad</span><span>Noticias</span><span>Contacto</span><span>ES/EN</span></nav><span class="hl dat">Hablar con HL</span></div>
+  <div class="doc">
+    <div class="hero">
+      <div>
+        <div class="p1 dat"><i></i><span>P-06</span><span>Documentos</span></div>
+        <h1><span><i style="--i:0">Documentos</i></span><span><i class="f" style="--i:1">públicos</i></span></h1>
+        <p>Certificaciones, políticas y material del Grupo HL, siempre en su versión vigente.</p>
+      </div>
+      <svg viewBox="0 0 360 200" aria-hidden="true">
+        <!-- planoteca: tres gavetas y una lámina que sale -->
+        <rect class="fn" x="40" y="70" width="280" height="120"/>
+        <path class="tr" style="--i:0;--l:800" d="M40 190 V70 H320 V190 Z"/>
+        <path class="tr" style="--i:1;--l:300" d="M40 110 H320 M40 150 H320"/>
+        <path class="tr" style="--i:2;--l:60" d="M165 90 h30 M165 130 h30 M165 170 h30"/>
+        <g class="hoja">
+          <path class="tr" style="--i:3;--l:700" d="M70 70 V20 H280 V70"/>
+          <path class="tr" style="--i:4;--l:300" d="M200 20 V62 H280"/>
+          <path class="tr" style="--i:5;--l:200" d="M200 34 H280 M200 48 H280 M240 48 V62"/>
+          <path class="tr sg" style="--i:6;--l:300" d="M86 34 H180 M86 30 v8 M180 30 v8"/>
+        </g>
+        <text x="40" y="62">ISO</text><text x="292" y="62">PDF</text>
+        <path class="tr sg" style="--i:7;--l:400" d="M20 70 V190 M16 70 h8 M16 190 h8"/>
+        
+      </svg>
+    </div>
+
+    <div class="herramientas">
+      <div class="herr-fila">
+        <span class="actualizado dat"><i></i>Actualizado el 21-oct-2026 · <span class="total">9</span> documentos</span>
+        <label class="buscar"><input type="search" placeholder="Buscar: ISO, política, brochure…" aria-label="Buscar documentos"><span class="dat">Buscar</span></label>
+      </div>
+      <div class="chips dat"></div>
+    </div>
+
+    <div class="grupos"></div>
+    <div class="vacia">No hay documentos con esa búsqueda. Pruebe otra palabra o pregúntele al asistente.</div>
+
+    <div class="cierre">
+      <div><b>¿No encuentra un documento?</b><span>Pregúntele al asistente: responde con lo publicado y le indica con quién hablar.</span></div>
+      <a href="#" class="dat">Hablar con HL</a>
+    </div>
+  </div>
+</template>
+
+<script>
+// Datos: los de certificaciones.yaml son reales (ente y código); fechas y el resto son de muestra.
+const DOCS = [
+  { c: 'Certificaciones', t: 'ISO 9001:2015', d: 'Sistema de gestión de la calidad', cod: 'CO24/00000108', em: 'SGS', id: 'ES/EN', mb: '1,8', hasta: '2027-03', p: 58, real: 1 },
+  { c: 'Certificaciones', t: 'ISO 14001:2015', d: 'Sistema de gestión ambiental', cod: 'CO24/00000109', em: 'SGS', id: 'ES/EN', mb: '1,7', hasta: '2027-03', p: 58, real: 1 },
+  { c: 'Certificaciones', t: 'ISO 45001:2018', d: 'Seguridad y salud en el trabajo', cod: 'CO24/00000107', em: 'SGS', id: 'ES/EN', mb: '1,9', hasta: '2026-12', p: 10, real: 1, pronto: 1 },
+  { c: 'Políticas', t: 'Política de gestión integral', d: 'Calidad, ambiente, seguridad y salud en el trabajo', cod: 'P-SGI-01', em: 'Grupo HL', id: 'ES', mb: '0,4' },
+  { c: 'Políticas', t: 'Tratamiento de datos personales', d: 'Manual M-TI-001 · Ley 1581 de 2012', cod: 'M-TI-001', em: 'HL Ingenieros S.A.', id: 'ES', mb: '0,6' },
+  { c: 'Políticas', t: 'Código de ética', d: 'Principios, conducta y Buzón ético', cod: 'C-ET-01', em: 'Grupo HL', id: 'ES', mb: '0,9' },
+  { c: 'Portafolio', t: 'ECOHL · Gerencia de proyectos', d: 'Casos, indicadores HSE y alcance PMC/EPCM', cod: 'PF-ECOHL', em: 'ECOHL', id: 'ES', mb: '6,2' },
+  { c: 'Formularios', t: 'Inscripción de proveedores', d: 'Para precalificación con Compras', cod: 'F-CO-02', em: 'Compras', id: 'ES', mb: '0,2' },
+  { c: 'Directorio', t: 'Sedes y buzones por función', d: 'Bogotá, El Rosal, Panamá y Santo Domingo', cod: 'D-01', em: 'Grupo HL', id: 'ES/EN', mb: '0,1' },
+];
+const CARPETAS = ['Certificaciones', 'Políticas', 'Portafolio', 'Brochures', 'Formularios', 'Directorio'];
+const LETRA = 'ABCDEF';
+
+function lamina(x, i) {
+  const meta = `<div class="lam-meta dat"><span>Emite <b>${x.em}</b></span><span>${x.id}</span><span>PDF · ${x.mb} MB</span></div>`;
+  const vig = x.hasta ? `<div class="vig${x.pronto ? ' pronto' : ''}"><div class="vig-l dat"><span>Vigente hasta <b>${x.hasta.split('-').reverse().join('-')}</b></span>${x.pronto ? '<span class="chip-aviso">Vence pronto</span>' : ''}</div><div class="vig-r" style="--p:${x.p}%"><span class="f"></span>${[0,25,50,75,100].map(v => `<i style="left:${v}%"></i>`).join('')}</div></div>` : '<div class="vig"><div class="vig-l dat"><span>Versión vigente · actualizada 10-2026</span>' + (x.real ? '' : '<span class="chip-muestra">Muestra</span>') + '</div></div>';
+  return `<article class="lam" style="--i:${i}" data-q="${(x.t + ' ' + x.d + ' ' + x.c + ' ' + x.em).toLowerCase()}">
+    <div class="lam-cab dat"><span>${x.cod}</span><span>${x.c}</span></div>
+    <div class="lam-cu"><h3>${x.t}</h3><p>${x.d}</p>${meta}</div>
+    ${vig}
+    <a class="lam-bajar" href="#"><span>Descargar PDF</span><span class="fl">↓</span></a>
+  </article>`;
+}
+
+function montar(raiz) {
+  raiz.innerHTML = document.getElementById('tpl-pagina').innerHTML;
+  const conDocs = CARPETAS.filter(c => DOCS.some(d => d.c === c));
+  const chips = raiz.querySelector('.chips');
+  chips.innerHTML = `<button type="button" aria-pressed="true" data-c="">Todos <sup>${DOCS.length}</sup></button>` +
+    conDocs.map(c => `<button type="button" aria-pressed="false" data-c="${c}">${c} <sup>${DOCS.filter(d => d.c === c).length}</sup></button>`).join('');
+  raiz.querySelector('.grupos').innerHTML = conDocs.map((c, k) => `<section class="grupo" data-c="${c}">
+      <div class="grupo-cab"><span class="p2">${LETRA[k]}</span><h2>${c}</h2><span class="eje"></span><span class="dat cuenta">${DOCS.filter(d => d.c === c).length}</span></div>
+      <div class="laminas">${DOCS.filter(d => d.c === c).map(lamina).join('')}</div></section>`).join('');
+  let carpeta = '', q = '';
+  const filtrar = () => {
+    let total = 0;
+    raiz.querySelectorAll('.grupo').forEach(g => {
+      let n = 0;
+      g.querySelectorAll('.lam').forEach(l => { const ok = (!carpeta || g.dataset.c === carpeta) && (!q || l.dataset.q.includes(q)); l.hidden = !ok; n += ok; });
+      g.hidden = !n; g.querySelector('.cuenta').textContent = n; total += n;
+    });
+    raiz.querySelector('.total').textContent = total;
+    raiz.querySelector('.vacia').style.display = total ? 'none' : 'block';
+  };
+  chips.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    carpeta = b.dataset.c; chips.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); filtrar();
+  });
+  raiz.querySelector('input[type=search]').addEventListener('input', e => { q = e.target.value.trim().toLowerCase(); filtrar(); });
+}
+document.querySelectorAll('.pagina').forEach(montar);
+
+document.querySelectorAll('.ctl [data-t]').forEach(b => b.addEventListener('click', () => document.documentElement.dataset.theme = b.dataset.t));
+document.getElementById('repetir').addEventListener('click', () => {
+  document.querySelectorAll('.pagina').forEach(montar);
+  document.querySelectorAll('.estados .ag').forEach(a => { const c = a.cloneNode(true); a.replaceWith(c); });
+});
+</script>
+</body></html>

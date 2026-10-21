@@ -228,48 +228,42 @@ Hay **dos claves** distintas, una por puerta:
 
 | Clave | La conocen | Protege |
 |---|---|---|
-| `clave_documentos` | Flujos 1-3 y `documentos.php` | Que nadie más pueda subir o borrar documentos del sitio |
-| `clave_agente` | `agente.php` y el flujo 4 | Que nadie llame al flujo del agente directamente (gasta créditos) |
+| `CLAVE_DOCUMENTOS` | Flujos 1-3 y `documentos.php` | Que nadie más pueda subir o borrar documentos del sitio |
+| `CLAVE_AGENTE` | `agente.php` y el flujo 4 | Que nadie llame al flujo del agente directamente (gasta créditos) |
 
-### 4.1 Generar cada clave
+### 4.1 Las claves ya están generadas
 
-En tu PC, abre **Windows PowerShell** y ejecuta (una vez por clave):
+Están en **`privado/.env`** dentro del repo: git lo ignora (`.gitignore`), así que nunca se sube. Ojo: la carpeta del repo se sincroniza con OneDrive.
+Ábrelo con el Bloc de notas cuando necesites copiar una clave:
+
+| Variable | Dónde se pega |
+|---|---|
+| `CLAVE_DOCUMENTOS` | Encabezado `X-HL-Clave` de las acciones HTTP de los flujos 1, 2 y 3 |
+| `CLAVE_AGENTE` | Condición del desencadenador del flujo 4 (§9.2) |
+| `AGENTE_URL` | Vacía por ahora: pega aquí la URL del flujo 4 cuando la tengas (§9.6) |
+| `TOPE_DIARIO` | Máximo de preguntas al día que el sitio manda al modelo (400). Cuando se alcanza, el panel ofrece los contactos de siempre |
+
+**Nunca pegues las claves en el repo, en Teams ni en un correo.** Haz una copia del `.env` en tu gestor de
+contraseñas o en un lugar cifrado: si se pierde, hay que generar claves nuevas y cambiarlas en los flujos.
+
+Si algún día necesitas una clave nueva, en **Windows PowerShell**:
 
 ```powershell
 $b = New-Object byte[] 32; [Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($b); ($b | ForEach-Object { $_.ToString('x2') }) -join ''
 ```
 
-Sale un texto de 64 caracteres (0-9, a-f). Guárdalo en tu gestor de contraseñas o en un archivo cifrado.
-**Nunca lo pegues en el repo, en Teams ni en un correo.**
+- [ ] Copia del `.env` guardada en un lugar seguro.
 
-- [ ] `clave_documentos` generada y guardada.
-- [ ] `clave_agente` generada y guardada.
-
-### 4.2 Archivo privado en el hosting (cuando haya acceso)
+### 4.2 El mismo archivo en el hosting (cuando haya acceso)
 
 1. En cPanel → **Administrador de archivos** → tu carpeta personal (la que *contiene* `public_html`, no dentro de ella).
 2. **+ Carpeta** → `hl-privado`.
-3. Dentro, **+ Archivo** → `config.php` → **Editar** y pega (con tus valores):
-
-```php
-<?php
-return [
-  'clave_documentos' => 'PEGA-AQUI-LA-CLAVE-DE-DOCUMENTOS',
-  'agente_url'       => 'PEGA-AQUI-LA-URL-DEL-FLUJO-4',
-  'clave_agente'     => 'PEGA-AQUI-LA-CLAVE-DEL-AGENTE',
-  'tope_diario'      => 400,
-];
-```
-
+3. **Cargar** → sube tu `.env` (con `AGENTE_URL` ya llena). Si no ves el archivo después, activa **Configuración → Mostrar archivos ocultos**.
 4. Permisos del archivo: clic derecho → **Change Permissions** → `600`.
 
-`tope_diario` es el máximo de preguntas al día que el sitio manda al modelo. Cuando se alcanza, el panel ofrece
-los contactos de siempre. Protege los créditos si alguien abusa.
+En local, la vista previa lee `privado/.env` del repo directamente (el plan explica cómo).
 
-**Para probar en local, antes de tener hosting:** el mismo archivo va en una carpeta tuya fuera del repo
-(por ejemplo `C:\Users\jurbina\hl-privado\config.php`). El plan explica cómo lo lee la vista previa.
-
-- [ ] `config.php` creado (local ahora; hosting cuando haya acceso).
+- [ ] `.env` en el hosting (cuando haya acceso).
 
 ---
 
@@ -321,7 +315,7 @@ Pestaña **Configuración** del desencadenador:
 4. **Método**: `POST`
 5. **Encabezados**: dos filas
    - `Content-Type` → `application/json`
-   - `X-HL-Clave` → *tu `clave_documentos`*
+   - `X-HL-Clave` → *tu `CLAVE_DOCUMENTOS`*
 6. **Cuerpo**: pega este JSON completo:
 
 ```json
@@ -569,7 +563,7 @@ Pestaña **Parámetros**:
 - **Mostrar todo** → **Método**: `POST`.
 
 Pestaña **Configuración**:
-- **Condiciones de desencadenador** → **+ Agregar** → (con tu `clave_agente`):
+- **Condiciones de desencadenador** → **+ Agregar** → (con tu `CLAVE_AGENTE`):
   ```
   @equals(triggerOutputs()?['headers']?['X-HL-Clave'], 'PEGA-AQUI-LA-CLAVE-DEL-AGENTE')
   ```
@@ -598,7 +592,7 @@ Pestaña **Configuración**:
 
 ### 9.6 Guardar y copiar la URL
 1. **Guardar**. Vuelve a abrir el desencadenador: aparece **URL de HTTP POST** → **Copiar**.
-2. Esa URL es secreta (incluye una firma `sig=`). Va **solo** en `config.php` (`agente_url`). Si alguna vez se filtra: **…** del desencadenador → **Regenerar clave de acceso** (o vuelve a crear el desencadenador) y actualiza `config.php`.
+2. Esa URL es secreta (incluye una firma `sig=`). Va **solo** en el `.env` (`AGENTE_URL`). Si alguna vez se filtra: **…** del desencadenador → **Regenerar clave de acceso** (o vuelve a crear el desencadenador) y actualiza el `.env`.
 
 ### 9.7 Probar desde tu PC
 En **Windows PowerShell** (cambia la URL y la clave):
@@ -620,7 +614,7 @@ Repite **sin** el encabezado (quita `-Headers $h`): no debe responder con el JSO
 
 Anota el tiempo de respuesta: lo normal son 3-8 s. Si pasa de 15 s, avísame.
 
-- [ ] Flujo 4 guardado, URL copiada a `config.php`, prueba con clave correcta y sin clave.
+- [ ] Flujo 4 guardado, URL copiada al `.env`, prueba con clave correcta y sin clave.
 
 ---
 
@@ -659,7 +653,7 @@ Detalle en [plan-agente.md](plan-agente.md). En corto:
 ### 12.1 Créditos de IA (lo más importante)
 - **Ejecutar un prompt** gasta créditos según el tamaño de la pregunta, el contexto y la respuesta, y según el modelo.
 - Las licencias **Power Automate Premium** traían créditos de AI Builder incluidos. Microsoft los retira: las licencias nuevas o renovadas desde el **1-nov-2026** ya no los traen. Los que existan se respetan **hasta el fin del contrato vigente**. Después, el flujo usa **Copilot Credits** (prepago o pago por uso) y, si no hay, **falla**.
-- **Qué hacer:** pídele a TI que revise en el **Centro de administración de Power Platform** → **Licencias / Capacidad** cuántos créditos de AI Builder tiene el entorno, hasta cuándo, y si hay Copilot Credits o pago por uso. `tope_diario` en `config.php` es el freno.
+- **Qué hacer:** pídele a TI que revise en el **Centro de administración de Power Platform** → **Licencias / Capacidad** cuántos créditos de AI Builder tiene el entorno, hasta cuándo, y si hay Copilot Credits o pago por uso. `TOPE_DIARIO` en el `.env` es el freno.
 - **Plan B sin tocar el sitio:** si un día no hay créditos, en el flujo 4 se cambia *Ejecutar un prompt* por una acción **HTTP** a **Azure OpenAI** (requiere suscripción de Azure; TI). Las entradas y la salida son las mismas, así que `agente.php` no cambia.
 
 ### 12.2 Límites de Power Automate
@@ -683,7 +677,7 @@ Cuando esté estable: **Compartir** cada flujo con un copropietario de TI, o pas
 
 ### 12.6 Rotar claves (una vez al año o si se filtran)
 1. Genera una clave nueva (§4.1).
-2. Cámbiala en `config.php` **y** en los encabezados de los flujos 1-3 (documentos) o en la condición del flujo 4 (agente).
+2. Cámbiala en el `.env` (el tuyo y el del hosting) **y** en los encabezados de los flujos 1-3 (documentos) o en la condición del flujo 4 (agente).
 3. Guarda los flujos. Entre los dos pasos, pueden fallar uno o dos envíos: reintenta con el flujo 3.
 
 ---
@@ -711,14 +705,14 @@ Cuando esté estable: **Compartir** cada flujo con un copropietario de TI, o pas
 | # | Paso | Quién | Depende de |
 |---|---|---|---|
 | 1 | Biblioteca: direcciones, permisos, carpetas, columnas, versiones, vista (§3) | Tú | — |
-| 2 | Generar las dos claves (§4.1) y `config.php` local (§4.2) | Tú | — |
+| 2 | Guardar copia del `.env` con las claves (§4.1) | Tú | — |
 | 3 | Prompt "HL · Asistente" (§8) | Tú | Créditos de IA (§12.1) |
 | 4 | Flujo 4 "HL · Agente" y su prueba (§9) | Tú | 3 |
 | 5 | Conocimiento, `agente.php`, panel conectado (plan AG.1, AG.3, AG.4) | Yo | 4 (para la prueba real; antes, con respuestas simuladas) |
 | 6 | Flujos 1-3 y prueba de la parte de SharePoint (§5-§7) | Tú | 1 |
 | 7 | `documentos.php` y página Documentos (plan AG.2, AG.6) | Yo | — |
 | 8 | SalesIQ (§10) y paso desde el panel (plan AG.5) | Tú + yo | `widgetcode` |
-| 9 | Hosting: `config.php`, despliegue, flujo 3, pruebas de punta a punta (§13) | Tú | Acceso al hosting (D5); F6 |
+| 9 | Hosting: `.env`, despliegue, flujo 3, pruebas de punta a punta (§13) | Tú | Acceso al hosting (D5); F6 |
 | 10 | Revisar créditos con TI (§12.1) y copropietario de los flujos (§12.4) | Tú + TI | — |
 
 ---
