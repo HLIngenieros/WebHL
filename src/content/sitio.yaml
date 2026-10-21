@@ -58,6 +58,7 @@
     confirmado: false
   confirmar:
     - "D7: confirmar que existen los buzones cotizaciones@, proveedores@, talento@ y buzonetico@ (o indicar los reales)."
+    - "Vacantes: decidir si el tablero sigue con Power Automate y SharePoint (F4) o se simplifica como el agente (D3, 21-oct)."
     - "Vacantes: crear la lista \"Vacantes\" en SharePoint y el flujo de Power Automate que publica /api/vacantes.json en el hosting (requiere acceso FTP/SFTP)."
     - "Remitente no-reply@hlingenieros.com autorizado en SPF/DKIM y prueba de envío (mail) en el hosting."
     - "Agente (D3): proveedor de IA de producción (Gerencia y TI: Claude en Microsoft Foundry o Azure OpenAI; comparativo en la guía del agente §3) y su clave en el .env del hosting (hl-privado/, fuera de public_html)."
