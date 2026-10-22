@@ -62,7 +62,7 @@
     - "Remitente no-reply@hlingenieros.com autorizado en SPF/DKIM y prueba de envío (mail) en el hosting."
     - "Agente (D3): proveedor de IA de producción (Gerencia y TI: Claude en Microsoft Foundry o Azure OpenAI; comparativo en la guía del agente §3) y su clave en el .env del hosting (hl-privado/, fuera de public_html)."
     - "Hosting: confirmar que el PHP puede llamar por HTTPS a la API del modelo (cURL saliente) y el tiempo máximo de ejecución."
-    - "Documentos: certificados ISO 9001, 14001 y 45001 en PDF (Calidad/SGS) y aprobación de los PDF de documentos-web/."
+    - "Documentos: certificados ISO 9001, 14001 y 45001 en PDF (Calidad/SGS) para public/documentos/certificaciones/."
     - "Jurídica: validar un aviso para la política de datos (ES/EN) sobre el asistente: responde con IA del proveedor elegido (D3), no guarda conversaciones ni pide datos; y sobre las cookies de Zoho SalesIQ, que solo se cargan al pasar con un asesor."
     - "Zoho SalesIQ (D3): widgetcode de la marca del sitio, departamento Comercial con regla de enrutamiento, horario y aviso de datos (guía del agente §4)."
     - "Número de WhatsApp comercial al que deriva el asistente (y si es uno por país)."
