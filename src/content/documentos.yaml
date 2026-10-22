@@ -1,0 +1,16 @@
+# Documentos públicos (plan AG.11): la página Documentos y el agente salen de aquí. El PDF va en
+# public/documentos/<pdf.es> (y <pdf.en> si hay versión en inglés); si el archivo no existe, la compilación falla.
+# Lo vencido (vigenteHasta < hoy) no se muestra ni se cita. Borradores por aprobar: documentos-web/ (design/documentos.mjs).
+- id: politica-datos
+  orden: 1
+  carpeta: politicas
+  titulo: { es: Política de tratamiento de datos personales, en: Personal data processing policy }
+  descripcion:
+    es: Manual de políticas y procedimientos de protección de datos (Ley 1581 de 2012)
+    en: Data protection policies and procedures manual (Colombian Law 1581 of 2012), in Spanish
+  pdf: { es: politica-datos-M-TI-001-act-2.pdf }
+  area: Jurídica
+  emisor: HL Ingenieros S.A.
+  codigo: M-TI-001
+  actualizado: '2026-10-19'
+  datosClave: Manual M-TI-001 · Ley 1581 de 2012 · responsable HL Ingenieros S.A.

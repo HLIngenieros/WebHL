@@ -50,7 +50,7 @@ function radicado(string $prefijo): string {
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') falla('Método no permitido.', 'Method not allowed.', [], 405);
 
-$config = json_decode((string) @file_get_contents(__DIR__ . '/config.json'), true);
+$config = json_decode((string) @file_get_contents((getenv('HL_DATOS') ?: __DIR__) . '/config.json'), true);
 if (!is_array($config)) falla('El formulario no está disponible.', 'The form is unavailable.', [], 503);
 
 $intencion = $_POST['intencion'] ?? '';

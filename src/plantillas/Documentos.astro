@@ -1,26 +1,25 @@
 ---
 // Documentos públicos (D3, plan AG.6, maqueta aprobada 21-oct): página del pie, acento azul. La lista la pinta la
-// isla Documentos.tsx desde /api/documentos.json (en AG.11 sale de la colección del repo); aquí van la
-// cabecera con la planoteca de alambre que se dibuja y el cierre que abre el asistente.
+// isla Documentos.tsx con el catálogo de la colección (plan AG.11), ya en el HTML; aquí van la cabecera con la planoteca de alambre que se dibuja y el cierre que abre el asistente.
 import Base from '../layouts/Base.astro';
 import Pod from '../components/Pod.astro';
 import Documentos from '../components/Documentos';
 import { ruta, type Lang } from '../i18n/rutas';
 import { t } from '../i18n/ui';
+import { documentos } from '../lib/documentos';
 
 interface Props { lang: Lang; alterno: string }
 const { lang, alterno } = Astro.props;
+const docs = await documentos(lang);
 const T = {
   es: {
     titulo: 'Documentos públicos', l1: 'Documentos', l2: 'públicos',
     lead: 'Certificaciones, políticas y material del Grupo HL, siempre en su versión vigente.',
-    sinJs: 'Los documentos se muestran con JavaScript activo. Si necesita uno, escríbanos desde Contacto.',
     cierre: '¿No encuentra un documento?', cierreTxt: 'Pregúntele al asistente: responde con lo publicado y le indica con quién hablar.', boton: 'Hablar con HL',
   },
   en: {
     titulo: 'Public documents', l1: 'Public', l2: 'documents',
     lead: 'Certifications, policies and materials from Grupo HL, always in their current version.',
-    sinJs: 'Documents are shown with JavaScript enabled. If you need one, write to us from Contact.',
     cierre: "Can't find a document?", cierreTxt: 'Ask the assistant: it answers from what we publish and tells you who to talk to.', boton: 'Talk to HL',
   },
 }[lang];
@@ -49,8 +48,7 @@ const T = {
       </svg>
     </header>
 
-    <Documentos client:load lang={lang} fuente="/api/documentos.json" />
-    <noscript><p class="sin-js">{T.sinJs}</p></noscript>
+    <Documentos client:load lang={lang} docs={docs} />
 
     <aside class="cierre">
       <div><b>{T.cierre}</b><span>{T.cierreTxt}</span></div>
@@ -90,7 +88,6 @@ const T = {
   @keyframes traza { to { stroke-dashoffset: 0; } }
   @keyframes sale { 0%, 20% { transform: translateY(0); } 45%, 70% { transform: translateY(-26px); } 95%, 100% { transform: translateY(0); } }
 
-  .sin-js { margin-top: var(--s5); color: var(--muted); }
   .cierre { display: grid; gap: var(--s3); align-items: center; margin-top: var(--s6); padding: var(--s3) var(--s4); background: var(--paper); border: var(--border-strong) solid var(--ink); }
   .cierre b { display: block; font-size: var(--fs-lead); font-stretch: var(--wdth-subtitle); font-weight: var(--fw-subtitle); }
   .cierre span { color: var(--muted); font-size: var(--fs-sm); }

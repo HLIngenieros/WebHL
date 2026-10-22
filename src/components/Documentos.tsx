@@ -1,8 +1,7 @@
-// Documentos públicos (D3, plan AG.6, maqueta aprobada 21-oct). Lee /api/documentos.json al abrir: lo mantiene
-// el catálogo de muestra en desarrollo; en AG.11 pasa a datos del repo (colección + public/documentos/), sin recompilar por
-// cada documento. Carpetas con burbuja de eje, láminas con cajetín y cota de vigencia, filtro y búsqueda.
-// Los documentos vencidos no se muestran.
-import { useEffect, useMemo, useState } from 'preact/hooks';
+// Documentos públicos (D3, plan AG.6 y AG.11, maqueta aprobada 21-oct). Recibe el catálogo ya armado al compilar
+// (src/lib/documentos.ts): Astro lo deja en el HTML y la isla solo agrega filtro y búsqueda. Carpetas con burbuja de
+// eje, láminas con cajetín y cota de vigencia. Los vencidos no se muestran (se filtra también al abrir la página).
+import { useMemo, useState } from 'preact/hooks';
 import type { Lang } from '../i18n/rutas';
 import './documentos.css';
 
@@ -21,34 +20,23 @@ const T = {
     actualizado: 'Actualizado el', documentos: (n: number) => `${n} documento${n === 1 ? '' : 's'}`, buscar: 'Buscar: ISO, política, brochure…', boton: 'Buscar',
     todos: 'Todos', emite: 'Emite', vigente: 'Vigente hasta', pronto: 'Vence pronto', version: 'Versión vigente · actualizada', bajar: 'Descargar PDF',
     vacio: 'No hay documentos con esa búsqueda. Pruebe otra palabra o pregúntele al asistente.', sinDocs: 'Muy pronto publicaremos aquí nuestras certificaciones y políticas.',
-    cargando: 'Cargando documentos…', error: 'No pudimos cargar los documentos. Intente de nuevo en unos minutos.',
   },
   en: {
     actualizado: 'Updated on', documentos: (n: number) => `${n} document${n === 1 ? '' : 's'}`, buscar: 'Search: ISO, policy, brochure…', boton: 'Search',
     todos: 'All', emite: 'Issued by', vigente: 'Valid until', pronto: 'Expires soon', version: 'Current version · updated', bajar: 'Download PDF',
     vacio: 'No documents match that search. Try another word or ask the assistant.', sinDocs: 'We will publish our certifications and policies here very soon.',
-    cargando: 'Loading documents…', error: 'We could not load the documents. Please try again in a few minutes.',
   },
 };
 const DIA = 86_400_000;
 const plano = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 
-export default function Documentos({ lang, fuente }: { lang: Lang; fuente: string }) {
+export default function Documentos({ lang, docs }: { lang: Lang; docs: Documento[] }) {
   const t = T[lang];
-  const [docs, setDocs] = useState<Documento[] | null>(null);
-  const [error, setError] = useState(false);
   const [carpeta, setCarpeta] = useState('');
   const [q, setQ] = useState('');
 
-  useEffect(() => {
-    fetch(fuente, { cache: 'no-cache' })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((xs: Documento[]) => setDocs(Array.isArray(xs) ? xs : []))
-      .catch(() => { setDocs([]); setError(true); });
-  }, []);
-
   const hoy = Date.now();
-  const vigentes = useMemo(() => (docs ?? []).filter((d) => d.url && d.titulo && (!d.vigenteHasta || Date.parse(d.vigenteHasta) + DIA > hoy)), [docs]);
+  const vigentes = useMemo(() => docs.filter((d) => d.url && d.titulo && (!d.vigenteHasta || Date.parse(d.vigenteHasta) + DIA > hoy)), [docs]);
   const enCarpetas = CARPETAS.filter((c) => vigentes.some((d) => d.carpeta === c));
   const termino = plano(q.trim());
   const visibles = vigentes.filter((d) => (!carpeta || d.carpeta === carpeta) && (!termino || plano(`${d.titulo} ${d.descripcion} ${d.emisor} ${d.codigo} ${NOMBRES[lang][d.carpeta]}`).includes(termino)));
@@ -59,9 +47,7 @@ export default function Documentos({ lang, fuente }: { lang: Lang; fuente: strin
   };
   const mb = (b: number) => new Intl.NumberFormat(lang === 'es' ? 'es-CO' : 'en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 }).format(b / 1048576);
 
-  // Mientras llega el catálogo se reserva el alto de la pantalla: así el cierre y el pie no saltan (CLS).
-  if (docs === null) return <p class="dc-estado dc-cargando voz-datos">{t.cargando}</p>;
-  if (!vigentes.length) return <p class="dc-estado">{error ? t.error : t.sinDocs}</p>;
+  if (!vigentes.length) return <p class="dc-estado">{t.sinDocs}</p>;
 
   return (
     <div class="dc">

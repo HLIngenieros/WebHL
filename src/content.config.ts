@@ -209,4 +209,22 @@ const noticias = defineCollection({
   }),
 });
 
-export const collections = { proyectos, servicios, sectores, sedes, certificaciones, historia, testimonios, sitio, paginas, noticias };
+// Documentos públicos (plan AG.11): PDF en public/documentos/<carpeta>/; `pdf.en` es la versión en inglés si existe.
+const documentos = defineCollection({
+  loader: file('src/content/documentos.yaml'),
+  schema: z.object({
+    orden: z.number(),
+    carpeta: z.enum(['certificaciones', 'politicas', 'portafolio', 'brochures', 'formularios', 'directorio']),
+    titulo: texto,
+    descripcion: texto,
+    pdf: z.object({ es: z.string().regex(/^[A-Za-z0-9/._-]+\.pdf$/), en: z.string().regex(/^[A-Za-z0-9/._-]+\.pdf$/).optional() }),
+    area: z.string(),
+    emisor: z.string(),
+    codigo: z.string().optional(),
+    vigenteHasta: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    actualizado: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    datosClave: z.string().optional(),
+  }),
+});
+
+export const collections = { proyectos, servicios, sectores, sedes, certificaciones, historia, testimonios, sitio, paginas, noticias, documentos };

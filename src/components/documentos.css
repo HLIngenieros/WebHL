@@ -1,7 +1,6 @@
 /* Documentos (plan AG.6, maqueta aprobada 21-oct): herramientas, carpetas con burbuja de eje y láminas con
    cajetín, cota de vigencia y descarga que se llena de azul. Prefijo dc- (ver CLAUDE.md, ojo F4). */
 .dc-estado { margin: var(--s5) 0 0; padding: var(--s4); border: var(--border) dashed var(--line); color: var(--muted); }
-.dc-cargando { min-height: 100svh; border: 0; }
 
 .dc-herr { display: grid; gap: var(--s3); margin-top: var(--s5); padding-top: var(--s3); border-top: var(--border-strong) solid var(--ink); }
 .dc-fila { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s3); align-items: center; justify-content: space-between; }

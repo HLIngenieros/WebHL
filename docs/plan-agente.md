@@ -44,7 +44,7 @@ elegido), `TOPE_DIARIO`; para AG.10 se suma `MODELO`. Lectura propia en el PHP (
 | AG.8 | Cierre Rev. 1 | 466 pruebas | — | Hecho |
 | **AG.9** | **Página de carga local** (ver abajo) | `/carga/` solo en `npm run dev` | Prueba de subida y listado | Hecho (21-oct): `src/lib/carga.mjs` + `carga.astro`; no existe en `dist/` |
 | **AG.10** | **`agente.php` → modelo directo** (ver abajo) | Respuestas reales en local | `api-php.spec.ts` (simulado) + prueba real con la clave | En curso (21-oct): `PROVEEDOR=claude-code` hecho y probado (desarrollo, sin clave); `anthropic`/`foundry` cuando haya credencial |
-| **AG.11** | **Documentos desde el repo** (ver abajo) | Página estática + catálogo al compilar | `documentos.spec.ts` | Pendiente |
+| **AG.11** | **Documentos desde el repo** (ver abajo) | Página estática + catálogo al compilar | `documentos.spec.ts` | Hecho (22-oct): colección con la política M-TI-001; los 12 borradores de `documentos-web/` esperan aprobación |
 | AG.12 | Cierre Rev. 2: suite, presupuesto, Lighthouse de Documentos, revisión enfocada en la carga y en `agente.php` | Commit | — | Pendiente |
 
 ### AG.9 · Página de carga local

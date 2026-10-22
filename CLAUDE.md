@@ -285,7 +285,11 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     MCP ni sesión; desde el temporal: no ve ningún CLAUDE.md), solo para peticiones de 127.0.0.1, `MODELO=haiku`,
     `--effort low` (~5 s por respuesta). Probado con `design/local.ps1`: respuestas reales con fuentes en ES/EN.
     Fuera `AGENTE_URL`/`CLAVE_AGENTE`. **Nunca es la vía de producción.**
-  - **Siguiente paso:** AG.11 (Documentos desde el repo); el proveedor de producción (`anthropic` con clave,
+  - Etapa 15 (2026-10-22): AG.11. Documentos sale de `src/content/documentos.yaml` (PDF en `public/documentos/`, `pdf.en`
+    opcional; si falta el archivo, la compilación falla): HTML estático y `/api/documentos.json` (ambos idiomas, también en
+    lanzamiento). Fuera la muestra. `npm run dev` ya atiende `/api/*.php` (`src/lib/php.mjs`: PHP portátil en el 8081
+    sobre `public/`, JSON de `dist/api` vía `HL_DATOS`; correr `npm run build` una vez antes).
+  - **Siguiente paso:** aprobar y publicar los borradores de `documentos-web/`; el proveedor de producción (`anthropic` con clave,
     `foundry` o `azure-openai`) se agrega cuando Gerencia y TI den la credencial. F6 después.
   - **Ojo agente:** al desplegar no borrar `/api/vacantes.json` (lo escribe el flujo de Vacantes de F4 en Power
     Automate; **congelado por decisión de Juan David, 21-oct**: no se toca hasta nuevo aviso). El sitio es `https://hlingenieros.com` sin www.

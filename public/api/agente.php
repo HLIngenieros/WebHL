@@ -14,6 +14,8 @@ header('Cache-Control: no-store');
 
 const SITIO = 'https://hlingenieros.com';
 const CONTEXTO_MAX = 9000;   // caracteres de contenido del sitio por pregunta
+// Carpeta de los JSON compilados: junto al PHP; en `astro dev`, dist/api (src/lib/php.mjs).
+define('DATOS', getenv('HL_DATOS') ?: __DIR__);
 const DOCUMENTOS_MAX = 3000; // caracteres del catálogo de documentos y vacantes
 const POR_IP = 30;           // preguntas cada 10 minutos por IP
 
@@ -114,7 +116,7 @@ if ($contador && flock($contador, LOCK_EX)) {
 }
 
 // ---------- Búsqueda en lo publicado ----------
-$base = json_decode((string) @file_get_contents(__DIR__ . '/conocimiento.json'), true)['fragmentos'] ?? [];
+$base = json_decode((string) @file_get_contents(DATOS . '/conocimiento.json'), true)['fragmentos'] ?? [];
 $frag = array_values(array_filter($base, fn($f) => ($f['lang'] ?? '') === $lang));
 $consulta = $pregunta;
 for ($i = count($historial) - 1; $i >= 0; $i--) if ($historial[$i][0] === 'yo') { $consulta .= ' ' . $historial[$i][1]; break; }
@@ -158,12 +160,13 @@ foreach ($elegidos as $k) {
 }
 
 // Documentos (catálogo del sitio) y vacantes abiertas.
-$docs = json_decode((string) @file_get_contents(__DIR__ . '/documentos.json'), true) ?: [];
+$docs = json_decode((string) @file_get_contents(DATOS . '/documentos.json'), true) ?: [];
 $permitidas = [];
 foreach ($base as $f) $permitidas[(string) parse_url((string) $f['url'], PHP_URL_PATH)] = (string) $f['titulo'];
 $lineasDocs = [];
 foreach ($docs as $d) {
   if (!is_array($d) || !isset($d['url'], $d['titulo'])) continue;
+  if (isset($d['lang']) && $d['lang'] !== $lang) continue;
   if (!empty($d['vigenteHasta']) && $d['vigenteHasta'] < date('Y-m-d')) continue; // vencido: ni se cita ni se enlaza
   $permitidas[(string) $d['url']] = (string) $d['titulo'];
   $vig = !empty($d['vigenteHasta']) ? ($lang === 'es' ? ' · vigente hasta ' : ' · valid until ') . $d['vigenteHasta'] : '';
@@ -175,7 +178,7 @@ foreach ($docs as $d) {
 usort($lineasDocs, fn($a, $b) => $b[0] <=> $a[0]);
 $empleo = preg_match('/\b(empleo|vacante|trabaj|cargo|hoja de vida|postul|job|career|opening|position|vacanc|hiring)/', plano($consulta));
 if ($empleo) {
-  $vacantes = json_decode((string) @file_get_contents(__DIR__ . '/vacantes.json'), true) ?: [];
+  $vacantes = json_decode((string) @file_get_contents(DATOS . '/vacantes.json'), true) ?: [];
   $trabaje = $lang === 'es' ? '/trabaje-con-nosotros/' : '/en/careers/';
   foreach ($vacantes as $v) {
     if (!is_array($v) || empty($v['id']) || empty($v['titulo']) || (($v['cierre'] ?? '9999') < date('Y-m-d'))) continue;
