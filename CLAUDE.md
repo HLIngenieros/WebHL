@@ -290,6 +290,10 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     lanzamiento). Fuera la muestra. `npm run dev` ya atiende `/api/*.php` (`src/lib/php.mjs`: PHP portátil en el 8081
     sobre `public/`, JSON de `dist/api` vía `HL_DATOS`; correr `npm run build` una vez antes).
     Publicados (aprobados por Juan David) los 6 documentos generados, ES/EN, en `public/documentos/<carpeta>/`.
+  - **Etapa 16 (2026-10-22): AG.12, cierre de la Rev. 2 del agente.** 463 pruebas (con `HL_PHP`), presupuesto OK,
+    Lighthouse móvil de Documentos 98/100/100/100 (LCP 2,0 s, CLS 0,004). Revisión enfocada: `carga.mjs` sin hallazgos;
+    `agente.php` ahora rechaza peticiones de otro origen (403) y responde "sin servicio" si no puede abrir el contador
+    del tope diario. El proxy de desarrollo conserva el `Host` (`changeOrigin: false`).
   - **Siguiente paso:** F6; el proveedor de producción (`anthropic` con clave,
     `foundry` o `azure-openai`) se agrega cuando Gerencia y TI den la credencial. F6 después.
   - **Ojo agente:** al desplegar no borrar `/api/vacantes.json` (lo escribe el flujo de Vacantes de F4 en Power

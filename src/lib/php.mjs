@@ -23,7 +23,8 @@ export default function php() {
         const cerrar = () => proceso.kill();
         process.once('exit', cerrar);
         process.once('SIGINT', () => { cerrar(); process.exit(); });
-        updateConfig({ vite: { server: { proxy: { '^/api/.*\\.php': `http://127.0.0.1:${PUERTO}` } } } });
+        // changeOrigin: false conserva el Host: agente.php lo compara con el origen de la petición.
+        updateConfig({ vite: { server: { proxy: { '^/api/.*\\.php': { target: `http://127.0.0.1:${PUERTO}`, changeOrigin: false } } } } });
         logger.info(`PHP en 127.0.0.1:${PUERTO} para /api/*.php (formularios en modo prueba: los correos van al temporal).`);
       },
     },

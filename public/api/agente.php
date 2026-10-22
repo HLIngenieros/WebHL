@@ -74,6 +74,11 @@ function fijo(string $estado, string $lang, array $extra = []): never {
 
 // ---------- Entrada ----------
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') salir(405, ['estado' => 'error', 'error' => 'Solo POST.']);
+// Solo desde el propio sitio: otra página abierta en el navegador no puede gastar el cupo (ni la sesión local).
+$origen = (string) ($_SERVER['HTTP_ORIGIN'] ?? '');
+if ($origen !== '' && parse_url($origen, PHP_URL_HOST) . (($o = parse_url($origen, PHP_URL_PORT)) ? ":$o" : '') !== ($_SERVER['HTTP_HOST'] ?? '')) {
+  salir(403, ['estado' => 'error', 'error' => 'Origen no permitido.']);
+}
 if ((int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 16384) salir(413, ['estado' => 'error', 'error' => 'Mensaje demasiado largo.']);
 $p = json_decode((string) file_get_contents('php://input'), true);
 if (!is_array($p)) salir(400, ['estado' => 'error', 'error' => 'El cuerpo no es JSON.']);
@@ -107,13 +112,12 @@ $tope = max(0, (int) ($env['TOPE_DIARIO'] ?? 400));
 $privado = isset($env['_ruta']) ? dirname((string) $env['_ruta']) : sys_get_temp_dir();
 $hoy = "$privado/agente-" . date('Ymd') . '.cnt';
 if (!is_file($hoy)) foreach (glob("$privado/agente-*.cnt") ?: [] as $viejo) @unlink($viejo); // un contador por día
-$contador = fopen($hoy, 'c+');
-if ($contador && flock($contador, LOCK_EX)) {
-  $usadas = (int) stream_get_contents($contador);
-  if ($usadas >= $tope) { flock($contador, LOCK_UN); fijo('limite', $lang); }
-  ftruncate($contador, 0); rewind($contador); fwrite($contador, (string) ($usadas + 1));
-  flock($contador, LOCK_UN);
-}
+$contador = @fopen($hoy, 'c+');
+if (!$contador || !flock($contador, LOCK_EX)) fijo('sin_servicio', $lang); // sin contador no hay tope: se cierra
+$usadas = (int) stream_get_contents($contador);
+if ($usadas >= $tope) { flock($contador, LOCK_UN); fijo('limite', $lang); }
+ftruncate($contador, 0); rewind($contador); fwrite($contador, (string) ($usadas + 1));
+flock($contador, LOCK_UN);
 
 // ---------- Búsqueda en lo publicado ----------
 $base = json_decode((string) @file_get_contents(DATOS . '/conocimiento.json'), true)['fragmentos'] ?? [];

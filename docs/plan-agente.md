@@ -45,7 +45,7 @@ elegido), `TOPE_DIARIO`; para AG.10 se suma `MODELO`. Lectura propia en el PHP (
 | **AG.9** | **Página de carga local** (ver abajo) | `/carga/` solo en `npm run dev` | Prueba de subida y listado | Hecho (21-oct): `src/lib/carga.mjs` + `carga.astro`; no existe en `dist/` |
 | **AG.10** | **`agente.php` → modelo directo** (ver abajo) | Respuestas reales en local | `api-php.spec.ts` (simulado) + prueba real con la clave | En curso (21-oct): `PROVEEDOR=claude-code` hecho y probado (desarrollo, sin clave); `anthropic`/`foundry` cuando haya credencial |
 | **AG.11** | **Documentos desde el repo** (ver abajo) | Página estática + catálogo al compilar | `documentos.spec.ts` | Hecho (22-oct): colección con 7 documentos (6 generados ES/EN + M-TI-001), aprobados por Juan David |
-| AG.12 | Cierre Rev. 2: suite, presupuesto, Lighthouse de Documentos, revisión enfocada en la carga y en `agente.php` | Commit | — | Pendiente |
+| AG.12 | Cierre Rev. 2: suite, presupuesto, Lighthouse de Documentos, revisión enfocada en la carga y en `agente.php` | Commit | — | Hecho (22-oct): 463 pruebas, presupuesto OK, Documentos 98/100/100/100 (LCP 2,0 s); `agente.php` rechaza otro origen y cierra si no puede llevar el tope diario |
 
 ### AG.9 · Página de carga local
 - **Solo desarrollo:** un middleware de Vite en `astro.config.mjs` (`configureServer`, activo solo en `astro dev`)

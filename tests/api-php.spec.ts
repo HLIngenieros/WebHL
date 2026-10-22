@@ -36,6 +36,10 @@ const preguntar = (pregunta: string, extra: object = {}) =>
   fetch(`${BASE}/api/agente.php`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pregunta, idioma: 'es', pagina: '/', historial: [], ...extra }) });
 
 test.describe('agente.php (respuestas simuladas)', () => {
+  test('rechaza otro origen', async () => {
+    const r = await fetch(`${BASE}/api/agente.php`, { method: 'POST', headers: { 'Content-Type': 'text/plain', Origin: 'https://otro.example' }, body: JSON.stringify({ pregunta: 'hola', idioma: 'es' }) });
+    expect(r.status).toBe(403);
+  });
   test('valida la entrada', async () => {
     expect((await fetch(`${BASE}/api/agente.php`)).status).toBe(405);
     expect((await preguntar(' ')).status).toBe(422);
