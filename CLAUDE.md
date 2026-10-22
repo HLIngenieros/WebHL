@@ -289,7 +289,8 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     opcional; si falta el archivo, la compilación falla): HTML estático y `/api/documentos.json` (ambos idiomas, también en
     lanzamiento). Fuera la muestra. `npm run dev` ya atiende `/api/*.php` (`src/lib/php.mjs`: PHP portátil en el 8081
     sobre `public/`, JSON de `dist/api` vía `HL_DATOS`; correr `npm run build` una vez antes).
-  - **Siguiente paso:** aprobar y publicar los borradores de `documentos-web/`; el proveedor de producción (`anthropic` con clave,
+    Publicados (aprobados por Juan David) los 6 documentos generados, ES/EN, en `public/documentos/<carpeta>/`.
+  - **Siguiente paso:** F6; el proveedor de producción (`anthropic` con clave,
     `foundry` o `azure-openai`) se agrega cuando Gerencia y TI den la credencial. F6 después.
   - **Ojo agente:** al desplegar no borrar `/api/vacantes.json` (lo escribe el flujo de Vacantes de F4 en Power
     Automate; **congelado por decisión de Juan David, 21-oct**: no se toca hasta nuevo aviso). El sitio es `https://hlingenieros.com` sin www.

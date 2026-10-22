@@ -1,8 +1,80 @@
 # Documentos públicos (plan AG.11): la página Documentos y el agente salen de aquí. El PDF va en
 # public/documentos/<pdf.es> (y <pdf.en> si hay versión en inglés); si el archivo no existe, la compilación falla.
 # Lo vencido (vigenteHasta < hoy) no se muestra ni se cita. Borradores por aprobar: documentos-web/ (design/documentos.mjs).
-- id: politica-datos
+- id: portafolio
   orden: 1
+  carpeta: portafolio
+  titulo: { es: "Portafolio de proyectos", en: "Project portfolio" }
+  descripcion:
+    es: "20 proyectos seleccionados con cliente, lugar, servicios y cifras"
+    en: "20 selected projects with client, location, services and figures"
+  pdf: { es: portafolio/hl-portafolio-de-proyectos.pdf, en: portafolio/hl-portafolio-de-proyectos-en.pdf }
+  area: Comercial
+  emisor: Grupo HL
+  actualizado: '2026-10-21'
+  datosClave: "20 proyectos seleccionados con cliente, lugar, servicios y cifras"
+- id: brochure
+  orden: 2
+  carpeta: brochures
+  titulo: { es: "Brochure corporativo", en: "Company profile" }
+  descripcion:
+    es: "Quiénes somos, valores, líneas de servicio, sectores, certificaciones y presencia"
+    en: "Who we are, values, service lines, sectors, certifications and presence"
+  pdf: { es: brochures/hl-brochure-corporativo.pdf, en: brochures/hl-brochure-corporativo-en.pdf }
+  area: Comunicaciones
+  emisor: Grupo HL
+  actualizado: '2026-10-21'
+  datosClave: "Quiénes somos, valores, líneas de servicio, sectores, certificaciones y presencia"
+- id: lineas-de-servicio
+  orden: 3
+  carpeta: brochures
+  titulo: { es: "Líneas de servicio", en: "Service lines" }
+  descripcion:
+    es: "Las 7 líneas: alcance, recursos, normas y proyectos de referencia"
+    en: "The 7 lines: scope, resources, standards and reference projects"
+  pdf: { es: brochures/hl-lineas-de-servicio.pdf, en: brochures/hl-lineas-de-servicio-en.pdf }
+  area: Comercial
+  emisor: Grupo HL
+  actualizado: '2026-10-21'
+  datosClave: "Las 7 líneas: alcance, recursos, normas y proyectos de referencia"
+- id: politica-gestion-integral
+  orden: 4
+  carpeta: politicas
+  titulo: { es: "Política de gestión integral", en: "Integrated management policy" }
+  descripcion:
+    es: "Compromisos con clientes, gente, comunidades y grupo; base de valores y sistema de gestión"
+    en: "Commitments to clients, people, communities and the group; values and management system"
+  pdf: { es: politicas/hl-politica-de-gestion-integral.pdf, en: politicas/hl-politica-de-gestion-integral-en.pdf }
+  area: Calidad
+  emisor: Grupo HL
+  actualizado: '2026-10-21'
+  datosClave: "Compromisos con clientes, gente, comunidades y grupo; base de valores y sistema de gestión"
+- id: reglas-de-oro
+  orden: 5
+  carpeta: politicas
+  titulo: { es: "Reglas de Oro HSE y PIENSA®", en: "HSE Golden Rules and PIENSA®" }
+  descripcion:
+    es: "Las 10 Reglas de Oro, la metodología PIENSA® y las prácticas de la cultura de seguridad"
+    en: "The 10 Golden Rules, the PIENSA® method and safety culture practices"
+  pdf: { es: politicas/hl-reglas-de-oro-hse.pdf, en: politicas/hl-reglas-de-oro-hse-en.pdf }
+  area: HSE
+  emisor: Grupo HL
+  actualizado: '2026-10-21'
+  datosClave: "Las 10 Reglas de Oro, la metodología PIENSA® y las prácticas de la cultura de seguridad"
+- id: sedes-y-contacto
+  orden: 7
+  carpeta: directorio
+  titulo: { es: "Sedes y contacto", en: "Offices and contact" }
+  descripcion:
+    es: "Las 4 sedes con dirección y teléfono, y los canales en línea por tipo de solicitud"
+    en: "The 4 offices with address and phone, and the online channels by type of request"
+  pdf: { es: directorio/hl-sedes-y-contacto.pdf, en: directorio/hl-sedes-y-contacto-en.pdf }
+  area: Comunicaciones
+  emisor: Grupo HL
+  actualizado: '2026-10-21'
+  datosClave: "Las 4 sedes con dirección y teléfono, y los canales en línea por tipo de solicitud"
+- id: politica-datos
+  orden: 6
   carpeta: politicas
   titulo: { es: Política de tratamiento de datos personales, en: Personal data processing policy }
   descripcion:

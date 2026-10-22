@@ -4,8 +4,9 @@ import { test, expect } from '@playwright/test';
 
 test('Documentos viene en el HTML desde la colección; filtra y busca', async ({ page }) => {
   await page.goto('/documentos/');
-  await expect(page.locator('#politicas .dc-lam')).toHaveCount(1);
-  const pdf = page.locator('#politicas .dc-bajar');
+  await expect(page.locator('.dc-grupo')).toHaveCount(4);
+  await expect(page.locator('#politicas .dc-lam')).toHaveCount(3);
+  const pdf = page.locator('#politicas .dc-bajar').last();
   await expect(pdf).toHaveAttribute('href', '/documentos/politica-datos-M-TI-001-act-2.pdf');
   expect((await page.request.get('/documentos/politica-datos-M-TI-001-act-2.pdf')).ok()).toBe(true);
   await page.getByRole('searchbox').fill('1581');
@@ -16,7 +17,9 @@ test('Documentos viene en el HTML desde la colección; filtra y busca', async ({
 
 test('el catálogo del agente trae cada documento en ambos idiomas', async ({ request }) => {
   const docs = await (await request.get('/api/documentos.json')).json();
-  expect(docs.map((d: { lang: string }) => d.lang).sort()).toEqual(['en', 'es']);
+  const en = docs.filter((d: { lang: string }) => d.lang === 'en');
+  expect(en).toHaveLength(docs.length / 2);
+  expect(en.find((d: { id: string }) => d.id === 'brochure').url).toBe('/documentos/brochures/hl-brochure-corporativo-en.pdf');
 });
 
 test('Documents en inglés y enlace desde HSE', async ({ page }) => {
