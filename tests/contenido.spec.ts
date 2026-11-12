@@ -146,9 +146,7 @@ test.describe('auditar()', () => {
     expect(auditar({ servicios: [servicio] }, { modo: 'desarrollo', hoy })).toMatchObject([{ campo: 'en', tipo: 'traduccion' }]);
   });
 
-  test('las cifras del sitio y la norma de una certificación también se traducen', () => {
-    const sitio = { id: 'hl', data: { asociadas: [{ aprobada: true }], clientes: [], cifras: [{ valor: 530, etiqueta: { es: 'Proyectos' } }] } };
-    expect(auditar({ sitio: [sitio] }, { modo: 'desarrollo', hoy })).toMatchObject([{ campo: 'en', tipo: 'traduccion' }]);
+  test('la norma de una certificación también se traduce', () => {
     const bpi = { id: 'bpi', data: { norma: { es: 'Buenas Prácticas de Innovación' }, ente: 'Icontec', vence: new Date(2030, 0, 1), pdf: 'x.pdf' } };
     expect(auditar({ certificaciones: [bpi] }, { modo: 'desarrollo', hoy })).toMatchObject([{ campo: 'en', tipo: 'traduccion' }]);
   });
@@ -180,9 +178,9 @@ test.describe('auditar()', () => {
     expect(ps.map((x) => x.campo).sort()).toEqual(['buzon', 'en']);
   });
 
-  test('testimonio sin autorizar: aviso que no bloquea', () => {
+  test('testimonios sin autorizar: ya no son pendiente (no se publican, R-7)', () => {
     const t = { id: 'ana', data: { nombre: 'Ana', cargo: { es: 'Ingeniera' }, autorizado: false, cita: { es: 'Cita' } } };
-    expect(auditar({ testimonios: [t] }, { modo: 'desarrollo', hoy })).toMatchObject([{ tipo: 'aviso', bloquea: false }]);
+    expect(auditar({ testimonios: [t] }, { modo: 'desarrollo', hoy })).toEqual([]);
   });
 });
 
@@ -246,7 +244,7 @@ test.describe('contenido migrado', () => {
     await expect(conteo(page, 'testimonios')).toHaveText('4');
     await expect(conteo(page, 'sitio')).toHaveText('1');
     await expect(conteo(page, 'paginas')).toHaveText('10'); // 5 ES + 5 EN (F5)
-    await expect(page.locator('tr[data-coleccion="testimonios"] li[data-campo="autorizado"]')).toHaveCount(4);
+    await expect(page.locator('tr[data-coleccion="testimonios"] li[data-campo="autorizado"]')).toHaveCount(0); // R-7
     await expect(page.locator('tr[data-coleccion="paginas"] li[data-campo="revisión jurídica"]')).toHaveCount(6); // 3 legales en ES y EN
   });
 

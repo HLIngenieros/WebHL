@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { hitos, tratamiento, avance } from '../src/lib/nosotros';
-import { auditar, type Pendiente } from '../src/lib/contenido';
+import { auditar } from '../src/lib/contenido';
 
 // ── Contenido de Nosotros (guía §12.2-12.3) ──
 
@@ -48,15 +48,13 @@ test.describe('línea del tiempo', () => {
 });
 
 test.describe('avisos de contenido', () => {
-  test('testimonios y asociadas sin aprobar son avisos: no bloquean el lanzamiento', () => {
+  test('testimonios y asociadas no generan pendientes (no se publican, R-7)', () => {
     const datos = {
       testimonios: [{ id: 't1', data: { autorizado: false, cargo: { es: 'C', en: 'C' }, cita: { es: 'Q', en: 'Q' } } }],
       sitio: [{ id: 'hl', data: { paises: ['CO'], video: { mp4: '/v.mp4' }, asociadas: [{ nombre: 'ECOHL', aprobada: false }], clientes: [], cifras: [] } }],
     };
-    let ps: Pendiente[] = [];
-    expect(() => { ps = auditar(datos as never, { modo: 'lanzamiento' }); }).not.toThrow();
-    const asociada = ps.find((p) => p.coleccion === 'sitio' && p.campo === 'asociadas');
-    expect(asociada).toMatchObject({ tipo: 'aviso', bloquea: false });
+    const ps = auditar(datos as never, { modo: 'lanzamiento' });
+    expect(ps.filter((p) => p.coleccion === 'testimonios' || p.campo === 'asociadas')).toEqual([]);
   });
 
   test('las fotos de archivo en baja resolución son un aviso, no un bloqueo', () => {

@@ -214,14 +214,8 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
   // La década es el dato real de cada hito (guía §12.3); lo que falta son las fotos en alta resolución.
   if (datos.historia?.length) add('historia', 'todas', 'fotos', 'aviso', false, 'fotos de archivo en alta resolución (las actuales son copias web de 2020) y una foto actual para "Hoy"');
   ingles('historia', datos.historia);
-  for (const { id, data } of datos.testimonios ?? []) {
-    if (!data.autorizado) add('testimonios', id, 'autorizado', 'aviso', false, 'no se publica hasta tener la autorización');
-    else if (!data.cita.en || !data.cargo.en) add('testimonios', id, 'en', 'traduccion');
-  }
+  // Testimonios y empresas asociadas no se publican (Plan R, R-7): sus datos quedan en el repo sin pendientes.
   for (const { id, data } of datos.sitio ?? []) {
-    if (!data.asociadas?.length) add('sitio', id, 'asociadas', 'insumo', true, 'D1');
-    const sinAprobar = data.asociadas?.filter((a) => !a.aprobada).map((a) => a.nombre ?? '?') ?? [];
-    if (sinAprobar.length) add('sitio', id, 'asociadas', 'aviso', false, `D1: sin aprobar (${sinAprobar.join(', ')}); no se publican`);
     const sinNombre = data.clientes?.filter((c) => !c.nombre).length;
     if (sinNombre) add('sitio', id, 'clientes', 'insumo', true, `${sinNombre} logos sin nombre`);
     if (!data.video) add('sitio', id, 'video', 'insumo', true, 'video de obra para el Home (20-30 s, MP4 + WebM, ≤ 6 MB) y su póster; hoy, póster provisional de Columbus');

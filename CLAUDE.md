@@ -152,7 +152,6 @@ de 5+ fotos con pie.
 Logotipo completo vectorial de HL Ingenieros ("ingenieros s.a."; el monograma ya está en vector, sacado del
 manual de HL Infraestructura en `docs/manualmarcaold.pdf`); fotos de archivo histórico en alta resolución
 (una por década; las de `src/assets/historia/` son copias web de 2020) y una foto actual para "Hoy";
-autorización de los 4 testimonios y validación de sus fragmentos; qué empresas asociadas se muestran (D1);
 una sola lista de valores; proyectos 2020-2026 (cliente, año, alcance, cifras); año de los
 16 casos y confirmación de cifras de Columbus (web: 42 meses, 8.300 t estructura, 18.600 t equipos vs.
 PDF ECOHL: 18 meses, 12.000 t, 10.500 t; el PDF habla de *fabricación*, así que probablemente son

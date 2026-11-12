@@ -49,10 +49,10 @@ página `/pendientes/` (`npm run dev`), generada al compilar; la lista de abajo 
    de Chimborazo (¿de crudo o de cemento?).
 4. Años de las 5 etapas de la historia, para la línea del tiempo.
 5. Certificados vigentes en PDF y lista única de valores (hoy hay una de 5 y otra de 6).
-6. Lista vigente de empresas del grupo (D1) y nombres de los 19 logos de clientes. **HL Infraestructura**
+6. Nombres de los 19 logos de clientes (las empresas asociadas ya no se muestran: R-7). **HL Infraestructura**
    (la consigue Juan David): desde cuándo existe, qué hace, con qué personal y equipos, y qué proyectos ejecutó.
 7. Proyectos 2020-2026 y casos de Costa Rica y Bolivia, si existen.
-8. Si los 4 testimonios siguen vigentes y autorizados.
+8. ~~Si los 4 testimonios siguen vigentes y autorizados~~ (no se publican: Plan R, R-7, 12-nov).
 
 ### Contacto, vacantes y agente (F4, 20-oct · en espera)
 
