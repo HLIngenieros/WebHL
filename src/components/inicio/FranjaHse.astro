@@ -12,7 +12,7 @@ const hse = datos.paginas.find((p) => p.data.pagina === 'hse' && p.data.lang ===
 const indicadores = (hse?.data.indicadores ?? []).filter((x) => !x.donde || x.donde.includes('inicio'));
 ---
 {indicadores.length > 0 && (
-  <section class="franja-hse" data-seccion="hse" aria-labelledby="hse-titulo">
+  <section class="franja-hse" aria-labelledby="hse-titulo">
     <span class="rayas" aria-hidden="true"></span>
     <div class="hse-in">
       <h2 id="hse-titulo" class="hse-titulo">{t(lang, 'hseInicio1')} <span>{t(lang, 'hseInicio2')}</span></h2>
@@ -31,22 +31,22 @@ const indicadores = (hse?.data.indicadores ?? []).filter((x) => !x.donde || x.do
 )}
 
 <style>
-  .franja-hse { display: grid; grid-template-columns: var(--s5) minmax(0, 1fr); background: var(--hl-grafito); color: var(--hl-blanco); }
-  .rayas { grid-row: span 2; background: repeating-linear-gradient(-45deg, var(--hl-verde) 0 10px, var(--hl-grafito) 10px 20px); }
+  .franja-hse { display: grid; grid-template-columns: var(--s5) minmax(0, 1fr); background: var(--azul-900); color: var(--hl-blanco); }
+  .rayas { grid-row: span 2; background: repeating-linear-gradient(-45deg, var(--hl-naranja) 0 10px, var(--azul-900) 10px 20px); }
   .hse-in { display: grid; gap: var(--s5); padding: var(--s6) var(--gutter); }
   .hse-titulo { margin: 0; color: var(--hl-blanco); }
-  .hse-titulo span { display: block; font-weight: var(--fw-fina); color: var(--hl-concreto); }
+  .hse-titulo span { display: block; font-weight: var(--fw-fina); color: var(--azul-50); }
   .indicadores { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s4); }
   .indicadores li { display: grid; gap: var(--s1); padding-left: var(--s3); border-left: var(--border) solid color-mix(in srgb, var(--hl-blanco) 20%, transparent); }
   .valor {
-    font-family: var(--f-ancha); font-stretch: var(--wdth-stat); font-weight: var(--fw-negra); font-size: var(--fs-stat);
-    line-height: .9; color: var(--hl-verde); white-space: nowrap; letter-spacing: -.02em;
+    font-family: var(--f-titulo); font-weight: var(--fw-negra); font-size: var(--fs-stat);
+    line-height: .9; color: var(--hl-naranja); white-space: nowrap; letter-spacing: -.02em;
   }
-  .etiqueta { color: var(--hl-concreto); font-size: var(--fs-sm); }
-  .fuente { color: var(--hl-acero); }
+  .etiqueta { color: var(--azul-50); font-size: var(--fs-sm); }
+  .fuente { color: var(--noche-tenue); }
   .hse-ir {
     grid-column: 2; display: flex; align-items: center; justify-content: space-between; gap: var(--s3); min-height: 56px; padding: 0 var(--gutter);
-    background: var(--hl-verde); color: var(--hl-grafito); text-decoration: none; font-weight: var(--fw-strong); font-stretch: var(--wdth-subtitle);
+    background: var(--hl-naranja); color: var(--azul-900); text-decoration: none; font-weight: var(--fw-strong);
   }
   .hse-ir span { transition: transform var(--t-rapido) var(--ease-plano); }
   .hse-ir:hover span { transform: translateX(6px); }

@@ -23,16 +23,16 @@ const fondos = await Promise.all(bloques.map((b) => (b.foto ? getImage({ src: b.
   .cierre { display: grid; }
   @media (min-width: 760px) { .cierre { grid-template-columns: 1fr 1fr; } }
   a { position: relative; isolation: isolate; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: var(--s5); min-height: 280px; padding: var(--s6) var(--gutter); color: var(--hl-blanco); text-decoration: none; }
-  .cierre-0 { background: var(--hl-azul); }
-  .cierre-1 { background: var(--hl-grafito); }
+  .cierre-0 { background: var(--azul-600); }
+  .cierre-1 { background: var(--azul-900); }
   .cierre-foto { position: absolute; inset: 0; z-index: -2; background-size: cover; background-position: center; filter: grayscale(1) contrast(1.1); opacity: .28; mix-blend-mode: luminosity; transition: transform 1.4s var(--ease-izaje), opacity var(--t-aparece); }
-  a::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--hl-senal); transform: translateY(101%); transition: transform .5s var(--ease-plano); }
+  a::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--hl-naranja); transform: translateY(101%); transition: transform .5s var(--ease-plano); }
   a:is(:hover, :focus-visible)::before { transform: none; }
-  a:is(:hover, :focus-visible) { color: var(--hl-grafito); }
+  a:is(:hover, :focus-visible) { color: var(--azul-900); }
   a:hover .cierre-foto { transform: scale(1.06); opacity: .12; }
-  a:focus-visible { outline: 2px solid var(--hl-senal); outline-offset: -6px; }
+  a:focus-visible { outline: 2px solid var(--hl-naranja); outline-offset: -6px; }
   .cierre-dato { opacity: .85; }
-  .cierre-titulo { font-stretch: var(--wdth-stat); font-family: var(--f-ancha); font-weight: var(--fw-negra); font-size: var(--fs-h1); line-height: .95; letter-spacing: -.02em; }
+  .cierre-titulo { font-family: var(--f-titulo); font-weight: var(--fw-negra); font-size: var(--fs-h1); line-height: .95; letter-spacing: -.02em; }
   .cierre-titulo span { display: block; font-weight: var(--fw-fina); }
   .cierre-flecha { font-size: var(--fs-h2); transition: transform .45s var(--ease-plano); }
   a:hover .cierre-flecha { transform: translateX(var(--s3)); }

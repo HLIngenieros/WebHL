@@ -7,15 +7,15 @@ const { tipo = 'med' } = Astro.props;
 
 <style>
   .chip {
-    display: inline-flex; align-items: center; gap: 6px; padding: 2px 7px; border: var(--border) solid currentColor;
-    font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: var(--fs-chip);
+    display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border: var(--border) solid currentColor; border-radius: var(--r-chip);
+    font-family: var(--f-mono); font-weight: var(--fw-data); font-size: var(--fs-chip);
     letter-spacing: var(--ls-data); text-transform: uppercase; line-height: 1.4; white-space: nowrap;
   }
-  .chip::before { content: ''; width: 6px; height: 6px; background: currentColor; }
+  .chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
   .crit { color: var(--bad); background: var(--bad-soft); }
   .high { color: var(--signal-ink); background: var(--signal-soft); }
   .ok { color: var(--good); background: var(--good-soft); }
   .acc { color: var(--accent); background: var(--accent-soft); }
-  .sec { color: var(--sec); background: var(--sec-soft); }
+  .sec { color: var(--accent); background: var(--accent-soft); }
   .med { color: var(--muted); }
 </style>

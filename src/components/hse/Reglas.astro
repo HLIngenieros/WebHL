@@ -79,16 +79,16 @@ const dos = (n: number) => String(n).padStart(2, '0');
   .regla:focus-visible .cara { outline: var(--focus-ring); outline-offset: 2px; }
   .cara { position: absolute; inset: 0; display: flex; flex-direction: column; padding: var(--s3); border: var(--border-strong) solid var(--ink); backface-visibility: hidden; }
   .frente { background: var(--paper); }
-  .n { font-family: var(--f-ancha); font-stretch: var(--wdth-stat); font-weight: var(--fw-negra); font-size: var(--fs-h1); line-height: .85; color: var(--sec); letter-spacing: -.02em; }
+  .n { font-family: var(--f-titulo); font-weight: var(--fw-negra); font-size: var(--fs-h1); line-height: .85; color: var(--accent); letter-spacing: -.02em; }
   .gira { position: absolute; right: var(--s3); top: var(--s3); color: var(--muted); transition: transform var(--t-aparece) var(--ease-izaje); }
   .regla:hover .gira { transform: rotate(180deg); }
-  .pic { width: 60px; height: 60px; margin: auto 0 var(--s3); color: var(--sec); }
+  .pic { width: 60px; height: 60px; margin: auto 0 var(--s3); color: var(--accent); }
   .pic path { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   h3 { margin: 0; font-size: var(--fs-lead); line-height: var(--lh-title); }
-  .frente::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: var(--sec); }
-  .dorso { justify-content: space-between; gap: var(--s2); background: var(--sec); color: var(--sec-ink); border-color: var(--sec); transform: rotateY(180deg); }
+  .frente::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: var(--accent); }
+  .dorso { justify-content: space-between; gap: var(--s2); background: var(--accent); color: var(--accent-ink); border-color: var(--accent); transform: rotateY(180deg); }
   .dorso p { margin: 0; font-size: var(--fs-sm); }
-  .ok { width: 34px; height: 34px; border-radius: 50%; background: var(--sec-ink); color: var(--sec); display: grid; place-items: center; font-weight: var(--fw-negra); }
+  .ok { width: 34px; height: 34px; border-radius: 50%; background: var(--accent-ink); color: var(--accent); display: grid; place-items: center; font-weight: var(--fw-negra); }
   @media (min-width: 900px) { .reglas { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 
   /* Entrada (revela.ts): caen como señales, se dibuja el pictograma y se mide la cota */

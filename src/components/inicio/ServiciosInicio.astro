@@ -1,6 +1,6 @@
 ---
 // Servicios en el inicio (guía §12.1-4): los 3 grupos como ejes de plano. Cada línea es una fila con su
-// código y flecha; al pasar, un barrido de --sec-soft la llena.
+// código y flecha; al pasar, un barrido de --accent-soft la llena.
 import Cabecera from './Cabecera.astro';
 import { cargar } from '../../lib/datos';
 import { bloque } from '../../lib/contenido';
@@ -20,7 +20,7 @@ const grupos = (['A', 'B', 'C'] as const).map((g) => ({
   })),
 }));
 ---
-<section class="servicios-inicio" data-seccion="servicios" aria-labelledby="servicios-titulo">
+<section class="servicios-inicio" aria-labelledby="servicios-titulo">
   <div class="wrap">
     <Cabecera id="servicios-titulo" codigo="L-04" nombre={t(lang, 'servicios')} titulo={[t(lang, 'serviciosInicio1'), t(lang, 'serviciosInicio2')]}
       enlace={{ href: ruta('servicios', lang), texto: t(lang, 'verServicios') }} />
@@ -43,9 +43,9 @@ const grupos = (['A', 'B', 'C'] as const).map((g) => ({
   .servicios-inicio { padding-block: var(--s7); background: var(--paper); }
   .grupos { display: grid; border-top: var(--border-strong) solid var(--ink); }
   .grupo { padding: var(--s4) 0 var(--s2); }
-  .grupo-cab { display: flex; align-items: center; gap: var(--s3); margin: 0 0 var(--s3); font-size: var(--fs-h3); color: var(--sec); }
+  .grupo-cab { display: flex; align-items: center; gap: var(--s3); margin: 0 0 var(--s3); font-size: var(--fs-h3); color: var(--accent); }
   .burbuja {
-    width: 34px; height: 34px; flex: none; border-radius: 50%; border: var(--border-strong) solid var(--sec); display: grid; place-items: center;
+    width: 34px; height: 34px; flex: none; border-radius: 50%; border: var(--border-strong) solid var(--accent); display: grid; place-items: center;
     font-size: var(--fs-sm); background: var(--paper);
   }
   ul { list-style: none; margin: 0; padding: 0; }
@@ -54,12 +54,12 @@ const grupos = (['A', 'B', 'C'] as const).map((g) => ({
     padding: var(--s2) var(--s2) var(--s2) 0; border-bottom: var(--border) solid var(--line); color: var(--ink); text-decoration: none; overflow: hidden;
   }
   li a::before {
-    content: ''; position: absolute; inset: 0; background: var(--sec-soft);
+    content: ''; position: absolute; inset: 0; background: var(--accent-soft);
     transform: scaleX(0); transform-origin: left; transition: transform var(--t-aparece) var(--ease-plano);
   }
   li a > * { position: relative; }
   li a:hover::before, li a:focus-visible::before { transform: scaleX(1); }
-  .codigo { color: var(--sec); white-space: nowrap; transition: transform var(--t-rapido) var(--ease-plano); }
+  .codigo { color: var(--accent); white-space: nowrap; transition: transform var(--t-rapido) var(--ease-plano); }
   .codigo::after { content: ' →'; }
   li a:hover .codigo { transform: translateX(-4px); }
   @media (min-width: 900px) {

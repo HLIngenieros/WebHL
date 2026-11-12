@@ -60,11 +60,11 @@ partes.push({ t: resto, marca: false });
   .mv { background: var(--paper); padding-block: var(--s6); }
   .mv-g { display: grid; gap: var(--s5); align-items: center; margin-top: var(--s5); }
   @media (min-width: 900px) { .mv-g { grid-template-columns: 1fr 1fr; gap: var(--s6); } }
-  .mv-lamina { --proporcion: 4 / 3; margin: 0; --sec: var(--accent); }
+  .mv-lamina { --proporcion: 4 / 3; margin: 0; }
   .mv-trazo { position: absolute; inset: 0; width: 100%; height: 100%; }
   .mv-trazo .t { fill: none; stroke: var(--trazo-foto); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
   @media (hover: hover) { .mv-lamina:hover .mv-trazo { opacity: 0; transition: opacity var(--t-aparece); } }
-  .mision { margin: 0; font-stretch: var(--wdth-stat); font-family: var(--f-ancha); font-size: calc(var(--fs-lema) * .7); line-height: 1; letter-spacing: -.025em; text-wrap: balance; }
+  .mision { margin: 0; font-family: var(--f-titulo); font-size: calc(var(--fs-lema) * .7); line-height: 1; letter-spacing: -.025em; text-wrap: balance; }
   .mision span { font-weight: var(--fw-fina); }
   .mision b { font-weight: var(--fw-negra); color: var(--accent); }
   .mv-cota { position: relative; height: 12px; margin: var(--s6) 0 var(--s5); border-inline: 1px solid var(--accent); }
@@ -81,8 +81,8 @@ partes.push({ t: resto, marca: false });
   .indicadores li + li { padding-left: var(--s4); border-left: var(--border) solid var(--line); }
   @media (max-width: 899.98px) { .indicadores li + li:nth-child(3) { padding-left: 0; border-left: 0; } }
   .indicador-num { margin: 0; color: var(--accent); }
-  .indicador-valor { font-stretch: var(--wdth-stat); font-family: var(--f-ancha); font-weight: var(--fw-negra); font-size: var(--fs-stat); line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
-  .indicador-unidad { font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: var(--fs-data); }
+  .indicador-valor { font-family: var(--f-titulo); font-weight: var(--fw-negra); font-size: var(--fs-stat); line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .indicador-unidad { font-weight: var(--fw-data); font-size: var(--fs-data); }
   .indicador-regla { display: block; height: 1px; width: 100%; margin: var(--s3) 0 var(--s2); background: var(--accent); transform-origin: left; }
   :global(html.js) .indicadores:not(.visible) .indicador-regla { transform: scaleX(0); }
   :global(html.js) .indicador-regla { transition: transform var(--t-cota) var(--ease-plano); transition-delay: calc(var(--i) * 120ms); }

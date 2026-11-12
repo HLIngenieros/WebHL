@@ -27,19 +27,9 @@
   --hl-cian: #3399CC;      /* apoyo: ilustración técnica y gráficos (no texto) */
   --hl-trazo: #8FB0F0;     /* líneas de dibujo y antetítulos sobre azul noche */
 
-  /* Primitivos con nombre histórico: los componentes los usan para las bandas oscuras.
-     Se renombran o retiran en R1. */
-  --hl-azul: #003399;
-  --hl-grafito: #071A40;   /* fondo de banda oscura (= azul 900) */
-  --hl-concreto: #EEF2FB;  /* texto principal sobre banda oscura */
-  --hl-acero: #A7B4CB;     /* texto secundario sobre banda oscura */
-  --hl-senal: #FF6633;     /* acento sobre banda oscura (= naranja) */
-  --hl-azul-claro: #8FB0F0;/* trazo sobre banda oscura */
+  --noche-tenue: #A7B4CB;  /* texto secundario sobre azul noche y en el pie */
   --hl-blanco: #FFFFFF;
   --hl-tinta: #14181C;     /* texto sobre relleno naranja, en los dos temas */
-  --hl-verde: #FF6633;     /* retirado (cifras HSE): pasa a naranja */
-  --hl-violeta: #8FB0F0;   /* retirado: acento de Sectores */
-  --hl-oxido: #8FB0F0;     /* retirado: acento de Noticias */
 
   /* ---- Roles de color · modo claro ---- */
   --bg: #FFFFFF;           /* fondo base */
@@ -65,26 +55,13 @@
   --sombra-card: 0 14px 32px -12px rgba(0, 0, 0, .22); /* tarjeta al pasar el cursor */
   --sombra-panel: 0 -20px 60px rgba(0, 0, 0, .35);     /* panel que sube (ficha) */
 
-  /* Acentos de sección: retirados (R-2). Quedan como alias del azul para no romper componentes;
-     se eliminan en R1. Las secciones se distinguen por su firma de movimiento. */
-  --sec-proyectos: var(--accent); --sec-servicios: var(--accent); --sec-sectores: var(--accent);
-  --sec-hse: var(--accent); --sec-noticias: var(--accent);
-
   color-scheme: light;
 
   /* ---- Tipografía ---- */
-  /* Los "respaldo" son fuentes del sistema con métricas ajustadas (design/fuente.py, se regeneran en R1). */
+  /* Los "respaldo" son fuentes del sistema con métricas ajustadas (design/fuente.py). */
   --f: "Open Sans", "Open Sans respaldo", system-ui, -apple-system, "Segoe UI", sans-serif;        /* texto */
-  --f-ancha: "Poppins", "Poppins respaldo", system-ui, -apple-system, "Segoe UI", sans-serif;      /* títulos, menú, botones, cifras */
+  --f-titulo: "Poppins", "Poppins respaldo", system-ui, -apple-system, "Segoe UI", sans-serif;      /* títulos, menú, botones, cifras */
   --f-mono: "IBM Plex Mono", "Plex respaldo", ui-monospace, Consolas, monospace;                    /* códigos, cotas, antetítulos (MAYÚS) */
-
-  /* anchos: sin eje wdth en las fuentes nuevas; quedan neutros y se retiran en R1 */
-  --wdth-display: 100%;
-  --wdth-title: 100%;
-  --wdth-subtitle: 100%;
-  --wdth-text: 100%;
-  --wdth-data: 100%;
-  --wdth-stat: 100%;
 
   /* tamaños */
   --fs-h1: clamp(36px, 5.2vw, 56px);
@@ -211,9 +188,6 @@
   --sombra-card: 0 16px 36px -12px rgba(0, 0, 0, .6);
   color-scheme: dark;
 }
-
-/* ---- Acento de sección: todas las secciones toman el azul (R-2). Se retira en R1. ---- */
-:root, [data-seccion] { --sec: var(--accent); --sec-soft: var(--accent-soft); --sec-ink: var(--accent-ink); }
 
 /* ---- Movimiento reducido: duraciones a cero ---- */
 @media (prefers-reduced-motion: reduce) {

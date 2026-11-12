@@ -24,7 +24,7 @@ function iniciar() {
   const ctx = contexto; // con tipo no nulo: lo usan funciones declaradas más abajo
 
   const css = getComputedStyle(document.documentElement);
-  const color = { linea: css.getPropertyValue('--hl-azul-claro'), senal: css.getPropertyValue('--hl-senal'), acero: css.getPropertyValue('--hl-acero'), texto: css.getPropertyValue('--hl-concreto') };
+  const color = { linea: css.getPropertyValue('--hl-trazo'), senal: css.getPropertyValue('--hl-naranja'), acero: css.getPropertyValue('--noche-tenue'), texto: css.getPropertyValue('--azul-50') };
   const etiquetas: Record<string, string> = JSON.parse(caja.dataset.etiquetas ?? '{}');
   const S = planta();
   const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -71,8 +71,7 @@ function iniciar() {
       ctx.strokeStyle = ctx.fillStyle = color.senal;
       ctx.beginPath(); ctx.arc(x, y, 3, 0, 7); ctx.fill();
       ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + 22, y - 22); ctx.lineTo(x + 32, y - 22); ctx.stroke();
-      ctx.font = '600 11px Archivo, sans-serif';
-      (ctx as any).fontStretch = 'condensed';
+      ctx.font = '500 11px "IBM Plex Mono", monospace';
       (ctx as any).letterSpacing = '1px';
       ctx.fillStyle = color.texto;
       ctx.fillText(etiquetas[resalta].toUpperCase(), x + 36, y - 18);

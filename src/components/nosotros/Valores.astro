@@ -7,7 +7,7 @@ type Icono = 'ventana' | 'anillos' | 'calendario' | 'escalones' | 'casco';
 interface Props { numero: string; titulo: string; valores: { nombre: string; frase: string; icono: Icono }[] }
 const { numero, titulo, valores } = Astro.props;
 const LETRAS = ['A', 'B', 'C', 'D', 'E'];
-// Pictogramas en grilla de 64 (trazo en --sec, detalle .s en señal).
+// Pictogramas en grilla de 64 (trazo en --accent, detalle .s en señal).
 const PICTO: Record<Icono, { d: string; s: string; c?: string }> = {
   ventana: { d: 'M8 8H56V56H8ZM32 8V56M8 32H56', s: 'M14 26L26 14M38 50L50 38' },
   anillos: { d: '', s: '', c: 'anillos' },
@@ -55,7 +55,7 @@ const PICTO: Record<Icono, { d: string; s: string; c?: string }> = {
   .valor-picto .t { fill: none; stroke: var(--accent); stroke-width: 1.6; }
   .valor-picto .s { stroke: var(--signal); }
   .valor-nombre {
-    margin: 0 0 0 34px; font-stretch: var(--wdth-data); font-family: var(--f); font-weight: var(--fw-title);
+    margin: 0 0 0 34px; font-family: var(--f); font-weight: var(--fw-title);
     font-size: var(--fs-h3); letter-spacing: .06em; text-transform: uppercase; line-height: 1.1; transition: color var(--t-rapido);
     overflow-wrap: anywhere;
   }

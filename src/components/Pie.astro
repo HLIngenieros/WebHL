@@ -79,55 +79,55 @@ const numero = (k: (typeof NAVEGACION)[number]) => (MENU.includes(k) ? String(ME
 <style>
   /* Grafito con la retícula azul del héroe; los colores son primitivos de marca (no cambian con el tema). */
   .pie {
-    --pie-linea: color-mix(in srgb, var(--hl-azul-claro) 7%, transparent);
-    margin-top: var(--s7); color: var(--hl-concreto);
+    --pie-linea: color-mix(in srgb, var(--hl-trazo) 7%, transparent);
+    margin-top: var(--s7); color: var(--azul-50);
     background:
       linear-gradient(var(--pie-linea) 1px, transparent 1px) 0 0 / 100% var(--s4),
       linear-gradient(90deg, var(--pie-linea) 1px, transparent 1px) 0 0 / var(--s4) 100%,
-      var(--hl-grafito);
+      var(--azul-900);
   }
   .pie a { color: inherit; text-decoration: none; }
-  .pie a:hover { color: var(--hl-azul-claro); }
-  .pie :focus-visible { outline: 2px solid var(--hl-azul-claro); outline-offset: 2px; }
+  .pie a:hover { color: var(--hl-trazo); }
+  .pie :focus-visible { outline: 2px solid var(--hl-trazo); outline-offset: 2px; }
 
   .pie-escena svg { display: block; width: 100%; height: auto; }
-  .pie-escena :is(path, circle) { fill: none; stroke: var(--hl-azul-claro); stroke-width: var(--stroke-thin); vector-effect: non-scaling-stroke; stroke-linecap: square; }
+  .pie-escena :is(path, circle) { fill: none; stroke: var(--hl-trazo); stroke-width: var(--stroke-thin); vector-effect: non-scaling-stroke; stroke-linecap: square; }
   .pie-escena .capa-ejes { stroke-dasharray: 2 4; stroke-opacity: .6; }
-  .pie-escena .terreno { stroke: var(--hl-concreto); stroke-width: var(--stroke-mid); }
-  .pie-escena .cota-t { stroke: var(--hl-senal); }
+  .pie-escena .terreno { stroke: var(--azul-50); stroke-width: var(--stroke-mid); }
+  .pie-escena .cota-t { stroke: var(--hl-naranja); }
   @media (max-width: 639.98px) { .pie-escena svg { height: var(--s7); } }
 
   .pie-in { display: grid; gap: var(--s5); padding-block: var(--s4) var(--s5); }
   .pie-marca { display: inline-block; margin-bottom: var(--s3); }
-  .pie .pie-marca:hover { color: var(--hl-concreto); }
+  .pie .pie-marca:hover { color: var(--azul-50); }
 
-  .pie-rotulo { margin: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border: var(--border-strong) solid var(--hl-concreto); }
-  .pie-rotulo div { padding: var(--s2) var(--s3); border: 0 solid var(--hl-acero); border-right-width: var(--border); border-bottom-width: var(--border); min-width: 0; }
+  .pie-rotulo { margin: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border: var(--border-strong) solid var(--azul-50); }
+  .pie-rotulo div { padding: var(--s2) var(--s3); border: 0 solid var(--noche-tenue); border-right-width: var(--border); border-bottom-width: var(--border); min-width: 0; }
   .pie-rotulo .c2 { grid-column: span 2; }
   .pie-rotulo .c3 { grid-column: span 3; }
   .pie-rotulo .c2:nth-child(3), .pie-rotulo .c3:nth-child(2n) { border-right-width: 0; }
   .pie-rotulo div:nth-last-child(-n + 2) { border-bottom-width: 0; }
-  dt { color: var(--hl-acero); }
+  dt { color: var(--noche-tenue); }
   dd { margin: 2px 0 0; font-weight: var(--fw-strong); font-size: var(--fs-sm); overflow-wrap: anywhere; }
-  .sede dd { font-weight: var(--fw-text); color: var(--hl-acero); }
-  .sede dd b { display: block; color: var(--hl-concreto); font-weight: var(--fw-strong); }
+  .sede dd { font-weight: var(--fw-text); color: var(--noche-tenue); }
+  .sede dd b { display: block; color: var(--azul-50); font-weight: var(--fw-strong); }
 
   nav { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); align-content: start; }
-  .tit { margin: 0 0 var(--s2); color: var(--hl-acero); }
+  .tit { margin: 0 0 var(--s2); color: var(--noche-tenue); }
   nav ul { list-style: none; margin: 0; padding: 0; display: grid; align-content: start; }
   nav a { display: inline-flex; align-items: baseline; gap: var(--s1); padding-block: 6px; font-size: var(--fs-sm); }
-  .num { width: 2.2em; color: var(--k, var(--hl-azul-claro)); }
-  .q { width: 8px; height: 8px; align-self: center; margin-right: var(--s1); background: var(--k, var(--hl-azul-claro)); transition: transform var(--t-rapido) var(--ease-izaje); }
-  .secciones a:hover { color: var(--k, var(--hl-azul-claro)); }
+  .num { width: 2.2em; color: var(--k, var(--hl-trazo)); }
+  .q { width: 8px; height: 8px; align-self: center; margin-right: var(--s1); background: var(--k, var(--hl-trazo)); transition: transform var(--t-rapido) var(--ease-izaje); }
+  .secciones a:hover { color: var(--k, var(--hl-trazo)); }
   .secciones a:hover .q { transform: scale(1.5); }
-  [data-acento='proyectos'] { --k: var(--hl-senal); }
+  [data-acento='proyectos'] { --k: var(--hl-naranja); }
   [data-acento='servicios'] { --k: var(--hl-cian); }
-  [data-acento='sectores'] { --k: var(--hl-violeta); }
-  [data-acento='hse'] { --k: var(--hl-verde); }
-  [data-acento='noticias'] { --k: var(--hl-oxido); }
-  .otros a { color: var(--hl-acero); }
+  [data-acento='sectores'] { --k: var(--hl-trazo); }
+  [data-acento='hse'] { --k: var(--hl-naranja); }
+  [data-acento='noticias'] { --k: var(--hl-trazo); }
+  .otros a { color: var(--noche-tenue); }
 
-  .pie-base { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s2) var(--s4); padding-block: var(--s3) var(--s4); border-top: var(--border) solid color-mix(in srgb, var(--hl-acero) 35%, transparent); color: var(--hl-acero); }
+  .pie-base { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s2) var(--s4); padding-block: var(--s3) var(--s4); border-top: var(--border) solid color-mix(in srgb, var(--noche-tenue) 35%, transparent); color: var(--noche-tenue); }
   .pie-base p { margin: 0; }
   .der { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3); }
   .iso { display: flex; flex-wrap: wrap; gap: var(--s1); }

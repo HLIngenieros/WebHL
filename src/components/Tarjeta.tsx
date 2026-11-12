@@ -17,7 +17,7 @@ export default function Tarjeta({ t: d, lang, prioridad = false, oculta = false 
     [t(lang, 'periodo'), d.periodo],
   ].filter((x): x is [string, string] => Boolean(x[1]));
   return (
-    <article className="tarjeta con-lamina" data-seccion="proyectos" data-id={d.id} hidden={oculta || undefined}>
+    <article className="tarjeta con-lamina" data-id={d.id} hidden={oculta || undefined}>
       {/* Sin título: la ilustración es decorativa y el H3 ya nombra el proyecto */}
       <Lamina imagen={d.imagen} sector={d.sector.id} sizes={SIZES} prioridad={prioridad} />
       <div className="tarjeta-cuerpo">

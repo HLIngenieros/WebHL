@@ -64,7 +64,8 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     if (bytes > limite) { falla = true; console.log(`EXCEDE ${archivo}: ${(bytes / 1024).toFixed(1)} KB`); }
   }
   console.log(`JS del inicio: ${(pesoPagina(join(DIST, 'index.html')) / 1024).toFixed(1)} KB gzip`);
-  console.log(`Fuente: ${(statSync(join(DIST, 'fonts/archivo-var-latin.woff2')).size / 1024).toFixed(1)} KB`);
+  const fuentes = readdirSync(join(DIST, 'fonts')).reduce((t, f) => t + statSync(join(DIST, 'fonts', f)).size, 0);
+  console.log(`Fuentes: ${(fuentes / 1024).toFixed(1)} KB`);
   console.log(`${paginas.length} páginas revisadas: ${falla ? 'FALLA' : 'OK'}`);
   process.exit(falla ? 1 : 0);
 }

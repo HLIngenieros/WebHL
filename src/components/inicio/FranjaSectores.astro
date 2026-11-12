@@ -25,14 +25,14 @@ const sectores = [...datos.sectores].sort((a, b) => a.data.orden - b.data.orden)
 
 <style>
   .franja {
-    display: flex; height: var(--s5); background: var(--hl-senal); color: var(--hl-grafito);
-    border-block: var(--border) solid var(--hl-grafito);
+    display: flex; height: var(--s5); background: var(--hl-naranja); color: var(--azul-900);
+    border-block: var(--border) solid var(--azul-900);
   }
   .rayas {
-    flex: none; width: var(--s6); position: relative; z-index: 1; border-right: var(--border) solid var(--hl-grafito);
-    background: repeating-linear-gradient(-45deg, var(--hl-grafito) 0 7px, var(--hl-senal) 7px 14px);
+    flex: none; width: var(--s6); position: relative; z-index: 1; border-right: var(--border) solid var(--azul-900);
+    background: repeating-linear-gradient(-45deg, var(--azul-900) 0 7px, var(--hl-naranja) 7px 14px);
   }
-  .rayas-fin { border-right: 0; border-left: var(--border) solid var(--hl-grafito); }
+  .rayas-fin { border-right: 0; border-left: var(--border) solid var(--azul-900); }
   .via { flex: 1; min-width: 0; overflow: hidden; display: flex; align-items: center; }
   .cinta { display: flex; width: max-content; animation: cinta 32s linear infinite; }
   .franja:is(:hover, :focus-within) .cinta { animation-play-state: paused; }
@@ -40,14 +40,14 @@ const sectores = [...datos.sectores].sort((a, b) => a.data.orden - b.data.orden)
   ul { display: flex; margin: 0; padding: 0; list-style: none; }
   li { display: flex; align-items: center; }
   /* Separador: rombo dibujado, no un carácter. */
-  li::after { content: ""; width: 6px; height: 6px; background: var(--hl-grafito); transform: rotate(45deg); }
+  li::after { content: ""; width: 6px; height: 6px; background: var(--azul-900); transform: rotate(45deg); }
   a {
     display: block; padding: var(--s1) var(--s5); color: inherit; text-decoration: none; white-space: nowrap;
-    font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: var(--fs-data);
+    font-family: var(--f-mono); font-weight: var(--fw-data); font-size: var(--fs-data);
     letter-spacing: .16em; text-transform: uppercase;
   }
   a:hover { text-decoration: underline; text-underline-offset: 3px; }
-  a:focus-visible { outline: 2px solid var(--hl-grafito); outline-offset: -4px; }
+  a:focus-visible { outline: 2px solid var(--azul-900); outline-offset: -4px; }
   @media (prefers-reduced-motion: reduce) {
     .cinta { animation: none; }
     .cinta-copia { display: none; }

@@ -99,26 +99,26 @@ const xAnio = (a: number) => 20 + ((a - 1968) / (anio - 1968)) * 220;
   .ficha-codigo { margin-left: auto; color: var(--muted); white-space: nowrap; }
   .ficha-num { margin: 0; padding: var(--s4) var(--s3) 0; display: flex; align-items: baseline; gap: var(--s2); flex-wrap: wrap; }
   .ficha-cifra {
-    font-stretch: var(--wdth-stat); font-family: var(--f-ancha); font-weight: var(--fw-negra); line-height: .9;
+    font-family: var(--f-titulo); font-weight: var(--fw-negra); line-height: .9;
     font-size: calc(var(--fs-stat) * 1.6); letter-spacing: -.03em; font-variant-numeric: tabular-nums;
   }
-  .ficha-unidad { font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: var(--fs-lead); letter-spacing: .1em; text-transform: uppercase; }
+  .ficha-unidad { font-weight: var(--fw-data); font-size: var(--fs-lead); letter-spacing: .1em; text-transform: uppercase; }
   .ficha-txt { margin: var(--s2) 0 0; padding: 0 var(--s3); color: var(--muted); font-size: var(--fs-sm); max-width: 26ch; }
   .ficha-dibujo { display: block; width: 100%; height: auto; margin-top: auto; padding: var(--s3) var(--s2) 0; box-sizing: border-box; overflow: visible; }
   .ficha-dibujo .t { fill: none; stroke: var(--accent); stroke-width: 1.4; vector-effect: non-scaling-stroke; }
   .ficha-dibujo .s { stroke: var(--signal); }
-  .ficha-dibujo text { fill: var(--muted); font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: var(--fs-chip); letter-spacing: .08em; }
+  .ficha-dibujo text { fill: var(--muted); font-weight: var(--fw-data); font-size: var(--fs-chip); letter-spacing: .08em; }
   .ficha-pie { margin: 0; padding: var(--s2) var(--s3); border-top: var(--border) solid var(--line-soft); color: var(--muted); }
   /* Hover y foco: la ficha se vuelve acento, el dibujo blanco y señal, y aparecen marcas de registro. */
   .ficha:hover { background: var(--accent); color: var(--accent-ink); }
   .ficha:hover :is(.ficha-codigo, .ficha-txt, .ficha-pie) { color: color-mix(in srgb, var(--accent-ink) 80%, transparent); }
   .ficha:hover :is(.ficha-cab, .ficha-pie) { border-color: color-mix(in srgb, var(--accent-ink) 20%, transparent); }
   .ficha:hover .ficha-dibujo .t { stroke: var(--accent-ink); }
-  .ficha:hover .ficha-dibujo .s { stroke: var(--hl-senal); }
+  .ficha:hover .ficha-dibujo .s { stroke: var(--hl-naranja); }
   .ficha:hover .ficha-dibujo text { fill: color-mix(in srgb, var(--accent-ink) 80%, transparent); }
   :global(html.js) .ficha:hover .ficha-dibujo .t { animation: retraza 1s var(--ease-plano); animation-delay: calc(var(--i, 0) * 90ms); }
   @keyframes retraza { from { clip-path: inset(0 100% 0 0); } }
-  .ficha::before, .ficha::after { content: ""; position: absolute; width: 10px; height: 10px; border: 0 solid var(--hl-senal); opacity: 0; transition: opacity var(--t-rapido); }
+  .ficha::before, .ficha::after { content: ""; position: absolute; width: 10px; height: 10px; border: 0 solid var(--hl-naranja); opacity: 0; transition: opacity var(--t-rapido); }
   .ficha::before { top: 5px; right: 5px; border-width: 1.5px 1.5px 0 0; }
   .ficha::after { bottom: 5px; left: 5px; border-width: 0 0 1.5px 1.5px; }
   .ficha:hover::before, .ficha:hover::after { opacity: 1; }

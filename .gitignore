@@ -19,3 +19,8 @@ privado/
 insumos/entrada/
 documentos-web/
 .impeccable/hook.cache.json
+
+# Archivos de trabajo locales (fuera de git)
+*.docx
+*.zip
+docs/guia-diapositivas.md

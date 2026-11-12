@@ -19,8 +19,8 @@ const { id, codigo, nombre, titulo, enlace } = Astro.props;
   .cabecera-titulo { margin: var(--s3) 0 0; }
   .cabecera-titulo span { display: block; font-weight: var(--fw-fina); }
   .ver-mas {
-    display: inline-flex; align-items: center; gap: var(--s2); min-height: 44px; color: var(--sec); text-decoration: none;
-    font-weight: var(--fw-strong); font-stretch: var(--wdth-subtitle);
+    display: inline-flex; align-items: center; gap: var(--s2); min-height: 44px; color: var(--accent); text-decoration: none;
+    font-weight: var(--fw-strong);
   }
   .ver-mas::after { content: '→'; transition: transform var(--t-rapido) var(--ease-plano); }
   .ver-mas:hover::after { transform: translateX(6px); }

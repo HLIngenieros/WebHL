@@ -12,7 +12,7 @@ const indice = (await rutasNoticias(lang, true)).find((r) => r.props.tipo === 'i
 const items = indice && 'items' in indice.props ? indice.props.items.slice(0, 3) : [];
 ---
 {items.length > 0 && (
-  <section class="noticias-inicio" data-seccion="noticias" aria-labelledby="noticias-titulo">
+  <section class="noticias-inicio" aria-labelledby="noticias-titulo">
     <div class="wrap">
       <Cabecera id="noticias-titulo" codigo="L-06" nombre={t(lang, 'noticias')} titulo={[t(lang, 'noticias1'), t(lang, 'noticias2')]}
         enlace={{ href: ruta('noticias', lang), texto: t(lang, 'todasNoticias') }} />

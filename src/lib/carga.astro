@@ -182,8 +182,8 @@ import '../styles/global.css';
 
     <style is:global>
       .cg { margin: 0; background-color: var(--bg); color: var(--ink); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: var(--grid-cell) var(--grid-cell) }
-      .cg .dat { font-stretch: var(--wdth-data); text-transform: uppercase; letter-spacing: var(--ls-data); font-weight: var(--fw-data); font-size: var(--fs-data) }
-      .cg code { font-family: var(--f); font-stretch: var(--wdth-data); color: var(--ink) }
+      .cg .dat { font-family: var(--f-mono); text-transform: uppercase; letter-spacing: var(--ls-data); font-weight: var(--fw-data); font-size: var(--fs-data) }
+      .cg code { font-family: var(--f); color: var(--ink) }
       .cg-w { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter) }
       .cg-local p, .cg-zona p { max-width: none }
 
@@ -195,7 +195,7 @@ import '../styles/global.css';
       .cg-cab { display: grid; grid-template-columns: 1fr minmax(280px, 380px); gap: var(--s5); align-items: end; padding: var(--s6) 0 var(--s5) }
       .cg-eje { display: inline-flex; align-items: center; gap: var(--s2); color: var(--accent) }
       .cg-eje i { width: 26px; height: 26px; border: var(--stroke-mid) solid var(--accent); border-radius: 50%; display: grid; place-items: center; font-style: normal; font-weight: var(--fw-title) }
-      .cg h1 { margin: var(--s3) 0; font-family: var(--f-ancha); font-stretch: var(--wdth-display); font-weight: var(--fw-display); font-size: var(--fs-h1); line-height: var(--lh-display); letter-spacing: var(--ls-display) }
+      .cg h1 { margin: var(--s3) 0; font-family: var(--f-titulo); font-weight: var(--fw-display); font-size: var(--fs-h1); line-height: var(--lh-display); letter-spacing: var(--ls-display) }
       .cg-lead { margin: 0; font-size: var(--fs-lead); color: var(--muted); max-width: 56ch }
       .cg-rotulo { border: var(--stroke-mid) solid var(--ink); background: var(--paper); display: grid; grid-template-columns: 1fr 1fr }
       .cg-rotulo > div { padding: var(--s2) var(--s3); border-top: 1px solid var(--ink); display: grid }
@@ -207,7 +207,7 @@ import '../styles/global.css';
       .cg-rotulo .cg-cifras { grid-template-columns: repeat(4, 1fr); padding: 0 }
       .cg-cifras > span { padding: var(--s2) var(--s3); border-right: 1px solid var(--line); display: grid }
       .cg-cifras > span:last-child { border-right: 0 }
-      .cg-cifras b { font-family: var(--f-ancha); font-stretch: var(--wdth-stat); font-weight: var(--fw-title); font-size: var(--fs-stat); line-height: 1 }
+      .cg-cifras b { font-family: var(--f-titulo); font-weight: var(--fw-title); font-size: var(--fs-stat); line-height: 1 }
 
       .cg-zona { display: block; position: relative; border: var(--stroke-mid) dashed var(--steel); background: var(--paper); padding: var(--s6) var(--s4) var(--s5); text-align: center; cursor: pointer; transition: border-color var(--t-rapido), background var(--t-rapido) }
       .cg-zona::before, .cg-zona::after { content: ""; position: absolute; width: 18px; height: 18px; border: var(--stroke-heavy) solid var(--ink) }
@@ -219,7 +219,7 @@ import '../styles/global.css';
       .cg-flecha i::before { content: ""; position: absolute; left: 50%; bottom: -2px; width: 18px; height: 18px; border-right: 3px solid var(--accent); border-bottom: 3px solid var(--accent); transform: translateX(-50%) rotate(45deg) }
       .cg-flecha b { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--ink) }
       .cg-zona.sobre .cg-flecha i { animation: cg-baja .8s var(--ease-izaje) infinite }
-      .cg-zona strong { display: block; font-family: var(--f-ancha); font-stretch: var(--wdth-title); font-weight: var(--fw-title); font-size: var(--fs-h3) }
+      .cg-zona strong { display: block; font-family: var(--f-titulo); font-weight: var(--fw-title); font-size: var(--fs-h3) }
       .cg-zona p { margin: var(--s1) 0 var(--s4); color: var(--muted); font-size: var(--fs-sm) }
       .cg-zona p u { color: var(--accent); text-underline-offset: 3px }
       .cg-tipos { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s1) }
@@ -256,7 +256,7 @@ import '../styles/global.css';
       .cg-sec { background: none; border: 1px solid var(--ink); color: var(--ink); padding: 8px 14px; cursor: pointer }
 
       .cg-reg-cab { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--s3); border-bottom: 2px solid var(--ink); padding: var(--s6) 0 var(--s2) }
-      .cg-reg-cab h2 { margin: 0; font-family: var(--f-ancha); font-stretch: var(--wdth-title); font-weight: var(--fw-title); font-size: var(--fs-h2); line-height: var(--lh-title) }
+      .cg-reg-cab h2 { margin: 0; font-family: var(--f-titulo); font-weight: var(--fw-title); font-size: var(--fs-h2); line-height: var(--lh-title) }
       .cg-filtros { display: flex; flex-wrap: wrap; gap: var(--s1) }
       .cg-filtros button { border: 1px solid var(--line); background: var(--paper); color: var(--ink); padding: 5px 10px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; font: inherit }
       .cg-filtros button[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--bg) }

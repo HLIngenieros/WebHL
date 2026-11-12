@@ -80,16 +80,16 @@ const [t1, ...t2] = pagina.titulo.split(' ');
   h1 { margin: var(--s3) 0 0; font-size: var(--fs-h1); line-height: var(--lh-display); }
   h1 .l { display: block; overflow: hidden; padding-bottom: .06em; }
   h1 .l > span { display: block; animation: linea var(--t-izaje) var(--ease-izaje) both; }
-  h1 .l + .l > span { font-weight: var(--fw-fina); color: var(--sec); animation-delay: 120ms; }
+  h1 .l + .l > span { font-weight: var(--fw-fina); color: var(--accent); animation-delay: 120ms; }
   @keyframes linea { from { transform: translateY(105%); } }
   .lead { margin: 0; color: var(--muted); }
   .leg-g { display: grid; gap: var(--s5); }
   .indice { display: grid; gap: 2px; border-top: var(--border-strong) solid var(--ink); padding-top: var(--s2); align-self: start; }
   .indice a { position: relative; display: block; padding: var(--s1) var(--s2); color: var(--muted); text-decoration: none; overflow: hidden; }
-  .indice a::before { content: ''; position: absolute; inset: 0; background: var(--sec-soft); transform: scaleX(var(--p, 0)); transform-origin: left; }
-  .indice a::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--sec); transform: scaleY(0); transition: transform var(--t-rapido) var(--ease-plano); }
+  .indice a::before { content: ''; position: absolute; inset: 0; background: var(--accent-soft); transform: scaleX(var(--p, 0)); transform-origin: left; }
+  .indice a::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent); transform: scaleY(0); transition: transform var(--t-rapido) var(--ease-plano); }
   .indice a span { position: relative; }
-  .indice a.actual { color: var(--sec); }
+  .indice a.actual { color: var(--accent); }
   .indice a.actual::after { transform: scaleY(1); }
   .cajetin { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 0 var(--s4); background: var(--paper); border: var(--border-strong) solid var(--ink); }
   .cajetin div { display: grid; gap: 2px; padding: var(--s2) var(--s3); border-right: var(--border) solid var(--line); border-bottom: var(--border) solid var(--line); }

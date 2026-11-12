@@ -138,7 +138,7 @@ const letra = (i: number) => String(pasos.slice(0, i + 1).filter(Boolean).length
 <style>
   .ficha { --pila: var(--s7); padding-block: var(--s5) var(--s7); }
   .migas { color: var(--muted); margin-bottom: var(--s4); }
-  .migas a { color: var(--sec); }
+  .migas a { color: var(--accent); }
   .ficha-cab-rejilla { display: grid; gap: var(--s5); align-items: center; }
   .ficha-portada :global(.lamina) { width: 100%; }
   @media (min-width: 900px) {
@@ -164,7 +164,7 @@ const letra = (i: number) => String(pasos.slice(0, i + 1).filter(Boolean).length
   .hoja button :global(img) { height: 100%; object-fit: cover; transition: transform calc(var(--t-rapido) * 3) var(--ease-izaje); }
   .hoja button:hover :global(img) { transform: scale(1.05); }
   .hoja figcaption { color: var(--muted); }
-  .hoja .num { color: var(--sec); }
+  .hoja .num { color: var(--accent); }
   .visor { padding: var(--s3); border: var(--border-strong) solid var(--ink); background: var(--paper); color: var(--ink); width: min(800px, 92vw); max-height: 92vh; overflow: auto; box-sizing: border-box; }
   .visor::backdrop { background: color-mix(in srgb, var(--ink) 70%, transparent); }
   .visor figure { margin: 0; display: grid; gap: var(--s2); }

@@ -57,11 +57,11 @@ const servicios = [...datos.servicios].sort((a, b) => a.data.orden - b.data.orde
     position: relative; display: grid; gap: var(--s2); align-content: start; padding: var(--s4);
     background: var(--paper); border-bottom: var(--border) solid var(--line); border-right: var(--border) solid var(--line);
   }
-  .lineas li:hover h3 a { color: var(--sec); }
+  .lineas li:hover h3 a { color: var(--accent); }
   .lineas h3 a { color: var(--ink); text-decoration: none; }
   .lineas h3 a::after { content: ''; position: absolute; inset: 0; }
   .lineas li:has(a:focus-visible) { outline: var(--focus-ring); outline-offset: 2px; }
   .lineas h3 a:focus-visible { outline: none; }
   .lineas p { margin: 0; color: var(--muted); }
-  .codigo, .conteo { color: var(--sec); }
+  .codigo, .conteo { color: var(--accent); }
 </style>

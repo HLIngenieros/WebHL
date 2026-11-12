@@ -114,7 +114,7 @@ industria" (Poppins 700, `--fs-lema`) y "con gente que cumple, desde 1968." (Pop
 Los componentes usan roles, no primitivos: `--bg` (blanco), `--paper` (niebla), `--ink`, `--muted`,
 `--line`, `--accent` (azul 600), `--accent-ink`, `--accent-soft`, `--signal` (naranja para marcas sobre
 claro, `#E2541F`), `--signal-ink` (naranja como texto sobre claro, `#B23C0E`), `--signal-soft`,
-`--bad`, `--good`. Sobre azul noche se usan los primitivos (`--hl-concreto`, `--hl-acero`,
+`--bad`, `--good`. Sobre azul noche se usan los primitivos (`--azul-50`, `--noche-tenue`,
 `--hl-trazo`, `--hl-naranja`), iguales en los dos temas.
 
 ### 3.3 Modo oscuro
@@ -131,7 +131,7 @@ naranja de marca sobre blanco 3,8:1 (solo marcas).
 
 ### 3.5 Acentos de sección: retirados
 
-Las variables `--sec*` y `[data-seccion]` resuelven todas al azul y se eliminan en R1. Lo que antes
+Las variables `--sec*` y `[data-seccion]` se eliminaron en R1 (12-nov). Lo que antes
 distinguía el color, ahora lo distingue el movimiento (§8).
 
 ---
@@ -140,7 +140,7 @@ distinguía el color, ahora lo distingue el movimiento (§8).
 
 | Voz | Familia | Uso |
 |---|---|---|
-| Títulos (`--f-ancha`) | **Poppins** 500 · 600 · 700 | H1, H2, H3, menú, botones, cifras |
+| Títulos (`--f-titulo`) | **Poppins** 500 · 600 · 700 | H1, H2, H3, menú, botones, cifras |
 | Texto (`--f`) | **Open Sans** 400 · 600 | Párrafos, fichas, formularios |
 | Datos (`--f-mono`) | **IBM Plex Mono** 500, MAYÚSCULAS, +12 % | Códigos (P-03, L-02), cotas, antetítulos, rótulos de tabla |
 
@@ -256,7 +256,7 @@ pestaña oculta.
 - **Fotografía de obra:** real y reciente (2020 en adelante), personas con EPP, escala de los equipos.
   AVIF/WebP responsivas, hasta 2400 px de ancho cuando haya originales (hoy son de 1200 px y se muestran
   a su tamaño). Pie con proyecto y año; `alt` descriptivo.
-- **Tratamiento:** sobre fondos oscuros, foto en duotono azul 900 → blanco; en fichas y tarjetas, a color
+- **Tratamiento:** sobre fondos oscuros, foto en duotono azul 900 → blanco (clase `.duotono` en la `.lamina`); en fichas y tarjetas, a color
   natural.
 - **Logos de clientes:** en placa blanca con borde, en gris; a color al pasar el cursor; `alt` con el
   nombre del cliente.

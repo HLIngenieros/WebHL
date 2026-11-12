@@ -157,7 +157,7 @@ export default function Explorador({ lang, tarjetas, opciones, grupos, lineas, m
 
         <div className="lado-lista">
           {pods.map((p) => (
-            <aside key={p.dim} className="pod-linea" data-seccion={p.dim}>
+            <aside key={p.dim} className="pod-linea">
               <span className="voz-datos">{p.codigo} · {p.tipo}</span>
               <strong>{p.nombre}</strong>
               <p>{p.texto}</p>

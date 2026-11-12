@@ -26,12 +26,12 @@ const partes = (v: string) => { const [num, ...resto] = v.split(' '); return { 
   .cifras > div:last-child:nth-child(odd) { grid-column: span 2; }
   dd {
     /* la cifra nunca se sale de su celda: se ajusta al ancho disponible, con el tamaño de la guía como tope */
-    margin: 0; color: var(--sec); font-size: min(var(--fs-stat), 15cqi); font-stretch: var(--wdth-stat); font-family: var(--f-ancha);
+    margin: 0; color: var(--accent); font-size: min(var(--fs-stat), 15cqi); font-family: var(--f-titulo);
     font-weight: var(--fw-title); line-height: 1;
   }
   dt { color: var(--muted); }
-  .unidad { font-size: .42em; font-stretch: var(--wdth-data); letter-spacing: var(--ls-data); }
-  .regla { position: absolute; left: var(--s3); right: var(--s3); bottom: -1px; height: 2px; background: var(--sec); transform-origin: left; }
+  .unidad { font-size: .42em; letter-spacing: var(--ls-data); }
+  .regla { position: absolute; left: var(--s3); right: var(--s3); bottom: -1px; height: 2px; background: var(--accent); transform-origin: left; }
   :global(html.js) .cota:not(.visible) .regla { transform: scaleX(0); }
   :global(html.js) .regla { transition: transform var(--t-cota) var(--ease-plano); transition-delay: calc(var(--i, 0) * 120ms); }
   :global(html.sin-revela) .cota:not(.visible) .regla { transform: none; }

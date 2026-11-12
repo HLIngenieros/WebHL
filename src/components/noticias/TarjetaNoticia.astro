@@ -16,7 +16,7 @@ const sello = new Intl.DateTimeFormat(lang === 'es' ? 'es-CO' : 'en-US', { day: 
   .format(fecha).replace(/\./g, '').replace(/ de /g, ' ').toUpperCase();
 const H = grande ? 'h2' : 'h3';
 ---
-<article class:list={['noti', { grande }]} data-seccion="noticias" data-tipo={tipo} style={`--i:${i}`}>
+<article class:list={['noti', { grande }]} data-tipo={tipo} style={`--i:${i}`}>
   <div class="lam">
     {foto ? <Foto src={foto} alt="" sizes={grande ? '(min-width: 900px) 66vw, 100vw' : '(min-width: 900px) 33vw, 100vw'} /> : <span class="sin-foto"><Ilustracion sector="industria" /></span>}
     <span class="tinte" aria-hidden="true"></span>
@@ -34,35 +34,35 @@ const H = grande ? 'h2' : 'h3';
 <style>
   .noti { position: relative; display: flex; flex-direction: column; background: var(--paper); border: var(--border-strong) solid var(--ink); transition: transform var(--t-rapido) var(--ease-izaje); }
   .noti[hidden] { display: none; }
-  .lam { position: relative; overflow: hidden; aspect-ratio: 16 / 10; background: var(--hl-grafito); }
+  .lam { position: relative; overflow: hidden; aspect-ratio: 16 / 10; background: var(--azul-900); }
   .grande .lam { aspect-ratio: auto; flex: 1; min-height: 320px; }
   .lam :global(img) { position: absolute; inset: 0; width: 100%; max-width: none; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.1); transform: scale(1.04); transition: filter var(--t-aparece) ease, transform 1.2s var(--ease-izaje); }
   .sin-foto { position: absolute; inset: 12%; }
-  .tinte { position: absolute; inset: 0; background: var(--sec); mix-blend-mode: multiply; opacity: .82; transition: opacity var(--t-aparece) ease; }
+  .tinte { position: absolute; inset: 0; background: var(--accent); mix-blend-mode: multiply; opacity: .82; transition: opacity var(--t-aparece) ease; }
   .noti:hover .lam :global(img) { filter: none; transform: scale(1.1); }
   .noti:hover .tinte { opacity: 0; }
   .sello {
     position: absolute; right: var(--s3); top: var(--s3); z-index: 1; display: grid; justify-items: center; gap: 2px; padding: var(--s1) var(--s3);
-    color: var(--sec); background: color-mix(in srgb, var(--paper) 94%, transparent);
+    color: var(--accent); background: color-mix(in srgb, var(--paper) 94%, transparent);
     border: 2px solid currentColor; outline: 1px solid currentColor; outline-offset: 2px; transform: rotate(-4deg);
   }
-  .sello b { font-family: var(--f-ancha); font-stretch: var(--wdth-display); font-weight: var(--fw-negra); font-size: var(--fs-lead); line-height: 1; white-space: nowrap; }
-  .p3 { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; display: flex; height: 30px; background: var(--hl-senal); color: var(--hl-grafito); border-top: var(--border) solid var(--hl-grafito); }
-  .p3 i { width: 56px; background: repeating-linear-gradient(-45deg, var(--hl-grafito) 0 6px, var(--hl-senal) 6px 12px); background-size: 16.97px 16.97px; border-right: var(--border) solid var(--hl-grafito); }
+  .sello b { font-family: var(--f-titulo); font-weight: var(--fw-negra); font-size: var(--fs-lead); line-height: 1; white-space: nowrap; }
+  .p3 { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; display: flex; height: 30px; background: var(--hl-naranja); color: var(--azul-900); border-top: var(--border) solid var(--azul-900); }
+  .p3 i { width: 56px; background: repeating-linear-gradient(-45deg, var(--azul-900) 0 6px, var(--hl-naranja) 6px 12px); background-size: 16.97px 16.97px; border-right: var(--border) solid var(--azul-900); }
   .noti:hover .p3 i { animation: rayas .6s linear infinite; }
   @keyframes rayas { to { background-position: 16.97px 0; } }
   .p3 span { display: flex; align-items: center; padding: 0 var(--s3); }
   .cu { display: grid; gap: var(--s2); padding: var(--s3) var(--s4) var(--s4); }
-  .cod { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); color: var(--sec); }
+  .cod { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); color: var(--accent); }
   .tit { margin: 0; font-size: var(--fs-lead); line-height: var(--lh-title); }
   .grande .tit { font-size: var(--fs-h2); }
-  .tit a { color: var(--ink); text-decoration: none; background: linear-gradient(var(--sec), var(--sec)) left bottom / 0 2px no-repeat; transition: background-size var(--t-aparece) var(--ease-plano); }
+  .tit a { color: var(--ink); text-decoration: none; background: linear-gradient(var(--accent), var(--accent)) left bottom / 0 2px no-repeat; transition: background-size var(--t-aparece) var(--ease-plano); }
   .tit a::after { content: ''; position: absolute; inset: 0; }
   .noti:hover .tit a { background-size: 100% 2px; }
   .noti:has(a:focus-visible) { outline: var(--focus-ring); outline-offset: 3px; }
   .tit a:focus-visible { outline: none; }
   .cu p { margin: 0; color: var(--muted); }
-  .leer { color: var(--sec); font-weight: var(--fw-strong); opacity: 0; transform: translateX(-10px); transition: opacity var(--t-rapido) ease, transform var(--t-rapido) var(--ease-izaje); }
+  .leer { color: var(--accent); font-weight: var(--fw-strong); opacity: 0; transform: translateX(-10px); transition: opacity var(--t-rapido) ease, transform var(--t-rapido) var(--ease-izaje); }
   .noti:hover .leer { opacity: 1; transform: none; }
   /* Entrada (revela.ts en la rejilla): suben y el sello se estampa; la franja sube */
   :global(html.js) :global(.revela):not(:global(.visible)) .noti { opacity: 0; transform: translateY(28px); }

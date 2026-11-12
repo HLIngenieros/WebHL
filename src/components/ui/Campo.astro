@@ -17,10 +17,10 @@ const id = `campo-${nombre}`;
   label { color: var(--muted); }
   input, textarea {
     font: inherit; color: var(--ink); background: var(--bg); min-height: 44px; box-sizing: border-box;
-    padding: 8px 12px; border: var(--border) solid var(--line); border-bottom: var(--border-strong) solid var(--ink);
-    border-radius: 0; transition: border-color var(--t-rapido) ease;
+    padding: 8px 12px; border: var(--border) solid var(--line);
+    border-radius: var(--radius); transition: border-color var(--t-rapido) ease;
   }
-  input:focus-visible, textarea:focus-visible { outline: var(--border) solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+  input:focus-visible, textarea:focus-visible { outline: var(--focus-ring); outline-offset: 0; border-color: var(--accent); }
   .con-error input, .con-error textarea { border-color: var(--bad); }
   .error { margin: 0; color: var(--bad); font-size: var(--fs-xs); }
 </style>

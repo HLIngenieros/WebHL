@@ -10,7 +10,7 @@ const Tag = href ? 'a' : 'button';
   .boton {
     display: inline-flex; align-items: center; gap: var(--s2); min-height: 44px; box-sizing: border-box;
     padding: 7px 16px; border: var(--border) solid; font: inherit; font-size: var(--fs-boton); font-weight: var(--fw-boton);
-    text-decoration: none; cursor: pointer;
+    border-radius: var(--radius); font-family: var(--f-titulo); text-decoration: none; cursor: pointer;
     transition: background-color var(--t-rapido) ease, color var(--t-rapido) ease, filter var(--t-rapido) ease;
   }
   .primario { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
@@ -19,7 +19,7 @@ const Tag = href ? 'a' : 'button';
   .secundario:hover { background: var(--ink); color: var(--bg); }
   .datos {
     min-height: 32px; padding: 5px 9px; background: var(--paper); color: var(--ink); border-color: var(--line);
-    font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: var(--fs-data);
+    font-family: var(--f-mono); font-weight: var(--fw-data); font-size: var(--fs-data);
     letter-spacing: var(--ls-data); text-transform: uppercase;
   }
   .datos:hover { border-color: var(--ink); }

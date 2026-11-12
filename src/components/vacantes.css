@@ -6,7 +6,7 @@
 .vc-tablero { display: flex; align-items: center; gap: var(--s3); padding-bottom: var(--s3); border-bottom: var(--border-strong) solid var(--ink); }
 .vc-tablero p { margin: 0; }
 .vc-flap { display: flex; gap: 4px; }
-.vc-flap b { position: relative; overflow: hidden; width: 1.05em; text-align: center; background: var(--ink); color: var(--bg); font-family: var(--f-ancha); font-stretch: var(--wdth-stat); font-weight: var(--fw-negra); font-size: var(--fs-h2); line-height: 1.15; animation: vc-gira var(--t-rapido) linear; }
+.vc-flap b { position: relative; overflow: hidden; width: 1.05em; text-align: center; background: var(--ink); color: var(--bg); font-family: var(--f-titulo); font-weight: var(--fw-negra); font-size: var(--fs-h2); line-height: 1.15; animation: vc-gira var(--t-rapido) linear; }
 .vc-flap b::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: var(--bg); opacity: .5; }
 @keyframes vc-gira { 50% { transform: scaleY(.1); } }
 .vc-vivo { display: flex; align-items: center; gap: var(--s1); color: var(--muted); }
@@ -42,7 +42,7 @@
 .vc-burbuja { width: 48px; height: 48px; border-radius: 50%; border: var(--stroke-mid) solid var(--ink); display: grid; place-items: center; transition: background var(--t-rapido), color var(--t-rapido), border-color var(--t-rapido), transform var(--t-izaje) var(--ease-izaje); }
 @container (max-width: 640px) { .vc-burbuja { width: 40px; height: 40px; } }
 .vc-vac:hover .vc-burbuja, .vc-abierta .vc-burbuja { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); transform: rotate(-8deg); }
-.vc-titulo strong { display: block; font-family: var(--f-ancha); font-stretch: var(--wdth-title); font-weight: var(--fw-title); font-size: var(--fs-h3); line-height: var(--lh-title); }
+.vc-titulo strong { display: block; font-family: var(--f-titulo); font-weight: var(--fw-title); font-size: var(--fs-h3); line-height: var(--lh-title); }
 .vc-chips { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); margin-top: var(--s1); color: var(--muted); }
 .vc-chips span + span::before { content: "·"; margin-right: var(--s2); }
 .vc-nueva { display: inline-flex; align-items: center; gap: 4px; margin-left: var(--s2); padding: 1px var(--s1); vertical-align: middle; background: var(--signal-soft); color: var(--ink); border: var(--stroke-thin) solid var(--signal); }

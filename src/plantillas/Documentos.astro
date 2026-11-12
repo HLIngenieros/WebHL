@@ -74,7 +74,7 @@ const T = {
   h1 { margin: var(--s3) 0 0; font-size: var(--fs-h1); line-height: var(--lh-display); }
   h1 .l { display: block; overflow: hidden; padding-bottom: .06em; }
   h1 .l > span { display: block; animation: linea var(--t-izaje) var(--ease-izaje) both; }
-  h1 .l + .l > span { font-weight: var(--fw-fina); color: var(--sec); animation-delay: 120ms; }
+  h1 .l + .l > span { font-weight: var(--fw-fina); color: var(--accent); animation-delay: 120ms; }
   @keyframes linea { from { transform: translateY(105%); } }
   .lead { margin: var(--s3) 0 0; max-width: 46ch; color: var(--muted); font-size: var(--fs-lead); }
 
@@ -83,13 +83,13 @@ const T = {
   .planoteca .fn { fill: none; stroke: var(--line); stroke-width: 1; }
   .planoteca .tr { fill: none; stroke: var(--accent); stroke-width: 1.4; stroke-dasharray: var(--l); stroke-dashoffset: var(--l); animation: traza var(--t-trazo) var(--ease-plano) forwards; animation-delay: calc(var(--i) * 140ms); }
   .planoteca .sg { stroke: var(--signal); }
-  .planoteca text { fill: var(--muted); font-stretch: var(--wdth-data); font-size: var(--fs-cota); letter-spacing: var(--ls-data); font-weight: var(--fw-data); }
+  .planoteca text { fill: var(--muted); font-family: var(--f-mono); font-size: var(--fs-cota); letter-spacing: var(--ls-data); font-weight: var(--fw-data); }
   .planoteca .hoja { animation: sale 3.6s var(--ease-izaje) infinite 1.6s; }
   @keyframes traza { to { stroke-dashoffset: 0; } }
   @keyframes sale { 0%, 20% { transform: translateY(0); } 45%, 70% { transform: translateY(-26px); } 95%, 100% { transform: translateY(0); } }
 
   .cierre { display: grid; gap: var(--s3); align-items: center; margin-top: var(--s6); padding: var(--s3) var(--s4); background: var(--paper); border: var(--border-strong) solid var(--ink); }
-  .cierre b { display: block; font-size: var(--fs-lead); font-stretch: var(--wdth-subtitle); font-weight: var(--fw-subtitle); }
+  .cierre b { display: block; font-size: var(--fs-lead); font-weight: var(--fw-subtitle); }
   .cierre span { color: var(--muted); font-size: var(--fs-sm); }
   .cierre a { justify-self: start; padding: 10px var(--s3); background: var(--accent); color: var(--accent-ink); text-decoration: none; font-weight: var(--fw-boton); white-space: nowrap; transition: transform var(--t-rapido) var(--ease-izaje); }
   .cierre a:hover { transform: translateY(-2px); }

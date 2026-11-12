@@ -35,7 +35,7 @@ const tx = (o, lang) => (o && typeof o === 'object' ? o[lang] ?? o.es : o);
 const num = (v, lang) => new Intl.NumberFormat(lang === 'es' ? 'es-CO' : 'en-US', { useGrouping: 'always' }).format(v);
 const medida = (v, u, lang) => (!u ? num(v, lang) : u === 'pct' ? `${num(v, lang)}${lang === 'es' ? ' ' : ''}%` : `${num(v, lang)} ${(v === 1 && SINGULAR[u]?.[lang]) || UNIDADES[u][lang]}`);
 const datos = (ruta) => `data:${{ '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.svg': 'image/svg+xml' }[extname(ruta).toLowerCase()]};base64,${readFileSync(ruta).toString('base64')}`;
-const FUENTE = datos(join(RAIZ, 'public/fonts/archivo-var-latin.woff2')).replace('data:undefined', 'data:font/woff2');
+const FUENTE = datos(join(RAIZ, 'design/archivo-var-latin.woff2')).replace('data:undefined', 'data:font/woff2');
 const MONO = readFileSync(join(RAIZ, 'src/assets/marca/monograma-hl.svg'), 'utf8');
 const URL_SITIO = 'hlingenieros.com';
 const rutas = {

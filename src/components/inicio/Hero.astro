@@ -43,23 +43,23 @@ const ZONAS_Y = ['1', '2', '3', '4'];
   .hero {
     position: relative; overflow: hidden; isolation: isolate;
     min-height: max(600px, 100svh); display: flex; flex-direction: column;
-    background: var(--hl-grafito); color: var(--hl-blanco);
+    background: var(--azul-900); color: var(--hl-blanco);
   }
   .hero-reticula {
     position: absolute; inset: 0; z-index: -1;
     background-image:
-      linear-gradient(color-mix(in srgb, var(--hl-azul-claro) 6%, transparent) 1px, transparent 1px),
-      linear-gradient(90deg, color-mix(in srgb, var(--hl-azul-claro) 6%, transparent) 1px, transparent 1px);
+      linear-gradient(color-mix(in srgb, var(--hl-trazo) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--hl-trazo) 6%, transparent) 1px, transparent 1px);
     background-size: var(--s6) var(--s6);
   }
   /* Marco de lámina: zonas A–H arriba y 1–4 a la izquierda (solo esos dos lados). */
-  .hero-marco { position: absolute; inset: var(--s3); border: var(--border) solid color-mix(in srgb, var(--hl-acero) 35%, transparent); pointer-events: none; }
-  .zonas-x, .zonas-y { position: absolute; display: flex; color: color-mix(in srgb, var(--hl-acero) 70%, transparent); font-size: var(--fs-chip); }
+  .hero-marco { position: absolute; inset: var(--s3); border: var(--border) solid color-mix(in srgb, var(--noche-tenue) 35%, transparent); pointer-events: none; }
+  .zonas-x, .zonas-y { position: absolute; display: flex; color: color-mix(in srgb, var(--noche-tenue) 70%, transparent); font-size: var(--fs-chip); }
   .zonas-x { left: 0; right: 0; top: calc(-1 * var(--s3)); height: var(--s3); }
   .zonas-y { top: 0; bottom: 0; left: calc(-1 * var(--s3)); width: var(--s3); flex-direction: column; }
   .zonas-x span, .zonas-y span { flex: 1; display: grid; place-items: center; }
-  .zonas-x span + span { border-left: var(--border) solid color-mix(in srgb, var(--hl-acero) 25%, transparent); }
-  .zonas-y span + span { border-top: var(--border) solid color-mix(in srgb, var(--hl-acero) 25%, transparent); }
+  .zonas-x span + span { border-left: var(--border) solid color-mix(in srgb, var(--noche-tenue) 25%, transparent); }
+  .zonas-y span + span { border-top: var(--border) solid color-mix(in srgb, var(--noche-tenue) 25%, transparent); }
 
   /* Bloque de texto centrado en vertical bajo la barra; a la izquierda. */
   .hero-txt {
@@ -73,10 +73,10 @@ const ZONAS_Y = ['1', '2', '3', '4'];
   .l2 { font-weight: var(--fw-fina); }
   .l3 {
     max-width: none; margin-top: var(--s4); letter-spacing: .14em; text-transform: uppercase; line-height: 1.2;
-    font-stretch: var(--wdth-data); font-family: var(--f); font-weight: var(--fw-boton); font-size: var(--fs-lema-datos);
-    color: var(--hl-concreto); opacity: .78;
+    font-family: var(--f); font-weight: var(--fw-boton); font-size: var(--fs-lema-datos);
+    color: var(--azul-50); opacity: .78;
   }
-  .l3 b { font-weight: var(--fw-subtitle); color: var(--hl-senal); }
+  .l3 b { font-weight: var(--fw-subtitle); color: var(--hl-naranja); }
   /* Izaje del H1: cada línea sube a su sitio (solo transform; legible desde el primer pintado). */
   :global(html.js) .lema .l > span { animation: lema-iza .9s var(--ease-izaje) both; }
   :global(html.js) .lema .l2 > span { animation-delay: .12s; }
@@ -84,9 +84,9 @@ const ZONAS_Y = ['1', '2', '3', '4'];
   @keyframes lema-iza { from { transform: translateY(105%); } }
   .hero-accion { margin-top: var(--s6); }
 
-  .hero-bajar { position: absolute; z-index: 1; left: 50%; bottom: var(--s5); transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: var(--s1); color: var(--hl-acero); font-size: var(--fs-chip); }
-  .hero-bajar i { width: 1px; height: var(--s5); background: color-mix(in srgb, var(--hl-acero) 30%, transparent); position: relative; overflow: hidden; }
-  .hero-bajar i::after { content: ""; position: absolute; left: -2px; top: 0; width: 5px; height: 1px; background: var(--hl-senal); animation: bajar 2.2s var(--ease-plano) infinite; }
+  .hero-bajar { position: absolute; z-index: 1; left: 50%; bottom: var(--s5); transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: var(--s1); color: var(--noche-tenue); font-size: var(--fs-chip); }
+  .hero-bajar i { width: 1px; height: var(--s5); background: color-mix(in srgb, var(--noche-tenue) 30%, transparent); position: relative; overflow: hidden; }
+  .hero-bajar i::after { content: ""; position: absolute; left: -2px; top: 0; width: 5px; height: 1px; background: var(--hl-naranja); animation: bajar 2.2s var(--ease-plano) infinite; }
   @keyframes bajar { to { transform: translateY(var(--s5)); } }
 
   /* Gemelo digital (Tarea 5): a la derecha; en móvil, debajo del título y más bajo. */

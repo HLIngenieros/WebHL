@@ -34,7 +34,7 @@ const enSectores = sectores.reduce((n, s) => n + s.n, 0);
 {movil ? (
   <div id={id} class="sub-movil" hidden>
     <span class="voz-datos rotulo">{t(lang, 'sectores')}</span>
-    <div class="sub-principales" data-seccion="sectores">
+    <div class="sub-principales">
       {principales.map((s) => <a href={s.url}><b>{s.nombre}</b><span class="voz-datos">{tn(lang, 'nProyectos', s.n)}</span></a>)}
     </div>
     <div class="sub-otros">{otros.map((s) => <a href={s.url}>{s.nombre}</a>)}</div>
@@ -45,7 +45,7 @@ const enSectores = sectores.reduce((n, s) => n + s.n, 0);
 ) : (
   <div id={id} class="panel-proyectos" hidden>
     <div class="panel-in">
-      <section class="panel-sectores" data-seccion="sectores" aria-labelledby={`${id}-sec`}>
+      <section class="panel-sectores" aria-labelledby={`${id}-sec`}>
         <p class="panel-tit voz-datos"><b id={`${id}-sec`}>{t(lang, 'sectores')}</b><span>{tn(lang, 'nSectores', sectores.length)} · {tn(lang, 'nProyectos', enSectores)}</span></p>
         <ul class="principales">
           {principales.map((s) => (
@@ -62,7 +62,7 @@ const enSectores = sectores.reduce((n, s) => n + s.n, 0);
           {otros.map((s) => <li><a href={s.url}>{s.nombre} <span class="voz-datos">{s.n}</span></a></li>)}
         </ul>
       </section>
-      <section class="panel-servicios" data-seccion="servicios" aria-labelledby={`${id}-ser`}>
+      <section class="panel-servicios" aria-labelledby={`${id}-ser`}>
         <p class="panel-tit voz-datos"><b id={`${id}-ser`}>{t(lang, 'servicios')}</b><span>{tn(lang, 'nLineas', 7)}</span></p>
         {grupos.map((g) => (
           <div class="grupo">
@@ -72,8 +72,8 @@ const enSectores = sectores.reduce((n, s) => n + s.n, 0);
         ))}
       </section>
       <p class="panel-pie">
-        <a class="ir" data-seccion="proyectos" href={ruta('proyectos', lang)}>{tn(lang, 'verExplorador', total)}</a>
-        <a class="ir" data-seccion="sectores" href={ruta('sectores', lang)}>{t(lang, 'todosSectores')}</a>
+        <a class="ir" href={ruta('proyectos', lang)}>{tn(lang, 'verExplorador', total)}</a>
+        <a class="ir" href={ruta('sectores', lang)}>{t(lang, 'todosSectores')}</a>
       </p>
     </div>
   </div>
@@ -110,7 +110,7 @@ const enSectores = sectores.reduce((n, s) => n + s.n, 0);
     border-bottom: var(--border) solid var(--line);
   }
   .principales a::before {
-    content: ''; position: absolute; inset: 0; background: var(--sec);
+    content: ''; position: absolute; inset: 0; background: var(--accent);
     transform: scaleY(0); transform-origin: bottom; transition: transform var(--t-aparece) var(--ease-plano);
   }
   .principales a > * { position: relative; }
@@ -120,24 +120,24 @@ const enSectores = sectores.reduce((n, s) => n + s.n, 0);
     background-size: var(--grid-cell) var(--grid-cell);
   }
   .dibujo :global(svg) { max-height: 120px; }
-  .nombre { font-family: var(--f-ancha); font-stretch: var(--wdth-title); font-weight: var(--fw-title); font-size: var(--fs-h3); line-height: var(--lh-title); }
-  .dato { display: flex; flex-wrap: wrap; gap: 0 var(--s2); color: var(--sec); }
+  .nombre { font-family: var(--f-titulo); font-weight: var(--fw-title); font-size: var(--fs-h3); line-height: var(--lh-title); }
+  .dato { display: flex; flex-wrap: wrap; gap: 0 var(--s2); color: var(--accent); }
   .dato span + span::before { content: '·'; margin-right: var(--s2); color: var(--muted); }
   .principales a:hover::before, .principales a:focus-visible::before { transform: scaleY(1); }
-  .principales a:hover, .principales a:focus-visible { color: var(--sec-ink); }
-  .principales a:hover .dato, .principales a:hover .dato span::before { color: var(--sec-ink); }
+  .principales a:hover, .principales a:focus-visible { color: var(--accent-ink); }
+  .principales a:hover .dato, .principales a:hover .dato span::before { color: var(--accent-ink); }
   .principales a:hover .dibujo { background-image: none; }
   .principales a:hover :global(.capa-estructura path), .principales a:hover :global(.capa-ejes line),
-  .principales a:hover :global(.capa-ejes circle) { stroke: var(--sec-ink); fill: none; }
+  .principales a:hover :global(.capa-ejes circle) { stroke: var(--accent-ink); fill: none; }
 
   .otros { display: flex; flex-wrap: wrap; align-items: center; padding-top: var(--s3); }
   .otros li { display: flex; align-items: center; }
   .otros li + li::before {
-    content: ''; width: 7px; height: 7px; margin-inline: var(--s3); border: var(--border-strong) solid var(--sec); transform: rotate(45deg);
+    content: ''; width: 7px; height: 7px; margin-inline: var(--s3); border: var(--border-strong) solid var(--accent); transform: rotate(45deg);
   }
   .otros a { display: inline-flex; align-items: baseline; gap: var(--s1); padding: var(--s1) 0; }
   .otros a span { color: var(--muted); }
-  .otros a:hover { color: var(--sec); }
+  .otros a:hover { color: var(--accent); }
 
   .grupo-nom { display: flex; align-items: center; gap: var(--s2); margin: var(--s2) 0 var(--s1); color: var(--muted); }
   .grupo:first-of-type .grupo-nom { margin-top: 0; }
@@ -145,10 +145,10 @@ const enSectores = sectores.reduce((n, s) => n + s.n, 0);
   .panel-servicios .panel-tit { padding-bottom: var(--s2); border-bottom: var(--border-strong) solid var(--ink); }
   .burbuja { width: 20px; height: 20px; border-radius: 50%; border: var(--border) solid currentColor; display: grid; place-items: center; letter-spacing: 0; }
   .grupo li a { display: block; padding: 5px 0 5px calc(20px + var(--s2)); }
-  .grupo li a:hover { color: var(--sec); }
+  .grupo li a:hover { color: var(--accent); }
 
   .panel-pie { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: var(--s4); margin: 0; padding: var(--s3) 0; border-top: var(--border) solid var(--line); }
-  .ir { display: inline-flex; align-items: center; gap: var(--s2); color: var(--sec); font-weight: var(--fw-strong); font-stretch: var(--wdth-subtitle); }
+  .ir { display: inline-flex; align-items: center; gap: var(--s2); color: var(--accent); font-weight: var(--fw-strong);}
   .ir::after { content: '→'; transition: transform var(--t-rapido) var(--ease-plano); }
   .ir:hover::after { transform: translateX(6px); }
 
@@ -157,9 +157,9 @@ const enSectores = sectores.reduce((n, s) => n + s.n, 0);
   .sub-movil[hidden] { display: none; }
   .rotulo { color: var(--muted); margin-top: var(--s2); }
   .sub-principales { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); }
-  .sub-principales a { display: grid; gap: 2px; padding: var(--s2) var(--s3); border: var(--border) solid var(--sec); }
-  .sub-principales b { font-family: var(--f-ancha); font-stretch: var(--wdth-subtitle); font-weight: var(--fw-title); font-size: var(--fs-lead); }
-  .sub-principales span { color: var(--sec); }
+  .sub-principales a { display: grid; gap: 2px; padding: var(--s2) var(--s3); border: var(--border) solid var(--accent); }
+  .sub-principales b { font-family: var(--f-titulo); font-weight: var(--fw-title); font-size: var(--fs-lead); }
+  .sub-principales span { color: var(--accent); }
   .sub-otros { display: flex; flex-wrap: wrap; gap: var(--s1); }
   .sub-otros a { padding: var(--s1) var(--s2); border: var(--border) solid var(--line); font-size: var(--fs-sm); min-height: 44px; display: inline-flex; align-items: center; box-sizing: border-box; }
   .sub-servicios a { display: flex; align-items: center; min-height: 40px; color: var(--muted); }

@@ -303,7 +303,10 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     Gestión integral en lugar de HSE). Adaptar sin perder dinamismo ni las animaciones especializadas. Fases R0-R6.
     **R0 cerrado (12-nov):** maqueta del Home aprobada (`design/maquetas/rediseno.html`), tokens v2.0 con
     `contraste.py` en OK, guía visual v2.0 y especificación v2.0.
-  - **Siguiente paso:** Plan R (R1: identidad en todo el sitio); luego F6. El proveedor de producción (`anthropic` con clave,
+    **R1 cerrado (12-nov):** Poppins/Open Sans/Plex Mono reducidas y alojadas (52 KB, `design/fuente.py`), fuera
+    anchos, acentos por sección y alias viejos (`--f-titulo`, `--azul-900`, `--noche-tenue`…), fotos a color y
+    `.duotono` sobre oscuro, radios y tarjetas que se elevan. Archivo solo queda en `design/` para los PDF.
+  - **Siguiente paso:** Plan R (R2: armazón, menú de 6 pestañas y pie); luego F6. El proveedor de producción (`anthropic` con clave,
     `foundry` o `azure-openai`) se agrega cuando Gerencia y TI den la credencial. F6 después.
   - **Ojo agente:** al desplegar no borrar `/api/vacantes.json` (lo escribe el flujo de Vacantes de F4 en Power
     Automate; **congelado por decisión de Juan David, 21-oct**: no se toca hasta nuevo aviso). El sitio es `https://hlingenieros.com` sin www.

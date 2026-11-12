@@ -42,12 +42,24 @@ en cómo se presenta ese contenido, no agregando bloques ni gráficas decorativa
 | Fase | Tareas | Verificación |
 |---|---|---|
 | **R0 · Maquetas y documentos** ✔ 12-nov | R0.1 Maqueta del Home `design/maquetas/rediseno.html` con fotos reales: menú, video de fondo con el título, cifras relevantes, clientes y pie, en claro y oscuro (**puerta**). R0.2 Con la maqueta aprobada: `tokens.css` nuevo, `contraste.py` en OK, guía visual v2.0 (identidad, componentes y movimiento) y especificación v2.0 (mapa del sitio y plantillas) | Aprobación de Juan David |
-| **R1 · Identidad** | Fuentes reducidas (`fuente.py`) y alojadas; tokens aplicados en `global.css` y en los componentes; se quitan `--sec-*` y `[data-seccion]` de color (los pods quedan en azul y naranja); fotos en duotono sobre oscuro y a color en las fichas; radios, sombras y estados | `check`, humo, presupuesto |
+| **R1 · Identidad** ✔ 12-nov | Fuentes reducidas (`fuente.py`) y alojadas; tokens aplicados en `global.css` y en los componentes; se quitan `--sec-*` y `[data-seccion]` de color (los pods quedan en azul y naranja); fotos en duotono sobre oscuro y a color en las fichas; radios, sombras y estados | `check`, humo, presupuesto |
 | **R2 · Armazón** | Menú de 6 pestañas sin panel (`PanelProyectos` sale) con ES/EN; menú móvil; pie del acta (oficina principal, teléfono, redes, sellos ISO, enlaces complementarios); transición de barrido (View Transitions); "Hablar con HL" se mantiene flotante | `check` + pruebas de navegación |
 | **R3 · Home y Quiénes somos** | Home: video de fondo con el título (MP4 + WebM ≤ 6 MB, póster como LCP, solo en escritorio, botón de pausa), cifras relevantes con contador (valor final en el HTML) y clientes. Sale todo lo demás del inicio actual. Quiénes somos: slogan, línea del tiempo, misión, visión y valores, presencia por países sin direcciones | `check` + pruebas de la página |
 | **R4 · Proyectos y Servicios** | Colección de servicios reducida a 3 y fichas reasignadas; sectores a 3 categorías de filtro y fuera sus páginas; explorador con mapa, filtros y ficha 3.1 (datos generales, fotos, cantidades); página de cada servicio: sus 3 proyectos que llevan a la ficha | `check` + explorador, ficha y servicio |
 | **R5 · Gestión integral y demás** | Gestión integral con sus 6 bloques. Noticias: blog con adjudicaciones, iniciativas y eventos. Contacto: solo los 4 formularios, sin sedes, con adjuntos (`enviar.php`). Complementarias: términos, datos, vacantes (`Vacantes.tsx` sin cambios: el flujo sigue congelado), acreedores y documentos públicos | `check` + formularios (PHP con `HL_PHP`) |
 | **R6 · Cierre** | Inglés de todo lo nuevo; `inventario.csv`, `.htaccess` y `sitemap` con los 301 (servicios, sectores, `/hse`); revisión de código enfocada en `enviar.php` (adjuntos); CLAUDE.md, memoria y bitácora | Suite completa, `npm run presupuesto`, Lighthouse móvil una vez (Home, explorador, Gestión integral, Contacto) |
+
+**Cierre de R1 (12-nov):** `design/fuente.py` reduce Poppins 500/600/700, Open Sans variable 400-600 y Plex Mono 500
+(solo mayúsculas, cifras y signos) desde Fontsource 5.2.6: 52 KB en total (Archivo pesaba 73). Respaldos con métricas
+(Arial, Arial Bold, Consolas). Fuera los anchos (`font-stretch`, `--wdth-*`), los acentos (`--sec*`, `[data-seccion]` de
+color; queda solo como gancho de prueba en la barra) y los alias viejos (`--hl-grafito` → `--azul-900`, `--hl-concreto` →
+`--azul-50`, `--hl-acero` → `--noche-tenue`, `--hl-senal`/`--hl-verde` → `--hl-naranja`, los demás → `--hl-trazo`);
+`--f-ancha` pasa a `--f-titulo`. Datos (`.voz-datos`, chips, tablas, mapa) en Plex Mono. Pods: franja y rayas naranjas,
+texto azul. Láminas a color; `.duotono` (azul 900 → blanco, con trazo) sobre oscuro (mosaico de Nosotros). Tarjetas
+separadas con radio 6, suben 4 px con sombra y la foto se acerca 5 %. Radios en botones, campos, chips, mapa y ventanas.
+Archivo queda en `design/` solo para el generador de PDF (`documentos.mjs`), cuya identidad se actualiza aparte.
+Verificación: `check` 0 errores, estilos + humo 15/15, presupuesto OK (inicio 11,9 KB gz). La suite completa se corre
+en R6.
 
 ## Riesgos
 

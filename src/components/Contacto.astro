@@ -56,7 +56,7 @@ const agente: DatosAgente = {
     display: inline-flex; align-items: center; gap: var(--s2);
     min-height: 48px; padding: 0 var(--s4); box-sizing: border-box;
     background: var(--accent); color: var(--accent-ink); text-decoration: none;
-    font-stretch: var(--wdth-data); font-weight: var(--fw-data); font-size: var(--fs-cta);
+    border-radius: var(--radius); font-family: var(--f-titulo); font-weight: var(--fw-boton); font-size: var(--fs-cta);
     letter-spacing: var(--ls-data); text-transform: uppercase;
     transition: filter var(--t-rapido) ease, transform var(--t-rapido) var(--ease-izaje);
   }
@@ -95,7 +95,7 @@ const agente: DatosAgente = {
   :global(.ag-cab::after) { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: repeating-linear-gradient(-45deg, var(--signal) 0 8px, var(--ink) 8px 16px); transform-origin: left; transform: scaleX(0); }
   :global(.ag-abierto .ag-cab::after) { animation: cota var(--t-cota) var(--ease-plano) both .15s; }
   :global(.ag-cab > div) { padding: var(--s2) var(--s3); display: grid; gap: var(--s1); justify-items: start; }
-  :global(.ag-cab strong) { font-family: var(--f-ancha); font-stretch: var(--wdth-title); font-weight: var(--fw-title); }
+  :global(.ag-cab strong) { font-family: var(--f-titulo); font-weight: var(--fw-title); }
   :global(.ag-ia) { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
   :global(.ag-ia i), :global(.ag-on i) { width: 7px; height: 7px; border-radius: 50%; background: var(--good); animation: latido-ag 2.4s ease-out infinite; }
   :global(.ag-cerrar) { border: 0; border-left: var(--stroke-thin) solid var(--ink); background: none; color: inherit; width: 52px; font-size: var(--fs-h3); cursor: pointer; transition: background var(--t-rapido); }

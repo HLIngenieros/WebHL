@@ -19,7 +19,7 @@ const sectores = resumenSectores(datos.sectores, datos.proyectos as unknown as E
   url: urlDe('sectores', sector.data.slug, lang),
 }));
 ---
-<section class="sectores-inicio" data-seccion="sectores" aria-labelledby="sectores-titulo">
+<section class="sectores-inicio" aria-labelledby="sectores-titulo">
   <div class="wrap">
     <Cabecera id="sectores-titulo" codigo="L-05" nombre={t(lang, 'sectores')} titulo={[t(lang, 'sectoresInicio1'), t(lang, 'sectoresInicio2')]}
       enlace={{ href: ruta('sectores', lang), texto: t(lang, 'verSectores') }} />
@@ -59,7 +59,7 @@ const sectores = resumenSectores(datos.sectores, datos.proyectos as unknown as E
     transition: color var(--t-aparece) var(--ease-plano);
   }
   .celda::before {
-    content: ''; position: absolute; inset: 0; background: var(--sec);
+    content: ''; position: absolute; inset: 0; background: var(--accent);
     transform: scaleY(0); transform-origin: bottom; transition: transform var(--t-aparece) var(--ease-plano);
   }
   .celda > * { position: relative; }
@@ -68,22 +68,22 @@ const sectores = resumenSectores(datos.sectores, datos.proyectos as unknown as E
   .celda h3 a::after { content: ''; position: absolute; inset: 0; }
   .celda h3 a:focus-visible { outline: none; }
   .celda:has(a:focus-visible) { outline: var(--focus-ring); outline-offset: 2px; z-index: 1; }
-  .cab, .dato, .grande { color: var(--sec); }
+  .cab, .dato, .grande { color: var(--accent); }
   .cab { display: flex; justify-content: space-between; gap: var(--s2); }
 
   .mayor { grid-column: span 2; padding: var(--s4); }
   .mayor .dibujo { padding: var(--s1) 10% 0; }
-  .mayor h3 { font-family: var(--f-ancha); font-stretch: var(--wdth-display); font-weight: var(--fw-display); font-size: var(--fs-h2); line-height: var(--lh-title); }
+  .mayor h3 { font-family: var(--f-titulo); font-weight: var(--fw-display); font-size: var(--fs-h2); line-height: var(--lh-title); }
   .linea { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--s3); }
   .intro { display: block; margin-top: var(--s1); color: var(--muted); font-size: var(--fs-sm); max-width: 40ch; }
   .grande { text-align: right; flex: none; }
-  .grande b { display: block; font-family: var(--f-ancha); font-stretch: var(--wdth-stat); font-weight: var(--fw-negra); font-size: var(--fs-stat); line-height: .9; }
+  .grande b { display: block; font-family: var(--f-titulo); font-weight: var(--fw-negra); font-size: var(--fs-stat); line-height: .9; }
   .menor .dibujo { width: 84px; }
   .texto { display: grid; gap: var(--s1); }
 
   .celda:hover::before { transform: scaleY(1); }
-  .celda:hover, .celda:hover :is(.cab, .dato, .grande, .intro) { color: var(--sec-ink); }
-  .celda:hover :global(.capa-estructura path), .celda:hover :global(.capa-ejes line), .celda:hover :global(.capa-ejes circle) { stroke: var(--sec-ink); fill: none; }
+  .celda:hover, .celda:hover :is(.cab, .dato, .grande, .intro) { color: var(--accent-ink); }
+  .celda:hover :global(.capa-estructura path), .celda:hover :global(.capa-ejes line), .celda:hover :global(.capa-ejes circle) { stroke: var(--accent-ink); fill: none; }
   /* Se traza otra vez al pasar */
   .celda:hover :global(.t) { animation: retrazo var(--t-trazo) var(--ease-plano) both; animation-delay: calc(var(--i, 0) * 60ms); }
   @keyframes retrazo { from { clip-path: inset(0 100% 0 0); } }

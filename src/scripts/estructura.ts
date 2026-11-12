@@ -21,7 +21,7 @@ function iniciar() {
   if (!caja || !lienzo || !contexto || botones.length !== 4) return;
   const ctx = contexto;
   const css = getComputedStyle(document.documentElement);
-  const color = { linea: css.getPropertyValue('--hl-azul-claro'), senal: css.getPropertyValue('--hl-senal'), verde: css.getPropertyValue('--hl-verde'), texto: css.getPropertyValue('--hl-concreto') };
+  const color = { linea: css.getPropertyValue('--hl-trazo'), senal: css.getPropertyValue('--hl-naranja'), verde: css.getPropertyValue('--hl-naranja'), texto: css.getPropertyValue('--azul-50') };
   const fuente = css.getPropertyValue('--f').trim() || 'sans-serif';
   const nombres: string[] = JSON.parse(caja.dataset.nombres ?? '[]');
   const rotulos: { cubierta: string; cimiento: string } = JSON.parse(caja.dataset.rotulos ?? '{}');

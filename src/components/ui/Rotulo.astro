@@ -1,6 +1,6 @@
 ---
 // Rótulo de plano (guía §6): datos clave en celdas con borde, como el cajetín de un plano.
-// Una celda lleva texto o enlaces; los enlaces pueden tomar el acento de su sección (data-seccion).
+// Una celda lleva texto o enlaces.
 type Enlace = { texto: string; href: string; seccion?: string };
 interface Props { celdas: { etiqueta: string; valor?: string; enlaces?: Enlace[] }[]; titulo?: string }
 const { celdas, titulo } = Astro.props;
@@ -10,7 +10,7 @@ const { celdas, titulo } = Astro.props;
   <dl class="rotulo">
     {celdas.map((c) => (
       <div><dt class="voz-datos">{c.etiqueta}</dt><dd>{c.enlaces
-        ? c.enlaces.map((e, i) => <>{i > 0 && ', '}<a href={e.href} data-seccion={e.seccion}>{e.texto}</a></>)
+        ? c.enlaces.map((e, i) => <>{i > 0 && ', '}<a href={e.href}>{e.texto}</a></>)
         : c.valor}</dd></div>
     ))}
   </dl>
@@ -29,7 +29,7 @@ const { celdas, titulo } = Astro.props;
   .rotulo > div { background: var(--paper); padding: var(--s2) var(--s3); min-width: 0; }
   .cab { margin: 0; max-width: none; padding: var(--s1) var(--s3); background: var(--ink); color: var(--bg); }
   dt { color: var(--muted); }
-  dd a { color: var(--sec); }
+  dd a { color: var(--accent); }
   dd { margin: 2px 0 0; font-weight: var(--fw-strong); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
   @container (min-width: 640px) {
     .rotulo { grid-template-columns: repeat(4, minmax(0, 1fr)); }

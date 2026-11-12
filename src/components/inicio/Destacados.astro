@@ -17,7 +17,7 @@ const lista = await tarjetas([...destacados(proyectos)].sort((a, b) => (b.data.h
 const total = paraExplorador(proyectos).length;
 ---
 {lista.length > 0 && (
-  <section class="destacados" data-seccion="proyectos" aria-labelledby="destacados-titulo">
+  <section class="destacados" aria-labelledby="destacados-titulo">
     <div class="wrap">
       <Cabecera id="destacados-titulo" codigo="L-03" nombre={t(lang, 'proyectos')} titulo={[t(lang, 'destacados1'), t(lang, 'destacados2')]}
         enlace={{ href: ruta('proyectos', lang), texto: tn(lang, 'verTodos', total) }} />
@@ -44,16 +44,16 @@ const total = paraExplorador(proyectos).length;
   .dest { position: relative; display: grid; background: var(--paper); border-bottom: var(--border) solid var(--line); }
   .dest :global(.lamina) { max-width: none; --proporcion: 4 / 3; }
   .dest-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s1); align-content: start; padding: var(--s3) var(--s4) var(--s4); min-width: 0; }
-  .dest-cod { display: flex; flex-wrap: wrap; gap: 0 var(--s2); color: var(--sec); }
+  .dest-cod { display: flex; flex-wrap: wrap; gap: 0 var(--s2); color: var(--accent); }
   .dest-titulo { margin: 0; font-size: var(--fs-h3); overflow-wrap: anywhere; }
   .dest-titulo a { color: var(--ink); text-decoration: none; }
   .dest-titulo a::after { content: ''; position: absolute; inset: 0; }
-  .dest:hover .dest-titulo a { color: var(--sec); }
+  .dest:hover .dest-titulo a { color: var(--accent); }
   .dest-titulo a:focus-visible { outline: none; }
   .dest:has(.dest-titulo a:focus-visible) { outline: var(--focus-ring); outline-offset: 2px; z-index: 1; }
   .dest-lugar { margin: 0; color: var(--muted); font-size: var(--fs-sm); }
-  .dest-cifra { margin: var(--s1) 0 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: var(--s1) var(--s2); color: var(--sec); }
-  .dest-cifra .cifra { font-family: var(--f-ancha); font-stretch: var(--wdth-display); font-weight: var(--fw-display); font-size: var(--fs-h3); }
+  .dest-cifra { margin: var(--s1) 0 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: var(--s1) var(--s2); color: var(--accent); }
+  .dest-cifra .cifra { font-family: var(--f-titulo); font-weight: var(--fw-display); font-size: var(--fs-h3); }
   .dest-cifra .voz-datos { color: var(--muted); }
   .dest-cifra .cifra { white-space: normal; min-width: 0; overflow-wrap: anywhere; }
   .dest:not(.dest-grande) .dest-cifra .cifra { font-size: var(--fs-lead); }

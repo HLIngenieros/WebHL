@@ -1,6 +1,6 @@
 // Línea estructural por sector (guía §6): lo que se ve mientras llega la fotografía, y el trazo que se
 // dibuja sobre la lámina. Componente sin estado: Astro lo compila a HTML y la isla del explorador lo reutiliza.
-// Tres capas para el paralaje de Sectores: estructura (--ink), ejes (--sec, punteados) y cotas (--signal).
+// Tres capas para el paralaje de Sectores: estructura (--ink), ejes (--accent, punteados) y cotas (--signal).
 
 type Dibujo = { estructura: string[]; ejes: number[]; cotas: [number, number, number][] };
 

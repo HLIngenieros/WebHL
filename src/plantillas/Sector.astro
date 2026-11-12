@@ -43,7 +43,7 @@ let n = 0;
         <h2 class="sr-only" id="s-servicios">{t(lang, 'serviciosAplicados')}</h2>
         {tx.serviciosTipicos && <p>{tx.serviciosTipicos}</p>}
         <ul class="enlaces">
-          {servicios.map((x) => <li><a data-seccion="servicios" href={urlDe('servicios', x.data.slug, lang)}>{bloque(x.data, lang).nombre}</a></li>)}
+          {servicios.map((x) => <li><a href={urlDe('servicios', x.data.slug, lang)}>{bloque(x.data, lang).nombre}</a></li>)}
         </ul>
       </section>
     )}
@@ -91,7 +91,7 @@ let n = 0;
   .con-eje > * + * { margin-top: var(--s4); }
   .con-eje p { margin: 0; }
   .enlaces { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); }
-  .enlaces a { color: var(--sec); font-weight: var(--fw-strong); }
+  .enlaces a { color: var(--accent); font-weight: var(--fw-strong); }
   .clientes { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s2); }
   .clientes li { padding: var(--s1) var(--s3); background: var(--paper); border: var(--border) solid var(--line); font-weight: var(--fw-strong); }
   .cierre { padding-block: var(--s6) var(--s7); }

@@ -82,9 +82,9 @@ const cantidades = [
       <Encabezado codigo="C-00" titulo="Pods de sección" entrada="P1 identifica, P2 estructura, P3 llama la atención. Cada uno toma el acento de su sección." />
       {SECCIONES.map(([id, nombre, codigo]) => (
         <div class="fila pods">
-          <Pod forma="rotulo" seccion={id} codigo={codigo} nombre={nombre} />
-          <Pod forma="eje" seccion={id} nombre={nombre} dato={codigo} />
-          <Pod forma="senal" seccion={id} codigo={codigo} nombre={nombre} />
+          <Pod forma="rotulo" codigo={codigo} nombre={nombre} />
+          <Pod forma="eje" nombre={nombre} dato={codigo} />
+          <Pod forma="senal" codigo={codigo} nombre={nombre} />
         </div>
       ))}
       <div class="con-eje">
