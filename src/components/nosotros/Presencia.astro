@@ -1,64 +1,125 @@
 ---
-// Presencia (guía §12.2-4, fondo grafito): siete estacas de topografía, una por país con obra, que caen
-// escalonadas al entrar; nombre del país inclinado arriba y código abajo.
-import Pod from '../Pod.astro';
+// Presencia (acta §2, guía v2.0 §8 "Pulso de mapa"): mapa propio quieto (sin hidratar) con los países con
+// obra y un punto por país, sin direcciones. El pulso recorre los países mientras la sección está a la vista;
+// elegir uno en la lista (o pasar el cursor) lo fija. Sin JS o con movimiento reducido: mapa quieto, sin pulso.
+import { PAISES_GEO } from '../../lib/mapa-presencia';
+import { CAJA_PRESENCIA, lienzo } from '../../lib/mapa';
 
-interface Props { numero: string; titulo: string; presencia: { titulo: string; clave: string; texto: string }; paises: { codigo: string; nombre: string }[] }
-const { numero, titulo, presencia, paises } = Astro.props;
-const ALTURAS = [210, 150, 120, 165, 110, 95, 130];
+interface Props { titulo: string; presencia: { titulo: string; clave: string; texto: string }; paises: { codigo: string; nombre: string }[] }
+const { titulo, presencia, paises } = Astro.props;
+const { ancho, alto, proyectar } = lienzo(CAJA_PRESENCIA);
+// Un punto por país, en su capital (referencia de ubicación, no una dirección).
+const PUNTO: Record<string, [number, number]> = {
+  CO: [4.71, -74.07], PA: [8.98, -79.52], CR: [9.93, -84.08], DO: [18.49, -69.93],
+  GT: [14.63, -90.51], BO: [-16.5, -68.15], EC: [-0.18, -78.47],
+};
+const conObra = new Set(paises.map((p) => p.codigo.toLowerCase()));
+const puntos = paises.filter((p) => PUNTO[p.codigo]).map((p) => {
+  const [x, y] = proyectar(PUNTO[p.codigo]);
+  return { ...p, x, y };
+});
 ---
-<section class="presencia" aria-labelledby="presencia-titulo" data-numero={numero}>
-  <div class="wrap">
-    <Pod forma="eje" letra={numero} nombre={titulo} />
-    <div class="presencia-g">
-      <div>
-        <h2 id="presencia-titulo" class="presencia-titulo">{presencia.titulo} <span>{presencia.clave}</span></h2>
-        <p class="presencia-texto">{presencia.texto}</p>
-      </div>
-      <ul class="estacas-paises izaje">
+<section class="presencia" aria-labelledby="presencia-titulo" data-presencia>
+  <div class="wrap presencia-g">
+    <div class="presencia-txt">
+      <h2 id="presencia-titulo" class="h2-barra">{titulo}</h2>
+      <p class="presencia-lema">{presencia.titulo} <span>{presencia.clave}</span></p>
+      <p class="presencia-texto">{presencia.texto}</p>
+      <ul class="presencia-paises">
         {paises.map((p, i) => (
-          <li style={`--i:${i}; --alto:${ALTURAS[i % ALTURAS.length]}px`}>
-            <span class="estaca-pais">{p.nombre}</span>
-            <span class="estaca-cabeza" aria-hidden="true"></span>
-            <span class="estaca-palo" aria-hidden="true"></span>
-            <span class="estaca-cod voz-datos" aria-hidden="true">{p.codigo}</span>
-          </li>
+          <li><button type="button" data-pais={p.codigo} aria-pressed={i === 0 ? 'true' : 'false'}>
+            <span class="pp-cod" aria-hidden="true">{p.codigo}</span> {p.nombre}
+          </button></li>
         ))}
       </ul>
     </div>
+    <svg class="presencia-mapa" viewBox={`0 0 ${ancho} ${alto}`} role="img" aria-label={paises.map((p) => p.nombre).join(', ')}>
+      <g class="pm-tierra">
+        {PAISES_GEO.map((g) => <path d={g.d} class:list={{ obra: conObra.has(g.id) }} data-geo={g.id} />)}
+      </g>
+      {puntos.map((p, i) => (
+        <g class:list={['pm-punto', { activo: i === 0 }]} data-pais={p.codigo} transform={`translate(${p.x} ${p.y})`}>
+          <circle class="pm-pulso" r="10" />
+          <circle class="pm-centro" r="9" />
+          <text class="pm-cod" x="16" y="7">{p.codigo}</text>
+        </g>
+      ))}
+    </svg>
   </div>
 </section>
 
+<script>
+  // Recorrido del pulso: un país cada 2,4 s (un latido), solo a la vista; se fija al elegir o al pasar el cursor.
+  const iniciar = () => {
+    const s = document.querySelector<HTMLElement>('[data-presencia]');
+    if (!s || s.dataset.listo) return;
+    s.dataset.listo = '1';
+    const botones = [...s.querySelectorAll<HTMLButtonElement>('button[data-pais]')];
+    const puntos = [...s.querySelectorAll<SVGGElement>('.pm-punto')];
+    const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let i = 0, reloj = 0, fijo = false, visible = false;
+    const mostrar = (n: number) => {
+      i = (n + botones.length) % botones.length;
+      const c = botones[i].dataset.pais;
+      botones.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pais === c)));
+      puntos.forEach((p) => p.classList.toggle('activo', p.dataset.pais === c));
+      s.querySelectorAll('.pm-tierra path').forEach((p) => p.classList.toggle('activo', p.getAttribute('data-geo') === c!.toLowerCase()));
+    };
+    const parar = () => { clearInterval(reloj); reloj = 0; };
+    const seguir = () => { if (!quieto && !fijo && visible && !reloj) reloj = window.setInterval(() => mostrar(i + 1), 2400); };
+    botones.forEach((b, n) => {
+      b.addEventListener('click', () => { fijo = true; parar(); mostrar(n); });
+      b.addEventListener('pointerenter', () => { parar(); mostrar(n); });
+    });
+    s.querySelector('.presencia-paises')!.addEventListener('pointerleave', seguir);
+    new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      s.classList.toggle('a-la-vista', visible);
+      visible ? seguir() : parar();
+    }, { threshold: 0.25 }).observe(s);
+    mostrar(0);
+  };
+  iniciar();
+  document.addEventListener('astro:page-load', iniciar);
+</script>
+
 <style>
-  .presencia { background: var(--azul-900); color: var(--hl-blanco); padding-block: var(--s6); overflow: hidden; }
-  .presencia :global(.pod-eje) { --accent: var(--hl-trazo); }
-  .presencia :global(.pod-bur) { background: var(--azul-900); }
-  .presencia-g { display: grid; gap: var(--s6); margin-top: var(--s5); align-items: end; }
-  @media (min-width: 900px) { .presencia-g { grid-template-columns: 5fr 7fr; } }
-  .presencia-titulo { margin: 0; color: var(--hl-blanco); font-size: var(--fs-h1); line-height: .95; }
-  .presencia-titulo span { font-weight: var(--fw-fina); }
-  .presencia-texto { margin: var(--s4) 0 0; color: var(--azul-50); opacity: .82; max-width: 44ch; font-size: var(--fs-lead); line-height: 1.6; }
-  .estacas-paises {
-    list-style: none; margin: 0; padding: var(--s7) var(--s2) 0; display: flex; justify-content: space-between; align-items: flex-end;
-    height: 300px; box-sizing: border-box; border-bottom: var(--border) solid color-mix(in srgb, var(--noche-tenue) 40%, transparent);
+  .presencia { background: var(--azul-900); color: var(--hl-blanco); padding-block: var(--s7); overflow: hidden; }
+  .presencia-g { display: grid; gap: var(--s6); align-items: center; }
+  @media (min-width: 900px) { .presencia-g { grid-template-columns: 5fr 6fr; } }
+  .presencia h2 { color: var(--hl-blanco); }
+  .presencia-lema { margin: var(--s4) 0 0; font-family: var(--f-titulo); font-weight: var(--fw-title); font-size: var(--fs-h2); line-height: var(--lh-title); }
+  .presencia-lema span { color: var(--hl-naranja); }
+  .presencia-texto { margin: var(--s3) 0 0; color: var(--azul-50); opacity: .85; max-width: 46ch; line-height: 1.6; }
+  .presencia-paises { list-style: none; margin: var(--s5) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s2); }
+  .presencia-paises button {
+    font: inherit; font-size: var(--fs-sm); color: var(--hl-blanco); background: transparent; cursor: pointer;
+    border: var(--border) solid color-mix(in srgb, var(--hl-blanco) 30%, transparent); border-radius: var(--r-chip);
+    padding: var(--s1) var(--s3); display: inline-flex; gap: var(--s2); align-items: center;
+    transition: background-color var(--t-rapido), border-color var(--t-rapido), color var(--t-rapido);
   }
-  .estacas-paises li { position: relative; display: flex; flex-direction: column; align-items: center; width: 12%; }
-  .estaca-pais {
-    position: absolute; bottom: calc(100% + var(--s2)); left: 50%; white-space: nowrap; transform: rotate(-40deg); transform-origin: left bottom;
-    color: var(--azul-50); font-size: var(--fs-sm); font-weight: var(--fw-strong);
+  .pp-cod { font-family: var(--f-mono); font-weight: var(--fw-data); font-size: var(--fs-xs); letter-spacing: var(--ls-data); color: var(--hl-naranja); transition: color var(--t-rapido); }
+  .presencia-paises button[aria-pressed='true'] { background: var(--hl-blanco); border-color: var(--hl-blanco); color: var(--azul-900); }
+  .presencia-paises button[aria-pressed='true'] .pp-cod { color: var(--azul-900); }
+  .presencia-paises button:focus-visible { outline: 2px solid var(--hl-naranja); outline-offset: 2px; }
+
+  .presencia-mapa { display: block; width: 100%; height: auto; max-height: 78vh; }
+  /* La caja recorta los países en recta: los bordes se desvanecen hacia el fondo. */
+  .presencia-mapa {
+    mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent), linear-gradient(180deg, transparent, #000 8%, #000 82%, transparent);
+    mask-composite: intersect;
   }
-  .estaca-cabeza { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 13px solid var(--hl-naranja); }
-  .estaca-palo { width: 1.5px; height: var(--alto); background: var(--hl-naranja); }
-  .estaca-cod { position: absolute; top: calc(100% + var(--s2)); color: var(--hl-naranja); }
-  /* Las estacas caen escalonadas (Izaje, revela.ts). */
-  :global(html.js) .estacas-paises li { transition: transform var(--t-izaje) var(--ease-izaje), opacity var(--t-izaje); transition-delay: calc(var(--i) * 80ms); }
-  :global(html.js) .estacas-paises:not(.visible) li { transform: translateY(-60px); opacity: 0; }
-  :global(html.js) .estacas-paises.izaje:not(.visible) { opacity: 1; transform: none; }
-  :global(html.sin-revela) .estacas-paises li { transform: none; opacity: 1; }
-  @media (max-width: 759.98px) {
-    .estacas-paises { height: 240px; }
-    .estaca-pais { font-size: var(--fs-xs); }
-    .estaca-palo { height: calc(var(--alto) * .6); }
-  }
-  @media (prefers-reduced-motion: reduce) { :global(html.js) .estacas-paises li { transform: none; opacity: 1; transition: none; } }
+  .pm-tierra path { fill: color-mix(in srgb, var(--hl-blanco) 7%, transparent); stroke: color-mix(in srgb, var(--hl-blanco) 22%, transparent); stroke-width: 1; vector-effect: non-scaling-stroke; transition: fill var(--t-aparece); }
+  .pm-tierra path.obra { fill: color-mix(in srgb, var(--azul-400) 55%, transparent); stroke: var(--azul-200); }
+  .pm-tierra path.obra.activo { fill: var(--hl-naranja); stroke: var(--hl-naranja); }
+  .pm-centro { fill: var(--azul-900); stroke: var(--hl-naranja); stroke-width: 3; transition: fill var(--t-rapido); }
+  .pm-punto.activo .pm-centro { fill: var(--hl-blanco); stroke: var(--hl-blanco); }
+  .pm-pulso { fill: none; stroke: var(--hl-blanco); stroke-width: 2; opacity: 0; }
+  .pm-cod { fill: var(--hl-blanco); font-family: var(--f-mono); font-weight: var(--fw-data); font-size: 26px; letter-spacing: .12em; opacity: .6; transition: opacity var(--t-rapido); }
+  .pm-punto.activo .pm-cod { opacity: 1; }
+  /* Pulso de mapa (guía §8): anillo que late en el país activo, en bucle solo a la vista. */
+  .presencia.a-la-vista .pm-punto.activo .pm-pulso { animation: pm-pulso 2.4s var(--ease-izaje) infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes pm-pulso { from { transform: scale(1); opacity: .9; } to { transform: scale(4.5); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .presencia.a-la-vista .pm-punto.activo .pm-pulso { animation: none; } }
+  @media (max-width: 899.98px) { .presencia-mapa { max-height: 60vh; } }
 </style>

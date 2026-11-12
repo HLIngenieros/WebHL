@@ -40,20 +40,12 @@ export function avance(progreso: number, anios: number[]): { anio: number; indic
   const p = Math.max(0, Math.min(1, progreso));
   const primero = anios[0], ultimo = anios[anios.length - 1];
   const exacto = primero + p * (ultimo - primero);
+  // El hito sale del año que se muestra (redondeado): con un scroll que no llega al píxel exacto
+  // (0,9999), el año ya dice 2026 y el hito debe ser "Hoy", no el anterior.
+  const anio = Math.round(exacto);
   let indice = 0;
-  anios.forEach((a, i) => { if (exacto >= a) indice = i; });
+  anios.forEach((a, i) => { if (anio >= a) indice = i; });
   const siguiente = anios[indice + 1];
-  const local = siguiente === undefined ? 0 : (exacto - anios[indice]) / (siguiente - anios[indice]);
-  return { anio: Math.round(exacto), indice, local };
-}
-
-/** Lo que se publica: en lanzamiento, solo lo autorizado (testimonios) o aprobado (empresas asociadas);
- *  en desarrollo se ve todo, marcado, para poder probarlo. */
-export function publicables<T extends { autorizado?: boolean; aprobada?: boolean }>(xs: T[], modo: 'desarrollo' | 'lanzamiento'): T[] {
-  return modo === 'lanzamiento' ? xs.filter((x) => x.autorizado === true || x.aprobada === true) : xs;
-}
-
-/** Numeración de las secciones que se muestran (01, 02…): una sección oculta no deja salto. */
-export function numerar(ids: string[], visibles: Record<string, boolean>): { id: string; n: string }[] {
-  return ids.filter((id) => visibles[id] !== false).map((id, i) => ({ id, n: String(i + 1).padStart(2, '0') }));
+  const local = siguiente === undefined ? 0 : Math.max(0, (exacto - anios[indice]) / (siguiente - anios[indice]));
+  return { anio, indice, local };
 }

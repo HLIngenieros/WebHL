@@ -17,7 +17,7 @@ const cintas = [clientes.slice(0, mitad), clientes.slice(mitad)];
 {clientes.length > 0 && (
   <section class="clientes" aria-labelledby="clientes-titulo">
     <div class="wrap">
-      <h2 id="clientes-titulo">{t(lang, 'nuestrosClientes')}</h2>
+      <h2 class="h2-barra" id="clientes-titulo">{t(lang, 'nuestrosClientes')}</h2>
     </div>
     {cintas.map((cinta, k) => (
       <div class="riel">
@@ -45,7 +45,6 @@ const cintas = [clientes.slice(0, mitad), clientes.slice(mitad)];
 <style>
   .clientes { padding-block: var(--s7); background: var(--bg); overflow: hidden; }
   h2 { margin: 0 0 var(--s5); }
-  h2::before { content: ''; display: block; width: 48px; height: 4px; margin-bottom: var(--s2); background: var(--hl-naranja); }
   .riel {
     border-block: var(--border) solid var(--line); overflow: hidden;
     mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);

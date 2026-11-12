@@ -6,7 +6,7 @@ test('navegar entre páginas no recarga el documento', async ({ page }) => {
   await page.evaluate(() => { (window as any).__marca = 1; });
   await page.locator('#nav-principal a[href="/nosotros/"]').click();
   await expect(page).toHaveURL(/\/nosotros\/$/);
-  await expect(page.locator('h1')).toHaveText(/Gente que cumple/);
+  await expect(page.locator('h1')).toHaveText(/gente que cumple/i);
   expect(await page.evaluate(() => (window as any).__marca)).toBe(1);
 });
 
@@ -24,13 +24,13 @@ test('la barra y el botón de contacto tienen nombre de transición propio (no s
 });
 
 test('las entradas terminan visibles', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/nosotros/');
   await expect(page.locator('h1.aparece')).toHaveCSS('opacity', '1');
 });
 
 test('con movimiento reducido no hay animación de entrada', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/');
+  await page.goto('/nosotros/');
   const h1 = page.locator('h1.aparece');
   await expect(h1).toHaveCSS('transition-duration', '0s');
   await expect(h1).toHaveCSS('opacity', '1');
@@ -39,7 +39,7 @@ test('con movimiento reducido no hay animación de entrada', async ({ page }) =>
 test.describe('sin JavaScript', () => {
   test.use({ javaScriptEnabled: false });
   test('el contenido animable es visible', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/nosotros/');
     await expect(page.locator('h1.aparece')).toHaveCSS('opacity', '1');
   });
 });
@@ -48,7 +48,7 @@ test('si el script de revelado no carga, el contenido aparece igual', async ({ p
   await page.addInitScript(() => {
     (window as any).IntersectionObserver = function () { throw new Error('sin IntersectionObserver'); };
   });
-  await page.goto('/');
+  await page.goto('/nosotros/');
   await expect(page.locator('h1.aparece')).toHaveCSS('opacity', '1', { timeout: 4000 });
 });
 
@@ -66,7 +66,7 @@ test('atrás tras navegar desde el menú móvil: menú cerrado, scroll restaurad
   await expect(page.locator('#menu-movil')).toBeHidden();
   await page.waitForFunction(() => Math.abs(window.scrollY - 300) < 2);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page.locator('h1.aparece')).toHaveCSS('opacity', '1');
+  await expect(page.locator('h1')).toBeVisible();
 });
 
 test('el rescate del revelado se mantiene al navegar', async ({ page }) => {

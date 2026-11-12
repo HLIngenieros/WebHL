@@ -18,7 +18,7 @@ const ICONOS: Record<CifraInicio['clave'], string> = {
 ---
 <section class="ci" aria-labelledby="ci-titulo">
   <div class="wrap">
-    <h2 id="ci-titulo">{t(lang, 'enCifras1')} {t(lang, 'enCifras2')}</h2>
+    <h2 class="h2-barra" id="ci-titulo">{t(lang, 'enCifras1')} {t(lang, 'enCifras2')}</h2>
     <ul class="ci-lista" data-lang={lang}>
       {cifras.map((c, i) => (
         <li class:list={['ci-cifra', { clave: c.signo }]} style={`--i:${i}`}>
@@ -68,9 +68,7 @@ const ICONOS: Record<CifraInicio['clave'], string> = {
 
 <style>
   .ci { padding-block: var(--s7); background: var(--paper); }
-  /* Títulos del Home: barra naranja corta encima del H2 (guía v2.0, 12-nov). */
   h2 { margin: 0; }
-  h2::before { content: ''; display: block; width: 48px; height: 4px; margin-bottom: var(--s2); background: var(--hl-naranja); }
   .ci-lista { list-style: none; margin: var(--s6) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s3); }
   /* Tarjeta blanca con borde sobre la banda niebla; se eleva al pasar el cursor. La de seguridad, en azul corporativo. */
   .ci-cifra {

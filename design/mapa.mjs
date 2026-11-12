@@ -1,16 +1,21 @@
 // Genera src/lib/mapa-geo.ts: los países de la región ya proyectados y simplificados, como trazos SVG.
 // Fuente: Natural Earth 1:50m Admin 0 – Countries (dominio público), descargado aparte (no se versiona):
 //   https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson
-// Uso: node design/mapa.mjs <ruta-al-geojson>
+// Uso: node design/mapa.mjs <ruta-al-geojson>              → src/lib/mapa-geo.ts (explorador)
+//      node design/mapa.mjs <ruta-al-geojson> --presencia  → src/lib/mapa-presencia.ts (Quiénes somos, hasta Bolivia)
 import { readFileSync, writeFileSync } from 'node:fs';
-import { CAJA, proyectar } from '../src/lib/mapa.ts';
+import { CAJA as CAJA_EXPLORADOR, CAJA_PRESENCIA, lienzo } from '../src/lib/mapa.ts';
 
 const entrada = process.argv[2];
-if (!entrada) throw new Error('Uso: node design/mapa.mjs <ne_50m_admin_0_countries.geojson>');
+if (!entrada) throw new Error('Uso: node design/mapa.mjs <ne_50m_admin_0_countries.geojson> [--presencia]');
+const PRESENCIA = process.argv.includes('--presencia');
+const CAJA = PRESENCIA ? CAJA_PRESENCIA : CAJA_EXPLORADOR;
+const { proyectar } = lienzo(CAJA);
+const DESTINO = PRESENCIA ? 'mapa-presencia.ts' : 'mapa-geo.ts';
 const geo = JSON.parse(readFileSync(entrada, 'utf8'));
 if (geo.type !== 'FeatureCollection' || !Array.isArray(geo.features)) throw new Error('No es un GeoJSON de países');
 
-const TOLERANCIA = 1; // unidades del viewBox
+const TOLERANCIA = PRESENCIA ? 1.6 : 1; // unidades del viewBox
 const MARGEN = 2; // grados fuera de la caja que aún se dibujan (para que las costas no corten en seco)
 
 // Douglas-Peucker sobre puntos ya proyectados.
@@ -56,8 +61,8 @@ for (const f of geo.features) {
 paises.sort((a, b) => a.id.localeCompare(b.id));
 
 const salida = `// Generado por design/mapa.mjs desde Natural Earth 1:50m (dominio público). No editar a mano.
-// Comando: node design/mapa.mjs <ne_50m_admin_0_countries.geojson>
+// Comando: node design/mapa.mjs <ne_50m_admin_0_countries.geojson>${PRESENCIA ? ' --presencia' : ''}
 export const PAISES_GEO: { id: string; d: string }[] = ${JSON.stringify(paises, null, 0).replace(/},{/g, '},\n  {')};
 `;
-writeFileSync(new URL('../src/lib/mapa-geo.ts', import.meta.url), salida);
+writeFileSync(new URL(`../src/lib/${DESTINO}`, import.meta.url), salida);
 console.log(`${paises.length} países, ${(Buffer.byteLength(salida) / 1024).toFixed(1)} KB`);

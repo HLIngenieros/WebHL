@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { hitos, tratamiento, avance, publicables, numerar } from '../src/lib/nosotros';
+import { hitos, tratamiento, avance } from '../src/lib/nosotros';
 import { auditar, type Pendiente } from '../src/lib/contenido';
 
 // ── Contenido de Nosotros (guía §12.2-12.3) ──
@@ -38,6 +38,8 @@ test.describe('línea del tiempo', () => {
     const anios = [1968, 1970, 1980, 1990, 2000, 2026];
     expect(avance(0, anios)).toEqual({ anio: 1968, indice: 0, local: 0 });
     expect(avance(1, anios)).toMatchObject({ anio: 2026, indice: 5 });
+    // Al final del scroll el navegador redondea: el hito acompaña al año que se muestra.
+    expect(avance(0.9999, anios)).toMatchObject({ anio: 2026, indice: 5 });
     const entre = avance((1985 - 1968) / (2026 - 1968), anios);
     expect(entre.indice).toBe(2);
     expect(entre.local).toBeGreaterThan(0);
@@ -45,19 +47,11 @@ test.describe('línea del tiempo', () => {
   });
 });
 
-test.describe('secciones que dependen de autorización', () => {
-  const sinAutorizar = [1, 2, 3, 4].map((i) => ({ id: `t${i}`, autorizado: false }));
-
-  test('en lanzamiento no se publica ningún testimonio sin autorizar', () => {
-    expect(publicables(sinAutorizar, 'lanzamiento')).toEqual([]);
-    expect(publicables(sinAutorizar, 'desarrollo')).toHaveLength(4);
-    expect(publicables([{ aprobada: true }, { aprobada: false }], 'lanzamiento')).toEqual([{ aprobada: true }]);
-  });
-
+test.describe('avisos de contenido', () => {
   test('testimonios y asociadas sin aprobar son avisos: no bloquean el lanzamiento', () => {
     const datos = {
       testimonios: [{ id: 't1', data: { autorizado: false, cargo: { es: 'C', en: 'C' }, cita: { es: 'Q', en: 'Q' } } }],
-      sitio: [{ id: 'hl', data: { paises: ['CO'], asociadas: [{ nombre: 'ECOHL', aprobada: false }], clientes: [], cifras: [] } }],
+      sitio: [{ id: 'hl', data: { paises: ['CO'], video: { mp4: '/v.mp4' }, asociadas: [{ nombre: 'ECOHL', aprobada: false }], clientes: [], cifras: [] } }],
     };
     let ps: Pendiente[] = [];
     expect(() => { ps = auditar(datos as never, { modo: 'lanzamiento' }); }).not.toThrow();
@@ -72,21 +66,13 @@ test.describe('secciones que dependen de autorización', () => {
   });
 });
 
-test('numerar(): las secciones visibles se numeran sin saltos', () => {
-  const ids = ['mision', 'valores', 'presencia', 'testimonios', 'asociadas'];
-  expect(numerar(ids, { testimonios: false, asociadas: false })).toEqual([
-    { id: 'mision', n: '01' }, { id: 'valores', n: '02' }, { id: 'presencia', n: '03' },
-  ]);
-  expect(numerar(ids, {}).map((x) => x.n)).toEqual(['01', '02', '03', '04', '05']);
-});
-
 // ── Página Nosotros (guía §12.2) ──
 
 test.describe('página Nosotros', () => {
   test('un solo h1, misión y visión de nosotros.es.md', async ({ page }) => {
     await page.goto('/nosotros/');
     await expect(page.locator('h1')).toHaveCount(1);
-    expect((await page.locator('h1').textContent())!.replace(/\s+/g, ' ').trim()).toBe('Gente que cumple desde 1968');
+    await expect(page.locator('h1')).toHaveText('Construimos la industria con gente que cumple, desde 1968.');
     await expect(page.locator('.mision')).toContainText('Gestionar proyectos de construcción generando valor y confianza.');
     await expect(page.locator('.vision')).toContainText('con la entrega anticipada de sus proyectos');
   });
@@ -108,54 +94,43 @@ test.describe('página Nosotros', () => {
     await expect(valores.nth(2)).toContainText('De cronogramas, especificaciones y presupuestos.');
   });
 
-  test('la descripción de ECOHL se lee completa', async ({ page }) => {
+  test('sin testimonios, empresas asociadas ni cierre (acta R-7)', async ({ page }) => {
     await page.goto('/nosotros/');
-    await expect(page.locator('.asociada').first()).toContainText('Servicios EPCM, gerencias de proyecto, interventoría, comisionamiento, administración de contratos y gerencia de riesgos.');
+    await expect(page.locator('.testimonios, .asociadas, .asociada, .mosaico, .cierre')).toHaveCount(0);
   });
 
-  test('siete estacas con los nombres de país', async ({ page }) => {
+  test('presencia: mapa con los 7 países con obra, un punto por país y sin direcciones', async ({ page }) => {
     await page.goto('/nosotros/');
-    expect(await page.locator('.presencia .estaca-pais').allTextContents()).toEqual(
+    const botones = page.locator('.presencia-paises button');
+    expect((await botones.allTextContents()).map((x) => x.replace(/^\s*[A-Z]{2}\s+/, '').trim())).toEqual(
       ['Colombia', 'Panamá', 'Costa Rica', 'República Dominicana', 'Guatemala', 'Bolivia', 'Ecuador']);
+    await expect(page.locator('.presencia .pm-punto')).toHaveCount(7);
+    await expect(page.locator('.presencia .pm-tierra path.obra')).toHaveCount(7);
+    await expect(page.locator('.presencia')).not.toContainText(/Calle|Carrera|Km|Avenida/);
   });
 
-  test('las secciones numeradas van sin saltos', async ({ page }) => {
-    await page.goto('/nosotros/');
-    const ns = await page.locator('[data-numero]').evaluateAll((xs) => xs.map((x) => (x as HTMLElement).dataset.numero));
-    expect(ns).toEqual(ns.map((_, i) => String(i + 1).padStart(2, '0')));
-  });
-
-  test('en desarrollo se ven los 4 testimonios marcados sin autorizar y las 4 empresas del grupo por confirmar', async ({ page }) => {
-    await page.goto('/nosotros/');
-    await expect(page.locator('.testimonios [aria-pressed]')).toHaveCount(4);
-    await expect(page.locator('.testimonios .chip-pendiente')).toContainText('sin autorizar');
-    await expect(page.locator('.asociada')).toHaveCount(4); // sin Megacranes ni Aktino (20-oct)
-    await expect(page.locator('.asociadas .chip-pendiente')).toContainText('por confirmar');
-  });
-
-  test('elegir un testimonio muestra su fragmento', async ({ page }) => {
-    await page.goto('/nosotros/');
-    const botones = page.locator('.testimonios [aria-pressed]');
-    await botones.nth(2).click();
-    await expect(botones.nth(2)).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('.testimonio.activo .testimonio-cita')).toContainText('Han pasado más de 15 años');
-  });
-
-  test('el selector avanza solo cada 9 s', async ({ page }) => {
+  test('presencia: el pulso recorre los países y elegir uno lo fija', async ({ page }) => {
     await page.clock.install();
     await page.goto('/nosotros/');
-    const botones = page.locator('.testimonios [aria-pressed]');
+    await page.locator('.presencia').scrollIntoViewIfNeeded();
+    const botones = page.locator('.presencia-paises button');
     await expect(botones.nth(0)).toHaveAttribute('aria-pressed', 'true');
-    await page.clock.fastForward(9500);
+    await page.clock.fastForward(2600);
     await expect(botones.nth(1)).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.pm-punto.activo')).toHaveAttribute('data-pais', 'PA');
+    await botones.nth(5).click();
+    await page.clock.fastForward(8000);
+    await expect(botones.nth(5)).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.pm-punto.activo')).toHaveAttribute('data-pais', 'BO');
   });
 
-  test('con movimiento reducido el selector no avanza', async ({ page }) => {
+  test('presencia: con movimiento reducido no hay recorrido', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.clock.install();
     await page.goto('/nosotros/');
-    await page.clock.fastForward(20000);
-    await expect(page.locator('.testimonios [aria-pressed]').nth(0)).toHaveAttribute('aria-pressed', 'true');
+    await page.locator('.presencia').scrollIntoViewIfNeeded();
+    await page.clock.fastForward(10000);
+    await expect(page.locator('.presencia-paises button').nth(0)).toHaveAttribute('aria-pressed', 'true');
   });
 
   for (const tema of ['light', 'dark'] as const) {

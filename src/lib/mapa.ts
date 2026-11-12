@@ -17,6 +17,20 @@ export function proyectar([lat, lon]: readonly [number, number]): [number, numbe
   return [r1((lon - CAJA.oeste) * K * ESCALA), r1((CAJA.norte - lat) * ESCALA)];
 }
 
+/** Mapa de presencia de Quiénes somos: llega hasta Bolivia (la caja del explorador termina en −6°). */
+export const CAJA_PRESENCIA = { oeste: -93, este: -59, sur: -24, norte: 21 };
+
+/** Lienzo de ANCHO unidades para cualquier caja, con la misma proyección. */
+export function lienzo(caja: typeof CAJA) {
+  const k = Math.cos((((caja.norte + caja.sur) / 2) * Math.PI) / 180);
+  const escala = ANCHO / ((caja.este - caja.oeste) * k);
+  return {
+    ancho: ANCHO,
+    alto: Math.round((caja.norte - caja.sur) * escala),
+    proyectar: ([lat, lon]: readonly [number, number]): [number, number] => [r1((lon - caja.oeste) * k * escala), r1((caja.norte - lat) * escala)],
+  };
+}
+
 // ── Mapa vivo (guía §13.2): encuadre, acercamiento y grupos. Funciones puras; la isla las conecta. ──
 
 /** Rectángulo del viewBox, en unidades del lienzo. */

@@ -1,11 +1,10 @@
 ---
 // Valores (guía §12.2-3): cinco ejes con burbuja A–E y un pictograma de plano por valor (guía §8). El eje
 // se pinta y la burbuja se llena al pasar; la frase siempre está visible.
-import Pod from '../Pod.astro';
 
 type Icono = 'ventana' | 'anillos' | 'calendario' | 'escalones' | 'casco';
-interface Props { numero: string; titulo: string; valores: { nombre: string; frase: string; icono: Icono }[] }
-const { numero, titulo, valores } = Astro.props;
+interface Props { titulo: string; valores: { nombre: string; frase: string; icono: Icono }[] }
+const { titulo, valores } = Astro.props;
 const LETRAS = ['A', 'B', 'C', 'D', 'E'];
 // Pictogramas en grilla de 64 (trazo en --accent, detalle .s en señal).
 const PICTO: Record<Icono, { d: string; s: string; c?: string }> = {
@@ -16,10 +15,9 @@ const PICTO: Record<Icono, { d: string; s: string; c?: string }> = {
   casco: { d: 'M10 42C10 24 20 14 32 14C44 14 54 24 54 42M4 42H60V48H4Z', s: 'M26 14V30M38 14V30M32 10V14' },
 };
 ---
-<section class="valores-sec" aria-labelledby="valores-titulo" data-numero={numero}>
+<section class="valores-sec" aria-labelledby="valores-titulo">
   <div class="wrap">
-    <Pod forma="eje" letra={numero} nombre={titulo} />
-    <h2 id="valores-titulo" class="sr-only">{titulo}</h2>
+    <h2 id="valores-titulo" class="h2-barra">{titulo}</h2>
     <ul class="valores trazo">
       {valores.map((v, i) => (
         <li class="valor" style={`--i:${i}`}>
@@ -39,7 +37,7 @@ const PICTO: Record<Icono, { d: string; s: string; c?: string }> = {
 </section>
 
 <style>
-  .valores-sec { padding-block: var(--s6); }
+  .valores-sec { padding-block: var(--s7); }
   .valores { list-style: none; margin: var(--s5) 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); border-top: var(--border) solid var(--line); }
   @media (min-width: 520px) { .valores { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (min-width: 900px) { .valores { grid-template-columns: repeat(5, minmax(0, 1fr)); } }

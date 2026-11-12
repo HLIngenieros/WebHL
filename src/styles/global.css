@@ -109,6 +109,12 @@
   .saltar:focus { top: var(--s3); }
 }
 
+/* ---- Títulos de sección v2.0 (12-nov): barra naranja de 48 × 4 px encima del H2 ---- */
+@layer components {
+  .h2-barra { margin: 0; }
+  .h2-barra::before { content: ''; display: block; width: 48px; height: 4px; margin-bottom: var(--s2); background: var(--hl-naranja); }
+}
+
 /* ---- Pods de sección (guía §6): mismo marcado en Astro (Pod.astro) y en los .tsx ---- */
 @layer components {
   /* P1 · Rótulo: identifica la página o la sección a la que enlaza una tarjeta */
