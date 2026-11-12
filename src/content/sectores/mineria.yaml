@@ -1,10 +1,6 @@
-# Fuente: texto de portada "Minero" (contenido/institucional.md §3.1).
-orden: 2
+# Categoría de filtro del explorador (Plan R, R-6): sin página propia.
+orden: 1
 principal: true
 slug: { es: mineria, en: mining }
-es:
-  nombre: Minería
-  intro: Obras de expansión de puertos y construcción de plantas de proceso para proyectos mineros.
-en:
-  nombre: Mining
-  intro: Port expansion works and process plant construction for mining projects.
+es: { nombre: Minería }
+en: { nombre: Mining }

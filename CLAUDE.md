@@ -315,7 +315,12 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     **R3 · Quiénes somos cerrado (12-nov):** H1 = lema, tira, misión/visión, valores (H2 visibles con `.h2-barra`
     global, sin pods) y presencia en mapa propio hasta Bolivia (`mapa-presencia.ts`) con pulso; fuera mosaico,
     testimonios, asociadas y cierre. Corregida la tira (hito alineado con el año al final del scroll).
-  - **Siguiente paso:** Plan R (R4: Proyectos y Servicios); luego F6. El proveedor de producción (`anthropic` con clave,
+    **R4 · Proyectos y Servicios cerrado (12-nov):** 3 especialidades con sus 3 proyectos (`proyectos:` en cada
+    servicio, validado por `auditar()`), sectores = Minería · Cemento · Otros proyectos sin página, ficha 3.1 (datos
+    generales, fotos, cantidades con cota) que en el explorador sube como panel (`<dialog>`, URL por `replaceState`),
+    Servicios con selector de especialidad por radios y cascada. Los 3 proyectos de cada especialidad son propuesta
+    (en `/pendientes/`).
+  - **Siguiente paso:** Plan R (R5: Gestión integral, Noticias, Contacto y complementarias); luego R6 y F6. El proveedor de producción (`anthropic` con clave,
     `foundry` o `azure-openai`) se agrega cuando Gerencia y TI den la credencial. F6 después.
   - **Ojo agente:** al desplegar no borrar `/api/vacantes.json` (lo escribe el flujo de Vacantes de F4 en Power
     Automate; **congelado por decisión de Juan David, 21-oct**: no se toca hasta nuevo aviso). El sitio es `https://hlingenieros.com` sin www.

@@ -2,7 +2,7 @@
 slug: { es: filtro-de-mangas-caracolito, en: caracolito-baghouse-filter }
 cliente: Cemex
 sector: cemento
-servicios: [montaje-mecanico, mantenimiento]
+servicios: [montaje-mecanico]
 cifras:
   - { valor: 1, unidad: dias, etiqueta: { es: Reinicio de la producción antes de lo previsto, en: Production restarted ahead of schedule } }
 visibilidad: normal

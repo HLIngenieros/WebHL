@@ -7,7 +7,7 @@ region: Santander
 coordenadas: [7.065, -73.854]
 meses: 14
 hh: 37000
-sector: infraestructura
+sector: otros
 servicios: [montaje-mecanico, montaje-electrico]
 cifras:
   - { valor: 37000, unidad: hh, etiqueta: { es: Horas hombre, en: Man-hours } }

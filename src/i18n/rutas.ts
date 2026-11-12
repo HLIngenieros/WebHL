@@ -6,7 +6,6 @@ export const RUTAS = {
   nosotros: { es: '/nosotros/', en: '/en/about/' },
   proyectos: { es: '/proyectos/', en: '/en/projects/' },
   servicios: { es: '/servicios/', en: '/en/services/' },
-  sectores: { es: '/sectores/', en: '/en/sectors/' },
   hse: { es: '/hse/', en: '/en/hse/' },
   noticias: { es: '/noticias/', en: '/en/news/' },
   contacto: { es: '/contacto/', en: '/en/contact/' },
@@ -29,7 +28,7 @@ export const PIE: ClaveRuta[] = ['terminos', 'datos', 'trabaje', 'acreedores', '
 export const ruta = (clave: ClaveRuta, lang: Lang): string => RUTAS[clave][lang];
 
 /** Secciones con páginas de contenido (una por entrada de la colección del mismo nombre). */
-export type Seccion = 'proyectos' | 'servicios' | 'sectores';
+export type Seccion = 'proyectos' | 'servicios';
 export const urlDe = (seccion: Seccion, slug: { es: string; en: string }, lang: Lang): string => `${RUTAS[seccion][lang]}${slug[lang]}/`;
 
 export const langDe = (pathname: string): Lang => (pathname === '/en' || pathname.startsWith('/en/') ? 'en' : 'es');

@@ -45,7 +45,7 @@ en cómo se presenta ese contenido, no agregando bloques ni gráficas decorativa
 | **R1 · Identidad** ✔ 12-nov | Fuentes reducidas (`fuente.py`) y alojadas; tokens aplicados en `global.css` y en los componentes; se quitan `--sec-*` y `[data-seccion]` de color (los pods quedan en azul y naranja); fotos en duotono sobre oscuro y a color en las fichas; radios, sombras y estados | `check`, humo, presupuesto |
 | **R2 · Armazón** ✔ 12-nov | Menú de 6 pestañas sin panel (`PanelProyectos` sale) con ES/EN; menú móvil; pie del acta (oficina principal, teléfono, redes, sellos ISO, enlaces complementarios); transición de barrido (View Transitions); "Hablar con HL" se mantiene flotante | `check` + pruebas de navegación |
 | **R3 · Home y Quiénes somos** (✔ 12-nov) | Home: video de fondo con el título (MP4 + WebM ≤ 6 MB, póster como LCP, solo en escritorio, botón de pausa), cifras relevantes con contador (valor final en el HTML) y clientes. Sale todo lo demás del inicio actual. Quiénes somos: slogan, línea del tiempo, misión, visión y valores, presencia por países sin direcciones. **Home hecho:** hero con póster provisional de Columbus (acercamiento lento y pausa; el video entra solo al poner `video:` en `sitio.yaml`, pendiente bloqueante), cifras calculadas (años, países, HH del proyecto visible con más horas, primer indicador con signo de HSE) y clientes; fuera franja de sectores, destacados, servicios, sectores, HSE, noticias y el gemelo digital. La barra deja de ser transparente a los 40 px. Ajustes (12-nov): cifras en tarjetas blancas con borde sobre banda niebla e íconos de trazo; H2 en Poppins 700 (todo el sitio) con barra naranja en el Home. **Quiénes somos hecho (12-nov):** H1 = lema; tira de negativos; misión y visión (con sus indicadores) y valores con H2 visible y barra naranja (clase global `.h2-barra`; fuera pods y numeración); presencia en un mapa propio estático que llega hasta Bolivia (`src/lib/mapa-presencia.ts`, `node design/mapa.mjs <geojson> --presencia`) con pulso que recorre los 7 países y se fija al elegir uno. Fuera mosaico, testimonios, asociadas y cierre (y sus textos). De paso: la tira mostraba 2026 con el hito anterior al final del scroll (el hito ahora sale del año redondeado) | `check` + pruebas de la página |
-| **R4 · Proyectos y Servicios** | Colección de servicios reducida a 3 y fichas reasignadas; sectores a 3 categorías de filtro y fuera sus páginas; explorador con mapa, filtros y ficha 3.1 (datos generales, fotos, cantidades); página de cada servicio: sus 3 proyectos que llevan a la ficha | `check` + explorador, ficha y servicio |
+| **R4 · Proyectos y Servicios** ✔ 12-nov | Colección de servicios reducida a 3 y fichas reasignadas; sectores a 3 categorías de filtro y fuera sus páginas; explorador con mapa, filtros y ficha 3.1 (datos generales, fotos, cantidades); página de cada servicio: sus 3 proyectos que llevan a la ficha | `check` + explorador, ficha y servicio |
 | **R5 · Gestión integral y demás** | Gestión integral con sus 6 bloques. Noticias: blog con adjudicaciones, iniciativas y eventos. Contacto: solo los 4 formularios, sin sedes, con adjuntos (`enviar.php`). Complementarias: términos, datos, vacantes (`Vacantes.tsx` sin cambios: el flujo sigue congelado), acreedores y documentos públicos | `check` + formularios (PHP con `HL_PHP`) |
 | **R6 · Cierre** | Inglés de todo lo nuevo; `inventario.csv`, `.htaccess` y `sitemap` con los 301 (servicios, sectores, `/hse`); revisión de código enfocada en `enviar.php` (adjuntos); CLAUDE.md, memoria y bitácora | Suite completa, `npm run presupuesto`, Lighthouse móvil una vez (Home, explorador, Gestión integral, Contacto) |
 
@@ -68,6 +68,24 @@ pie ya no lleva navegación de respaldo. Pie del acta: marca, oficina principal 
 complementarios, sellos ISO (texto hasta tener las imágenes oficiales) y LinkedIn. Provisionales hasta R5: "Gestión
 integral" apunta a `/hse/` y "Vacantes" a Trabaje con nosotros. Favicon en `#003399`. El barrido entre páginas ya
 existía (`Base.astro`). Verificación: `check` 0 errores; barra, pie, movimiento y humo 33/33.
+
+**Cierre de R4 (12-nov):** servicios = 3 especialidades (`orden`, `slug`, `proyectos` con 3 referencias, `nombre`,
+`resumen`); fuera EPC, Gerencia, Fabricación y Mantenimiento y los campos de alcance, normas, FAQ y grupos. Sectores =
+Minería · Cemento · Otros proyectos (`otros`/`other`; agua y energía, petróleo y gas, infraestructura e industria pasan a
+`otros`), sin página. Fichas reasignadas: Fabricación y Mantenimiento → montaje mecánico; Gerencia y EPC se quitan;
+Chuchupa queda sin especialidad (pendiente por confirmar). `auditar()` exige que los 3 proyectos de cada especialidad
+existan, no sean discretos y la mencionen; la cifra de la ficha pasa de "3-4" a "una para la tarjeta". **Propuesta de los
+3 proyectos (en `/pendientes/`):** mecánico = Columbus, Cementos Progreso, PTAR Salitre; civil = Columbus, Chimborazo,
+Diana Pet Food; eléctrico = Puerto Bolívar, Buriticá, Charlotte. Ficha 3.1: datos generales (rótulo + descripción;
+el sector lleva al explorador filtrado), fotos y cantidades medidas con cota (`Cifras`); fuera cifras, reto,
+relacionados y llamada. En el explorador la ficha sube como panel (`<dialog>` con el `<article>` de la página ya
+compilada, descargado al pasar por la tarjeta): Escape, el botón o el fondo cierran y el foco vuelve; la URL cambia con
+`replaceState` porque el `ClientRouter` maneja el historial (Atrás sale del explorador); con Ctrl o sin JS se abre la
+página. Fuera grupos A-B-C y pods de línea. Servicios: selector de especialidad con radios (sin JS, flechas) y cascada de
+sus 3 tarjetas; la página de la especialidad muestra sus 3 y el enlace al explorador filtrado. En Contacto, el sector
+del formulario ya no repite "Otros proyectos" junto a "Otro". Pruebas: de paso se pusieron al día las de R1-R3 que
+seguían en `proyectos.spec.ts` (sección en la pestaña del menú, selector de idioma, variantes hasta 2400 px).
+Verificación: `check` 0 errores; proyectos, contenido, humo y pantallas 238/238. Los 301 de servicios y sectores van en R6.
 
 ## Riesgos
 

@@ -7,7 +7,7 @@ region: Cundinamarca
 coordenadas: [4.965, -73.913]
 meses: 8
 hh: 90000
-sector: industria
+sector: otros
 servicios: [obras-civiles]
 cifras:
   - { valor: 2300, unidad: m3, etiqueta: { es: Concreto, en: Concrete } }

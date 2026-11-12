@@ -1,29 +1,12 @@
-# Fuente: "Montajes eléctricos" (contenido/institucional.md §3.1).
-grupo: B
-orden: 5
+# Especialidad 3 (Plan R, R-5).
+orden: 3
 slug: { es: montaje-electrico, en: electrical-installation }
-normas: [RETIE]
+proyectos: [puerto-bolivar, planta-buritica, proyecto-charlotte]
+confirmar:
+  - "Validar los 3 proyectos de Montaje eléctrico (propuesta: Puerto Bolívar, Buriticá, Charlotte)."
 es:
   nombre: Montaje eléctrico e instrumentación
   resumen: Instalamos el sistema eléctrico de potencia y control y la instrumentación para la puesta en marcha de los proyectos.
-  alcance:
-    - subcapacidad: Potencia
-      texto: Instalaciones de media y baja tensión, subestaciones eléctricas, tableros de distribución, celdas y centros de control de motores (CCM).
-    - subcapacidad: Puesta a tierra y apantallamiento
-      texto: Mallas de puesta a tierra y apantallamientos.
-    - subcapacidad: Cableado y canalizaciones
-      texto: Todo el cableado y las canalizaciones necesarios.
-    - subcapacidad: Instrumentación y control
-      texto: Instalación de la instrumentación para el control integrado del proceso productivo.
 en:
   nombre: Electrical installation and instrumentation
   resumen: We install the electrical power and control system and the instrumentation needed to commission each project.
-  alcance:
-    - subcapacidad: Power
-      texto: Medium- and low-voltage installations, electrical substations, distribution boards, switchgear and motor control centers (MCC).
-    - subcapacidad: Grounding and lightning protection
-      texto: Grounding grids and lightning protection.
-    - subcapacidad: Cabling and raceways
-      texto: All required cabling and raceways.
-    - subcapacidad: Instrumentation and control
-      texto: Installation of instrumentation for integrated control of the production process.

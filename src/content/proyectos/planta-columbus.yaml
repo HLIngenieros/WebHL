@@ -10,7 +10,7 @@ coordenadas: [10.391, -75.479]
 meses: 42
 hh: 9470000
 sector: cemento
-servicios: [epc-llave-en-mano, obras-civiles, montaje-mecanico, montaje-electrico]
+servicios: [obras-civiles, montaje-mecanico, montaje-electrico]
 cifras:
   - { valor: 9470000, unidad: hh, etiqueta: { es: Horas hombre, en: Man-hours } }
   - { valor: 5250, unidad: tpd, etiqueta: { es: Capacidad de producción de cemento, en: Cement production capacity } }

@@ -23,7 +23,8 @@ const porOrden = <X extends { data: { orden: number } }>(xs: X[]) => [...xs].sor
 const opciones = {
   pais: Object.entries(PAISES).map(([c, n]) => [c, n[lang]] as [string, string]),
   servicio: porOrden(datos.servicios).map((s) => bloque(s.data, lang).nombre),
-  sector: porOrden(datos.sectores).map((s) => bloque(s.data, lang).nombre),
+  // "Otros proyectos" es una categoría del explorador: el formulario ya ofrece "Otro".
+  sector: porOrden(datos.sectores).filter((s) => s.id !== 'otros').map((s) => bloque(s.data, lang).nombre),
 };
 const enlaces = Object.fromEntries(FORMULARIOS.map((f) => [f.id, ruta(f.ruta, lang)])) as Record<Intencion, string>;
 const buzones = sitio.contacto.buzones;

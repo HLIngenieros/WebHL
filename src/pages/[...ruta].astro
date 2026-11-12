@@ -1,5 +1,5 @@
 ---
-// Enrutador único: páginas de contenido (proyectos, servicios, sectores) y provisionales del resto del
+// Enrutador único: páginas de contenido (proyectos y servicios) y provisionales del resto del
 // mapa. Cada fase cambia una provisional por su plantilla. Inicio y Nosotros tienen archivo propio
 // (src/pages/index.astro, nosotros.astro y en/) para cargar solo su CSS.
 import Base from '../layouts/Base.astro';
@@ -11,12 +11,10 @@ import Ficha from '../plantillas/Ficha.astro';
 import Proyectos from '../plantillas/Proyectos.astro';
 import Servicios from '../plantillas/Servicios.astro';
 import Servicio from '../plantillas/Servicio.astro';
-import Sectores from '../plantillas/Sectores.astro';
-import Sector from '../plantillas/Sector.astro';
 
 export async function getStaticPaths() {
   // getStaticPaths corre aislado del resto del archivo: sus constantes van aquí dentro.
-  const CONTENIDO: ClaveRuta[] = ['proyectos', 'servicios', 'sectores'];
+  const CONTENIDO: ClaveRuta[] = ['proyectos', 'servicios'];
   // Con archivo propio; noticias vive en src/pages/noticias/ y solo se genera con 3 o más entradas.
   const PROPIAS: ClaveRuta[] = ['inicio', 'nosotros', 'hse', 'acreedores', 'datos', 'terminos', 'noticias', 'contacto', 'trabaje', 'proveedores', 'buzon'];
   const provisionales = (Object.keys(RUTAS) as ClaveRuta[])
@@ -40,9 +38,7 @@ const titulo = 'clave' in props ? t(lang, props.clave) : '';
   props.tipo === 'ficha' ? <Ficha id={props.id!} lang={lang} alterno={props.alterno} />
   : props.tipo === 'proyectos' ? <Proyectos lang={lang} alterno={props.alterno} />
   : props.tipo === 'servicios' ? <Servicios lang={lang} alterno={props.alterno} />
-  : props.tipo === 'servicio' ? <Servicio id={props.id!} lang={lang} alterno={props.alterno} />
-  : props.tipo === 'sectores' ? <Sectores lang={lang} alterno={props.alterno} />
-  : <Sector id={props.id!} lang={lang} alterno={props.alterno} />
+  : <Servicio id={props.id!} lang={lang} alterno={props.alterno} />
 ) : (
   <Base titulo={titulo} lang={lang}>
     <section class="wrap py-s7">

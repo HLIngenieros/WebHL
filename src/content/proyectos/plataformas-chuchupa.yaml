@@ -1,8 +1,8 @@
 # Fuente: PDF "Portafolio ECOHL" (2020), casos 1 y 2 (cadena crítica, TOC).
 slug: { es: plataformas-chuchupa, en: chuchupa-platforms }
 cliente: Chevron
-sector: petroleo-y-gas
-servicios: [gerencia-de-proyectos]
+sector: otros
+servicios: []
 cifras:
   - { valor: 0, unidad: pct, etiqueta: { es: Pérdida de tiempo, en: Lost time } }
   - { valor: 0, etiqueta: { es: Incidentes, en: Incidents } }
@@ -10,6 +10,7 @@ visibilidad: normal
 fuente: ecohl
 confirmar:
   - "Ubicación: plataformas costa afuera; ¿La Guajira?"
+  - "Especialidad: fue gerencia (ECOHL), que ya no es una especialidad; ¿mecánico, civil o eléctrico?"
 es:
   titulo: Plataformas Chuchupa A y B
   resumen: Planeación por cadena crítica de los trabajos costa afuera en las plataformas Chuchupa A y B, sin pérdida de tiempo ni incidentes.

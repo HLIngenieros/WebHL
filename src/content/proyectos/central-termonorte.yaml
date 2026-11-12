@@ -7,7 +7,7 @@ region: Magdalena
 coordenadas: [11.241, -74.199]
 meses: 12
 hh: 210000
-sector: agua-y-energia
+sector: otros
 servicios: [obras-civiles]
 cifras:
   - { valor: 93, unidad: mw, etiqueta: { es: Capacidad de generación, en: Generating capacity } }

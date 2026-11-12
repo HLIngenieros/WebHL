@@ -6,8 +6,8 @@ ciudad: Bogotá
 coordenadas: [4.711, -74.072]
 meses: 12
 hh: 305000
-sector: agua-y-energia
-servicios: [montaje-mecanico, fabricacion]
+sector: otros
+servicios: [montaje-mecanico]
 cifras:
   - { valor: 92000, unidad: pd, etiqueta: { es: Tubería de acero al carbono e inoxidable, en: Carbon and stainless steel piping } }
   - { valor: 770, unidad: t, etiqueta: { es: Equipos, en: Equipment } }

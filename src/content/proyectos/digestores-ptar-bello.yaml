@@ -7,7 +7,7 @@ region: Antioquia
 coordenadas: [6.337, -75.558]
 meses: 12
 hh: 750000
-sector: agua-y-energia
+sector: otros
 servicios: [montaje-mecanico]
 cifras:
   - { valor: 6, unidad: u, etiqueta: { es: Digestores ovoidales, en: Egg-shaped digesters } }

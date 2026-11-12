@@ -6,7 +6,7 @@ const PANTALLAS = [[360, 780], [390, 844], [768, 1024], [1024, 768], [1366, 768]
 const PAGINAS = [
   '/', '/nosotros/', '/en/about/', '/muestra/', '/pendientes/', '/404.html',
   '/proyectos/', '/en/projects/', '/proyectos/planta-columbus/', '/proyectos/torre-grua-maceo/',
-  '/servicios/', '/servicios/montaje-mecanico/', '/sectores/', '/sectores/mineria/',
+  '/servicios/', '/servicios/montaje-mecanico/',
   '/hse/', '/en/hse/', '/acreedores/', '/legal/datos/', '/legal/terminos/',
 ];
 

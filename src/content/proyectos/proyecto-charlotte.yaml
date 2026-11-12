@@ -7,7 +7,7 @@ region: Valle del Cauca
 coordenadas: [3.539, -76.303]
 meses: 9
 hh: 95000
-sector: industria
+sector: otros
 servicios: [montaje-mecanico, montaje-electrico]
 cifras:
   - { valor: 290, unidad: u, etiqueta: { es: Equipos, en: Equipment } }

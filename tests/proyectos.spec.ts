@@ -2,44 +2,12 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import fs from 'node:fs';
 import path from 'node:path';
-import { medida, relacionados, sectoresDe, serviciosDe, clientesDe, auditar } from '../src/lib/contenido';
+import { medida, auditar } from '../src/lib/contenido';
 import { cumple, conteos, leerFiltros, escribirFiltros } from '../src/lib/explorador';
 import { urlDe } from '../src/i18n/rutas';
 import { p, ids, tj, slugs } from './apoyo';
 
 const SITIO = 'https://hlingenieros.com';
-
-test.describe('relaciones de F2', () => {
-  const lista = [
-    p('base', { servicios: [{ id: 'montaje-mecanico' }, { id: 'obras-civiles' }] }),
-    p('gemelo', { cliente: 'Zeta', servicios: [{ id: 'montaje-mecanico' }, { id: 'obras-civiles' }] }),
-    p('mismo-sector', { cliente: 'Alfa', servicios: [{ id: 'fabricacion' }] }),
-    p('mismo-servicio', { sector: { id: 'mineria' }, servicios: [{ id: 'obras-civiles' }] }),
-    p('nada-en-comun', { sector: { id: 'mineria' }, servicios: [{ id: 'fabricacion' }] }),
-    p('oculta', { cliente: 'Secreto', visibilidad: 'discreta' }),
-  ];
-
-  test('(foco 1) una discreta no entra en relacionados, sectores, servicios ni clientes', () => {
-    expect(ids(relacionados(lista, lista[0], 10))).not.toContain('oculta');
-    expect(sectoresDe([lista[5]], 'montaje-mecanico')).toEqual([]);
-    expect(serviciosDe([lista[5]], 'cemento')).toEqual([]);
-    expect(clientesDe(lista, 'cemento')).not.toContain('Secreto');
-  });
-
-  test('relacionados: primero mismo sector y servicios, sin la actual ni sin nada en común', () => {
-    expect(ids(relacionados(lista, lista[0]))).toEqual(['gemelo', 'mismo-sector', 'mismo-servicio']);
-    expect(ids(relacionados(lista, lista[0], 1))).toEqual(['gemelo']);
-  });
-
-  test('sectores de un servicio y servicios de un sector, por frecuencia', () => {
-    expect(sectoresDe(lista, 'obras-civiles')).toEqual(['cemento', 'mineria']);
-    expect(serviciosDe(lista, 'cemento')).toEqual(['montaje-mecanico', 'obras-civiles', 'fabricacion']);
-  });
-
-  test('clientes del sector, únicos y en orden alfabético', () => {
-    expect(clientesDe(lista, 'cemento')).toEqual(['Alfa', 'Cliente', 'Zeta']);
-  });
-});
 
 test.describe('medida()', () => {
   test('cifra con unidad en cada idioma', () => {
@@ -89,14 +57,18 @@ test.describe('filtros del explorador', () => {
 test.describe('rutas de contenido', () => {
   test('(foco 4) urlDe arma la URL del idioma', () => {
     expect(urlDe('proyectos', { es: 'planta-columbus', en: 'columbus-plant' }, 'en')).toBe('/en/projects/columbus-plant/');
-    expect(urlDe('sectores', { es: 'mineria', en: 'mining' }, 'es')).toBe('/sectores/mineria/');
   });
 
   test('un país desconocido detiene la compilación', () => {
     expect(() => auditar({ proyectos: [p('raro', { pais: 'XX' })] }, { modo: 'desarrollo' })).toThrow(/raro.*XX/);
   });
 
-  for (const seccion of ['proyectos', 'servicios', 'sectores'] as const) {
+  test('los sectores ya no tienen página (Plan R, R-6)', () => {
+    expect(fs.existsSync(path.join(process.cwd(), 'dist', 'sectores'))).toBe(false);
+    expect(fs.existsSync(path.join(process.cwd(), 'dist', 'en', 'sectors'))).toBe(false);
+  });
+
+  for (const seccion of ['proyectos', 'servicios'] as const) {
     test(`(foco 4) cada página de ${seccion} existe en ES y EN y enlaza a su par`, async ({ page }) => {
       for (const slug of slugs(seccion)) {
         const es = urlDe(seccion, slug, 'es');
@@ -106,7 +78,7 @@ test.describe('rutas de contenido', () => {
           expect(resp?.status(), aqui).toBe(200);
           const otroLang = otra.startsWith('/en/') ? 'en' : 'es';
           await expect(page.locator(`link[rel=alternate][hreflang=${otroLang}]`)).toHaveAttribute('href', SITIO + otra);
-          await expect(page.locator('a.idioma')).toHaveAttribute('href', otra);
+          await expect(page.locator('.idioma a')).toHaveAttribute('href', otra);
         }
       }
     });
@@ -116,35 +88,13 @@ test.describe('rutas de contenido', () => {
 test.describe('identidad por sección', () => {
   test.use({ colorScheme: 'light' });
 
-  test('(foco 4) <html> declara la sección de la página', async ({ page }) => {
-    const seccion = async (url: string) => { await page.goto(url); return page.locator('html').getAttribute('data-seccion'); };
+  // Sin acentos por sección (Plan R, R-2): la sección se marca en la pestaña del menú (aria-current).
+  test('(foco 4) la pestaña de la sección queda marcada, también en sus subpáginas', async ({ page }) => {
+    const seccion = async (url: string) => { await page.goto(url); return page.locator('#nav-principal a[aria-current]').getAttribute('data-seccion'); };
     expect(await seccion('/proyectos/')).toBe('proyectos');
     expect(await seccion('/proyectos/planta-columbus/')).toBe('proyectos');
     expect(await seccion('/en/services/')).toBe('servicios');
-    expect(await seccion('/sectores/mineria/')).toBe('sectores');
-    expect(await seccion('/')).toBeNull();
-    expect(await seccion('/nosotros/')).toBeNull();
-  });
-
-  test('el indicador del menú toma el acento de la sección', async ({ page }) => {
-    await page.setViewportSize({ width: 1366, height: 768 });
-    const color = async (url: string) => {
-      await page.goto(url);
-      return page.locator('#nav-principal a[aria-current]').evaluate((a) => getComputedStyle(a).borderBottomColor);
-    };
-    expect(await color('/proyectos/')).toBe('rgb(138, 90, 0)');
-    // Servicios cuelga de Proyectos en la barra (guía §13.1): se marca Proyectos, con su acento.
-    expect(await color('/servicios/')).toBe('rgb(138, 90, 0)');
-  });
-
-  test('un pod con otra sección toma su acento dentro de la página', async ({ page }) => {
-    await page.goto('/muestra/');
-    expect(await page.locator('html').getAttribute('data-seccion')).toBe('proyectos');
-    const barra = (sel: string) => page.locator(sel).first().evaluate((el) => getComputedStyle(el, '::before').backgroundColor);
-    expect(await barra('.pod-rotulo[data-seccion="hse"]')).toBe('rgb(31, 111, 58)');
-    expect(await barra('.pod-rotulo:not([data-seccion])')).toBe('rgb(138, 90, 0)');
-    await expect(page.locator('.pod-eje')).not.toHaveCount(0);
-    await expect(page.locator('.pod-senal')).not.toHaveCount(0);
+    expect(await seccion('/servicios/obras-civiles/')).toBe('servicios');
   });
 
   for (const tema of ['light', 'dark'] as const) {
@@ -182,15 +132,6 @@ test.describe('lámina, tarjeta e ilustraciones', () => {
     await expect(page.locator('astro-island')).toHaveCount(0);
   });
 
-  test('la lámina va en gris y vuelve a color al pasar el cursor', async ({ page }) => {
-    await page.setViewportSize({ width: 1366, height: 900 });
-    await page.goto('/muestra/');
-    const img = page.locator('.tarjeta[data-id="planta-columbus"] img');
-    expect(await img.evaluate((el) => getComputedStyle(el).filter)).toContain('grayscale(1)');
-    await page.locator('.tarjeta[data-id="planta-columbus"]').hover();
-    await expect.poll(() => img.evaluate((el) => getComputedStyle(el).filter)).toBe('none');
-  });
-
   test('(foco 5) con reduced-motion los trazos están completos', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/muestra/');
@@ -199,13 +140,14 @@ test.describe('lámina, tarjeta e ilustraciones', () => {
     expect(estado.filter(([clip, guion]) => clip !== 'none' || guion !== 'none')).toEqual([]);
   });
 
-  test('(foco 3) ninguna variante generada pasa de 800 px de ancho', async () => {
+  // Guía v2.0 §9: hasta 2400 px cuando haya originales (el póster del Home sale a 1200).
+  test('(foco 3) ninguna variante generada pasa de 2400 px de ancho', async () => {
     const sharp = (await import('sharp')).default;
     const dir = path.join(process.cwd(), 'dist', '_astro');
     const anchas: string[] = [];
     for (const f of fs.readdirSync(dir).filter((x) => /\.(avif|webp)$/.test(x))) {
       const { width } = await sharp(path.join(dir, f)).metadata();
-      if ((width ?? 0) > 800) anchas.push(`${f}: ${width}`);
+      if ((width ?? 0) > 2400) anchas.push(`${f}: ${width}`);
     }
     expect(anchas).toEqual([]);
   });
@@ -230,10 +172,20 @@ test.describe('ficha de proyecto', () => {
     }
   });
 
-  test('Columbus: cifras por idioma, cantidades, hoja de contactos y LCP', async ({ page }) => {
+  test('ficha 3.1: datos generales, fotos y cantidades, en ese orden', async ({ page }) => {
     await page.goto('/proyectos/planta-columbus/');
-    await expect(page.locator('.cifras dd').first()).toContainText('9.470.000');
-    await expect(page.locator('.cantidades tbody tr')).toHaveCount(11);
+    const ejes = await page.locator('.ficha-cuerpo > section h2').allInnerTexts();
+    expect(ejes).toEqual(['Datos generales', 'Fotos', 'Cantidades de obra']);
+    await expect(page.locator('.ficha .tarjeta, .ficha .relacionados, .ficha .llamada')).toHaveCount(0);
+    // El sector ya no tiene página: lleva al explorador filtrado; las especialidades, a su página.
+    await expect(page.locator('.rotulo a', { hasText: 'Cemento' })).toHaveAttribute('href', '/proyectos/?sector=cemento');
+    await expect(page.locator('.rotulo a[href="/servicios/obras-civiles/"]')).toHaveCount(1);
+  });
+
+  test('Columbus: cantidades medidas por idioma, hoja de contactos y LCP', async ({ page }) => {
+    await page.goto('/proyectos/planta-columbus/');
+    await expect(page.locator('.ficha-cuerpo .cifras > div')).toHaveCount(11);
+    await expect(page.locator('.ficha-cuerpo .cifras dd').first()).toContainText('442.000');
     await expect(page.locator('.hoja figure')).toHaveCount(4);
     await expect(page.locator('.ficha-portada img')).toHaveAttribute('fetchpriority', 'high');
     await page.locator('.hoja button').nth(1).click();
@@ -242,7 +194,7 @@ test.describe('ficha de proyecto', () => {
     await page.keyboard.press('Escape');
     await expect(visor).toHaveCount(0);
     await page.goto('/en/projects/columbus-plant/');
-    await expect(page.locator('.cifras dd').first()).toContainText('9,470,000');
+    await expect(page.locator('.ficha-cuerpo .cifras dd').first()).toContainText('442,000');
   });
 
   test('(foco 3) a 2560 px ninguna foto pasa de 800 px, ni abierta', async ({ page }) => {
@@ -254,11 +206,7 @@ test.describe('ficha de proyecto', () => {
     expect((await anchos()).filter((w) => w > 800.5)).toEqual([]);
   });
 
-  test('(foco 1) los relacionados nunca enlazan a una discreta; las discretas se indexan', async ({ page }) => {
-    for (const slug of slugs('proyectos')) {
-      await page.goto(urlDe('proyectos', slug, 'es'));
-      for (const d of DISCRETAS) await expect(page.locator(`.relacionados a[href*="${d}"]`)).toHaveCount(0);
-    }
+  test('(foco 1) las discretas tienen ficha y se indexan', async ({ page }) => {
     for (const d of DISCRETAS) {
       const resp = await page.goto(`/proyectos/${d}/`);
       expect(resp?.status()).toBe(200);
@@ -269,7 +217,7 @@ test.describe('ficha de proyecto', () => {
   test('(foco 4) en inglés todos los enlaces internos de la ficha son EN', async ({ page }) => {
     await page.goto('/en/projects/columbus-plant/');
     const hrefs = await page.locator('main a[href^="/"]').evaluateAll((xs) => xs.map((x) => x.getAttribute('href')!));
-    expect(hrefs.length).toBeGreaterThan(3);
+    expect(hrefs.length).toBeGreaterThan(2);
     expect(hrefs.filter((h) => !h.startsWith('/en/'))).toEqual([]);
   });
 
@@ -358,16 +306,20 @@ test.describe('explorador de proyectos', () => {
   });
 
   test('la URL llega filtrada y los valores desconocidos se ignoran', async ({ page }) => {
-    await page.goto('/proyectos/?sector=cemento&servicio=fabricacion');
+    await page.goto('/proyectos/?sector=cemento&servicio=obras-civiles');
     await hidratado(page);
-    await expect(visibles(page)).toHaveCount(1);
+    await expect(visibles(page)).toHaveCount(2);
+    // Fabricación salió con el Plan R: un enlace viejo ya no filtra.
+    await page.goto('/proyectos/?servicio=fabricacion');
+    await hidratado(page);
+    await expect(visibles(page)).toHaveCount(22);
     await page.goto('/proyectos/?sector=nada');
     await hidratado(page);
     await expect(visibles(page)).toHaveCount(22);
   });
 
   test('(foco 5) sin resultados aparece "Quitar filtros" y devuelve las 22', async ({ page }) => {
-    await page.goto('/proyectos/?sector=infraestructura&servicio=fabricacion');
+    await page.goto('/proyectos/?sector=mineria&servicio=obras-civiles');
     await hidratado(page);
     await expect(visibles(page)).toHaveCount(0);
     await page.locator('.sin-resultados button').click();
@@ -398,22 +350,57 @@ test.describe('explorador de proyectos', () => {
   const caja = (page: import('@playwright/test').Page) =>
     page.locator('.explorador svg.mapa').evaluate((s) => s.getAttribute('viewBox')!.split(' ').map(Number));
 
-  test('las placas ponen Cemento y Minería primero y más anchas', async ({ page }) => {
+  test('filtros del acta: Minería · Cemento · Otros (dos placas grandes) y las 3 especialidades', async ({ page }) => {
     await page.goto('/proyectos/');
     await hidratado(page);
     const placas = page.locator('.placas .placa');
-    await expect(placas.nth(0)).toHaveAttribute('data-valor', 'cemento');
-    await expect(placas.nth(1)).toHaveAttribute('data-valor', 'mineria');
+    await expect(placas).toHaveCount(3);
+    await expect(placas.nth(0)).toHaveAttribute('data-valor', 'mineria');
+    await expect(placas.nth(1)).toHaveAttribute('data-valor', 'cemento');
+    await expect(placas.nth(2)).toHaveAttribute('data-valor', 'otros');
     await expect(page.locator('.placas .placa.mayor')).toHaveCount(2);
+    const esp = await page.locator('[data-dim="servicio"] button').evaluateAll((xs) => xs.map((x) => x.getAttribute('data-valor')));
+    expect(esp).toEqual(['montaje-mecanico', 'obras-civiles', 'montaje-electrico']);
+    await expect(page.locator('.pod-linea, .filtros-explorador .burbuja')).toHaveCount(0);
   });
 
-  test('al elegir un sector o un servicio aparece su pod de línea con enlace', async ({ page }) => {
-    await page.goto('/proyectos/?sector=cemento&servicio=montaje-mecanico');
+  test('la ficha sube como panel: URL de la ficha, Escape cierra y el foco vuelve', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 900 });
+    await page.goto('/proyectos/?sector=cemento');
     await hidratado(page);
-    const pods = page.locator('.pod-linea');
-    await expect(pods).toHaveCount(2);
-    await expect(pods.nth(0).locator('a')).toHaveAttribute('href', '/sectores/cemento/');
-    await expect(pods.nth(1).locator('a')).toHaveAttribute('href', '/servicios/montaje-mecanico/');
+    const enlace = page.locator('.explorador .tarjeta[data-id="planta-columbus"] h3 a');
+    await enlace.click();
+    const panel = page.locator('dialog.panel-ficha[open]');
+    await expect(panel).toBeVisible();
+    await expect(panel.locator('h1')).toHaveText(/Columbus/);
+    await expect(page).toHaveURL(/\/proyectos\/planta-columbus\/$/);
+    await expect(page).toHaveTitle(/Columbus/);
+    await page.keyboard.press('Escape');
+    await expect(panel).toHaveCount(0);
+    await expect(page).toHaveURL(/\/proyectos\/\?sector=cemento$/);
+    await expect(enlace).toBeFocused();
+  });
+
+  test('desde el panel, el sector filtra el explorador sin recargar', async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 900 });
+    await page.goto('/proyectos/');
+    await hidratado(page);
+    await page.locator('.explorador .tarjeta[data-id="puerto-bolivar"] h3 a').click();
+    await page.locator('dialog.panel-ficha .rotulo a', { hasText: 'Minería' }).click();
+    await expect(page.locator('dialog.panel-ficha[open]')).toHaveCount(0);
+    await expect(page).toHaveURL(/\?sector=mineria$/);
+    await expect(boton(page, 'sector', 'mineria')).toHaveAttribute('aria-pressed', 'true');
+    await expect(visibles(page)).toHaveCount(4);
+  });
+
+  test('con Ctrl la tarjeta se abre como página, sin panel', async ({ page, context }) => {
+    await page.goto('/proyectos/');
+    await hidratado(page);
+    const nueva = context.waitForEvent('page');
+    await page.locator('.explorador .tarjeta[data-id="planta-columbus"] h3 a').click({ modifiers: ['Control'] });
+    await (await nueva).close();
+    await expect(page.locator('dialog.panel-ficha[open]')).toHaveCount(0);
+    await expect(page).toHaveURL(/\/proyectos\/$/);
   });
 
   test('filtrar encoge los puntos que no cumplen y encuadra el resto', async ({ page }) => {
@@ -489,11 +476,11 @@ test.describe('explorador de proyectos', () => {
   });
 });
 
-test.describe('servicios y sectores', () => {
+test.describe('servicios (3 especialidades)', () => {
   const DISCRETAS = ['patio-de-carbon-estrella', 'tanques-cobre-panama'];
 
-  test('(foco 1) ninguna página de servicio o sector enlaza a una discreta, y no cargan React', async ({ page }) => {
-    const urls = ['/servicios/', '/sectores/', ...slugs('servicios').map((s) => urlDe('servicios', s, 'es')), ...slugs('sectores').map((s) => urlDe('sectores', s, 'es'))];
+  test('(foco 1) ninguna página de servicio enlaza a una discreta, y no cargan islas', async ({ page }) => {
+    const urls = ['/servicios/', ...slugs('servicios').map((s) => urlDe('servicios', s, 'es'))];
     for (const url of urls) {
       await page.goto(url);
       await expect(page.locator('h1'), url).toHaveCount(1);
@@ -502,26 +489,35 @@ test.describe('servicios y sectores', () => {
     }
   });
 
-  test('(foco 1) los conteos de los índices cuentan solo visibles', async ({ page }) => {
-    await page.goto('/sectores/');
-    await expect(page.locator('[data-id="mineria"] .conteo')).toHaveText(/^3\b/);
+  for (const js of [true, false]) {
+    test.describe(js ? 'con JavaScript' : 'sin JavaScript', () => {
+      test.use({ javaScriptEnabled: js });
+      test('el índice muestra una especialidad a la vez y sus 3 proyectos llevan a la ficha', async ({ page }) => {
+        await page.goto('/servicios/');
+        await expect(page.locator('.esp-pestana')).toHaveCount(3);
+        await expect(page.locator('.esp-panel:visible')).toHaveCount(1);
+        await expect(page.locator('.esp-panel:visible')).toHaveAttribute('data-esp', 'montaje-mecanico');
+        await expect(page.locator('.esp-panel:visible .tarjeta')).toHaveCount(3);
+        await page.locator('.esp-pestana', { hasText: 'Obras civiles' }).click();
+        await expect(page.locator('.esp-panel:visible')).toHaveAttribute('data-esp', 'obras-civiles');
+        await expect(page.locator('.esp-panel:visible .tarjeta h3 a').first()).toHaveAttribute('href', '/proyectos/planta-columbus/');
+      });
+    });
+  }
+
+  test('el selector se maneja con las flechas', async ({ page }) => {
     await page.goto('/servicios/');
-    await expect(page.locator('[data-id="montaje-mecanico"] .conteo')).not.toHaveText(/^0\b/);
+    await page.locator('.esp-pestana input').first().focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(page.locator('.esp-panel:visible')).toHaveAttribute('data-esp', 'obras-civiles');
   });
 
-  test('montaje mecánico: 4 tarjetas, enlace al explorador filtrado y normas', async ({ page }) => {
+  test('montaje mecánico: sus 3 proyectos en orden y el enlace al explorador filtrado', async ({ page }) => {
     await page.goto('/servicios/montaje-mecanico/');
-    await expect(page.locator('main .tarjeta')).toHaveCount(4);
+    const ids = await page.locator('main .tarjeta').evaluateAll((xs) => xs.map((x) => x.getAttribute('data-id')));
+    expect(ids).toEqual(['planta-columbus', 'planta-cementos-progreso', 'ptar-salitre']);
     await expect(page.locator('a.ver-todos')).toHaveAttribute('href', '/proyectos/?servicio=montaje-mecanico');
-    for (const n of ['ASME', 'API 650', 'AWS']) await expect(page.locator('.normas').getByText(n, { exact: true })).toHaveCount(1);
-  });
-
-  test('un servicio sin FAQ ni capacidad no muestra esas secciones', async ({ page }) => {
-    await page.goto('/servicios/montaje-mecanico/');
-    await expect(page.getByRole('heading', { name: 'Preguntas frecuentes' })).toHaveCount(0);
-    await expect(page.getByRole('heading', { name: 'Capacidad' })).toHaveCount(0);
-    await page.goto('/servicios/gerencia-de-proyectos/');
-    await expect(page.getByRole('heading', { name: 'Capacidad' })).toHaveCount(1);
+    await expect(page.locator('.capa-plano, .normas, .faq, .llamada')).toHaveCount(0);
   });
 
   test('(foco 4) en inglés los enlaces internos y el filtro son EN', async ({ page }) => {
@@ -531,16 +527,14 @@ test.describe('servicios y sectores', () => {
     await expect(page.locator('a.ver-todos')).toHaveAttribute('href', '/en/projects/?servicio=mechanical-installation');
   });
 
-  test('(foco 5) con reduced-motion las capas y subcapacidades quedan quietas y visibles', async ({ page }) => {
+  test('(foco 5) con reduced-motion las tarjetas no se animan', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/sectores/mineria/');
-    const capas = await page.locator('.escenario g[class^="capa-"]').evaluateAll((xs) => xs.map((x) => getComputedStyle(x).transform));
-    expect(capas.length).toBe(3);
-    expect(capas.filter((v) => v !== 'none')).toEqual([]);
-    await page.goto('/servicios/montaje-mecanico/');
-    const subs = await page.locator('.capa-plano').evaluateAll((xs) => xs.map((x) => [getComputedStyle(x).transform, getComputedStyle(x).opacity]));
-    expect(subs.length).toBe(4);
-    expect(subs.filter(([t, o]) => t !== 'none' || o !== '1')).toEqual([]);
+    for (const url of ['/servicios/', '/servicios/obras-civiles/']) {
+      await page.goto(url);
+      const an = await page.locator('main .tarjeta:visible').evaluateAll((xs) => xs.map((x) => getComputedStyle(x).animationName));
+      expect(an.length, url).toBe(3);
+      expect(an.filter((x) => x !== 'none'), url).toEqual([]);
+    }
   });
 });
 
@@ -584,57 +578,22 @@ test.describe('menores de la revisión', () => {
     await expect(page.locator('.tarjeta[data-id="planta-columbus"] .tarjeta-cifra .cifra')).toHaveText('9.470.000');
   });
 
-  test('la fila de cifras no deja tramos vacíos con 1 o 3 cifras', async ({ page }) => {
+  test('las filas de cifras no dejan tramos vacíos (11 y 3 cantidades)', async ({ page }) => {
     await page.setViewportSize({ width: 1366, height: 900 });
-    for (const url of ['/proyectos/torre-grua-maceo/', '/proyectos/molienda-de-cemento-sonson/']) {
+    for (const url of ['/proyectos/planta-columbus/', '/proyectos/planta-cementos-progreso/']) {
       await page.goto(url);
-      const [fila, celdas] = await page.locator('.cifras').evaluate((dl) => [dl.getBoundingClientRect().width,
-        [...dl.children].reduce((t, c) => t + c.getBoundingClientRect().width, 0)]);
-      expect(Math.abs(fila - celdas), url).toBeLessThan(2);
+      await page.locator('.ficha-cuerpo .cifras').scrollIntoViewIfNeeded();
+      // Cada fila de la rejilla suma el ancho completo.
+      const huecos = await page.locator('.ficha-cuerpo .cifras').evaluate((dl) => {
+        const ancho = dl.getBoundingClientRect().width;
+        const filas = new Map<number, number>();
+        for (const c of dl.children) { const r = c.getBoundingClientRect(); filas.set(Math.round(r.top), (filas.get(Math.round(r.top)) ?? 0) + r.width); }
+        return [...filas.values()].map((w) => Math.round(ancho - w)).filter((d) => Math.abs(d) >= 2);
+      });
+      expect(huecos, url).toEqual([]);
     }
   });
 
-  test('la cabecera de sector no repite su código', async ({ page }) => {
-    await page.goto('/sectores/mineria/');
-    await expect(page.locator('.cota-texto')).toHaveText(/proyectos/);
-  });
-});
-
-// Guía §13.3 · Página de Sectores: escenarios para Cemento y Minería, índice para el resto.
-test.describe('página de Sectores', () => {
-  test('Cemento y Minería como escenarios, en ese orden; los otros 4 en el índice', async ({ page }) => {
-    await page.goto('/sectores/');
-    const escenas = page.locator('.escena');
-    await expect(escenas).toHaveCount(2);
-    await expect(escenas.nth(0)).toHaveAttribute('data-id', 'cemento');
-    await expect(escenas.nth(1)).toHaveAttribute('data-id', 'mineria');
-    await expect(page.locator('.indice li')).toHaveCount(4);
-    await expect(page.locator('h1')).toHaveCount(1);
-  });
-
-  test('cada escenario enlaza a su sector y al explorador filtrado, con 3 obras', async ({ page }) => {
-    await page.goto('/sectores/');
-    const cemento = page.locator('.escena[data-id=cemento]');
-    await expect(cemento.locator('.obras li')).toHaveCount(3);
-    await expect(cemento.locator('.obras li').first()).toContainText('Planta Columbus');
-    await expect(cemento.locator('a.ir').nth(0)).toHaveAttribute('href', '/sectores/cemento/');
-    await expect(cemento.locator('a.ir').nth(1)).toHaveAttribute('href', '/proyectos/?sector=cemento');
-    await page.goto('/en/sectors/');
-    await expect(page.locator('.escena[data-id=mineria] a.ir').nth(1)).toHaveAttribute('href', '/en/projects/?sector=mining');
-  });
-
-  test('la foto de la lámina no pasa de 800 px', async ({ page }) => {
-    await page.setViewportSize({ width: 2560, height: 1440 });
-    await page.goto('/sectores/');
-    const ancho = await page.locator('.lamina-esc').first().evaluate((e) => e.getBoundingClientRect().width);
-    expect(ancho).toBeLessThanOrEqual(800);
-  });
-
-  test('con movimiento reducido las capas quedan quietas', async ({ page }) => {
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/sectores/');
-    await expect(page.locator('.escena .capas .capa-cotas').first()).toHaveCSS('animation-name', 'none');
-  });
 });
 
 // Guía §13.2 · Mapa vivo: funciones puras de encuadre, acercamiento y grupos.

@@ -28,7 +28,7 @@ export const cargar = (): ReturnType<typeof leer> => (cache ??= leer());
 export type Contenido = Awaited<ReturnType<typeof leer>>;
 export type { Pendiente };
 
-export type TipoContenido = 'proyectos' | 'ficha' | 'servicios' | 'servicio' | 'sectores' | 'sector';
+export type TipoContenido = 'proyectos' | 'ficha' | 'servicios' | 'servicio';
 export type PropsContenido = { tipo: TipoContenido; lang: Lang; id?: string; alterno: string };
 
 const LANGS: Lang[] = ['es', 'en'];
@@ -41,7 +41,6 @@ export async function rutasDeContenido(): Promise<{ params: { ruta: string }; pr
   const indices: [Seccion, TipoContenido, TipoContenido][] = [
     ['proyectos', 'proyectos', 'ficha'],
     ['servicios', 'servicios', 'servicio'],
-    ['sectores', 'sectores', 'sector'],
   ];
   for (const [seccion, indice, detalle] of indices) {
     for (const lang of LANGS) {

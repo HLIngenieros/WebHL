@@ -1,10 +1,6 @@
-# Fuente: texto de portada "Cementero" (contenido/institucional.md §3.1).
-orden: 1
+# Categoría de filtro del explorador (Plan R, R-6): sin página propia.
+orden: 2
 principal: true
 slug: { es: cemento, en: cement }
-es:
-  nombre: Cemento
-  intro: Montaje electromecánico y obras civiles de líneas productoras de cemento, en Colombia y en el exterior.
-en:
-  nombre: Cement
-  intro: Electromechanical installation and civil works for cement production lines, in Colombia and abroad.
+es: { nombre: Cemento }
+en: { nombre: Cement }

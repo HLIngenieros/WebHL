@@ -3,7 +3,7 @@ slug: { es: patio-de-carbon-estrella, en: estrella-coal-yard }
 cliente: Consorcio Odebrecht Tecnimont Estrella
 meses: 12
 hh: 340000
-sector: agua-y-energia
+sector: otros
 servicios: [montaje-mecanico]
 cifras:
   - { valor: 6400, unidad: t, etiqueta: { es: Estructura metálica, en: Structural steel } }

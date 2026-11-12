@@ -1,67 +1,99 @@
 ---
-// Índice de servicios (especificación §3): 7 líneas en 3 grupos, cada grupo con su eje (P2).
+// Servicios (acta GHL-WEB-001; especificación v2.0 §5): las 3 especialidades, cada una con sus 3 proyectos.
+// Firma (guía §8): al elegir una especialidad, sus proyectos entran en cascada. El selector son radios:
+// funciona sin JS y con teclado (flechas), y cada tarjeta lleva a su ficha.
 import Base from '../layouts/Base.astro';
 import Encabezado from '../components/ui/Encabezado.astro';
 import Pod from '../components/Pod.astro';
-import { cargar } from '../lib/datos';
-import { bloque, deServicio, type Entrada, type Proyecto } from '../lib/contenido';
+import Tarjeta from '../components/Tarjeta';
+import { cargar, tarjetas } from '../lib/datos';
+import { bloque, proyectosDe, type Entrada, type Proyecto } from '../lib/contenido';
 import { urlDe, type Lang } from '../i18n/rutas';
-import { t, tn } from '../i18n/ui';
+import { t } from '../i18n/ui';
 
 interface Props { lang: Lang; alterno: string }
 const { lang, alterno } = Astro.props;
 const { datos } = await cargar();
 const proyectos = datos.proyectos as unknown as Entrada<Proyecto>[];
-const GRUPOS = ['A', 'B', 'C'] as const;
-const NOMBRE_GRUPO = { A: 'grupoA', B: 'grupoB', C: 'grupoC' } as const;
-const servicios = [...datos.servicios].sort((a, b) => a.data.orden - b.data.orden);
+const especialidades = await Promise.all([...datos.servicios].sort((a, b) => a.data.orden - b.data.orden).map(async (s) => ({
+  id: s.id,
+  num: String(s.data.orden).padStart(2, '0'),
+  url: urlDe('servicios', s.data.slug, lang),
+  ...bloque(s.data, lang),
+  tarjetas: await tarjetas(proyectosDe(s.data, proyectos), lang),
+})));
 ---
 <Base titulo={t(lang, 'servicios')} descripcion={t(lang, 'serviciosEntrada')} lang={lang} alterno={alterno}>
   <div class="wrap servicios pila">
-    <Encabezado nivel={1} titulo={t(lang, 'servicios')} entrada={t(lang, 'serviciosEntrada')} medida={`${servicios.length} · A B C`}>
+    <Encabezado nivel={1} titulo={t(lang, 'servicios')} entrada={t(lang, 'serviciosEntrada')}>
       <Pod slot="pod" forma="rotulo" codigo="L-03" nombre={t(lang, 'servicios')} />
     </Encabezado>
-    {GRUPOS.map((g) => {
-      const lista = servicios.filter((s) => s.data.grupo === g);
-      return (
-        <section class="con-eje grupo" aria-labelledby={`grupo-${g}`}>
-          <Pod forma="eje" letra={g} nombre={t(lang, NOMBRE_GRUPO[g])} dato={String(lista.length)} />
-          <h2 class="sr-only" id={`grupo-${g}`}>{t(lang, NOMBRE_GRUPO[g])}</h2>
-          <ul class="lineas">
-            {lista.map((s, i) => {
-              const tx = bloque(s.data, lang);
-              const n = deServicio(proyectos, s.id).length;
-              return (
-                <li data-id={s.id} class="izaje" style={`--i:${i}`}>
-                  <span class="voz-datos codigo">{`${g}-${String(s.data.orden).padStart(2, '0')}`}</span>
-                  <h3><a href={urlDe('servicios', s.data.slug, lang)}>{tx.nombre}</a></h3>
-                  <p>{tx.resumen}</p>
-                  <span class="voz-datos conteo">{tn(lang, 'nProyectos', n)}</span>
-                </li>
-              );
-            })}
-          </ul>
+
+    <div class="esp">
+      <fieldset class="esp-selector">
+        <legend class="sr-only">{t(lang, 'especialidad')}</legend>
+        {especialidades.map((e, i) => (
+          <label class="esp-pestana">
+            <input type="radio" name="especialidad" value={e.id} checked={i === 0} />
+            <span class="voz-datos esp-num">{e.num}</span>
+            <span class="esp-nom">{e.nombre}</span>
+          </label>
+        ))}
+      </fieldset>
+
+      {especialidades.map((e) => (
+        <section class="esp-panel" data-esp={e.id} aria-labelledby={`esp-${e.id}`}>
+          <div class="esp-cab">
+            <h2 id={`esp-${e.id}`} class="h2-barra">{e.nombre}</h2>
+            <p>{e.resumen}</p>
+            <a class="esp-ir" href={e.url}>{t(lang, 'verEspecialidad')} <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="tarjetas-cont"><div class="tarjetas">{e.tarjetas.map((x) => <Tarjeta t={x} lang={lang} />)}</div></div>
         </section>
-      );
-    })}
+      ))}
+    </div>
   </div>
 </Base>
 
 <style>
   .servicios { --pila: var(--s6); padding-block: var(--s5) var(--s7); }
-  .grupo > * + * { margin-top: var(--s4); }
-  .lineas { list-style: none; margin: 0; padding: 0; display: grid; border-top: var(--border-strong) solid var(--ink); }
-  @media (min-width: 760px) { .lineas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (min-width: 1100px) { .lineas { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  .lineas li {
-    position: relative; display: grid; gap: var(--s2); align-content: start; padding: var(--s4);
-    background: var(--paper); border-bottom: var(--border) solid var(--line); border-right: var(--border) solid var(--line);
+  .esp-selector { display: grid; gap: var(--s2); margin: 0 0 var(--s5); padding: 0; border: 0; }
+  @media (min-width: 760px) { .esp-selector { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .esp-pestana {
+    position: relative; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: var(--s3);
+    min-height: 64px; padding: var(--s3) var(--s4); cursor: pointer; background: var(--paper);
+    border: var(--border) solid var(--line); border-radius: var(--r-card); overflow: hidden;
+    transition: border-color var(--t-rapido) ease, background-color var(--t-rapido) ease, color var(--t-rapido) ease;
   }
-  .lineas li:hover h3 a { color: var(--accent); }
-  .lineas h3 a { color: var(--ink); text-decoration: none; }
-  .lineas h3 a::after { content: ''; position: absolute; inset: 0; }
-  .lineas li:has(a:focus-visible) { outline: var(--focus-ring); outline-offset: 2px; }
-  .lineas h3 a:focus-visible { outline: none; }
-  .lineas p { margin: 0; color: var(--muted); }
-  .codigo, .conteo { color: var(--accent); }
+  /* La línea naranja de la pestaña activa se mide de izquierda a derecha (guía §7) */
+  .esp-pestana::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--hl-naranja);
+    transform: scaleX(0); transform-origin: left; transition: transform var(--t-cota) var(--ease-plano);
+  }
+  .esp-pestana input { position: absolute; opacity: 0; pointer-events: none; }
+  .esp-num { color: var(--accent); }
+  .esp-nom { font-family: var(--f-titulo); font-weight: var(--fw-title); line-height: 1.2; }
+  .esp-pestana:hover { border-color: var(--accent); }
+  .esp-pestana:has(input:checked) { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .esp-pestana:has(input:checked) .esp-num { color: var(--accent-ink); }
+  .esp-pestana:has(input:checked)::after { transform: scaleX(1); }
+  .esp-pestana:has(input:focus-visible) { outline: var(--focus-ring); outline-offset: 2px; }
+
+  .esp-panel { display: none; }
+  .esp:has(.esp-pestana:nth-child(2) input:checked) .esp-panel:nth-of-type(1),
+  .esp:has(.esp-pestana:nth-child(3) input:checked) .esp-panel:nth-of-type(2),
+  .esp:has(.esp-pestana:nth-child(4) input:checked) .esp-panel:nth-of-type(3) { display: grid; gap: var(--s5); }
+  .esp-cab { display: grid; gap: var(--s3); max-width: 72ch; }
+  .esp-cab p { margin: 0; color: var(--muted); }
+  .esp-ir { color: var(--accent); font-family: var(--f-titulo); font-weight: var(--fw-strong); text-decoration: none; }
+  .esp-ir span { display: inline-block; transition: transform var(--t-rapido) var(--ease-izaje); }
+  .esp-ir:hover span { transform: translateX(5px); }
+
+  /* Cascada: al mostrarse el panel, sus tarjetas suben una tras otra (escalonado, guía §8) */
+  .esp-panel :global(.tarjeta) { animation: esp-sube var(--t-izaje) var(--ease-izaje) both; }
+  .esp-panel :global(.tarjeta:nth-child(2)) { animation-delay: calc(var(--t-escalon) * 1.5); }
+  .esp-panel :global(.tarjeta:nth-child(3)) { animation-delay: calc(var(--t-escalon) * 3); }
+  .esp-cab { animation: esp-sube var(--t-izaje) var(--ease-izaje) both; }
+  @keyframes esp-sube { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .esp-panel :global(.tarjeta), .esp-cab { animation: none; } }
 </style>

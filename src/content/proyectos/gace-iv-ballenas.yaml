@@ -7,7 +7,7 @@ region: La Guajira
 coordenadas: [11.775, -72.444]
 meses: 13
 hh: 253720
-sector: petroleo-y-gas
+sector: otros
 servicios: [obras-civiles, montaje-mecanico, montaje-electrico]
 cifras:
   - { valor: 253720, unidad: hh, etiqueta: { es: Horas hombre, en: Man-hours } }

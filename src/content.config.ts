@@ -32,7 +32,7 @@ const proyectos = defineCollection({
     meses: z.number().optional(),
     hh: z.number().optional(),
     sector: reference('sectores'),
-    servicios: z.array(reference('servicios')).min(1),
+    servicios: z.array(reference('servicios')).default([]),
     cifras: z.array(z.object({ valor: z.number(), unidad: unidad.optional(), etiqueta: texto })).default([]),
     cantidades: z.array(z.object({ valor: z.number().optional(), unidad: unidad.optional(), concepto: texto })).default([]),
     fotos: z.array(z.object({ archivo: image(), pie: texto.optional() })).default([]),
@@ -43,37 +43,28 @@ const proyectos = defineCollection({
   }),
 });
 
+// Especialidades (Plan R, R-5): 3, cada una con los 3 proyectos que muestra (auditar() valida la relación).
 const servicios = defineCollection({
   loader: yaml('servicios'),
   schema: z.object({
-    grupo: z.enum(['A', 'B', 'C']),
     orden: z.number(),
     slug,
-    buzon: z.string().optional(),
-    normas: z.array(z.string()).default([]),
+    proyectos: z.array(reference('proyectos')).length(3),
     confirmar,
-    ...idiomas(z.object({
-      nombre: z.string(),
-      resumen: z.string(),
-      alcance: z.array(z.object({ subcapacidad: z.string(), texto: z.string() })),
-      propios: z.string().optional(),
-      aliados: z.string().optional(),
-      capacidad: z.string().optional(),
-      contratos: z.array(z.string()).optional(),
-      faq: z.array(z.object({ p: z.string(), r: z.string() })).optional(),
-    })),
+    ...idiomas(z.object({ nombre: z.string(), resumen: z.string() })),
   }),
 });
 
+// Categorías del filtro del explorador (Plan R, R-6): Minería · Cemento · Otros proyectos, sin página.
 const sectores = defineCollection({
   loader: yaml('sectores'),
   schema: z.object({
     orden: z.number(),
-    /** Sector principal de HL (Cemento y Minería): va primero y más grande (guía §13). */
+    /** Minería y Cemento: placa grande con su dibujo en el filtro. */
     principal: z.boolean().default(false),
     slug,
     confirmar,
-    ...idiomas(z.object({ nombre: z.string(), intro: z.string(), serviciosTipicos: z.string().optional() })),
+    ...idiomas(z.object({ nombre: z.string() })),
   }),
 });
 

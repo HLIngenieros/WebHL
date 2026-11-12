@@ -1,0 +1,5 @@
+# Categoría de filtro del explorador (Plan R, R-6): agua y energía, petróleo y gas, infraestructura e industria.
+orden: 3
+slug: { es: otros, en: other }
+es: { nombre: Otros proyectos }
+en: { nombre: Other projects }

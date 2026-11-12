@@ -3,35 +3,12 @@ import AxeBuilder from '@axe-core/playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 import {
-  txt, numero, edad, periodo, deServicio, deSector, destacados, paraExplorador, auditar, resumenSectores,
+  txt, numero, edad, periodo, destacados, paraExplorador, proyectosDe, auditar,
   type Pendiente,
 } from '../src/lib/contenido';
 import { p, ids } from './apoyo';
 
 const de = (ps: Pendiente[], id: string) => ps.filter((x) => x.id === id);
-
-test.describe('resumen de sectores (submenú, inicio y Sectores)', () => {
-  const sec = (id: string, orden: number, principal = false) => ({ id, data: { orden, principal } });
-  const sectores = [sec('agua', 1), sec('mineria', 3, true), sec('cemento', 2, true), sec('industria', 4)];
-  const proyectos = [
-    p('chica', { hh: 1000 }),
-    p('grande', { hh: 9000 }),
-    p('oculta', { hh: 99000, visibilidad: 'discreta' }),
-    p('mina', { sector: { id: 'mineria' } }),
-  ];
-  const r = resumenSectores(sectores, proyectos);
-  test('los principales van primero, cada grupo por su orden', () => {
-    expect(r.map((x) => x.sector.id)).toEqual(['cemento', 'mineria', 'agua', 'industria']);
-    expect(r.map((x) => x.principal)).toEqual([true, true, false, false]);
-  });
-  test('cuenta solo proyectos visibles y elige la obra con más horas hombre', () => {
-    expect(r[0].n).toBe(2);
-    expect(r[0].obra?.id).toBe('grande');
-    expect(r[1].obra?.id).toBe('mina');
-    expect(r[2].n).toBe(0);
-    expect(r[2].obra).toBeUndefined();
-  });
-});
 
 test.describe('relaciones derivadas', () => {
   const lista = [
@@ -41,10 +18,13 @@ test.describe('relaciones derivadas', () => {
     p('otro-sector', { sector: { id: 'mineria' }, servicios: [{ id: 'obras-civiles' }] }),
   ];
 
-  test('una discreta nunca entra en servicio, sector ni destacados', () => {
-    expect(ids(deServicio(lista, 'montaje-mecanico'))).toEqual(['destacado', 'normal']);
-    expect(ids(deSector(lista, 'cemento'))).toEqual(['destacado', 'normal']);
+  test('una discreta nunca entra en los destacados', () => {
     expect(ids(destacados(lista))).toEqual(['destacado']);
+  });
+
+  test('una especialidad muestra sus 3 proyectos en el orden de su archivo', () => {
+    const servicio = { proyectos: [{ id: 'otro-sector' }, { id: 'destacado' }, { id: 'normal' }] };
+    expect(ids(proyectosDe(servicio, lista))).toEqual(['otro-sector', 'destacado', 'normal']);
   });
 
   test('el explorador muestra todas, con las discretas al final', () => {
@@ -103,13 +83,13 @@ test.describe('auditar()', () => {
     expect(periodo(incompleto.data)).toBeUndefined();
   });
 
-  test('cliente, rol, lugar, cifras, pies y dudas por confirmar', () => {
+  test('cliente, rol, lugar, cifra, pies y dudas por confirmar', () => {
     const x = p('x', {
       cliente: undefined, rol: undefined, pais: undefined, ciudad: undefined, cifras: [],
       fotos: [{ archivo: {} }], confirmar: ['¿Silo de crudo o de cemento?'],
     });
     const ps = de(auditar({ proyectos: [x] }, { modo: 'desarrollo', hoy }), 'x');
-    for (const campo of ['cliente', 'rol', 'pais', 'ciudad', 'cifras', 'pies de foto']) {
+    for (const campo of ['cliente', 'rol', 'pais', 'ciudad', 'cifra', 'pies de foto']) {
       expect(ps.find((y) => y.campo === campo), campo).toMatchObject({ bloquea: true });
     }
     expect(ps.find((y) => y.tipo === 'confirmar')).toMatchObject({ detalle: '¿Silo de crudo o de cemento?' });
@@ -142,7 +122,7 @@ test.describe('auditar()', () => {
       en: { titulo: 'T', resumen: 'R', descripcion: 'D' },
     });
     expect(de(auditar({ proyectos: [conReto] }, { modo: 'desarrollo', hoy }), 'reto')).toMatchObject([{ campo: 'en', tipo: 'traduccion' }]);
-    const servicio = { id: 's', data: { buzon: 'b@x.co', es: { nombre: 'S', faq: [{ p: '?', r: '.' }] }, en: { nombre: 'S' } } };
+    const servicio = { id: 's', data: { proyectos: [], es: { nombre: 'S', resumen: 'R' }, en: { nombre: 'S' } } };
     expect(auditar({ servicios: [servicio] }, { modo: 'desarrollo', hoy })).toMatchObject([{ campo: 'en', tipo: 'traduccion' }]);
   });
 
@@ -152,12 +132,24 @@ test.describe('auditar()', () => {
   });
 
   test('una referencia a un servicio o sector inexistente falla en cualquier modo', () => {
-    const servicios = [{ id: 'montaje-mecanico', data: { en: {} } }];
+    const servicios = [{ id: 'montaje-mecanico', data: { proyectos: [], en: {} } }];
     const sectores = [{ id: 'cemento', data: { en: {} } }];
     const malo = p('malo', { servicios: [{ id: 'montaje-mecanicos' }], sector: { id: 'cementos' } });
     expect(() => auditar({ proyectos: [malo], servicios, sectores }, { modo: 'desarrollo', hoy }))
       .toThrow(/malo[\s\S]*montaje-mecanicos[\s\S]*malo[\s\S]*cementos/);
     expect(() => auditar({ proyectos: [p('bueno')], servicios, sectores }, { modo: 'desarrollo', hoy })).not.toThrow();
+  });
+
+  test('los 3 proyectos de una especialidad existen, no son discretos y la mencionan', () => {
+    const lista = [p('bueno'), p('oculto', { visibilidad: 'discreta' }), p('civil', { servicios: [{ id: 'obras-civiles' }] })];
+    const con = (...refs: string[]) => [
+      { id: 'montaje-mecanico', data: { proyectos: refs.map((id) => ({ id })), en: {} } },
+      { id: 'obras-civiles', data: { proyectos: [], en: {} } },
+    ];
+    expect(() => auditar({ proyectos: lista, servicios: con('bueno') }, { modo: 'desarrollo', hoy })).not.toThrow();
+    expect(() => auditar({ proyectos: lista, servicios: con('nada') }, { modo: 'desarrollo', hoy })).toThrow(/"nada" no existe/);
+    expect(() => auditar({ proyectos: lista, servicios: con('oculto') }, { modo: 'desarrollo', hoy })).toThrow(/"oculto" es discreto/);
+    expect(() => auditar({ proyectos: lista, servicios: con('civil') }, { modo: 'desarrollo', hoy })).toThrow(/"civil" no tiene "montaje-mecanico"/);
   });
 
   test('en lanzamiento falla con todos los bloqueantes en el mensaje', () => {
@@ -221,10 +213,9 @@ const conteo = (page: import('@playwright/test').Page, coleccion: string) => pag
 test.describe('contenido migrado', () => {
   test.beforeEach(async ({ page }) => { await page.goto('/pendientes/'); });
 
-  test('7 servicios y 6 sectores; los servicios esperan su buzón (D7)', async ({ page }) => {
-    await expect(conteo(page, 'servicios')).toHaveText('7');
-    await expect(conteo(page, 'sectores')).toHaveText('6');
-    await expect(page.locator('tr[data-coleccion="servicios"] li[data-campo="buzon"]')).toHaveCount(7);
+  test('3 especialidades y 3 sectores de filtro (Plan R)', async ({ page }) => {
+    await expect(conteo(page, 'servicios')).toHaveText('3');
+    await expect(conteo(page, 'sectores')).toHaveText('3');
   });
 
   test('22 proyectos: 2 discretos (D6) y 4 destacados', async ({ page }) => {

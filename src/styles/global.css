@@ -333,7 +333,7 @@
   .filtros-explorador { border-top: var(--border-strong) solid var(--ink); }
   .fila-filtro { display: grid; border-bottom: var(--border) solid var(--line); min-width: 0; }
   .fila-filtro .et { padding: var(--s2) 0 var(--s1); color: var(--muted); }
-  /* En móvil la fila de placas se desplaza de lado; desde 900 px es una rejilla 2-2-1-1-1-1 */
+  /* En móvil la fila de placas se desplaza de lado; desde 900 px, Minería y Cemento grandes y Otros al lado */
   .placas { display: flex; overflow-x: auto; }
   .placa {
     position: relative; display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s2); min-height: 72px;
@@ -356,15 +356,13 @@
   .placa[aria-pressed='true'] :is(.capa-estructura path, .capa-ejes line, .capa-ejes circle) { stroke: var(--accent-ink); fill: none; }
   .placa:disabled { cursor: not-allowed; opacity: .45; }
   .placa:focus-visible { outline: var(--focus-ring); outline-offset: -3px; }
-  .grupos-servicio { display: grid; }
-  .grupo-servicio { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s1); padding: var(--s2) 0; }
+  .especialidades { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s1); padding: var(--s2) 0; }
   .burbuja { width: 24px; height: 24px; flex: none; border-radius: 50%; border: var(--border) solid var(--muted); color: var(--muted); display: grid; place-items: center; letter-spacing: 0; margin-right: var(--s1); }
   @media (min-width: 900px) {
     .filtros-explorador .fila-filtro { grid-template-columns: 110px minmax(0, 1fr); }
     .fila-filtro .et { padding: var(--s3) 0; }
-    .placas { display: grid; grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr; overflow: visible; }
-    .grupos-servicio { grid-template-columns: 2fr 3fr 2fr; }
-    .grupo-servicio { padding: var(--s2) var(--s3); border-left: var(--border) solid var(--line); }
+    .placas { display: grid; grid-template-columns: 2fr 2fr 1.2fr; overflow: visible; }
+    .especialidades { padding: var(--s2) var(--s3); border-left: var(--border) solid var(--line); }
   }
 
   .filtro {
@@ -404,15 +402,28 @@
   }
   @media (max-width: 899.98px) { .lado-mapa .mapa-lienzo { aspect-ratio: 1 / 1; } }
 
-  .pod-linea {
-    display: grid; gap: var(--s1); margin-top: var(--s3); padding: var(--s3) var(--s4); background: var(--paper);
-    border-radius: var(--r-card); border-left: 4px solid var(--hl-naranja); animation: barre var(--t-izaje) var(--ease-plano) both;
+  /* Ficha 3.1 en panel (guía v2.0 §8, Izaje de panel): sube desde abajo sobre el explorador */
+  .panel-ficha {
+    position: fixed; inset: auto 0 0; margin: 0 auto; padding: 0; width: min(1240px, 100%); max-width: none;
+    height: calc(100dvh - var(--s5)); max-height: none; overflow: auto; overscroll-behavior: contain;
+    background: var(--bg); color: var(--ink); border: var(--border) solid var(--line); border-bottom: 0;
+    border-top: 3px solid var(--hl-naranja); border-radius: var(--r-card) var(--r-card) 0 0;
+    box-shadow: var(--sombra-card);
   }
-  @keyframes barre { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
-  .pod-linea .voz-datos { color: var(--accent); }
-  .pod-linea strong { font-family: var(--f-titulo); font-weight: var(--fw-title); font-size: var(--fs-h3); line-height: var(--lh-title); }
-  .pod-linea p { margin: 0; color: var(--muted); font-size: var(--fs-sm); }
-  .pod-linea a { color: var(--accent); font-weight: var(--fw-strong); text-decoration: none; min-height: 32px; display: inline-flex; align-items: center; }
+  .panel-ficha::backdrop { background: color-mix(in srgb, var(--azul-950) 70%, transparent); }
+  html:has(.panel-ficha[open]) { overflow: hidden; }
+  .panel-barra {
+    position: sticky; top: 0; z-index: 2; display: flex; justify-content: flex-end; padding: var(--s2) var(--s3);
+    background: color-mix(in srgb, var(--bg) 92%, transparent); border-bottom: var(--border) solid var(--line);
+  }
+  .panel-cerrar {
+    min-height: 44px; padding: 0 var(--s3); display: inline-flex; align-items: center; gap: var(--s2);
+    background: var(--paper); color: var(--ink); border: var(--border) solid var(--line); border-radius: var(--radius); cursor: pointer;
+  }
+  .panel-cerrar:hover { border-color: var(--accent); color: var(--accent); }
+  .panel-ficha .migas { display: none; }
+  .panel-ficha .ficha { padding-top: var(--s4); }
+  @media (min-width: 900px) { .panel-ficha { height: calc(100dvh - var(--s6)); } }
 
   /* Lista compacta junto al mapa: tarjetas horizontales */
   .lista-explorador { margin-top: var(--s3); }

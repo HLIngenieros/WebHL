@@ -1,6 +1,9 @@
-// Explorador de proyectos (guía §13.2): la única isla del sitio, en Preact (la API de React en ~10 KB).
-// Sin JS, el HTML ya trae las tarjetas y el mapa quieto; los filtros solo aparecen con JS. Las tarjetas nunca
-// se desmontan: las que no cumplen quedan ocultas y las demás se reacomodan con FLIP (solo transform/opacity).
+// Explorador de proyectos (guía v2.0 §8): isla en Preact (la API de React en ~10 KB). Sin JS, el HTML ya trae
+// las tarjetas y el mapa quieto; los filtros solo aparecen con JS. Las tarjetas nunca se desmontan: las que no
+// cumplen quedan ocultas y las demás se reacomodan con FLIP (solo transform/opacity).
+// Ficha 3.1 como panel: al abrir una tarjeta o un punto del mapa se trae el <article> de la página de la
+// ficha (ya compilada) y sube en un <dialog>; Escape, el botón o el fondo lo cierran y el foco vuelve a la
+// tarjeta. La URL pasa a la de la ficha con replaceState (el ClientRouter maneja el historial) y vuelve al cerrar.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { ComponentChildren } from 'preact';
 import Tarjeta from './Tarjeta';
@@ -12,17 +15,12 @@ import type { Lang } from '../i18n/rutas';
 
 type Dim = keyof Filtros;
 export type OpcionSector = { valor: string; nombre: string; id: string; principal: boolean };
-export type OpcionServicio = { valor: string; nombre: string; grupo: 'A' | 'B' | 'C' };
 export type Opcion = { valor: string; nombre: string };
-/** Resumen de una línea (sector o servicio) para el pod del explorador. */
-export type Linea = { codigo: string; nombre: string; texto: string; url: string };
 
 interface Props {
   lang: Lang;
   tarjetas: DatosTarjeta[];
-  opciones: { sector: OpcionSector[]; servicio: OpcionServicio[]; pais: Opcion[] };
-  grupos: Record<'A' | 'B' | 'C', string>;
-  lineas: { sector: Record<string, Linea>; servicio: Record<string, Linea> };
+  opciones: { sector: OpcionSector[]; servicio: Opcion[]; pais: Opcion[] };
   mapa: { paises: string[]; obras: ObraMapa[]; sedes: { x: number; y: number; etiqueta: string }[] };
   ruta: string;
 }
@@ -30,13 +28,22 @@ interface Props {
 const DIMS: Dim[] = ['servicio', 'sector', 'pais'];
 const quieto = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-export default function Explorador({ lang, tarjetas, opciones, grupos, lineas, mapa, ruta }: Props) {
+const IZAJE = 'cubic-bezier(.2, .8, .2, 1)';
+type Ficha = { articulo: Element; titulo: string } | null;
+
+export default function Explorador({ lang, tarjetas, opciones, mapa, ruta }: Props) {
   const [filtros, setFiltros] = useState<Filtros>({});
   const [resaltado, setResaltado] = useState<string | null>(null);
   const lista = useRef<HTMLDivElement>(null);
   const total = useRef<HTMLElement>(null);
   const cota = useRef<HTMLSpanElement>(null);
   const antes = useRef<Map<string, DOMRect> | null>(null);
+  const panel = useRef<HTMLDialogElement>(null);
+  const cuerpo = useRef<HTMLDivElement>(null);
+  const origen = useRef<HTMLElement | null>(null);
+  const volver = useRef({ url: '', titulo: '' });
+  const fichas = useRef(new Map<string, Promise<Ficha>>());
+  const urls = useMemo(() => new Set(tarjetas.map((x) => x.url)), [tarjetas]);
 
   const validos = useMemo(
     () => Object.fromEntries(DIMS.map((d) => [d, new Set(opciones[d].map((o) => o.valor))])) as Record<Dim, Set<string>>,
@@ -59,6 +66,80 @@ export default function Explorador({ lang, tarjetas, opciones, grupos, lineas, m
     history.replaceState(history.state, '', location.pathname + escribirFiltros(nuevos));
   }
   const alternar = (d: Dim, v: string) => cambiar({ ...filtros, [d]: filtros[d] !== v ? v : undefined });
+
+  // ── Ficha 3.1 en panel ──
+  const traer = (url: string): Promise<Ficha> => {
+    let f = fichas.current.get(url);
+    if (!f) {
+      f = fetch(url)
+        .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
+        .then((html) => {
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+          const articulo = doc.querySelector('article.ficha');
+          return articulo ? { articulo, titulo: doc.title } : null;
+        })
+        .catch(() => { fichas.current.delete(url); return null; });
+      fichas.current.set(url, f);
+    }
+    return f;
+  };
+
+  async function abrir(url: string, desde: HTMLElement) {
+    const ficha = await traer(url);
+    const d = panel.current;
+    if (!ficha || !d || !cuerpo.current) { location.assign(url); return; }
+    origen.current = desde;
+    volver.current = { url: location.pathname + location.search, titulo: document.title };
+    cuerpo.current.replaceChildren(document.importNode(ficha.articulo, true));
+    d.showModal();
+    d.scrollTop = 0;
+    history.replaceState(history.state, '', url);
+    document.title = ficha.titulo;
+    if (!quieto()) {
+      d.animate([{ transform: 'translateY(48px)', clipPath: 'inset(100% 0 0 0)' }, { transform: 'none', clipPath: 'inset(0 0 0 0)' }], { duration: 600, easing: IZAJE });
+    }
+    // Lo que se revela al entrar (cotas de las cantidades, izajes) se observa dentro del panel.
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    }), { root: d });
+    cuerpo.current.querySelectorAll('.izaje, .cota, .trazo, .revela').forEach((el) => io.observe(el));
+  }
+
+  function cerrar() {
+    const d = panel.current;
+    if (!d?.open) return;
+    if (quieto()) { d.close(); return; }
+    d.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(32px)' }], { duration: 240, easing: 'ease-in' }).onfinish = () => d.close();
+  }
+
+  // Al cerrarse (también con Escape): URL y título del explorador, y el foco vuelve a la tarjeta.
+  function alCerrar() {
+    history.replaceState(history.state, '', volver.current.url);
+    document.title = volver.current.titulo;
+    cuerpo.current?.replaceChildren();
+    origen.current?.focus();
+  }
+
+  function alClic(e: MouseEvent) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = (e.target as Element).closest?.('a');
+    const href = a?.getAttribute('href');
+    if (!a || !href) return;
+    if (urls.has(href)) { e.preventDefault(); abrir(href, a); return; }
+    // Desde el panel, el enlace del sector filtra el explorador en vez de recargarlo.
+    if (panel.current?.contains(a) && a.pathname === ruta) {
+      e.preventDefault();
+      const nuevos = leerFiltros(a.search, validos);
+      volver.current.url = ruta + escribirFiltros(nuevos);
+      cerrar();
+      setFiltros(nuevos);
+    }
+  }
+  // La ficha se descarga al pasar por la tarjeta o al enfocarla.
+  const anticipar = (e: Event) => {
+    const href = (e.target as Element).closest?.('.tarjeta')?.querySelector('a')?.getAttribute('href');
+    if (href && urls.has(href)) traer(href);
+  };
 
   // FLIP, segundo paso; además el total se mide con su cota (guía §13.2).
   useLayoutEffect(() => {
@@ -97,13 +178,9 @@ export default function Explorador({ lang, tarjetas, opciones, grupos, lineas, m
   const cSector = conteos(tarjetas, filtros, 'sector');
   const cServicio = conteos(tarjetas, filtros, 'servicio');
   const cPais = conteos(tarjetas, filtros, 'pais');
-  const pods = [
-    filtros.sector && lineas.sector[filtros.sector] && { ...lineas.sector[filtros.sector], dim: 'sectores', tipo: t(lang, 'sector'), ir: t(lang, 'verSector') },
-    filtros.servicio && lineas.servicio[filtros.servicio] && { ...lineas.servicio[filtros.servicio], dim: 'servicios', tipo: t(lang, 'servicio'), ir: t(lang, 'verServicio') },
-  ].filter(Boolean) as (Linea & { dim: string; tipo: string; ir: string })[];
 
   return (
-    <div className="explorador">
+    <div className="explorador" onClick={alClic}>
       <div className="filtros-explorador">
         <div className="fila-filtro" data-dim="sector" role="group" aria-labelledby="et-sector">
           <span className="voz-datos et" id="et-sector">{t(lang, 'sector')}</span>
@@ -120,17 +197,12 @@ export default function Explorador({ lang, tarjetas, opciones, grupos, lineas, m
           </div>
         </div>
         <div className="fila-filtro" data-dim="servicio" role="group" aria-labelledby="et-servicio">
-          <span className="voz-datos et" id="et-servicio">{t(lang, 'servicio')}</span>
-          <div className="grupos-servicio">
-            {(['A', 'B', 'C'] as const).map((g) => (
-              <div key={g} className="grupo-servicio">
-                <span className="burbuja voz-datos" title={grupos[g]} aria-hidden="true">{g}</span>
-                {opciones.servicio.filter((o) => o.grupo === g).map((o) => {
-                  const n = cServicio.get(o.valor) ?? 0;
-                  return boton('servicio', o.valor, <>{o.nombre} <span className="conteo">{n}</span></>, n, 'filtro');
-                })}
-              </div>
-            ))}
+          <span className="voz-datos et" id="et-servicio">{t(lang, 'especialidad')}</span>
+          <div className="especialidades">
+            {opciones.servicio.map((o) => {
+              const n = cServicio.get(o.valor) ?? 0;
+              return boton('servicio', o.valor, <>{o.nombre} <span className="conteo">{n}</span></>, n, 'filtro');
+            })}
           </div>
         </div>
       </div>
@@ -156,14 +228,6 @@ export default function Explorador({ lang, tarjetas, opciones, grupos, lineas, m
         </div>
 
         <div className="lado-lista">
-          {pods.map((p) => (
-            <aside key={p.dim} className="pod-linea">
-              <span className="voz-datos">{p.codigo} · {p.tipo}</span>
-              <strong>{p.nombre}</strong>
-              <p>{p.texto}</p>
-              <a href={p.url}>{p.ir} →</a>
-            </aside>
-          ))}
           {cumplen.length === 0 && (
             <div className="sin-resultados">
               <p>{t(lang, 'sinResultados')}</p>
@@ -172,7 +236,8 @@ export default function Explorador({ lang, tarjetas, opciones, grupos, lineas, m
           )}
           <h2 className="sr-only">{t(lang, 'proyectos')}</h2>
           <div className="tarjetas-cont lista-explorador" ref={lista}
-            onMouseOver={(e) => { const id = (e.target as Element).closest<HTMLElement>('.tarjeta')?.dataset.id ?? null; if (id !== resaltado) setResaltado(id); }}
+            onFocusIn={anticipar}
+            onMouseOver={(e) => { anticipar(e); const id = (e.target as Element).closest<HTMLElement>('.tarjeta')?.dataset.id ?? null; if (id !== resaltado) setResaltado(id); }}
             onMouseLeave={() => setResaltado(null)}>
             <div className="tarjetas">
               {/* Sin prioridad: sus fotos competirían con la fuente del LCP */}
@@ -181,6 +246,16 @@ export default function Explorador({ lang, tarjetas, opciones, grupos, lineas, m
           </div>
         </div>
       </div>
+
+      <dialog ref={panel} className="panel-ficha" aria-label={t(lang, 'fichaProyecto')}
+        onClose={alCerrar}
+        onCancel={(e) => { e.preventDefault(); cerrar(); }}
+        onClick={(e) => { if (e.target === panel.current) cerrar(); }}>
+        <div className="panel-barra">
+          <button type="button" className="panel-cerrar voz-datos" onClick={cerrar}>{t(lang, 'cerrar')} <span aria-hidden="true">×</span></button>
+        </div>
+        <div ref={cuerpo} />
+      </dialog>
     </div>
   );
 }

@@ -32,7 +32,7 @@ export interface Proyecto {
 }
 
 interface ConIdiomas { es?: object; en?: object; confirmar?: string[] }
-interface Servicio extends ConIdiomas { buzon?: string }
+interface Servicio extends ConIdiomas { proyectos: Ref[] }
 interface Sede { nombre: Texto; buzon?: string; confirmar?: string[] }
 interface Certificacion { norma: Texto; vence?: Date; pdf?: string; confirmar?: string[] }
 interface Hito extends ConIdiomas { anio?: number; foto?: unknown }
@@ -98,45 +98,11 @@ const ordenar = (xs: P[]) =>
   [...xs].sort((a, b) => peso(a) - peso(b) || (b.data.fin ?? 0) - (a.data.fin ?? 0) || a.id.localeCompare(b.id));
 const visibles = (xs: P[]) => xs.filter((x) => x.data.visibilidad !== 'discreta');
 
-export const deServicio = (xs: P[], id: string) => ordenar(visibles(xs).filter((x) => x.data.servicios.some((s) => s.id === id)));
-export const deSector = (xs: P[], id: string) => ordenar(visibles(xs).filter((x) => x.data.sector.id === id));
 export const destacados = (xs: P[]) => ordenar(xs.filter((x) => x.data.visibilidad === 'destacado'));
 export const paraExplorador = (xs: P[]) => [...ordenar(visibles(xs)), ...ordenar(xs.filter((x) => x.data.visibilidad === 'discreta'))];
 
-/** Sectores para el submenú, el inicio y la página de Sectores (guía §13): los principales primero
- * (Cemento y Minería), cada grupo por su orden, con sus proyectos visibles y la obra que los representa
- * (la de más horas hombre; si ninguna las tiene, la primera). */
-export function resumenSectores<S extends { id: string; data: { orden: number; principal?: boolean } }>(sectores: S[], xs: P[]) {
-  return [...sectores]
-    .sort((a, b) => Number(!!b.data.principal) - Number(!!a.data.principal) || a.data.orden - b.data.orden)
-    .map((sector) => {
-      const ps = deSector(xs, sector.id);
-      const obra = ps.reduce<P | undefined>((m, x) => (!m || (x.data.hh ?? 0) > (m.data.hh ?? 0) ? x : m), undefined);
-      return { sector, principal: !!sector.data.principal, n: ps.length, obra };
-    });
-}
-
-/** Proyectos parecidos: 2 puntos por mismo sector y 1 por servicio compartido; sin la actual ni discretas. */
-export function relacionados(xs: P[], actual: P, n = 3): P[] {
-  const mios = new Set(actual.data.servicios.map((s) => s.id));
-  const puntaje = (x: P) => (x.data.sector.id === actual.data.sector.id ? 2 : 0) + x.data.servicios.filter((s) => mios.has(s.id)).length;
-  const orden = new Map(ordenar(xs).map((x, i) => [x.id, i]));
-  return visibles(xs)
-    .filter((x) => x.id !== actual.id && puntaje(x) > 0)
-    .sort((a, b) => puntaje(b) - puntaje(a) || orden.get(a.id)! - orden.get(b.id)!)
-    .slice(0, n);
-}
-
-/** Ids más frecuentes primero (empate por id). */
-function porFrecuencia(ids: string[]): string[] {
-  const c = new Map<string, number>();
-  for (const id of ids) c.set(id, (c.get(id) ?? 0) + 1);
-  return [...c.keys()].sort((a, b) => c.get(b)! - c.get(a)! || a.localeCompare(b));
-}
-export const sectoresDe = (xs: P[], servicioId: string) => porFrecuencia(deServicio(xs, servicioId).map((x) => x.data.sector.id));
-export const serviciosDe = (xs: P[], sectorId: string) => porFrecuencia(deSector(xs, sectorId).flatMap((x) => x.data.servicios.map((s) => s.id)));
-export const clientesDe = (xs: P[], sectorId: string) =>
-  [...new Set(deSector(xs, sectorId).flatMap((x) => (x.data.cliente ? [x.data.cliente] : [])))].sort((a, b) => a.localeCompare(b, 'es'));
+/** Los 3 proyectos que una especialidad muestra (Plan R, R-5), en el orden de su archivo. */
+export const proyectosDe = (servicio: { proyectos: Ref[] }, xs: P[]) => servicio.proyectos.map((r) => xs.find((x) => x.id === r.id)!);
 
 // ── Auditoría: lo que falta para lanzar (especificación §4, validación en dos modos) ──
 
@@ -169,6 +135,15 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
     if (p.pais && !PAISES[p.pais]) errores.push(`- proyectos/${id}: país "${p.pais}" sin nombre en src/i18n/ui.ts (PAISES)`);
     if (p.slug.es !== id) errores.push(`- proyectos/${id}: slug.es "${p.slug.es}" debe ser igual al nombre del archivo`);
   }
+  // Los 3 proyectos de cada especialidad: existen, no son discretos (D6) y la mencionan.
+  for (const { id, data } of datos.servicios ?? []) {
+    for (const r of data.proyectos) {
+      const x = proyectos.find((y) => y.id === r.id);
+      if (!x) errores.push(`- servicios/${id}: proyecto "${r.id}" no existe`);
+      else if (x.data.visibilidad === 'discreta') errores.push(`- servicios/${id}: "${r.id}" es discreto (D6) y no va en una especialidad`);
+      else if (!x.data.servicios.some((s) => s.id === id)) errores.push(`- servicios/${id}: "${r.id}" no tiene "${id}" entre sus servicios`);
+    }
+  }
   for (const lang of ['es', 'en'] as const) {
     const vistos = new Map<string, string>();
     for (const { id, data } of proyectos) {
@@ -188,7 +163,7 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
     if (!p.pais) add('proyectos', id, 'pais', 'insumo');
     if (!p.ciudad) add('proyectos', id, 'ciudad', 'insumo');
     if (!p.inicio || !p.fin) add('proyectos', id, 'años', 'insumo');
-    if (p.cifras.length < 3 || p.cifras.length > 4) add('proyectos', id, 'cifras', 'insumo', true, `tiene ${p.cifras.length}; se necesitan 3-4`);
+    if (!p.cifras.length) add('proyectos', id, 'cifra', 'insumo', true, 'cifra destacada de la tarjeta');
     if (!p.fotos.length) add('proyectos', id, 'fotos', 'aviso', false, 'se muestra una ilustración de línea');
     if (!p.cantidades.length) add('proyectos', id, 'cantidades', 'aviso', false, 'sin cantidades de obra');
     const sinPie = p.fotos.filter((f) => !f.pie).length;
@@ -196,7 +171,6 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
     if (faltaIngles(p)) add('proyectos', id, 'en', 'traduccion');
     dudas('proyectos', id, p.confirmar);
   }
-  for (const { id, data } of datos.servicios ?? []) if (!data.buzon) add('servicios', id, 'buzon', 'insumo', true, 'D7');
   ingles('servicios', datos.servicios);
   ingles('sectores', datos.sectores);
   for (const { id, data } of datos.sedes ?? []) {

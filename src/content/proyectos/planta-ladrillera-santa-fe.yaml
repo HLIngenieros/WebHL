@@ -1,8 +1,8 @@
 # Fuente: PDF "Portafolio ECOHL" (2020), clientes destacados.
 slug: { es: planta-ladrillera-santa-fe, en: ladrillera-santa-fe-plant }
 cliente: Ladrillera Santa Fe
-sector: industria
-servicios: [fabricacion, montaje-mecanico, montaje-electrico]
+sector: otros
+servicios: [montaje-mecanico, montaje-electrico]
 cifras: []
 visibilidad: normal
 fuente: ecohl

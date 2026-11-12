@@ -2,7 +2,7 @@
 slug: { es: cargador-de-buques-cerrejon, en: cerrejon-shiploader }
 cliente: Carbones del Cerrejón
 sector: mineria
-servicios: [mantenimiento]
+servicios: [montaje-mecanico]
 cifras:
   - { valor: 3, unidad: dias, etiqueta: { es: Entrega antes de lo previsto, en: Delivered ahead of schedule } }
 visibilidad: normal

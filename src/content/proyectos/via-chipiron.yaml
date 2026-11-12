@@ -8,7 +8,7 @@ region: Arauca
 coordenadas: [6.950, -71.100]
 meses: 15
 hh: 251006
-sector: infraestructura
+sector: otros
 servicios: [obras-civiles]
 cifras:
   - { valor: 251006, unidad: hh, etiqueta: { es: Horas hombre, en: Man-hours } }

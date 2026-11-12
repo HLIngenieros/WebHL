@@ -1,33 +1,12 @@
-# Fuente: "Obras civiles" (contenido/institucional.md §3.1).
-grupo: B
-orden: 3
+# Especialidad 2 (Plan R, R-5).
+orden: 2
 slug: { es: obras-civiles, en: civil-works }
-normas: [NSR-10]
+proyectos: [planta-columbus, planta-chimborazo, planta-diana-pet-food]
+confirmar:
+  - "Validar los 3 proyectos de Obras civiles (propuesta: Columbus, Chimborazo, Diana Pet Food)."
 es:
   nombre: Obras civiles industriales
   resumen: Ejecutamos de manera directa las obras civiles de plantas industriales y de proyectos públicos y privados.
-  alcance:
-    - subcapacidad: Movimiento de tierras
-      texto: Excavaciones y rellenos.
-    - subcapacidad: Cimentaciones y estructuras de concreto
-      texto: Cimentaciones para todo tipo de equipos y edificaciones, estructuras de concreto y placas de nivelación.
-    - subcapacidad: Mampostería
-      texto: Mampostería para edificaciones industriales.
-    - subcapacidad: Deslizado, pilotaje y urbanismo
-      texto: Deslizado de edificios y silos, pilotaje y obras de urbanismo, que completan la oferta integral en la especialidad civil.
-  propios: Movimientos de tierras, rellenos, cimentaciones, estructuras de concreto, placas de nivelación y mampostería.
-  aliados: Pilotaje, deslizado de edificios y silos, y obras de urbanismo, mediante alianzas estratégicas.
 en:
   nombre: Industrial civil works
   resumen: We directly execute the civil works for industrial plants and for public and private projects.
-  alcance:
-    - subcapacidad: Earthworks
-      texto: Excavation and backfill.
-    - subcapacidad: Foundations and concrete structures
-      texto: Foundations for all types of equipment and buildings, concrete structures and leveling slabs.
-    - subcapacidad: Masonry
-      texto: Masonry for industrial buildings.
-    - subcapacidad: Slipform construction, piling and site development
-      texto: Slipform construction of buildings and silos, piling and site development works, which round out our full civil offering.
-  propios: Earthworks, backfill, foundations, concrete structures, leveling slabs and masonry.
-  aliados: Piling, slipform construction of buildings and silos, and site development works, through strategic alliances.
