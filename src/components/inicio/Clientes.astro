@@ -45,6 +45,7 @@ const cintas = [clientes.slice(0, mitad), clientes.slice(mitad)];
 <style>
   .clientes { padding-block: var(--s7); background: var(--paper); overflow: hidden; }
   h2 { margin: 0 0 var(--s5); }
+  h2::before { content: ''; display: block; width: 48px; height: 4px; margin-bottom: var(--s2); background: var(--hl-naranja); }
   .riel {
     border-block: var(--border) solid var(--line); overflow: hidden;
     mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);

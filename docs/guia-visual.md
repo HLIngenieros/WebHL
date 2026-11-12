@@ -148,7 +148,7 @@ distinguía el color, ahora lo distingue el movimiento (§8).
 |---|---|
 | Lema (Home) | Poppins 700 · `--fs-lema` / 1,02 · −2 % |
 | H1 de página | Poppins 700 · `--fs-h1` / 1,1 |
-| H2 de sección | Poppins 600 · `--fs-h2` / 1,2 |
+| H2 de sección | Poppins 700 · `--fs-h2` / 1,2 · −2 % (en el Home, con barra naranja de 48 × 4 px encima) |
 | H3 de tarjeta | Poppins 600 · `--fs-h3` / 1,3 |
 | Cifra | Poppins 700 · `--fs-stat` / 1 · tabular |
 | Texto | Open Sans 400 · `--fs-body` / 1,6 |
