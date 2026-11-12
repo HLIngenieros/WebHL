@@ -308,7 +308,10 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     `.duotono` sobre oscuro, radios y tarjetas que se elevan. Archivo solo queda en `design/` para los PDF.
     **R2 cerrado (12-nov):** cabecera azul noche con 6 pestañas y línea naranja, menú móvil con `popover` nativo,
     pie del acta (oficina principal, enlaces, sellos, redes); fuera `PanelProyectos`.
-  - **Siguiente paso:** Plan R (R3: Home con video y Quiénes somos); luego F6. El proveedor de producción (`anthropic` con clave,
+    **R3 · Home cerrado (12-nov):** póster provisional (Columbus) con acercamiento y pausa, video listo para cuando
+    llegue (`video:` en `sitio.yaml`; pendiente bloqueante), cifras con cota y contador, clientes. Fuera el gemelo y los
+    bloques viejos del inicio.
+  - **Siguiente paso:** Plan R (R3: Quiénes somos); luego F6. El proveedor de producción (`anthropic` con clave,
     `foundry` o `azure-openai`) se agrega cuando Gerencia y TI den la credencial. F6 después.
   - **Ojo agente:** al desplegar no borrar `/api/vacantes.json` (lo escribe el flujo de Vacantes de F4 en Power
     Automate; **congelado por decisión de Juan David, 21-oct**: no se toca hasta nuevo aviso). El sitio es `https://hlingenieros.com` sin www.

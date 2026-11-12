@@ -140,7 +140,8 @@ const sitio = defineCollection({
     fundacion: z.number().int(),
     lema: texto,
     paises: z.array(z.string().length(2)).min(1),
-    cifras: z.array(z.object({ valor: z.number(), prefijo: z.string().optional(), unidad: unidad.optional(), etiqueta: texto })),
+    // Video del Home (guía v2.0 §9): rutas bajo public/. Sin video, el hero muestra el póster provisional.
+    video: z.object({ mp4: z.string(), webm: z.string().optional() }).optional(),
     redes: z.array(z.object({ red: z.string(), url: z.url() })),
     asociadas: z.array(z.object({ nombre: z.string(), logo: image().optional(), area: texto.optional(), descripcion: texto.optional(), aprobada: z.boolean() })).optional(),
     clientes: z.array(z.object({ nombre: z.string().optional(), logo: image() })).default([]),

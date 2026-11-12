@@ -8,11 +8,8 @@
   # Países con obra: los nombra el texto "Ejecutamos los proyectos de forma diferente" del inicio actual
   # (contenido/institucional.md §1). Las fichas solo registran CO, EC, GT y PA.
   paises: [CO, PA, CR, DO, GT, BO, EC]
-  cifras:
-    - { valor: 530, prefijo: '+', etiqueta: { es: Proyectos ejecutados, en: Projects completed } }
-    - { valor: 4000000, prefijo: '+', unidad: hh, etiqueta: { es: Horas hombre al año, en: Man-hours per year } }
-    - { valor: 7, etiqueta: { es: Países con obra, en: Countries with projects } }
-    - { valor: 4, etiqueta: { es: Sedes, en: Offices } }
+  # Video del Home (pendiente): archivos en public/video/.
+  # video: { mp4: /video/inicio.mp4, webm: /video/inicio.webm }
   # Empresas del grupo (D1: falta decidir cuáles se muestran). Ninguna se publica hasta `aprobada: true`.
   # Megacranes y Aktino ya salieron del grupo (20-oct): no se incluyen. HL Infraestructura ejecuta las obras y
   # tendrá el protagonismo (falta su información); HL Panamá y HL Rental siguen, con protagonismo muy reducido.

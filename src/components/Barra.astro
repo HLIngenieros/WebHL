@@ -80,14 +80,15 @@ const actual = (k: string) => (k === activa ? 'page' : undefined);
     marcarTema();
   }
 
-  // Barra inmersa (solo el inicio): transparente mientras el hero está bajo la barra.
+  // Barra inmersa (solo el inicio): transparente hasta que se baja 40 px (umbral del hero) o, sin umbral,
+  // mientras el hero está bajo la barra.
   let observador: IntersectionObserver | null = null;
   function inmersa() {
     observador?.disconnect();
     observador = null;
     (window as any).__barraObs = 0;
     const barra = document.querySelector<HTMLElement>('header.barra[data-inmersa]');
-    const hero = document.querySelector('.hero');
+    const hero = document.querySelector('.hero-umbral') ?? document.querySelector('.hero');
     if (!barra || !hero) return;
     const alto = barra.offsetHeight;
     observador = new IntersectionObserver(([e]) => {

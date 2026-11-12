@@ -1,20 +1,13 @@
 ---
-// Inicio (guía §12.1, especificación §5): hero con barra inmersa, franja de sectores, HL en cifras,
-// destacados, servicios, sectores (Cemento y Minería al frente), franja HSE y clientes. Noticias: el
-// bloque no existe hasta que haya al menos 3 (especificación §3).
+// Home (acta GHL-WEB-001 §1, especificación v2.0 §5, maqueta R0): video de fondo con el lema, cifras
+// relevantes y clientes. Nada más.
 import Base from '../layouts/Base.astro';
 import Hero from '../components/inicio/Hero.astro';
-import FranjaSectores from '../components/inicio/FranjaSectores.astro';
-import FichasCifras from '../components/inicio/FichasCifras.astro';
-import Destacados from '../components/inicio/Destacados.astro';
-import ServiciosInicio from '../components/inicio/ServiciosInicio.astro';
-import SectoresInicio from '../components/inicio/SectoresInicio.astro';
-import FranjaHse from '../components/inicio/FranjaHse.astro';
+import CifrasInicio from '../components/inicio/CifrasInicio.astro';
 import Clientes from '../components/inicio/Clientes.astro';
-import NoticiasInicio from '../components/inicio/NoticiasInicio.astro';
 import { cifrasInicio } from '../lib/inicio';
 import { cargar } from '../lib/datos';
-import { txt } from '../lib/contenido';
+import { bloque, txt } from '../lib/contenido';
 import type { Lang } from '../i18n/rutas';
 
 interface Props { lang: Lang; alterno: string }
@@ -22,18 +15,22 @@ const { lang, alterno } = Astro.props;
 const { datos } = await cargar();
 const sitio = datos.sitio[0].data;
 const lema = txt(sitio.lema, lang)!;
-const numeroIso = (c: { data: { norma: { es: string } } }) => Number(c.data.norma.es.replace(/\D/g, ''));
-const iso = datos.certificaciones.filter((c) => c.data.norma.es.startsWith('ISO')).sort((a, b) => numeroIso(a) - numeroIso(b));
-const cifras = cifrasInicio({ fundacion: sitio.fundacion, paises: sitio.paises, sedes: datos.sedes.length, certificaciones: iso.length }, lang);
+// Horas hombre: el proyecto visible con más horas (hoy, Columbus).
+const mayor = datos.proyectos
+  .filter((p) => p.data.visibilidad !== 'discreta' && p.data.hh)
+  .sort((a, b) => b.data.hh! - a.data.hh!)[0];
+// Seguridad: el primer indicador con signo de la página HSE (−64 % de frecuencia de accidentes).
+const hse = datos.paginas.find((p) => p.data.pagina === 'hse' && p.data.lang === lang) ?? datos.paginas.find((p) => p.data.pagina === 'hse')!;
+const seguridad = hse.data.indicadores!.find((x) => x.signo)!;
+const cifras = cifrasInicio({
+  fundacion: sitio.fundacion,
+  paises: sitio.paises,
+  proyecto: { nombre: bloque(mayor.data, lang).titulo, hh: mayor.data.hh! },
+  seguridad: { valor: seguridad.valor, signo: seguridad.signo },
+}, lang);
 ---
 <Base titulo="Grupo HL" descripcion={lema} lang={lang} alterno={alterno} barra="inmersa">
-  <Hero lang={lang} lema={lema} />
-  <FranjaSectores lang={lang} />
-  <FichasCifras lang={lang} cifras={cifras} paises={sitio.paises} sedes={datos.sedes.map((s) => s.data.ciudad)} normas={iso.map((c) => c.data.norma.es.replace('ISO ', ''))} />
-  <Destacados lang={lang} />
-  <ServiciosInicio lang={lang} />
-  <SectoresInicio lang={lang} />
-  <FranjaHse lang={lang} />
-  <NoticiasInicio lang={lang} />
+  <Hero lang={lang} lema={lema} video={sitio.video} />
+  <CifrasInicio lang={lang} cifras={cifras} />
   <Clientes lang={lang} />
 </Base>

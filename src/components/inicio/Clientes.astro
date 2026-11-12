@@ -1,9 +1,8 @@
 ---
-// Clientes (guía §12.1-4): los logos de sitio.clientes en dos cintas que corren en sentidos contrarios,
+// Clientes (guía v2.0, maqueta R0): los logos de sitio.clientes en dos cintas que corren en sentidos contrarios,
 // en gris y a color al pasar. Se detienen con hover, foco, movimiento reducido o fuera de pantalla.
 // La segunda copia de cada cinta solo cierra el bucle: no se lee ni se enfoca.
 import { Image } from 'astro:assets';
-import Cabecera from './Cabecera.astro';
 import { cargar } from '../../lib/datos';
 import type { Lang } from '../../i18n/rutas';
 import { t } from '../../i18n/ui';
@@ -18,7 +17,7 @@ const cintas = [clientes.slice(0, mitad), clientes.slice(mitad)];
 {clientes.length > 0 && (
   <section class="clientes" aria-labelledby="clientes-titulo">
     <div class="wrap">
-      <Cabecera id="clientes-titulo" codigo="L-06" nombre={t(lang, 'clientes')} titulo={[t(lang, 'clientesInicio1'), t(lang, 'clientesInicio2')]} />
+      <h2 id="clientes-titulo">{t(lang, 'nuestrosClientes')}</h2>
     </div>
     {cintas.map((cinta, k) => (
       <div class="riel">
@@ -44,7 +43,8 @@ const cintas = [clientes.slice(0, mitad), clientes.slice(mitad)];
 </script>
 
 <style>
-  .clientes { padding-block: var(--s6); background: var(--paper); overflow: hidden; }
+  .clientes { padding-block: var(--s7); background: var(--paper); overflow: hidden; }
+  h2 { margin: 0 0 var(--s5); }
   .riel {
     border-block: var(--border) solid var(--line); overflow: hidden;
     mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);

@@ -1,105 +1,120 @@
 ---
-// Hero del inicio · lámina viva (guía §12.1-1): marco de lámina con zonas, H1 con el lema, botón de
-// trazo y el gemelo digital. Grafito en los dos temas: usa los primitivos --hl-*.
-import BotonTrazo from '../ui/BotonTrazo.astro';
+// Hero del Home (guía v2.0 §8 y §9, maqueta R0): solo el lema sobre el video, con la capa --velo-video y botón
+// de pausa. El póster es el LCP; el video (sitio.video) se agrega después del evento load, solo en escritorio,
+// sin movimiento reducido ni ahorro de datos. Sin video, el póster hace un acercamiento lento.
+import { Picture } from 'astro:assets';
+import poster from '../../assets/proyectos/planta-columbus/1.jpg';
 import { partirLema } from '../../lib/inicio';
-import { ruta, type Lang } from '../../i18n/rutas';
+import type { Lang } from '../../i18n/rutas';
 import { t } from '../../i18n/ui';
 
-interface Props { lang: Lang; lema: string }
-const { lang, lema } = Astro.props;
-const [l1, l2, l3] = partirLema(lema);
-// El año del lema es texto (no se calcula): solo se le da su tinta de señal.
-const [antes, despues] = l3.split('1968');
-const ZONAS_X = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-// Textos de las etiquetas del gemelo (una por disciplina), para el script.
-const etiquetas = JSON.stringify({
-  civil: t(lang, 'discCivil'), mecanico: t(lang, 'discMecanico'), electrico: t(lang, 'discElectrico'),
-  fabricacion: t(lang, 'discFabricacion'), mantenimiento: t(lang, 'discMantenimiento'),
-});
-const ZONAS_Y = ['1', '2', '3', '4'];
+interface Props { lang: Lang; lema: string; video?: { mp4: string; webm?: string } }
+const { lang, lema, video } = Astro.props;
+const { l1, l2, l3, cierre } = partirLema(lema);
 ---
-<section class="hero" aria-labelledby="lema">
-  <div class="hero-reticula" aria-hidden="true"></div>
-  <div class="gemelo" data-estado="quieto" data-etiquetas={etiquetas} aria-hidden="true"><canvas></canvas></div>
-  <div class="hero-marco" aria-hidden="true">
-    <div class="zonas-x voz-datos">{ZONAS_X.map((z) => <span>{z}</span>)}</div>
-    <div class="zonas-y voz-datos">{ZONAS_Y.map((z) => <span>{z}</span>)}</div>
-  </div>
+<section class="hero" aria-labelledby="lema" data-video={video ? JSON.stringify(video) : undefined}>
+  <Picture
+    src={poster} alt="" widths={[640, 960, 1200]} sizes="100vw" formats={['avif', 'webp']}
+    loading="eager" fetchpriority="high" class="hero-poster"
+  />
+  <div class="hero-velo" aria-hidden="true"></div>
+  <span class="hero-umbral" aria-hidden="true"></span>
   <div class="hero-txt">
-    <h1 id="lema" class="lema aparece">
-      <span class="l l1"><span>{l1}</span></span>{' '}
-      <span class="l l2"><span>{l2}</span></span>{' '}
-      <span class="l l3"><span>{despues === undefined ? l3 : <>{antes}<b>1968</b>{despues}</>}</span></span>
+    <h1 id="lema" class="lema">
+      <span class="l"><span>{l1}</span></span>{' '}
+      <span class="l"><span>{l2}</span></span>{' '}
+      <span class="l l3"><span>{l3}{cierre && <> <em>{cierre}</em></>}</span></span>
     </h1>
-    <div class="hero-accion"><BotonTrazo href={ruta('proyectos', lang)} texto={t(lang, 'verProyectos')} /></div>
   </div>
-  <div class="hero-bajar voz-datos" aria-hidden="true"><i></i>{t(lang, 'bajar')}</div>
+  <button class="hero-pausa" type="button" aria-pressed="false" data-pausar={t(lang, 'pausarVideo')} data-reproducir={t(lang, 'reproducirVideo')} aria-label={t(lang, 'pausarVideo')}>
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-pausa" d="M4 3h3v10H4zM9 3h3v10H9z" /><path class="i-play" d="M5 3l8 5-8 5z" /></svg>
+  </button>
 </section>
 
-<script>import '../../scripts/gemelo.ts';</script>
+<script>
+  // Botón de pausa (acercamiento del póster o video) y carga diferida del video.
+  function iniciar() {
+    const hero = document.querySelector<HTMLElement>('.hero');
+    const boton = hero?.querySelector<HTMLButtonElement>('.hero-pausa');
+    if (!hero || !boton || hero.dataset.listo) return;
+    hero.dataset.listo = '1';
+    const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let video: HTMLVideoElement | undefined;
+    const pausar = (si: boolean) => {
+      hero.classList.toggle('pausado', si);
+      boton.setAttribute('aria-pressed', String(si));
+      boton.setAttribute('aria-label', (si ? boton.dataset.reproducir : boton.dataset.pausar) ?? '');
+      if (video) si ? video.pause() : video.play().catch(() => {});
+    };
+    if (quieto) pausar(true);
+    boton.addEventListener('click', () => pausar(!hero.classList.contains('pausado')));
+
+    const fuentes = hero.dataset.video && JSON.parse(hero.dataset.video) as { mp4: string; webm?: string };
+    const ahorro = (navigator as any).connection?.saveData;
+    if (!fuentes || quieto || ahorro || !matchMedia('(min-width: 900px)').matches) return;
+    const cargar = () => {
+      video = Object.assign(document.createElement('video'), { muted: true, loop: true, playsInline: true, autoplay: true, preload: 'auto' });
+      video.className = 'hero-video';
+      video.setAttribute('aria-hidden', 'true');
+      if (fuentes.webm) video.append(Object.assign(document.createElement('source'), { src: fuentes.webm, type: 'video/webm' }));
+      video.append(Object.assign(document.createElement('source'), { src: fuentes.mp4, type: 'video/mp4' }));
+      video.addEventListener('playing', () => hero.classList.add('con-video'), { once: true });
+      hero.querySelector('.hero-velo')!.before(video);
+      if (hero.classList.contains('pausado')) video.pause();
+    };
+    document.readyState === 'complete' ? cargar() : addEventListener('load', cargar, { once: true });
+  }
+  iniciar();
+  document.addEventListener('astro:page-load', iniciar);
+</script>
 
 <style>
   .hero {
     position: relative; overflow: hidden; isolation: isolate;
-    min-height: max(600px, 100svh); display: flex; flex-direction: column;
+    min-height: max(560px, min(860px, 100svh)); display: flex; align-items: center;
     background: var(--azul-900); color: var(--hl-blanco);
   }
-  .hero-reticula {
-    position: absolute; inset: 0; z-index: -1;
-    background-image:
-      linear-gradient(color-mix(in srgb, var(--hl-trazo) 6%, transparent) 1px, transparent 1px),
-      linear-gradient(90deg, color-mix(in srgb, var(--hl-trazo) 6%, transparent) 1px, transparent 1px);
-    background-size: var(--s6) var(--s6);
+  .hero :global(.hero-poster), .hero :global(.hero-video) {
+    position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover;
   }
-  /* Marco de lámina: zonas A–H arriba y 1–4 a la izquierda (solo esos dos lados). */
-  .hero-marco { position: absolute; inset: var(--s3); border: var(--border) solid color-mix(in srgb, var(--noche-tenue) 35%, transparent); pointer-events: none; }
-  .zonas-x, .zonas-y { position: absolute; display: flex; color: color-mix(in srgb, var(--noche-tenue) 70%, transparent); font-size: var(--fs-chip); }
-  .zonas-x { left: 0; right: 0; top: calc(-1 * var(--s3)); height: var(--s3); }
-  .zonas-y { top: 0; bottom: 0; left: calc(-1 * var(--s3)); width: var(--s3); flex-direction: column; }
-  .zonas-x span, .zonas-y span { flex: 1; display: grid; place-items: center; }
-  .zonas-x span + span { border-left: var(--border) solid color-mix(in srgb, var(--noche-tenue) 25%, transparent); }
-  .zonas-y span + span { border-top: var(--border) solid color-mix(in srgb, var(--noche-tenue) 25%, transparent); }
+  .hero :global(.hero-poster) { transform-origin: 60% 50%; animation: acercar 26s ease-in-out infinite alternate; }
+  @keyframes acercar { from { transform: scale(1.02); } to { transform: scale(1.14) translate(-2%, -1.5%); } }
+  .hero :global(.hero-video) { opacity: 0; transition: opacity var(--t-vista) ease; }
+  .hero.con-video :global(.hero-video) { opacity: 1; }
+  .hero.pausado :global(.hero-poster) { animation-play-state: paused; }
+  /* Umbral de la barra: deja de ser transparente cuando se baja 40 px (Barra.astro lo observa). */
+  .hero-umbral { position: absolute; left: 0; top: calc(var(--bar-h) + 40px); width: 1px; height: 1px; }
+  .hero-velo { position: absolute; inset: 0; z-index: -1; background: var(--velo-video); }
 
-  /* Bloque de texto centrado en vertical bajo la barra; a la izquierda. */
   .hero-txt {
-    position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; justify-content: center;
-    padding: calc(var(--bar-h) + var(--s6)) var(--gutter) var(--s7); max-width: var(--wrap); margin-inline: auto; width: 100%; box-sizing: border-box;
+    width: 100%; max-width: var(--wrap); margin-inline: auto; box-sizing: border-box;
+    padding: calc(var(--bar-h) + var(--s6)) var(--gutter) var(--s7);
   }
-  .lema { margin: 0; line-height: .9; letter-spacing: -.025em; font-size: var(--fs-lema); }
-  .lema .l { display: block; overflow: hidden; padding-bottom: .04em; }
-  .lema .l > span { display: inline-block; }
-  .l1 { font-weight: var(--fw-negra); }
-  .l2 { font-weight: var(--fw-fina); }
-  .l3 {
-    max-width: none; margin-top: var(--s4); letter-spacing: .14em; text-transform: uppercase; line-height: 1.2;
-    font-family: var(--f); font-weight: var(--fw-boton); font-size: var(--fs-lema-datos);
-    color: var(--azul-50); opacity: .78;
-  }
-  .l3 b { font-weight: var(--fw-subtitle); color: var(--hl-naranja); }
+  .lema { margin: 0; max-width: 18ch; font: var(--fw-negra) var(--fs-lema) / 1.02 var(--f-titulo); letter-spacing: -.02em; }
+  .lema .l { display: block; overflow: hidden; padding-bottom: .06em; }
+  .lema .l > span { display: block; }
+  .l3 { margin-top: var(--s3); max-width: 32ch; font-size: var(--fs-lema-datos); font-weight: var(--fw-fina); line-height: 1.3; letter-spacing: 0; color: var(--azul-50); }
+  .l3 em { font-style: normal; color: var(--hl-blanco); text-decoration: underline 3px var(--hl-naranja); text-underline-offset: .3em; }
   /* Izaje del H1: cada línea sube a su sitio (solo transform; legible desde el primer pintado). */
   :global(html.js) .lema .l > span { animation: lema-iza .9s var(--ease-izaje) both; }
-  :global(html.js) .lema .l2 > span { animation-delay: .12s; }
+  :global(html.js) .lema .l:nth-child(2) > span { animation-delay: .12s; }
   :global(html.js) .lema .l3 > span { animation-delay: .24s; }
   @keyframes lema-iza { from { transform: translateY(105%); } }
-  .hero-accion { margin-top: var(--s6); }
 
-  .hero-bajar { position: absolute; z-index: 1; left: 50%; bottom: var(--s5); transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: var(--s1); color: var(--noche-tenue); font-size: var(--fs-chip); }
-  .hero-bajar i { width: 1px; height: var(--s5); background: color-mix(in srgb, var(--noche-tenue) 30%, transparent); position: relative; overflow: hidden; }
-  .hero-bajar i::after { content: ""; position: absolute; left: -2px; top: 0; width: 5px; height: 1px; background: var(--hl-naranja); animation: bajar 2.2s var(--ease-plano) infinite; }
-  @keyframes bajar { to { transform: translateY(var(--s5)); } }
-
-  /* Gemelo digital (Tarea 5): a la derecha; en móvil, debajo del título y más bajo. */
-  .gemelo { position: absolute; z-index: 0; right: -2%; top: var(--bar-h); bottom: var(--s5); width: 62%; }
-  .gemelo canvas { display: block; width: 100%; height: 100%; }
-  @media (max-width: 899.98px) {
-    .hero-marco { display: none; }
-    .hero-txt { flex: 0 0 auto; padding-top: calc(var(--bar-h) + var(--s6)); padding-bottom: 0; }
-    .gemelo { order: 2; position: relative; right: auto; top: auto; bottom: auto; width: 100%; height: 44svh; min-height: 260px; }
-    .hero-bajar { display: none; }
+  .hero-pausa {
+    position: absolute; right: var(--gutter); bottom: var(--s5); width: 44px; height: 44px; border-radius: 50%;
+    display: grid; place-items: center; cursor: pointer; color: var(--hl-blanco);
+    border: var(--border) solid color-mix(in srgb, var(--hl-blanco) 50%, transparent);
+    background: color-mix(in srgb, var(--azul-900) 50%, transparent);
   }
+  .hero-pausa svg { width: 14px; height: 14px; fill: currentColor; }
+  .hero-pausa .i-play, .hero.pausado .hero-pausa .i-pausa { display: none; }
+  .hero.pausado .hero-pausa .i-play { display: inline; }
+
+  /* En el móvil, "Hablar con HL" ocupa el pie de la pantalla: el hero termina encima de él. */
+  @media (max-width: 759.98px) { .hero { min-height: max(520px, calc(100svh - var(--bar-h))); } }
   @media (prefers-reduced-motion: reduce) {
+    .hero :global(.hero-poster) { animation: none; }
     :global(html.js) .lema .l > span { animation: none; }
-    .hero-bajar i::after { animation: none; }
   }
 </style>

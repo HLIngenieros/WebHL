@@ -1,0 +1,82 @@
+---
+// HL en cifras (guía v2.0 §9, maqueta R0): cuatro cifras con su cota, que se mide al entrar en pantalla, y un
+// contador. El valor final va escrito en el HTML; el contador solo anima hasta él (sin JS o con movimiento
+// reducido, se ve quieto). La de seguridad lleva el signo en naranja.
+import type { CifraInicio } from '../../lib/inicio';
+import type { Lang } from '../../i18n/rutas';
+import { t } from '../../i18n/ui';
+
+interface Props { lang: Lang; cifras: CifraInicio[] }
+const { lang, cifras } = Astro.props;
+---
+<section class="ci" aria-labelledby="ci-titulo">
+  <div class="wrap">
+    <h2 id="ci-titulo">{t(lang, 'enCifras1')} {t(lang, 'enCifras2')}</h2>
+    <ul class="ci-lista" data-lang={lang}>
+      {cifras.map((c, i) => (
+        <li class:list={['ci-cifra', { clave: c.signo }]} style={`--i:${i}`}>
+          <span class="ci-cota" aria-hidden="true"></span>
+          <span class="ci-valor">{c.signo && <b>{c.signo}</b>}<span data-n={c.valor}>{c.texto}</span>{c.clave === 'seguridad' && (lang === 'es' ? ' %' : '%')}</span>
+          <span class="ci-unidad">{c.unidad}</span>
+          <p>{c.descripcion}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<script>
+  // Al entrar en pantalla: la cota se mide y el número cuenta de 0 a su valor final (una vez).
+  function iniciar() {
+    const lista = document.querySelector<HTMLElement>('.ci-lista');
+    if (!lista || lista.dataset.listo) return;
+    lista.dataset.listo = '1';
+    const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fmt = new Intl.NumberFormat(lista.dataset.lang === 'en' ? 'en-US' : 'es-CO', { useGrouping: 'always' });
+    const dur = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--t-contador')) * 1000 || 1600;
+    const contar = (el: HTMLElement) => {
+      const fin = Number(el.dataset.n);
+      const t0 = performance.now();
+      const paso = (t: number) => {
+        const p = Math.min(1, (t - t0) / dur);
+        el.textContent = fmt.format(Math.round(fin * (1 - (1 - p) ** 3)));
+        if (p < 1) requestAnimationFrame(paso);
+      };
+      requestAnimationFrame(paso);
+    };
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('visible');
+      if (!quieto) e.target.querySelectorAll<HTMLElement>('[data-n]').forEach(contar);
+      io.unobserve(e.target);
+    }), { threshold: .4 });
+    lista.querySelectorAll('.ci-cifra').forEach((c) => io.observe(c));
+  }
+  iniciar();
+  document.addEventListener('astro:page-load', iniciar);
+</script>
+
+<style>
+  .ci { padding-block: var(--s7); background: var(--bg); }
+  h2 { margin: 0; }
+  .ci-lista { list-style: none; margin: var(--s6) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s4); }
+  .ci-cifra { position: relative; padding-top: var(--s3); container-type: inline-size; }
+  /* Cota: línea con dos topes; el trazo se mide de izquierda a derecha y el tope final aparece al terminar. */
+  .ci-cota { position: absolute; inset: 0 0 auto; height: 12px; border-left: 1.5px solid var(--accent); }
+  .ci-cota::before { content: ''; position: absolute; left: 0; right: 0; top: 5px; height: 1.5px; background: var(--accent); transform-origin: left; }
+  .ci-cota::after { content: ''; position: absolute; right: 0; top: 0; width: 1.5px; height: 12px; background: var(--accent); }
+  :global(html.js) .ci-cifra .ci-cota::before { transform: scaleX(0); transition: transform var(--t-cota) var(--ease-plano) calc(var(--i) * var(--t-escalon)); }
+  :global(html.js) .ci-cifra .ci-cota::after { opacity: 0; transition: opacity var(--t-rapido) calc(var(--t-cota) + var(--i) * var(--t-escalon)); }
+  :global(html.js) .ci-cifra.visible .ci-cota::before { transform: none; }
+  :global(html.js) .ci-cifra.visible .ci-cota::after { opacity: 1; }
+  .ci-valor {
+    display: block; margin: var(--s2) 0 var(--s1); color: var(--accent); font: var(--fw-display) var(--fs-stat) / 1 var(--f-titulo);
+    font-size: min(var(--fs-stat), 18cqi); letter-spacing: -.02em; font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .clave .ci-valor { color: var(--ink); }
+  .clave .ci-valor b { color: var(--hl-naranja); font-weight: inherit; }
+  .ci-unidad { font: var(--fw-subtitle) 1rem var(--f-titulo); }
+  p { margin: var(--s2) 0 0; color: var(--muted); font-size: .9375rem; line-height: 1.5; }
+  @media (max-width: 899.98px) { .ci-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--s5); } }
+  @media print { :global(html.js) .ci-cifra .ci-cota::before { transform: none; } :global(html.js) .ci-cifra .ci-cota::after { opacity: 1; } }
+</style>

@@ -37,7 +37,7 @@ interface Sede { nombre: Texto; buzon?: string; confirmar?: string[] }
 interface Certificacion { norma: Texto; vence?: Date; pdf?: string; confirmar?: string[] }
 interface Hito extends ConIdiomas { anio?: number; foto?: unknown }
 interface Testimonio { autorizado: boolean; cargo: Texto; cita: Texto }
-interface Sitio { paises?: string[]; asociadas?: { nombre?: string; aprobada?: boolean }[]; clientes?: { nombre?: string }[]; cifras?: { etiqueta: Texto }[]; confirmar?: string[] }
+interface Sitio { paises?: string[]; asociadas?: { nombre?: string; aprobada?: boolean }[]; clientes?: { nombre?: string }[]; video?: object; confirmar?: string[] }
 interface Pagina { pagina: string; lang: Lang; revisionJuridica?: boolean; confirmar?: string[] }
 
 export interface Datos {
@@ -224,7 +224,7 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
     if (sinAprobar.length) add('sitio', id, 'asociadas', 'aviso', false, `D1: sin aprobar (${sinAprobar.join(', ')}); no se publican`);
     const sinNombre = data.clientes?.filter((c) => !c.nombre).length;
     if (sinNombre) add('sitio', id, 'clientes', 'insumo', true, `${sinNombre} logos sin nombre`);
-    if (data.cifras?.some((c) => !c.etiqueta.en)) add('sitio', id, 'en', 'traduccion');
+    if (!data.video) add('sitio', id, 'video', 'insumo', true, 'video de obra para el Home (20-30 s, MP4 + WebM, ≤ 6 MB) y su póster; hoy, póster provisional de Columbus');
     dudas('sitio', id, data.confirmar);
   }
   const paginas = datos.paginas ?? [];
