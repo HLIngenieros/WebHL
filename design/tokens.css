@@ -1,7 +1,9 @@
 /* ==========================================================================
-   Grupo HL · Tokens de diseño
+   Grupo HL · Tokens de diseño · v2.0 (Plan R, 12-nov-2026)
    Única fuente de verdad de los valores visuales. Las reglas de uso están en
-   docs/guia-visual.md. Si cambia un valor aquí, correr design/contraste.py.
+   docs/guia-visual.md (v2.0). Si cambia un valor aquí, correr design/contraste.py.
+   Identidad del comité comercial (acta GHL-WEB-001): azul #003399 + naranja #FF6633,
+   Poppins (títulos y cifras), Open Sans (texto), IBM Plex Mono (datos).
 
    Breakpoints (no pueden ser variables en @media; usar estos valores):
      520px móvil · 640px móvil grande · 760px tableta · 900px tableta grande · 960px escritorio corto
@@ -9,101 +11,119 @@
    ========================================================================== */
 
 :root {
-  /* ---- Paleta de marca (primitivos, no cambian con el tema) ---- */
-  --hl-azul: #0B509E;
-  --hl-grafito: #14181C;
-  --hl-concreto: #E7EAEB;
-  --hl-acero: #8A949B;
-  --hl-senal: #F2B42A;
-  --hl-azul-claro: #62A0EC; /* azul de líneas sobre grafito (el --accent oscuro): gemelo y retícula del hero */
-  --hl-blanco: #FFFFFF;    /* monograma y texto sobre el grafito del hero (igual en los dos temas) */
-  --hl-verde: #5CC27D;     /* verde HSE sobre grafito (franja HSE del inicio, igual en los dos temas) */
-  --hl-cian: #4FC3D9;      /* acentos de sección sobre grafito (pie, igual en los dos temas): los del modo oscuro */
-  --hl-violeta: #A894E0;
-  --hl-oxido: #F08A5D;
+  /* ---- Escala azul de marca (primitivos, no cambian con el tema) ---- */
+  --azul-50: #EEF2FB;      /* niebla: fondos alternos, chips */
+  --azul-100: #D9E2F6;
+  --azul-200: #B3C5EC;
+  --azul-300: #809FDE;
+  --azul-400: #4D78CF;
+  --azul-500: #1F52BD;
+  --azul-600: #003399;     /* corporativo: enlaces, botón principal, cifras */
+  --azul-700: #002B82;
+  --azul-800: #00226A;
+  --azul-900: #071A40;     /* noche: hero, bandas oscuras */
+  --azul-950: #040F26;     /* pie */
+  --hl-naranja: #FF6633;   /* acento puntual (≤ 5 % de la pantalla): relleno o sobre azul oscuro; nunca texto sobre blanco */
+  --hl-cian: #3399CC;      /* apoyo: ilustración técnica y gráficos (no texto) */
+  --hl-trazo: #8FB0F0;     /* líneas de dibujo y antetítulos sobre azul noche */
+
+  /* Primitivos con nombre histórico: los componentes los usan para las bandas oscuras.
+     Se renombran o retiran en R1. */
+  --hl-azul: #003399;
+  --hl-grafito: #071A40;   /* fondo de banda oscura (= azul 900) */
+  --hl-concreto: #EEF2FB;  /* texto principal sobre banda oscura */
+  --hl-acero: #A7B4CB;     /* texto secundario sobre banda oscura */
+  --hl-senal: #FF6633;     /* acento sobre banda oscura (= naranja) */
+  --hl-azul-claro: #8FB0F0;/* trazo sobre banda oscura */
+  --hl-blanco: #FFFFFF;
+  --hl-tinta: #14181C;     /* texto sobre relleno naranja, en los dos temas */
+  --hl-verde: #FF6633;     /* retirado (cifras HSE): pasa a naranja */
+  --hl-violeta: #8FB0F0;   /* retirado: acento de Sectores */
+  --hl-oxido: #8FB0F0;     /* retirado: acento de Noticias */
 
   /* ---- Roles de color · modo claro ---- */
-  --bg: #E7EAEB;           /* concreto: fondo base */
-  --paper: #F6F7F7;        /* superficies: paneles, tarjetas, campos */
-  --ink: #14181C;          /* grafito: texto principal, estructura */
+  --bg: #FFFFFF;           /* fondo base */
+  --paper: #EEF2FB;        /* superficies: secciones alternas, paneles, campos */
+  --ink: #14181C;          /* tinta: títulos y texto principal */
   --muted: #56606A;        /* texto secundario */
-  --steel: #8A949B;        /* acero: solo líneas e ilustración, nunca texto */
-  --line: #C2C9CD;         /* bordes y divisores */
-  --line-soft: #D7DCDF;    /* divisores internos */
-  --accent: #0B509E;       /* azul HL: enlaces, acción principal, ejes */
+  --steel: #8A949B;        /* solo líneas e ilustración, nunca texto */
+  --line: #D5DBE3;         /* bordes y divisores */
+  --line-soft: #E4E9F0;    /* divisores internos */
+  --accent: #003399;       /* azul corporativo: enlaces, acción principal, cifras */
   --accent-ink: #FFFFFF;   /* texto sobre --accent */
-  --accent-soft: #D6E2F1;
-  --signal: #B27900;       /* señalización: cotas, líneas y marcas, no texto */
-  --signal-ink: #805700;   /* señalización cuando es texto */
-  --signal-soft: #F5E7C2;
+  --accent-soft: #D9E2F6;
+  --signal: #E2541F;       /* naranja para cotas y marcas sobre claro (no texto); el #FF6633 puro solo como relleno */
+  --signal-ink: #B23C0E;   /* naranja cuando es texto sobre claro */
+  --signal-soft: #FFE3D8;
   --bad: #AC4028;          /* estado: crítico, error */
   --bad-soft: #F2DDD5;
   --good: #2B714E;         /* estado: correcto, completado */
   --good-soft: #D5E9DC;
-  --grid: rgba(11, 80, 158, .075); /* retícula de fondo */
-  --trazo-foto: #FFFFFF;   /* trazo sobre la lámina de foto (igual en claro y oscuro) */
+  --grid: rgba(0, 51, 153, .07); /* retícula de fondo */
+  --trazo-foto: #FFFFFF;   /* trazo sobre foto (igual en claro y oscuro) */
+  --velo-video: linear-gradient(90deg, rgba(4, 15, 38, .88) 0%, rgba(4, 15, 38, .78) 50%, rgba(4, 15, 38, .62) 100%); /* capa del video del Home */
+  --sombra-card: 0 14px 32px -12px rgba(0, 0, 0, .22); /* tarjeta al pasar el cursor */
+  --sombra-panel: 0 -20px 60px rgba(0, 0, 0, .35);     /* panel que sube (ficha) */
 
-  /* Acentos de sección (guía §3.5): primitivos por tema; [data-seccion] los asigna a --sec */
-  --sec-proyectos: #8A5A00; --sec-proyectos-soft: #F5E7C2; --sec-proyectos-ink: #FFFFFF;
-  --sec-servicios: #006B80; --sec-servicios-soft: #CDE8EE; --sec-servicios-ink: #FFFFFF;
-  --sec-sectores: #5B3FA0;  --sec-sectores-soft: #E3DCF2;  --sec-sectores-ink: #FFFFFF;
-  --sec-hse: #1F6F3A;       --sec-hse-soft: #D3EBDA;       --sec-hse-ink: #FFFFFF;
-  --sec-noticias: #B13F12;  --sec-noticias-soft: #F9E6DE;  --sec-noticias-ink: #FFFFFF;
+  /* Acentos de sección: retirados (R-2). Quedan como alias del azul para no romper componentes;
+     se eliminan en R1. Las secciones se distinguen por su firma de movimiento. */
+  --sec-proyectos: var(--accent); --sec-servicios: var(--accent); --sec-sectores: var(--accent);
+  --sec-hse: var(--accent); --sec-noticias: var(--accent);
 
   color-scheme: light;
 
   /* ---- Tipografía ---- */
-  /* "Archivo respaldo" y "… ancho" son Arial con métricas de Archivo (global.css, design/fuente.py):
-     el cambio de fuente no mueve el texto. La ancha va en las voces expandidas (display, título, cifra). */
-  --f: "Archivo", "Archivo respaldo", "Arial Narrow", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --f-ancha: "Archivo", "Archivo respaldo ancho", "Arial", system-ui, sans-serif;
+  /* Los "respaldo" son fuentes del sistema con métricas ajustadas (design/fuente.py, se regeneran en R1). */
+  --f: "Open Sans", "Open Sans respaldo", system-ui, -apple-system, "Segoe UI", sans-serif;        /* texto */
+  --f-ancha: "Poppins", "Poppins respaldo", system-ui, -apple-system, "Segoe UI", sans-serif;      /* títulos, menú, botones, cifras */
+  --f-mono: "IBM Plex Mono", "Plex respaldo", ui-monospace, Consolas, monospace;                    /* códigos, cotas, antetítulos (MAYÚS) */
 
-  /* anchos (eje wdth de Archivo) */
-  --wdth-display: 122%;    /* h1, cifras grandes */
-  --wdth-title: 115%;      /* h2, títulos de tarjeta */
-  --wdth-subtitle: 108%;   /* h3 */
+  /* anchos: sin eje wdth en las fuentes nuevas; quedan neutros y se retiran en R1 */
+  --wdth-display: 100%;
+  --wdth-title: 100%;
+  --wdth-subtitle: 100%;
   --wdth-text: 100%;
-  --wdth-data: 72%;        /* voz de datos: rótulos, cotas, etiquetas */
-  --wdth-stat: 125%;       /* cifras destacadas */
+  --wdth-data: 100%;
+  --wdth-stat: 100%;
 
   /* tamaños */
-  --fs-h1: clamp(36px, 5.6vw, 68px);
-  --fs-lema: clamp(44px, 6.2vw, 92px);       /* H1 del inicio (guía §12.1) */
-  --fs-lema-datos: clamp(15px, 1.9vw, 28px); /* su línea en voz de datos */
-  --fs-anio-tira: clamp(72px, 12vw, 190px);  /* año de la tira de negativos (guía §12.3) */
-  --fs-h2: clamp(28px, 3.6vw, 44px);
-  --fs-h3: 21px;
-  --fs-stat: clamp(26px, 3.4vw, 40px);
+  --fs-h1: clamp(36px, 5.2vw, 56px);
+  --fs-lema: clamp(46px, 7.4vw, 92px);       /* H1 del Home sobre el video */
+  --fs-lema-datos: clamp(20px, 2.3vw, 30px); /* segunda línea del lema ("con gente que cumple, desde 1968.") */
+  --fs-anio-tira: clamp(72px, 12vw, 190px);  /* año de la línea del tiempo */
+  --fs-h2: clamp(28px, 3.4vw, 40px);
+  --fs-h3: 20px;
+  --fs-stat: clamp(40px, 4.6vw, 56px);
   --fs-lead: 17px;
-  --fs-body: 16px;
-  --fs-sm: 14.5px;
+  --fs-body: 17px;
+  --fs-sm: 14px;
   --fs-xs: 13px;
-  --fs-data: 12.5px;
-  /* componentes (guía §7) */
-  --marca-mono: 28px;      /* monograma de la marca (mínimo 24 px, guía §2.2) */
-  --fs-marca-nombre: 17px;
-  --fs-boton: 14px;
-  --fs-cta: 13.5px;        /* Hablar con HL */
-  --fs-chip: 11.5px;
-  --fs-cota: 11px;         /* texto sobre la cota */
+  --fs-data: 12px;
+  /* componentes */
+  --marca-mono: 40px;      /* monograma de la marca (mínimo 24 px) */
+  --fs-marca-nombre: 21px;
+  --fs-boton: 15px;
+  --fs-cta: 14px;          /* Hablar con HL */
+  --fs-chip: 14px;
+  --fs-cota: 12px;         /* texto sobre la cota */
 
   /* pesos */
-  --fw-display: 850;
-  --fw-title: 800;
-  --fw-subtitle: 750;
+  --fw-display: 700;
+  --fw-title: 600;
+  --fw-subtitle: 600;
   --fw-strong: 600;
   --fw-text: 400;
-  --fw-data: 600;
-  --fw-negra: 900;         /* lema: "Construimos" (guía §2.3) */
-  --fw-fina: 300;          /* lema: "la industria" */
-  --fw-boton: 550;
+  --fw-data: 500;
+  --fw-negra: 700;         /* lema: "Construimos la industria" */
+  --fw-fina: 500;          /* lema: segunda línea */
+  --fw-boton: 600;
 
   /* interlineado y tracking */
-  --lh-display: .98;
-  --lh-title: 1.05;
+  --lh-display: 1.02;
+  --lh-title: 1.2;
   --lh-text: 1.6;
-  --ls-display: -.015em;
-  --ls-data: .07em;
+  --ls-display: -.02em;
+  --ls-data: .12em;
 
   /* ---- Espaciado (módulo 8px) ---- */
   --s1: 4px;
@@ -112,102 +132,92 @@
   --s4: 24px;
   --s5: 40px;
   --s6: 64px;
-  --s7: 104px;
+  --s7: 96px;
 
   /* ---- Layout ---- */
-  --wrap: 1180px;
-  --gutter: clamp(16px, 4vw, 40px);
+  --wrap: 1200px;
+  --gutter: clamp(20px, 4vw, 32px);
   --cols: 12;
-  --bar-h: 52px;
-  --grid-cell: 24px;       /* retícula de fondo; 16px en piezas pequeñas */
+  --bar-h: 80px;
+  --grid-cell: 48px;       /* retícula de las bandas oscuras; 24px en piezas pequeñas */
   --measure: 70ch;         /* ancho máximo de párrafo */
 
-  /* ---- Bordes y trazos ---- */
-  --radius: 0;             /* esquinas rectas en todo el sistema */
+  /* ---- Bordes, radios y trazos ---- */
+  --radius: 4px;           /* botones y campos */
+  --r-card: 6px;           /* tarjetas, logos, paneles */
+  --r-chip: 22px;          /* chips y filtros */
   --border: 1px;
   --border-strong: 1.5px;
   --stroke-thin: 1px;
   --stroke-mid: 1.6px;
+  --stroke-icono: 1.8px;   /* íconos de 24 px, sin relleno, esquinas redondeadas */
   --stroke-heavy: 3.2px;
-  --focus-ring: 2px solid var(--accent);
+  --focus-ring: 2px solid var(--azul-400);
 
   /* ---- Movimiento ---- */
-  --ease-plano: cubic-bezier(.6, .05, .25, 1);   /* trazo y cota: arranca lento, se asienta */
-  --ease-izaje: cubic-bezier(.2, .8, .2, 1);     /* carga que llega y frena */
-  --ease-barrido: cubic-bezier(.7, 0, .2, 1);    /* transición entre páginas */
+  --ease-plano: cubic-bezier(.6, .05, .25, 1);   /* líneas, cotas, subrayados, mapas */
+  --ease-izaje: cubic-bezier(.2, .8, .2, 1);     /* elementos que suben: textos, tarjetas, paneles */
+  --ease-barrido: cubic-bezier(.7, 0, .2, 1);    /* transición entre páginas y menú móvil */
   --t-rapido: .2s;
   --t-aparece: .5s;
   --t-izaje: .6s;
-  --t-vista: .5s;
+  --t-vista: .7s;          /* barrido entre páginas */
   --t-cota: 1.2s;
-  --t-trazo: 1.4s;
+  --t-trazo: 2.2s;
+  --t-contador: 1.6s;
+  --t-escalon: .1s;        /* escalonado por elemento, máx. 6 */
 }
 
-/* ---- Pantallas grandes: más ancho útil y tipografía de display que sigue creciendo (guía §5) ---- */
+/* ---- Pantallas grandes: más ancho útil y tipografía de display que sigue creciendo ---- */
 @media (min-width: 1600px) {
   :root {
     --wrap: 1360px;
-    --fs-h1: clamp(68px, 4.4vw, 112px);
-    --fs-lema: clamp(92px, 5.4vw, 140px);
-    --fs-lema-datos: clamp(28px, 1.6vw, 40px);
-    --fs-h2: clamp(44px, 2.6vw, 64px);
-    --fs-stat: clamp(40px, 2.4vw, 60px);
+    --fs-h1: clamp(56px, 3.6vw, 88px);
+    --fs-lema: clamp(92px, 5.6vw, 140px);
+    --fs-lema-datos: clamp(30px, 1.8vw, 42px);
+    --fs-h2: clamp(40px, 2.4vw, 60px);
+    --fs-stat: clamp(56px, 3.2vw, 76px);
     --fs-lead: 19px;
-    --fs-body: 17px;
+    --fs-body: 18px;
   }
 }
 @media (min-width: 2200px) {
   :root {
-    --wrap: 1600px; --fs-lead: 21px; --fs-body: 18px; --fs-sm: 15.5px; --fs-data: 13.5px;
-    --marca-mono: 32px; --fs-marca-nombre: 19px; --fs-boton: 15px; --fs-cta: 14.5px; --fs-chip: 12.5px; --fs-cota: 12px;
+    --wrap: 1600px; --fs-lead: 21px; --fs-body: 19px; --fs-sm: 15.5px; --fs-data: 13px;
+    --marca-mono: 44px; --fs-marca-nombre: 23px; --fs-boton: 16px; --fs-cta: 15px; --fs-chip: 15px; --fs-cota: 13px;
   }
 }
 
 /* ---- Roles de color · modo oscuro ---- */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0E1113; --paper: #15191C; --ink: #E5E9EB; --muted: #959FA7;
-    --steel: #5E6870; --line: #2D3439; --line-soft: #21272B;
-    --accent: #62A0EC; --accent-ink: #08131F; --accent-soft: #15263B;
-    --signal: #F2B42A; --signal-ink: #F2B42A; --signal-soft: #3A2F12;
+    --bg: #040F26; --paper: #071A40; --ink: #E9EEF8; --muted: #A7B4CB;
+    --steel: #4D6290; --line: #1E3566; --line-soft: #142850;
+    --accent: #8FB0F0; --accent-ink: #040F26; --accent-soft: #122C63;
+    --signal: #FF6633; --signal-ink: #FF6633; --signal-soft: #3A1A10;
     --bad: #E2816A; --bad-soft: #3A1E17; --good: #68B98A; --good-soft: #14291D;
-    --grid: rgba(98, 160, 236, .08);
-    --sec-proyectos: #F2B42A; --sec-proyectos-soft: #3A2F12; --sec-proyectos-ink: #08131F;
-    --sec-servicios: #4FC3D9; --sec-servicios-soft: #0F2E35; --sec-servicios-ink: #08131F;
-    --sec-sectores: #A894E0;  --sec-sectores-soft: #261E3D;  --sec-sectores-ink: #08131F;
-    --sec-hse: #5CC27D;       --sec-hse-soft: #12291A;       --sec-hse-ink: #08131F;
-    --sec-noticias: #F08A5D;  --sec-noticias-soft: #3A1C12;  --sec-noticias-ink: #08131F;
+    --grid: rgba(143, 176, 240, .08);
+    --sombra-card: 0 16px 36px -12px rgba(0, 0, 0, .6);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0E1113; --paper: #15191C; --ink: #E5E9EB; --muted: #959FA7;
-  --steel: #5E6870; --line: #2D3439; --line-soft: #21272B;
-  --accent: #62A0EC; --accent-ink: #08131F; --accent-soft: #15263B;
-  --signal: #F2B42A; --signal-ink: #F2B42A; --signal-soft: #3A2F12;
+  --bg: #040F26; --paper: #071A40; --ink: #E9EEF8; --muted: #A7B4CB;
+  --steel: #4D6290; --line: #1E3566; --line-soft: #142850;
+  --accent: #8FB0F0; --accent-ink: #040F26; --accent-soft: #122C63;
+  --signal: #FF6633; --signal-ink: #FF6633; --signal-soft: #3A1A10;
   --bad: #E2816A; --bad-soft: #3A1E17; --good: #68B98A; --good-soft: #14291D;
-  --grid: rgba(98, 160, 236, .08);
-  --sec-proyectos: #F2B42A; --sec-proyectos-soft: #3A2F12; --sec-proyectos-ink: #08131F;
-  --sec-servicios: #4FC3D9; --sec-servicios-soft: #0F2E35; --sec-servicios-ink: #08131F;
-  --sec-sectores: #A894E0;  --sec-sectores-soft: #261E3D;  --sec-sectores-ink: #08131F;
-  --sec-hse: #5CC27D;     --sec-hse-soft: #12291A;     --sec-hse-ink: #08131F;
-  --sec-noticias: #F08A5D;  --sec-noticias-soft: #3A1C12;  --sec-noticias-ink: #08131F;
+  --grid: rgba(143, 176, 240, .08);
+  --sombra-card: 0 16px 36px -12px rgba(0, 0, 0, .6);
   color-scheme: dark;
 }
 
-/* ---- Acento de sección (guía §3.5) ----
-   Cualquier elemento con data-seccion toma el acento de esa sección; sin valor conocido, el azul.
-   Se resuelve en el propio elemento, así que sigue al tema claro u oscuro. */
+/* ---- Acento de sección: todas las secciones toman el azul (R-2). Se retira en R1. ---- */
 :root, [data-seccion] { --sec: var(--accent); --sec-soft: var(--accent-soft); --sec-ink: var(--accent-ink); }
-[data-seccion="proyectos"] { --sec: var(--sec-proyectos); --sec-soft: var(--sec-proyectos-soft); --sec-ink: var(--sec-proyectos-ink); }
-[data-seccion="servicios"] { --sec: var(--sec-servicios); --sec-soft: var(--sec-servicios-soft); --sec-ink: var(--sec-servicios-ink); }
-[data-seccion="sectores"] { --sec: var(--sec-sectores); --sec-soft: var(--sec-sectores-soft); --sec-ink: var(--sec-sectores-ink); }
-[data-seccion="hse"] { --sec: var(--sec-hse); --sec-soft: var(--sec-hse-soft); --sec-ink: var(--sec-hse-ink); }
-[data-seccion="noticias"] { --sec: var(--sec-noticias); --sec-soft: var(--sec-noticias-soft); --sec-ink: var(--sec-noticias-ink); }
 
 /* ---- Movimiento reducido: duraciones a cero ---- */
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --t-rapido: 0s; --t-aparece: 0s; --t-izaje: 0s; --t-vista: 0s; --t-cota: 0s; --t-trazo: 0s;
+    --t-rapido: 0s; --t-aparece: 0s; --t-izaje: 0s; --t-vista: 0s; --t-cota: 0s; --t-trazo: 0s; --t-contador: 0s;
   }
 }

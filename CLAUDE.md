@@ -192,7 +192,9 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     probando variantes.
   - **Revisión de código:** solo al cerrar una fase L y enfocada en el riesgo (formularios, seguridad, PHP),
     no en todo el diff.
-  - **Documentar al cerrar, no durante:** CLAUDE.md, el plan y la memoria se actualizan una vez por etapa.
+  - **Cerrar cada tarea (12-nov):** al terminar cada tarea se actualizan su documentación (plan con estado,
+    CLAUDE.md si cambia algo de fondo) y la memoria, y se hace **commit**. El push lo hace Juan David desde
+    GitHub Desktop.
   - **Respuestas cortas:** resultado, lo que falta y la siguiente decisión; sin resúmenes de lo ya dicho.
 - **Trabajo por etapas.** El alcance de cada etapa (fase, módulo o tarea) se define sobre la marcha,
   según avance el desarrollo. Al cerrar cada etapa se hace su commit. Si se trabajó en una rama, se
@@ -294,7 +296,14 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     Lighthouse móvil de Documentos 98/100/100/100 (LCP 2,0 s, CLS 0,004). Revisión enfocada: `carga.mjs` sin hallazgos;
     `agente.php` ahora rechaza peticiones de otro origen (403) y responde "sin servicio" si no puede abrir el contador
     del tope diario. El proxy de desarrollo conserva el `Host` (`changeOrigin: false`).
-  - **Siguiente paso:** F6; el proveedor de producción (`anthropic` con clave,
+  - **Etapa 17 (en curso, 12-nov): Plan R · Rediseño comercial** ([docs/plan-r.md](docs/plan-r.md)). Acta de
+    inicio con el área comercial (10-nov) y su anexo navegable. **Manda sobre la guía visual v1.x y la
+    especificación v1.x en lo que contradiga** (identidad azul `#003399` + naranja `#FF6633`, Poppins/Open Sans/Plex
+    Mono, sin acentos por sección, menú de 6 pestañas, 3 especialidades de servicio, sin páginas de sector,
+    Gestión integral en lugar de HSE). Adaptar sin perder dinamismo ni las animaciones especializadas. Fases R0-R6.
+    **R0 cerrado (12-nov):** maqueta del Home aprobada (`design/maquetas/rediseno.html`), tokens v2.0 con
+    `contraste.py` en OK, guía visual v2.0 y especificación v2.0.
+  - **Siguiente paso:** Plan R (R1: identidad en todo el sitio); luego F6. El proveedor de producción (`anthropic` con clave,
     `foundry` o `azure-openai`) se agrega cuando Gerencia y TI den la credencial. F6 después.
   - **Ojo agente:** al desplegar no borrar `/api/vacantes.json` (lo escribe el flujo de Vacantes de F4 en Power
     Automate; **congelado por decisión de Juan David, 21-oct**: no se toca hasta nuevo aviso). El sitio es `https://hlingenieros.com` sin www.

@@ -1,0 +1,56 @@
+# Plan R · Rediseño comercial (identidad y orden del contenido)
+
+Origen: acta GHL-WEB-001 de la reunión de inicio con el área comercial (10-nov-2026) y su anexo navegable
+`grupo-hl-propuesta-web.zip` (parámetros de diseño y maquetas del Home, las 6 pestañas y 4 complementarias).
+Decisiones de Juan David del 12-nov. Va **antes de F6**. Tamaño L: suite completa, presupuesto y Lighthouse solo al cierre.
+
+**Principio rector:** cada página lleva **exactamente** lo que define el acta (tabla siguiente), nada más. Lo
+que hoy tenemos y el acta no pide, sale. El dinamismo, las animaciones especializadas y la fluidez se conservan
+en cómo se presenta ese contenido, no agregando bloques ni gráficas decorativas.
+
+## Contenido por página (acta, "Ajustes acordados en la revisión del tablero")
+
+| Página | Contenido |
+|---|---|
+| 1 · Home | Video de fondo con el texto (solo el título; sin gráficas de plano), cifras relevantes y sección de clientes |
+| 2 · Quiénes somos | Slogan, línea del tiempo, misión, visión y valores, presencia por países (sin direcciones) |
+| 3 · Proyectos | Solo minería, cemento y otros proyectos; mapa, filtros y ficha 3.1 (datos generales, fotos, cantidades) |
+| 4 · Servicios | Mecánico, civil, eléctrico e instrumentación; 3 proyectos por servicio que filtran hacia la ficha |
+| 5 · Gestión integral | Certificados, indicadores de seguridad, política SGI, Reglas de Oro, PIENSA®, herramientas |
+| 6 · Noticias | Blog con adjudicaciones, iniciativas y eventos |
+| 7 · Contacto | Solo formularios: cotizar, proveedores, buzón ético, trabaja con HL (sin sedes) |
+| Pie (todas) | Oficina principal, teléfono, redes, sellos ISO y enlaces complementarios |
+| Complementarias | Términos y condiciones, tratamiento de datos, vacantes, acreedores y documentos públicos |
+
+## Decisiones (12-nov)
+
+| # | Tema | Decisión |
+|---|---|---|
+| R-1 | Tipografía | **Poppins** 600/700 (títulos, menú, botones, cifras) + **Open Sans** 400/600 (texto) + **IBM Plex Mono** 500 reducida a mayúsculas, cifras y signos (códigos, cotas, antetítulos). Alojadas en el servidor, `font-display: swap` y respaldos con métricas ajustadas (`design/fuente.py`). Si el presupuesto no da, Plex Mono sale primero. Se elige Poppins y no Raleway porque es la del anexo que ya vio el comité |
+| R-2 | Color | Escala azul `#003399` (50 `#EEF2FB` … 950 `#040F26`), naranja `#FF6633` solo como relleno o sobre azul oscuro (≤ 5 % de la pantalla), cian `#3399CC` para ilustración, tinta `#14181C`, gris `#56606A`. **Se retiran los acentos por sección**: las secciones se distinguen por su firma de movimiento y su pod |
+| R-3 | Formas | Radios de 4 (botones y campos), 6 (tarjetas) y 22 px (chips); la tarjeta sube 4 px y gana sombra al pasar el cursor; íconos con trazo de 1,8 px. Bandas oscuras (azul 900 con retícula de 48 px) solo en el hero y en las bandas clave; el resto en claro |
+| R-4 | Modo oscuro | Se mantiene; se recalcula el contraste con `contraste.py` |
+| R-5 | Servicios | **3 especialidades, en este orden:** Montaje mecánico (y tubería) · Obras civiles · Montaje eléctrico e instrumentación. Se conservan los slugs `montaje-mecanico`, `obras-civiles` y `montaje-electrico`. EPC, Gerencia, Fabricación y Mantenimiento salen con 301: EPC → `/servicios/` ("proyecto completo" va en la intro y en el formulario), Gerencia/ECOHL → `/nosotros/`, Fabricación y Mantenimiento → `/servicios/montaje-mecanico/` |
+| R-6 | Sectores | Las 6 páginas salen con 301 al explorador filtrado. El filtro de sector queda en **Minería · Cemento · Otros proyectos** |
+| R-7 | Quiénes somos | Sin testimonios ni empresas asociadas (los datos se quedan en el repo) |
+| R-8 | Formularios | Adjuntos solo en PDF de hasta 5 MB, validados en el PHP (tipo real, tamaño, cantidad) y enviados como adjunto del correo sin guardarlos en disco |
+| R-9 | Rutas | Se conservan `/nosotros`, `/proyectos`, `/servicios`, `/noticias` y `/contacto`. `/hse` → **`/gestion-integral`** (EN `/en/integrated-management`) con 301. `/proveedores`, `/trabaje-con-nosotros` y `/buzon-etico` siguen como URL, pero muestran la plantilla de Contacto con su pestaña abierta (funciona sin JS y cada una tiene su título). Nueva `/vacantes` (EN `/en/jobs`). `/acreedores` y `/documentos`: una sola plantilla con dos pestañas, igual que Contacto |
+| R-10 | Pendientes del acta | Arquitectura de marca, lema, plataforma, inglés y casos sensibles siguen con D1, D2, D4 y D6 mientras el comité decide. El compromiso 10 del acta (arreglos en el WordPress) no es de este proyecto |
+
+## Fases
+
+| Fase | Tareas | Verificación |
+|---|---|---|
+| **R0 · Maquetas y documentos** ✔ 12-nov | R0.1 Maqueta del Home `design/maquetas/rediseno.html` con fotos reales: menú, video de fondo con el título, cifras relevantes, clientes y pie, en claro y oscuro (**puerta**). R0.2 Con la maqueta aprobada: `tokens.css` nuevo, `contraste.py` en OK, guía visual v2.0 (identidad, componentes y movimiento) y especificación v2.0 (mapa del sitio y plantillas) | Aprobación de Juan David |
+| **R1 · Identidad** | Fuentes reducidas (`fuente.py`) y alojadas; tokens aplicados en `global.css` y en los componentes; se quitan `--sec-*` y `[data-seccion]` de color (los pods quedan en azul y naranja); fotos en duotono sobre oscuro y a color en las fichas; radios, sombras y estados | `check`, humo, presupuesto |
+| **R2 · Armazón** | Menú de 6 pestañas sin panel (`PanelProyectos` sale) con ES/EN; menú móvil; pie del acta (oficina principal, teléfono, redes, sellos ISO, enlaces complementarios); transición de barrido (View Transitions); "Hablar con HL" se mantiene flotante | `check` + pruebas de navegación |
+| **R3 · Home y Quiénes somos** | Home: video de fondo con el título (MP4 + WebM ≤ 6 MB, póster como LCP, solo en escritorio, botón de pausa), cifras relevantes con contador (valor final en el HTML) y clientes. Sale todo lo demás del inicio actual. Quiénes somos: slogan, línea del tiempo, misión, visión y valores, presencia por países sin direcciones | `check` + pruebas de la página |
+| **R4 · Proyectos y Servicios** | Colección de servicios reducida a 3 y fichas reasignadas; sectores a 3 categorías de filtro y fuera sus páginas; explorador con mapa, filtros y ficha 3.1 (datos generales, fotos, cantidades); página de cada servicio: sus 3 proyectos que llevan a la ficha | `check` + explorador, ficha y servicio |
+| **R5 · Gestión integral y demás** | Gestión integral con sus 6 bloques. Noticias: blog con adjudicaciones, iniciativas y eventos. Contacto: solo los 4 formularios, sin sedes, con adjuntos (`enviar.php`). Complementarias: términos, datos, vacantes (`Vacantes.tsx` sin cambios: el flujo sigue congelado), acreedores y documentos públicos | `check` + formularios (PHP con `HL_PHP`) |
+| **R6 · Cierre** | Inglés de todo lo nuevo; `inventario.csv`, `.htaccess` y `sitemap` con los 301 (servicios, sectores, `/hse`); revisión de código enfocada en `enviar.php` (adjuntos); CLAUDE.md, memoria y bitácora | Suite completa, `npm run presupuesto`, Lighthouse móvil una vez (Home, explorador, Gestión integral, Contacto) |
+
+## Riesgos
+
+- **Rendimiento:** pasamos de 1 familia a 3 y se suma el video. El LCP del Home lo pone el póster (AVIF, sin precarga del video) y el video se carga después del evento `load`, solo en escritorio y sin `prefers-reduced-motion`. Presupuesto vigente: LCP < 2,0 s y JS ≤ 30 KB gz.
+- **Adjuntos en el PHP:** validación del tipo real (`finfo`), tope de tamaño y de cantidad, sin escritura en el servidor; correo MIME armado a mano.
+- **Fotos:** no hay fotos recientes en alta resolución ni video de obra. Se trabaja con las actuales (≤ 800 px) y póster de muestra, y quedan marcadas en `/pendientes/`.

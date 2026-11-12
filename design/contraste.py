@@ -12,42 +12,34 @@ TOKENS = Path(__file__).with_name("tokens.css")
 # (texto/elemento, fondo, mínimo, uso)
 PARES = [
     ("ink", "bg", 4.5, "texto principal"),
-    ("ink", "paper", 4.5, "texto en paneles"),
+    ("ink", "paper", 4.5, "texto en secciones alternas"),
     ("muted", "bg", 4.5, "texto secundario"),
-    ("muted", "paper", 4.5, "texto secundario en paneles"),
-    ("accent", "bg", 4.5, "enlaces"),
-    ("accent", "paper", 4.5, "enlaces en paneles"),
+    ("muted", "paper", 4.5, "texto secundario en secciones alternas"),
+    ("accent", "bg", 4.5, "enlaces y cifras"),
+    ("accent", "paper", 4.5, "enlaces en secciones alternas"),
     ("accent-ink", "accent", 4.5, "botón primario"),
-    ("bg", "ink", 4.5, "botón/filtro activo invertido"),
-    ("signal-ink", "bg", 4.5, "señalización como texto"),
-    ("signal-ink", "paper", 4.5, "señalización como texto en paneles"),
+    ("bg", "ink", 4.5, "filtro activo invertido"),
+    ("signal-ink", "bg", 4.5, "naranja como texto"),
+    ("signal-ink", "paper", 4.5, "naranja como texto en secciones alternas"),
     ("accent", "accent-soft", 4.5, "chip de acento"),
-    ("signal-ink", "signal-soft", 4.5, "chip alto"),
+    ("signal-ink", "signal-soft", 4.5, "chip de aviso"),
     ("bad", "bad-soft", 4.5, "chip crítico"),
     ("good", "good-soft", 4.5, "chip correcto"),
     ("bad", "bg", 4.5, "mensaje de error"),
     ("signal", "bg", 3.0, "cotas y marcas (no texto)"),
     ("accent", "bg", 3.0, "anillo de foco (no texto)"),
     ("ink", "bg", 3.0, "borde inferior de campos (no texto)"),
-    ("hl-verde", "hl-grafito", 4.5, "cifras HSE sobre grafito"),
-    ("hl-grafito", "hl-verde", 4.5, "botón HSE sobre grafito"),
-    ("hl-concreto", "hl-grafito", 4.5, "texto sobre grafito"),
-    ("hl-acero", "hl-grafito", 4.5, "fuente sobre grafito"),
-    ("hl-azul-claro", "hl-grafito", 4.5, "número de sección en el pie"),
-    ("hl-senal", "hl-grafito", 4.5, "número de Proyectos en el pie"),
-    ("hl-oxido", "hl-grafito", 4.5, "número de Noticias en el pie"),
-    ("hl-cian", "hl-grafito", 3.0, "marca de Servicios en el pie (no texto)"),
-    ("hl-violeta", "hl-grafito", 3.0, "marca de Sectores en el pie (no texto)"),
+    ("hl-concreto", "hl-grafito", 4.5, "texto sobre azul noche"),
+    ("hl-acero", "hl-grafito", 4.5, "texto secundario sobre azul noche"),
+    ("hl-trazo", "hl-grafito", 4.5, "antetítulos sobre azul noche"),
+    ("hl-naranja", "hl-grafito", 4.5, "naranja sobre azul noche"),
+    ("hl-naranja", "azul-950", 4.5, "naranja en el pie"),
+    ("hl-acero", "azul-950", 4.5, "texto del pie"),
+    ("hl-tinta", "hl-naranja", 4.5, "texto sobre relleno naranja"),
+    ("hl-blanco", "azul-600", 4.5, "blanco sobre azul corporativo"),
+    ("azul-600", "azul-50", 4.5, "azul sobre niebla"),
+    ("hl-cian", "bg", 3.0, "ilustración cian (no texto)"),
 ]
-
-# Acentos de sección (guía §3.5): texto sobre fondo y papel, texto sobre el acento y chip.
-for _s in ("proyectos", "servicios", "sectores", "hse", "noticias"):
-    PARES += [
-        (f"sec-{_s}", "bg", 4.5, f"acento {_s}"),
-        (f"sec-{_s}", "paper", 4.5, f"acento {_s} en paneles"),
-        (f"sec-{_s}-ink", f"sec-{_s}", 4.5, f"texto sobre {_s} (pod P3)"),
-        (f"sec-{_s}", f"sec-{_s}-soft", 4.5, f"chip / filtro {_s}"),
-    ]
 
 
 def bloque(css, selector):

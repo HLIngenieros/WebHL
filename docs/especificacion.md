@@ -1,7 +1,8 @@
-# Especificación del sitio nuevo de HL Ingenieros
+# Especificación del sitio nuevo del Grupo HL
 
-Versión 1.2 · 2026-10-19 · Aprobada por secciones con Juan David Urbina (1.1: D2, Inicio, Nosotros y F3;
-1.2: menú con submenú en Proyectos, prevalencia de Cemento y Minería, explorador con mapa vivo).
+Versión 2.0 · 2026-11-12 · Aprobada por secciones con Juan David Urbina (1.1: D2, Inicio, Nosotros y F3;
+1.2: menú con submenú en Proyectos, prevalencia de Cemento y Minería, explorador con mapa vivo; **2.0:
+Plan R, orden de contenido del acta GHL-WEB-001 del área comercial, ver [plan-r.md](plan-r.md)**).
 Complementa a [guia-visual.md](guia-visual.md) (identidad), [../design/tokens.css](../design/tokens.css)
 (valores) y [../contenido/](../contenido/) (contenido extraído). Si algo aquí contradice la propuesta
 Rev. 0, manda este documento.
@@ -40,55 +41,42 @@ interno) y, de D1, qué empresas asociadas se muestran.
 
 ## 3. Arquitectura de información
 
-**Menú corto con un solo submenú** (cambio del 2026-10-19, por redundancia entre el explorador y las
-páginas de Servicios y Sectores): Nosotros · Proyectos ▾ · HSE y calidad · Noticias · Contacto · ES/EN.
-"Proyectos" lleva al explorador; un botón aparte (▾) abre el panel con **Sectores** (Cemento y Minería
-al frente, el resto en una línea) y **Servicios** (lista simple por grupo, sin prevalencia). Las páginas
-de Servicios y Sectores siguen publicadas e indexadas, y se enlazan desde ese panel, el pod de línea
-del explorador, el inicio, las fichas y el pie. El logo lleva al inicio y el botón "Hablar con HL" está
-siempre visible (en móvil, en una barra inferior).
+**Menú de 6 pestañas** (Plan R, acta del 10-nov): Quiénes somos · Proyectos · Servicios · Gestión
+integral · Noticias · Contacto · ES/EN. Sin submenú ni botón de cotizar. El logo lleva al Home y "Hablar
+con HL" sigue flotante. **Cada página lleva exactamente el contenido que define el acta** (guía §10).
 
-**Prevalencia de Cemento y Minería:** son los sectores principales de HL. Van primero y más grandes en
-el panel del menú, en la página de Sectores, en el bloque de sectores del inicio y en los filtros del
-explorador.
-
-| ES | EN | Contenido |
+| ES | EN | Contenido (acta) |
 |---|---|---|
-| `/` | `/en/` | Inicio |
-| `/nosotros` | `/en/about` | Historia y línea del tiempo, visión, misión y valores, testimonios, empresas asociadas |
-| `/proyectos` | `/en/projects` | Explorador (servicio · sector · país) y mapa de presencia |
-| `/proyectos/[slug]` | `/en/projects/[slug]` | ~22 fichas: 16 actuales + 6 del PDF de ECOHL |
-| `/servicios` | `/en/services` | Índice en 3 grupos |
-| `/servicios/[s]` | `/en/services/[s]` | 7 líneas (abajo) |
-| `/sectores` | `/en/sectors` | Índice |
-| `/sectores/[s]` | `/en/sectors/[s]` | 6 sectores (abajo) |
-| `/hse` | `/en/hse` | HSE y calidad: política SGI, ISO 9001/14001/45001, Reglas de Oro, PIENSA®, prácticas, indicadores |
-| `/noticias`, `/noticias/[slug]` | `/en/news/...` | Noticias y proyectos adjudicados; se oculta si hay menos de 3 entradas |
-| `/contacto` | `/en/contact` | Sedes, formulario de cotización, asistente, redes |
-| `/trabaje-con-nosotros` | `/en/careers` | Pie · formulario |
-| `/proveedores` | `/en/suppliers` | Pie · formulario |
-| `/buzon-etico` | `/en/ethics-line` | Pie · canal confidencial, sin IA, permite anónimo |
-| `/acreedores` | `/en/creditors` | Pie · avisos Ley 1116 |
-| `/legal/datos` | `/en/legal/privacy` | Pie · política de tratamiento de datos (Ley 1581) |
-| `/legal/terminos` | `/en/legal/terms` | Pie |
+| `/` | `/en/` | Video de fondo con el título, cifras relevantes y clientes |
+| `/nosotros` | `/en/about` | Quiénes somos: slogan, línea del tiempo, misión, visión y valores, presencia por países (sin direcciones) |
+| `/proyectos` | `/en/projects` | Minería, cemento y otros proyectos: mapa, filtros (sector · especialidad · país) |
+| `/proyectos/[slug]` | `/en/projects/[slug]` | Ficha 3.1: datos generales, fotos, cantidades (~22 fichas) |
+| `/servicios` | `/en/services` | Las 3 especialidades con 3 proyectos cada una |
+| `/servicios/[s]` | `/en/services/[s]` | Especialidad y sus 3 proyectos, que llevan a la ficha |
+| `/gestion-integral` | `/en/integrated-management` | Certificados, indicadores de seguridad, política SGI, Reglas de Oro, PIENSA®, herramientas |
+| `/noticias`, `/noticias/[slug]` | `/en/news/...` | Blog con adjudicaciones, iniciativas y eventos |
+| `/contacto` | `/en/contact` | Solo formularios en pestañas: cotizar, proveedores, buzón ético, trabaja con HL (sin sedes) |
+| `/proveedores`, `/trabaje-con-nosotros`, `/buzon-etico` | `/en/suppliers`, `/en/careers`, `/en/ethics-line` | Plantilla de Contacto con esa pestaña abierta |
+| `/vacantes` | `/en/jobs` | Complementaria: tablero de vacantes |
+| `/acreedores`, `/documentos` | `/en/creditors`, `/en/documents` | Complementaria: una plantilla con dos pestañas |
+| `/legal/datos` | `/en/legal/privacy` | Complementaria: tratamiento de datos (Ley 1581) |
+| `/legal/terminos` | `/en/legal/terms` | Complementaria: términos y condiciones |
 
-**Servicios** (de 9 a 7):
+**Servicios** (de 7 a 3 especialidades, en este orden):
 
-| Grupo | ES | EN |
+| ES | EN | Absorbe (301) |
 |---|---|---|
-| A · Gestión | `epc-llave-en-mano` (absorbe Ingeniería y diseños) | `epc-turnkey` |
-| A · Gestión | `gerencia-de-proyectos` (PMC/EPCM, ECOHL; absorbe Asistencia en la ejecución) | `project-management` |
-| B · Construcción y montaje | `obras-civiles` | `civil-works` |
-| B · Construcción y montaje | `montaje-mecanico` (y tubería) | `mechanical-installation` |
-| B · Construcción y montaje | `montaje-electrico` (e instrumentación) | `electrical-installation` |
-| C · Fabricación y mantenimiento | `fabricacion` (metalmecánica) | `fabrication` |
-| C · Fabricación y mantenimiento | `mantenimiento` (y paradas de planta) | `maintenance-shutdowns` |
+| `montaje-mecanico` (y tubería) | `mechanical-installation` | `fabricacion`, `mantenimiento` |
+| `obras-civiles` | `civil-works` | — |
+| `montaje-electrico` (e instrumentación) | `electrical-installation` | — |
 
-**Sectores:** `cemento` (cement), `mineria` (mining), `agua-y-energia` (water-energy), `petroleo-y-gas`
-(oil-gas), `infraestructura` (infrastructure), `industria` (industrial: alimentos, consumo, manufactura).
+`epc-llave-en-mano` → `/servicios/` y `gerencia-de-proyectos` → `/nosotros/`, con 301.
+
+**Sectores:** ya no tienen página. Quedan como 3 categorías de filtro: **Minería · Cemento · Otros
+proyectos**. Las 6 páginas actuales y su índice salen con 301 al explorador filtrado. `/hse` → `/gestion-integral` con 301.
 
 **Además:** página 404, `sitemap.xml`, `robots.txt` y `.htaccess` con las 301/410 de
-[inventario.csv](../contenido/inventario.csv). Son ~50 páginas por idioma. Los slugs en inglés van
+[inventario.csv](../contenido/inventario.csv). Los slugs en inglés van
 traducidos; cada página conoce su par para el selector de idioma y `hreflang`.
 
 ## 4. Modelo de contenido
@@ -102,8 +90,8 @@ Las colecciones de Astro se validan con esquema al compilar.
 | Colección | Unidad | Campos |
 |---|---|---|
 | proyectos | proyecto | slug es/en, cliente, dueño final, rol de HL (contratista, subcontratista o consorcio + nombre), país, ciudad, coordenadas, año de inicio y fin, meses, HH, sector, servicios[], cifras destacadas (3-4: valor, unidad, etiqueta), cantidades[], fotos[] (archivo, pie), `visibilidad` (destacado, normal o discreta); textos: título, resumen, descripción, reto o resultado |
-| servicios | línea | grupo, orden, slug es/en, buzón; textos: nombre, resumen, alcance por subcapacidad, recursos propios frente a aliados, normas, capacidad, modelos de contrato, FAQ |
-| sectores | sector | slug es/en, orden; textos: nombre, introducción, servicios típicos |
+| servicios | especialidad (3) | orden, slug es/en, 3 proyectos (referencias, en orden); textos: nombre, resumen corto |
+| sectores | categoría de filtro (3: minería, cemento, otros) | orden; textos: nombre. Sin página propia |
 | noticias | noticia × idioma | fecha, tipo (noticia o adjudicado), proyecto relacionado, par en el otro idioma, cuerpo |
 | sedes | sede | nombre, ciudad, país, dirección, teléfono, horario, buzón, coordenadas |
 | certificaciones | certificado | norma, ente, vence, PDF (aviso al compilar si está vencido) |
@@ -124,45 +112,25 @@ Las colecciones de Astro se validan con esquema al compilar.
 
 ## 5. Plantillas
 
-- **Inicio** (guía §12.1):
-  - hero con barra inmersa, H1 con el lema (D2), botón "Ver proyectos" y gemelo digital;
-  - franja P3 de sectores;
-  - "HL en cifras": años (calculados), 7 países, 4 sedes, 3 normas ISO, escritas en el HTML;
-  - 3-4 proyectos destacados;
-  - los 3 grupos de servicio y los sectores (Cemento y Minería al frente);
-  - franja HSE con indicadores;
-  - últimas noticias (si las hay);
-  - logos de clientes.
-  - Del cuarto punto en adelante se diseña con maquetas al empezar F3.1.
-- **Nosotros** (guía §12.2): cabecera con mosaico, línea del tiempo en tira de negativos, misión y
-  visión con indicadores, valores, presencia, testimonios autorizados, empresas asociadas y cierre.
-- **Proyectos** (guía §13.2): la lista completa se escribe en el HTML. Una isla Preact agrega:
-  - filtros en placas (sector, con Cemento y Minería más anchas; servicio en grupos A/B/C; país), con
-    el número de obras que quedarían; el estado va en la URL (`?sector=cemento&servicio=…&pais=co`);
-  - el mapa vivo sobre el SVG propio: acercar y desplazar, grupos que se separan al acercar, puntos que
-    siguen a los filtros, clic en un país (filtra y encuadra), en un grupo (acerca) o en un punto
-    (ventana con la ficha);
-  - el pod de línea: con un sector o un servicio elegido, su resumen y el enlace a su página.
+Cada plantilla lleva solo el contenido del acta (guía §10); movimiento según guía §8.
 
-  Sin JavaScript la lista funciona igual. En móvil, el mapa va arriba y los filtros se desplazan de lado.
-- **Ficha de proyecto:**
-  - rótulo de plano con los datos y la foto principal en lámina (guía §8);
-  - cifras destacadas, descripción, reto o resultado y cantidades;
-  - galería en hoja de contactos, con pie;
-  - enlaces a su servicio y su sector, y proyectos relacionados;
-  - llamada a contacto.
-- **Servicio:**
-  - alcance por subcapacidad, recursos propios frente a aliados y normas (NSR-10, RETIE, ASME, API 650,
-    AWS);
-  - capacidad y modelos de contrato;
-  - 2-4 proyectos y los sectores, derivados;
-  - FAQ y contacto de la línea.
-- **Índice de sectores** (guía §13.3): Cemento y Minería como escenarios (lámina, cifras y 3 obras);
-  el resto en un índice en filas.
-- **Sector:** introducción, servicios aplicados, proyectos y clientes del sector (derivados) y llamada a
-  contacto.
-- **HSE y calidad, Contacto:** texto más colecciones (certificaciones, sedes). HSE, Noticias,
-  Acreedores y legales se diseñan con maquetas al empezar F3.3.
+- **Home** (maqueta aprobada `design/maquetas/rediseno.html`): video de fondo con el H1 del lema (sin
+  gráficas encima, capa `--velo-video`, pausa); cifras relevantes (años calculados, 7 países, 9.470.000
+  HH de Columbus, −64 % de accidentes), escritas en el HTML; clientes en dos cintas de logos.
+- **Quiénes somos:** slogan; línea del tiempo (tira de negativos); misión, visión y valores; presencia
+  por países en el mapa propio, sin direcciones.
+- **Proyectos:** la lista completa se escribe en el HTML. Una isla Preact agrega los filtros (sector:
+  Minería · Cemento · Otros; especialidad: las 3; país), con el estado en la URL, y el mapa vivo sobre el
+  SVG propio. Sin JavaScript la lista funciona igual.
+- **Ficha 3.1:** a) datos generales (cliente, rol de HL, ubicación, años de ejecución, duración, sector,
+  especialidades), b) fotos con pie, c) cantidades de obra.
+- **Servicios / servicio:** la especialidad y sus 3 proyectos, que llevan a su ficha.
+- **Gestión integral:** certificados (ISO 9001, 14001, 45001, SGS, con número y PDF), indicadores de
+  seguridad, política SGI, Reglas de Oro, PIENSA® y herramientas tecnológicas de gestión.
+- **Noticias:** blog filtrable por adjudicaciones, iniciativas y eventos.
+- **Contacto:** los 4 formularios en pestañas, sin sedes.
+- **Complementarias:** plantilla de texto (términos, datos); vacantes (tablero); acreedores y documentos
+  públicos (pestañas).
 - **Formularios** (cotización, proveedores, trabaje con nosotros, buzón ético):
   - **dinámicos y animados (20-oct):** isla Preact por pasos (intención → datos → mensaje → autorización),
     campos que cambian según intención y país, validación en vivo y firma de movimiento propia; sin JS
@@ -171,11 +139,12 @@ Las colecciones de Astro se validan con esquema al compilar.
     un radicado y envía al buzón de la función;
   - Power Automate toma los correos con el disparador estándar "Cuando llega un correo nuevo" (no
     premium);
-  - el buzón ético va a su propio buzón, fuera de ese flujo.
+  - el buzón ético va a su propio buzón, fuera de ese flujo;
+  - **adjuntos (R-8):** cotización, proveedores y hoja de vida aceptan PDF de hasta 5 MB, validados en el
+    PHP (tipo real, tamaño, cantidad) y enviados como adjunto del correo, sin guardarlos en disco.
 - **Hablar con HL (D3, 20-oct):** sin asesores en vivo. Un solo agente IA que conversa y, según lo
-  aprendido en la conversación, deriva a WhatsApp, a un correo por función o a un teléfono. En F4 solo
-  la interfaz (visual completa, no funcional: respuestas de muestra marcadas como tal). El agente se
-  construye en Copilot Studio y se conecta por Direct Line a esa interfaz (decisión del 20-oct).
+  aprendido en la conversación, deriva a WhatsApp, a un correo por función o a un teléfono. Agente propio
+  (`agente.php` → modelo de IA directo), según [plan-agente.md](plan-agente.md) Rev. 2.
 - **Vacantes (20-oct):** Trabaje con nosotros muestra las vacantes abiertas, leídas al abrir la página de
   `/api/vacantes.json`, que publica Power Automate desde una lista de SharePoint de Talento Humano
   (contrato en [plan-f4.md](plan-f4.md)). "Postularme" lleva la vacante al formulario F-03.
@@ -192,9 +161,9 @@ Las reglas detalladas están en la guía visual §5 y §9. Lo esencial:
 | LCP / CLS / INP | < 2,0 s / < 0,05 / < 200 ms |
 | JavaScript por página | ≤ 30 KB gz (explorador ≤ 100 KB) |
 
-- **Identidad por sección:** cada sección tiene su acento, sus pods y su firma de movimiento (guía
-  §3.5, §6 y §9). Las fotos nunca se muestran a más de 800 px de ancho.
-- **Recursos:** Archivo en un solo archivo variable, reducido y alojado en el servidor. Imágenes
+- **Identidad (guía v2.0):** azul `#003399` + naranja `#FF6633`; las secciones se distinguen por su
+  firma de movimiento, no por color. Video del Home ≤ 6 MB con póster como LCP, sin precarga.
+- **Recursos:** Poppins, Open Sans e IBM Plex Mono reducidas y alojadas en el servidor. Imágenes
   AVIF/WebP responsivas con dimensiones fijas. Mapa en SVG propio, sin terceros. Compresión y caché en
   `.htaccess` (un año para recursos con hash; HTML sin caché).
 - **Navegación cómoda:** precarga al pasar el cursor o al ver el enlace, Speculation Rules y transición
@@ -217,6 +186,7 @@ commit, Lighthouse y capturas en la matriz de pantallas (Playwright).
 | F3 · Institucional | Por subpartes, cada una con su commit: **F3.0** fuente y LCP · **F3.1** Inicio (primero lo aprobado; el resto tras aprobar sus maquetas) · **F3.2** Nosotros · **F3.3** HSE y calidad, Noticias (oculta si falta contenido), Acreedores y legales | Sitio completo en español |
 | F4 · Contacto | 4 formularios + PHP + radicado; Hablar con HL | Contacto de punta a punta (probado con `php -S` de un PHP portátil; hoy no hay PHP instalado) |
 | F5 · Inglés | Traducción con el glosario, pares de páginas y `hreflang` | Sitio bilingüe |
+| Plan R · Rediseño comercial | R0-R6 de [plan-r.md](plan-r.md): identidad, armazón, Home y Quiénes somos, Proyectos y Servicios, Gestión integral y demás, cierre | Sitio con la identidad y el orden del acta |
 | F6 · Lanzamiento | En espera de la aprobación oficial: acceso al hosting, `.htaccess` 301/410, sitemap, GA4 y Search Console, control de calidad final, respaldo de WordPress, cambio y seguimiento por 2 semanas. Recompilar y publicar después de cada 1 de enero (el año del pie se fija al compilar) | Producción |
 
 **En paralelo:** redacción en español durante F1-F3 a partir de lo extraído; el inglés se traduce sobre

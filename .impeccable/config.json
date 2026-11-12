@@ -1,0 +1,23 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "open sans",
+        "createdAt": "2026-11-12T13:46:15.880Z",
+        "reason": "Open Sans is the text face in HL's brand manual and the committee's design parameters (acta GHL-WEB-001, 10-nov-2026)"
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "design/maquetas/rediseno.html"
+        ],
+        "createdAt": "2026-11-12T13:46:16.232Z",
+        "reason": "Client and sector ribbons are explicitly requested in acta GHL-WEB-001 §3.6; they pause on hover and stop under reduced-motion"
+      }
+    ]
+  }
+}
