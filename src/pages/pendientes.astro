@@ -18,7 +18,7 @@ const grupos: { tipo: Pendiente['tipo']; titulo: string; entrada: string }[] = [
 ];
 const etiquetas: Record<(typeof nombres)[number], string> = {
   proyectos: 'Proyectos', servicios: 'Servicios', sectores: 'Sectores', sedes: 'Sedes', certificaciones: 'Certificaciones',
-  historia: 'Historia', testimonios: 'Testimonios', sitio: 'Sitio', paginas: 'Páginas',
+  historia: 'Historia', testimonios: 'Testimonios', sitio: 'Sitio', paginas: 'Páginas', noticias: 'Noticias',
 };
 const titulo = (id: string) => datos.proyectos.find((p) => p.id === id)?.data.es.titulo ?? id;
 const bloqueantes = pendientes.filter((x) => x.bloquea).length;
