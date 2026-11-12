@@ -140,7 +140,7 @@ verifica en el hosting en F6.** Revisión de `enviar.php`: un envío mayor que `
 (ahora 413 con el tamaño) y en el buzón ético anónimo el nombre original del PDF podía delatar a quien reporta (ahora
 `adjunto.pdf`); los metadatos del PDF quedan como pregunta para jurídica en `/pendientes/`. Lighthouse móvil: Home
 98/100/100/100 (LCP 2,0 s), explorador 98 (2,0 s), Gestión integral 99 (1,7 s), Contacto 99 (1,8 s, CLS 0: tenía 0,161
-porque la banda de pasos del formulario aparecía al hidratar; ahora el HTML inicial la reserva). Suite 424/424 con
+porque la banda de pasos del formulario aparecía al hidratar; ahora el HTML inicial la reserva). Suite 422/422 con
 `HL_PHP` (2 pruebas viejas de `menores.spec.ts` puestas al día con R1/R3), presupuesto OK (JS del inicio 9,7 KB gz).
 
 ## Riesgos

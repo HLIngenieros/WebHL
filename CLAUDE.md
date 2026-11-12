@@ -332,7 +332,7 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     **R6 · Cierre del Plan R (12-nov):** `inventario.csv` con `destino`; `src/lib/servidor.mjs` genera `dist/.htaccess` (301/410,
     HTTPS sin www, caché, compresión) y `dist/sitemap.xml` al compilar (falla si un destino no existe; probar en Apache en F6);
     `public/robots.txt`. `enviar.php`: 413 si el envío pasa de `post_max_size` y adjunto anónimo sin nombre original. CLS de
-    Contacto corregido (banda de pasos reservada). 424 pruebas, presupuesto OK, Lighthouse móvil 98-99 en Home, explorador,
+    Contacto corregido (banda de pasos reservada). 422 pruebas, presupuesto OK, Lighthouse móvil 98-99 en Home, explorador,
     Gestión integral y Contacto.
   - **Siguiente paso:** F6 · Lanzamiento (en espera de la aprobación oficial y de los insumos de `/pendientes/`); Nosotros
     sigue con Lighthouse 94 (pendiente de F6). El proveedor de producción (`anthropic` con clave,
