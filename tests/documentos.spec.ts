@@ -25,7 +25,7 @@ test('el catálogo del agente trae cada documento en ambos idiomas', async ({ re
 test('Documents en inglés y enlace desde HSE', async ({ page }) => {
   await page.goto('/en/documents/');
   await expect(page.locator('h2', { hasText: 'Policies' })).toBeVisible();
-  await page.goto('/hse/');
+  await page.goto('/gestion-integral/');
   await expect(page.locator('a.cert-docs')).toHaveAttribute('href', '/documentos/#certificaciones');
 });
 

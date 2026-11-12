@@ -167,7 +167,7 @@ const paginas = defineCollection({
       /** En qué páginas va (inicio, hse); sin valor, en las dos. */
       donde: z.array(z.enum(['inicio', 'hse'])).optional(),
     })).optional(),
-    // HSE (guía §12.5): política en 3D, Reglas de Oro, PIENSA® y prácticas.
+    // Gestión integral (acta, R5): política en 3D, Reglas de Oro, PIENSA® y herramientas.
     politica: z.object({
       intro: z.string(),
       compromisos: z.array(z.object({ titulo: z.string(), corto: z.string(), texto: z.string() })).length(4),
@@ -175,7 +175,8 @@ const paginas = defineCollection({
     }).optional(),
     reglas: z.array(z.object({ titulo: z.string(), texto: z.string() })).optional(),
     piensa: z.object({ texto: z.string(), pasos: z.array(z.object({ titulo: z.string(), texto: z.string() })) }).optional(),
-    practicas: z.array(z.object({ titulo: z.string(), texto: z.string(), quien: z.string(), icono: z.enum(['ojo', 'pare', 'pasaporte', 'liderazgo']) })).optional(),
+    // Herramientas tecnológicas de gestión (acta, bloque 6): nombre, para qué y uso.
+    herramientas: z.array(z.object({ nombre: z.string(), categoria: z.string(), uso: z.string() })).optional(),
     // Acreedores y legales: documentos en PDF (public/documentos/).
     documentos: z.array(z.object({ numero: z.string(), titulo: z.string(), fecha: z.string(), pdf: z.string(), estado: z.enum(['vigente', 'anterior']) })).optional(),
     documento: z.object({ codigo: z.string(), actualizacion: z.number(), fecha: z.string(), ley: z.string(), pdf: z.string() }).optional(),

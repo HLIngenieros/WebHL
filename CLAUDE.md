@@ -320,7 +320,9 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     generales, fotos, cantidades con cota) que en el explorador sube como panel (`<dialog>`, URL por `replaceState`),
     Servicios con selector de especialidad por radios y cascada. Los 3 proyectos de cada especialidad son propuesta
     (en `/pendientes/`).
-  - **Siguiente paso:** Plan R (R5: Gestión integral, Noticias, Contacto y complementarias); luego R6 y F6. El proveedor de producción (`anthropic` con clave,
+    **R5 · Gestión integral cerrado (12-nov):** `/gestion-integral/` (EN `/en/integrated-management/`) con índice y los 6
+    bloques del acta; herramientas tecnológicas nuevas (lista del anexo, por confirmar con TI); fuera foto, prácticas y cierre.
+  - **Siguiente paso:** Plan R (R5: Contacto, Noticias y complementarias); luego R6 y F6. El proveedor de producción (`anthropic` con clave,
     `foundry` o `azure-openai`) se agrega cuando Gerencia y TI den la credencial. F6 después.
   - **Ojo agente:** al desplegar no borrar `/api/vacantes.json` (lo escribe el flujo de Vacantes de F4 en Power
     Automate; **congelado por decisión de Juan David, 21-oct**: no se toca hasta nuevo aviso). El sitio es `https://hlingenieros.com` sin www.

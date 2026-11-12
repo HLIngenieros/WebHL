@@ -7,7 +7,7 @@ const PAGINAS = [
   '/', '/nosotros/', '/en/about/', '/muestra/', '/pendientes/', '/404.html',
   '/proyectos/', '/en/projects/', '/proyectos/planta-columbus/', '/proyectos/torre-grua-maceo/',
   '/servicios/', '/servicios/montaje-mecanico/',
-  '/hse/', '/en/hse/', '/acreedores/', '/legal/datos/', '/legal/terminos/',
+  '/gestion-integral/', '/en/integrated-management/', '/acreedores/', '/legal/datos/', '/legal/terminos/',
 ];
 
 for (const [w, h] of PANTALLAS) {

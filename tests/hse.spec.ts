@@ -35,27 +35,30 @@ test.describe('estructura de la política (funciones)', () => {
   });
 });
 
-test.describe('página HSE', () => {
-  test('lleva cabecera, 4 indicadores, certificaciones, política, 10 reglas, PIENSA y 4 prácticas', async ({ page }) => {
-    await page.goto('/hse/');
+test.describe('página Gestión integral', () => {
+  test('lleva los 6 bloques del acta en orden, con índice, y nada más', async ({ page }) => {
+    await page.goto('/gestion-integral/');
     await expect(page.locator('h1')).toHaveCount(1);
-    await expect(page.locator('.indicadores-hse .celdas li')).toHaveCount(4);
-    await expect(page.locator('.certs .cert')).toHaveCount(4);
+    const ids = ['cert-titulo', 'ind-titulo', 'pol-titulo', 'reglas-titulo', 'piensa-titulo', 'herr-titulo'];
+    expect(await page.locator('main h2').evaluateAll((h) => h.map((x) => x.id))).toEqual(ids);
+    expect(await page.locator('.indice a').evaluateAll((a) => a.map((x) => x.getAttribute('href')))).toEqual(ids.map((i) => `#${i}`));
     await expect(page.locator('.certs .cert').first()).toContainText('ISO 9001');
+    await expect(page.locator('.indicadores-hse .celdas li')).toHaveCount(4);
     await expect(page.locator('.compromisos button')).toHaveCount(4);
     await expect(page.locator('.reglas .regla')).toHaveCount(10);
     await expect(page.locator('.eje li')).toHaveCount(3);
-    await expect(page.locator('.prac li')).toHaveCount(4);
+    await expect(page.locator('.herr li')).toHaveCount(5);
   });
 
-  test('el inicio solo muestra sus 3 indicadores (Chuchupa, sin Chipirón)', async ({ page }) => {
-    await page.goto('/');
-    await expect(page.locator('.franja-hse .indicadores li')).toHaveCount(3);
-    await expect(page.locator('.franja-hse')).not.toContainText('Chipirón');
+  test('la versión en inglés vive en /en/integrated-management/ y /hse/ ya no existe', async ({ page, request }) => {
+    await page.goto('/en/integrated-management/');
+    await expect(page.locator('.herr li').first()).toContainText('Construction management');
+    await expect(page.locator('#nav-principal a[href="/en/integrated-management/"]')).toHaveAttribute('aria-current', 'page');
+    expect((await request.get('/hse/')).status()).toBe(404);
   });
 
   test('cada regla tiene su texto completo en el nombre accesible y gira con el teclado', async ({ page }) => {
-    await page.goto('/hse/');
+    await page.goto('/gestion-integral/');
     const regla = page.locator('.regla').nth(3);
     await expect(regla).toHaveAttribute('aria-label', /LO-TO/);
     await regla.focus();
@@ -65,7 +68,7 @@ test.describe('página HSE', () => {
 
   test('la estructura 3D anima en pantalla, elige un compromiso al pasar y se pausa fuera', async ({ page }) => {
     await page.setViewportSize({ width: 1366, height: 900 });
-    await page.goto('/hse/');
+    await page.goto('/gestion-integral/');
     const caja = page.locator('.estructura');
     await caja.scrollIntoViewIfNeeded();
     await expect(caja).toHaveAttribute('data-estado', 'animando');
@@ -77,7 +80,7 @@ test.describe('página HSE', () => {
 
   test('con movimiento reducido la estructura queda quieta y las reglas visibles', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/hse/');
+    await page.goto('/gestion-integral/');
     await expect(page.locator('.estructura')).toHaveAttribute('data-estado', 'quieto');
     await expect(page.locator('.regla').first()).toHaveCSS('opacity', '1');
   });
@@ -85,7 +88,7 @@ test.describe('página HSE', () => {
   test.describe('sin JavaScript', () => {
     test.use({ javaScriptEnabled: false });
     test('se leen los 4 compromisos y las reglas; el lienzo no se muestra', async ({ page }) => {
-      await page.goto('/hse/');
+      await page.goto('/gestion-integral/');
       await expect(page.locator('.estructura')).toBeHidden();
       await expect(page.locator('.compromisos .txt').nth(3)).toBeVisible();
       await expect(page.locator('.regla').first()).toHaveCSS('opacity', '1');
@@ -94,17 +97,17 @@ test.describe('página HSE', () => {
 
   test('ir y volver con el router deja un solo bucle de la estructura', async ({ page }) => {
     await page.setViewportSize({ width: 1366, height: 900 });
-    await page.goto('/hse/');
+    await page.goto('/gestion-integral/');
     await page.locator('#nav-principal a[href="/nosotros/"]').click();
     await expect(page).toHaveURL(/\/nosotros\/$/);
-    await page.locator('#nav-principal a[href="/hse/"]').click();
-    await expect(page).toHaveURL(/\/hse\/$/);
+    await page.locator('#nav-principal a[href="/gestion-integral/"]').click();
+    await expect(page).toHaveURL(/\/gestion-integral\/$/);
     expect(await page.evaluate(() => (window as any).__estructuraBucles)).toBe(1);
   });
 
   test('axe sin violaciones en HSE', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/hse/');
+    await page.goto('/gestion-integral/');
     const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
     expect(r.violations.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);
   });

@@ -1,8 +1,8 @@
 ---
 pagina: hse
 lang: es
-titulo: HSE y calidad
-descripcion: Sistema de gestión integral del Grupo HL, con HL Ingenieros S.A. certificada en ISO 9001, ISO 14001 e ISO 45001, con Reglas de Oro HSE, PIENSA® y una cultura de seguridad medible.
+titulo: Gestión integral
+descripcion: "Sistema de gestión integral del Grupo HL: certificaciones ISO 9001, ISO 14001 e ISO 45001, indicadores de seguridad, política, Reglas de Oro HSE, PIENSA® y herramientas de gestión."
 # Indicadores (guía §12.1-4 y §12.5). Fuente: PDF de ECOHL, casos 1 a 5. `donde` dice en qué página va cada uno.
 indicadores:
   - { valor: 64, signo: "−", unidad: "%", etiqueta: Frecuencia de accidentes incapacitantes en 8 años, fuente: Programa de cultura de seguridad · ECOHL }
@@ -38,16 +38,18 @@ piensa:
     - { titulo: Planificación, texto: Siempre empieza por planificar. }
     - { titulo: Tema, texto: Se define el tema que se quiere tratar. }
     - { titulo: Herramienta, texto: Se selecciona la herramienta más adecuada. }
-practicas:
-  - { titulo: Observadores de comportamiento, icono: ojo, quien: Equipo de cada proyecto, texto: "Se planea, se observa, se interviene y se registran los comportamientos, con retroalimentación constante a las personas observadas y a toda la organización." }
-  - { titulo: Pare y asegure, icono: pare, quien: "Antes: Reporto y aporto", texto: "Los trabajadores de mano de obra directa reportan las condiciones inseguras que identifican, con incentivos y un premio mensual a quien más reporta." }
-  - { titulo: Pasaportes de seguridad, icono: pasaporte, quien: Todos los trabajadores, texto: "Cada trabajador recibe un pasaporte de seguridad, que fija los parámetros de las sanciones por incumplir las normas según el reglamento interno." }
-  - { titulo: Reuniones de liderazgo, icono: liderazgo, quien: Presidencia y Dirección HSE, texto: "El presidente o un vicepresidente visita la obra con la Dirección HSE: momento de seguridad, indicadores HSE e inspección de campo." }
+# Herramientas tecnológicas de gestión (acta, bloque 6): lista del anexo del área comercial; nombres en texto.
+herramientas:
+  - { nombre: Procore, categoria: Gestión de obra, uso: "Planos, RFI, reportes diarios y seguimiento de cada proyecto en campo." }
+  - { nombre: Libra, categoria: ERP, uso: "Finanzas, compras, inventarios y nómina del grupo." }
+  - { nombre: Zoho CRM, categoria: Gestión comercial, uso: "Oportunidades, clientes y seguimiento de cotizaciones." }
+  - { nombre: Opus, categoria: Presupuestos, uso: "Presupuestos, análisis de precios unitarios y control de costos de obra." }
+  - { nombre: Microsoft 365, categoria: Colaboración, uso: "Correo, documentos, Teams y trabajo compartido entre oficina y obra." }
 confirmar:
   - "Indicadores HSE de los últimos 3 años (los publicados son del programa de 8 años del PDF de ECOHL, de 2020)."
-  - "Autoridad para detener trabajos (ADT): el sitio actual la lista pero no tiene texto."
+  - "Herramientas tecnológicas de gestión (Procore, Libra, Zoho CRM, Opus y Microsoft 365, del anexo del acta): confirmar con TI que siguen vigentes y si se pueden mostrar sus logos."
   - "Certificados en PDF de ISO 9001, 14001 y 45001 para descargar desde la página."
 ---
 
-<!-- Fuente: contenido/institucional.md §2.2 y el PDF de ECOHL (casos 1 a 5). El texto de la página vive en
-los campos de arriba (guía §12.5); las certificaciones salen de la colección certificaciones. -->
+<!-- Fuente: contenido/institucional.md §2.2, el PDF de ECOHL (casos 1 a 5) y el anexo del acta GHL-WEB-001
+(herramientas). El texto de la página vive en los campos de arriba; las certificaciones salen de su colección. -->
