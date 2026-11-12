@@ -60,3 +60,28 @@ test('la 404 no declara canonical ni hreflang', async ({ page }) => {
   await expect(page.locator('link[rel=canonical]')).toHaveCount(0);
   await expect(page.locator('.herramientas a[hreflang=en]')).toHaveAttribute('href', '/en/');
 });
+
+test.describe('servidor (R6): 301/410 del inventario y sitemap', () => {
+  test('una 301 sin destino o hacia sí misma detiene la compilación; las 410 no llevan destino', async () => {
+    const { reglas } = await import('../src/lib/servidor.mjs');
+    const f = (url: string, accion: string, destino = '') => ({ url: `${SITIO}${url}`, accion, destino });
+    expect(() => reglas([f('/viejo/', '301')])).toThrow(/sin destino/);
+    expect(() => reglas([f('/igual/', '301', '/igual/')])).toThrow(/sí misma/);
+    const r = reglas([f('/a/', '301', '/nosotros/'), f('/tag/x/', '410')]);
+    expect(r.r301).toContainEqual(['/a/', '/nosotros/']);
+    expect(r.r301).toContainEqual(['/hse/', '/gestion-integral/']);
+    expect(r.r410).toEqual(['/tag/x/']);
+  });
+
+  test('el inventario real produce reglas y el sitemap no publica páginas internas', async () => {
+    const fs = await import('node:fs');
+    const { leerCsv, reglas } = await import('../src/lib/servidor.mjs');
+    const r = reglas(leerCsv(fs.readFileSync('contenido/inventario.csv', 'utf8')));
+    expect(r.r301.length).toBeGreaterThan(80);
+    expect(r.r410.length).toBe(17);
+    const mapa = fs.readFileSync('dist/sitemap.xml', 'utf8');
+    expect(mapa).toContain(`<loc>${SITIO}/gestion-integral/</loc>`);
+    expect(mapa).not.toMatch(/\/(muestra|pendientes|api|404)\//);
+    expect(fs.readFileSync('dist/.htaccess', 'utf8')).toContain('RedirectMatch 301 ^/grupo-hl/?$ /nosotros/');
+  });
+});

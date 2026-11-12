@@ -49,6 +49,8 @@ function radicado(string $prefijo): string {
 }
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') falla('Método no permitido.', 'Method not allowed.', [], 405);
+// Un envío mayor que post_max_size llega con $_POST y $_FILES vacíos: se avisa del tamaño, no de un motivo inválido (R6).
+if (!$_POST && !$_FILES && (int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 0) falla('El envío es demasiado grande: el PDF puede pesar hasta 5 MB.', 'The submission is too large: the PDF can be up to 5 MB.', [], 413);
 
 $config = json_decode((string) @file_get_contents((getenv('HL_DATOS') ?: __DIR__) . '/config.json'), true);
 if (!is_array($config)) falla('El formulario no está disponible.', 'The form is unavailable.', [], 503);
@@ -89,6 +91,8 @@ foreach ($def['campos'] as $c) {
     if (!$ok) { $malos[] = $id; continue; }
     $nombre = preg_replace('/[^\w.-]+/u', '_', linea($f['name'], 80)) ?: "$id.pdf";
     if (!str_ends_with(strtolower($nombre), '.pdf')) $nombre .= '.pdf';
+    // Reporte ético anónimo: el nombre original del archivo puede delatar a quien reporta (R6).
+    if ($anonimo) $nombre = "$id.pdf";
     $adjunto = ['nombre' => $nombre, 'ruta' => $f['tmp_name']];
     $valores[$id] = ['label' => $c['label'], 'valor' => $nombre];
     continue;

@@ -115,7 +115,7 @@ const puntos = paises.filter((p) => PUNTO[p.codigo]).map((p) => {
   .pm-centro { fill: var(--azul-900); stroke: var(--hl-naranja); stroke-width: 3; transition: fill var(--t-rapido); }
   .pm-punto.activo .pm-centro { fill: var(--hl-blanco); stroke: var(--hl-blanco); }
   .pm-pulso { fill: none; stroke: var(--hl-blanco); stroke-width: 2; opacity: 0; }
-  .pm-cod { fill: var(--hl-blanco); font-family: var(--f-mono); font-weight: var(--fw-data); font-size: 26px; letter-spacing: .12em; opacity: .6; transition: opacity var(--t-rapido); }
+  .pm-cod { fill: var(--hl-blanco); font-family: var(--f-mono); font-weight: var(--fw-data); font-size: 26px; letter-spacing: .12em; opacity: .6; transition: opacity var(--t-rapido); } /* font-size en unidades del viewBox */
   .pm-punto.activo .pm-cod { opacity: 1; }
   /* Pulso de mapa (guía §8): anillo que late en el país activo, en bucle solo a la vista. */
   .presencia.a-la-vista .pm-punto.activo .pm-pulso { animation: pm-pulso 2.4s var(--ease-izaje) infinite; transform-box: fill-box; transform-origin: center; }

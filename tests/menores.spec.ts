@@ -42,7 +42,8 @@ test('no hay tamaños de letra ni anchos tipográficos escritos a mano fuera de 
   const sueltos = fuentes('src').flatMap((archivo) =>
     readFileSync(archivo, 'utf8').split('\n')
       .map((linea, i) => ({ linea, i }))
-      .filter(({ linea }) => /(font-size|font-stretch|font-weight):\s*\d[\w.%]*\s*;/.test(linea))
+      // Fuera de cuenta: los descriptores de @font-face y los tamaños en unidades de un viewBox de SVG (marcados).
+      .filter(({ linea }) => /(font-size|font-stretch|font-weight):\s*\d[\w.%]*\s*;/.test(linea) && !/@font-face|unidades del viewBox/.test(linea))
       .map(({ i }) => `${archivo}:${i + 1}`));
   expect(sueltos).toEqual([]);
 });
@@ -60,7 +61,9 @@ test('el título de primera pantalla aparece sin esperar al script de revelado',
     (window as any).IntersectionObserver = function () { throw new Error('sin IntersectionObserver'); };
   });
   await page.goto('/');
-  await expect(page.locator('h1.aparece')).toHaveCSS('opacity', '1', { timeout: 1500 });
+  // Desde R3 el H1 del Home es el lema sobre el video, con animación propia (no .aparece).
+  await expect(page.locator('h1')).toHaveCSS('opacity', '1', { timeout: 1500 });
+  await expect(page.locator('h1')).toBeInViewport();
 });
 
 test('al imprimir no queda contenido sin revelar', async ({ page }) => {

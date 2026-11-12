@@ -93,4 +93,24 @@ test.describe('enviar.php (adjuntos)', () => {
     expect((await proveedor([['adjunto', pdf(5 * 1024 * 1024 + 10), 'grande.pdf']])).status).toBe(422);
     expect((await proveedor([['adjunto', pdf(), 'a.pdf'], ['otro', pdf(), 'b.pdf']])).status).toBe(422);
   });
+  test('un envío mayor que post_max_size avisa del tamaño (413), no de un motivo inválido', async () => {
+    const r = await proveedor([['adjunto', pdf(9 * 1024 * 1024), 'enorme.pdf']]);
+    expect(r.status).toBe(413);
+    // El PHP portátil muestra su aviso de arranque antes del JSON (display_errors); en el hosting va apagado.
+    expect(await r.text()).toContain('demasiado grande');
+  });
+  test('en un reporte ético anónimo el adjunto pierde su nombre original', async () => {
+    const { readdirSync, statSync, readFileSync } = await import('node:fs');
+    const fd = new FormData();
+    for (const [k, v] of Object.entries({ intencion: 'etico', lang: 'es', t: '0', ley: 'si', anonimo: 'si', pais: 'Colombia', tipo: 'Otra',
+      mensaje: 'Reporte de prueba con soporte adjunto para el comité.' })) fd.append(k, v);
+    fd.append('adjunto', pdf(), 'Ana_Perez_soporte.pdf');
+    const antes = Date.now();
+    expect(await (await fetch(`${BASE}/api/enviar.php`, { method: 'POST', body: fd, headers: { Accept: 'application/json' } })).json()).toMatchObject({ ok: true });
+    const eml = readdirSync(tmpdir()).filter((f) => f.startsWith('hl-correo-')).map((f) => join(tmpdir(), f))
+      .filter((f) => statSync(f).mtimeMs >= antes - 1000).map((f) => readFileSync(f, 'utf8')).find((t) => t.includes('buzonetico@'));
+    expect(eml).toBeTruthy();
+    expect(eml).toContain('filename="adjunto.pdf"');
+    expect(eml).not.toContain('Ana_Perez');
+  });
 });

@@ -47,7 +47,7 @@ en cómo se presenta ese contenido, no agregando bloques ni gráficas decorativa
 | **R3 · Home y Quiénes somos** (✔ 12-nov) | Home: video de fondo con el título (MP4 + WebM ≤ 6 MB, póster como LCP, solo en escritorio, botón de pausa), cifras relevantes con contador (valor final en el HTML) y clientes. Sale todo lo demás del inicio actual. Quiénes somos: slogan, línea del tiempo, misión, visión y valores, presencia por países sin direcciones. **Home hecho:** hero con póster provisional de Columbus (acercamiento lento y pausa; el video entra solo al poner `video:` en `sitio.yaml`, pendiente bloqueante), cifras calculadas (años, países, HH del proyecto visible con más horas, primer indicador con signo de HSE) y clientes; fuera franja de sectores, destacados, servicios, sectores, HSE, noticias y el gemelo digital. La barra deja de ser transparente a los 40 px. Ajustes (12-nov): cifras en tarjetas blancas con borde sobre banda niebla e íconos de trazo; H2 en Poppins 700 (todo el sitio) con barra naranja en el Home. **Quiénes somos hecho (12-nov):** H1 = lema; tira de negativos; misión y visión (con sus indicadores) y valores con H2 visible y barra naranja (clase global `.h2-barra`; fuera pods y numeración); presencia en un mapa propio estático que llega hasta Bolivia (`src/lib/mapa-presencia.ts`, `node design/mapa.mjs <geojson> --presencia`) con pulso que recorre los 7 países y se fija al elegir uno. Fuera mosaico, testimonios, asociadas y cierre (y sus textos). De paso: la tira mostraba 2026 con el hito anterior al final del scroll (el hito ahora sale del año redondeado) | `check` + pruebas de la página |
 | **R4 · Proyectos y Servicios** ✔ 12-nov | Colección de servicios reducida a 3 y fichas reasignadas; sectores a 3 categorías de filtro y fuera sus páginas; explorador con mapa, filtros y ficha 3.1 (datos generales, fotos, cantidades); página de cada servicio: sus 3 proyectos que llevan a la ficha | `check` + explorador, ficha y servicio |
 | **R5 · Gestión integral y demás** ✔ 12-nov | Gestión integral con sus 6 bloques. Noticias: blog con adjudicaciones, iniciativas y eventos. Contacto: solo los 4 formularios, sin sedes, con adjuntos (`enviar.php`). Complementarias: términos, datos, vacantes (`Vacantes.tsx` sin cambios: el flujo sigue congelado), acreedores y documentos públicos | `check` + formularios (PHP con `HL_PHP`) |
-| **R6 · Cierre** | Inglés de todo lo nuevo; `inventario.csv`, `.htaccess` y `sitemap` con los 301 (servicios, sectores, `/hse`); revisión de código enfocada en `enviar.php` (adjuntos); CLAUDE.md, memoria y bitácora | Suite completa, `npm run presupuesto`, Lighthouse móvil una vez (Home, explorador, Gestión integral, Contacto) |
+| **R6 · Cierre** ✔ 12-nov | Inglés de todo lo nuevo; `inventario.csv`, `.htaccess` y `sitemap` con los 301 (servicios, sectores, `/hse`); revisión de código enfocada en `enviar.php` (adjuntos); CLAUDE.md, memoria y bitácora | Suite completa, `npm run presupuesto`, Lighthouse móvil una vez (Home, explorador, Gestión integral, Contacto) |
 
 **Cierre de R1 (12-nov):** `design/fuente.py` reduce Poppins 500/600/700, Open Sans variable 400-600 y Plex Mono 500
 (solo mayúsculas, cifras y signos) desde Fontsource 5.2.6: 52 KB en total (Archivo pesaba 73). Respaldos con métricas
@@ -120,6 +120,28 @@ sello y franja naranja en las adjudicaciones; la entrada usa la capa oscura del 
 de **muestra** ES/EN (`muestra: true`, chip "Muestra"): `auditar()` las marca como bloqueantes del lanzamiento y salen en
 `/pendientes/`. Corregida la marca de los filtros en móvil (dos filas: ahora sigue la fila y la altura del botón). Verificación:
 `check` 0 errores; HSE (con noticias), contenido, humo y rutas 90/90.
+
+### R6 · Cierre (tareas)
+
+| # | Tarea | Estado |
+|---|---|---|
+| R6.1 | Inglés de lo nuevo: `auditar()` sin traducciones pendientes y barrido de `dist/en/` buscando español (solo quedan nombres propios) | ✔ |
+| R6.2 | `inventario.csv` con columna `destino` (URL exacta de cada 301; `/buzon-etico/` y `/proveedores/` se conservan: misma URL) | ✔ |
+| R6.3 | Integración `src/lib/servidor.mjs` (al compilar): `dist/.htaccess` (HTTPS sin www, 301/410 del inventario + `/hse`, 404, caché y compresión) y `dist/sitemap.xml`; falla si un destino no existe. `public/robots.txt` | ✔ 81 + 2 × 301, 17 × 410, 86 URL en el sitemap |
+| R6.4 | Revisión enfocada de `enviar.php` (adjuntos) | ✔ 2 arreglos |
+| R6.5 | Suite completa, `npm run presupuesto`, Lighthouse móvil (Home, explorador, Gestión integral, Contacto) | ✔ |
+| R6.6 | CLAUDE.md, memoria, bitácora y commit | ✔ |
+
+**R6 · Cierre (12-nov):** inglés sin pendientes (solo nombres propios en español en `dist/en/`). `inventario.csv` con columna
+`destino`; sectores viejos → explorador filtrado (`?sector=cemento|mineria|otros`), servicios viejos → su especialidad o
+`/servicios/`. `src/lib/servidor.mjs` escribe al compilar `dist/.htaccess` (HTTPS sin www, `RedirectMatch` 301/410, 404,
+caché y compresión) y `dist/sitemap.xml`; la compilación falla si un destino no existe. **Sin probar en Apache real: se
+verifica en el hosting en F6.** Revisión de `enviar.php`: un envío mayor que `post_max_size` respondía "Motivo no válido"
+(ahora 413 con el tamaño) y en el buzón ético anónimo el nombre original del PDF podía delatar a quien reporta (ahora
+`adjunto.pdf`); los metadatos del PDF quedan como pregunta para jurídica en `/pendientes/`. Lighthouse móvil: Home
+98/100/100/100 (LCP 2,0 s), explorador 98 (2,0 s), Gestión integral 99 (1,7 s), Contacto 99 (1,8 s, CLS 0: tenía 0,161
+porque la banda de pasos del formulario aparecía al hidratar; ahora el HTML inicial la reserva). Suite 424/424 con
+`HL_PHP` (2 pruebas viejas de `menores.spec.ts` puestas al día con R1/R3), presupuesto OK (JS del inicio 9,7 KB gz).
 
 ## Riesgos
 

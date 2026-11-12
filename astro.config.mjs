@@ -5,6 +5,7 @@ import preact from '@astrojs/preact';
 import conocimiento from './src/lib/conocimiento.mjs';
 import carga from './src/lib/carga.mjs';
 import php from './src/lib/php.mjs';
+import servidor from './src/lib/servidor.mjs';
 
 export default defineConfig({
   site: 'https://hlingenieros.com',
@@ -20,6 +21,7 @@ export default defineConfig({
   // conocimiento: al compilar, el texto de cada página para el agente (dist/api/conocimiento.json).
   // carga: solo en `astro dev`, la página /carga/ para subir insumos a insumos/entrada/ (plan AG.9).
   // php: solo en `astro dev`, el PHP portátil atiende /api/*.php (agente y formularios).
-  integrations: [preact(), conocimiento(), carga(), php()],
+  // servidor: al compilar, dist/.htaccess (301/410 del inventario, caché, compresión) y dist/sitemap.xml (R6).
+  integrations: [preact(), conocimiento(), carga(), php(), servidor()],
   vite: { plugins: [tailwindcss()] },
 });

@@ -38,6 +38,7 @@
 @keyframes fm-aparece { from { opacity: 0; transform: translateY(-4px); } }
 @keyframes fm-empuje { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 .fm-estatico { display: grid; gap: var(--s4); }
+:root:not(.js) .fm-ejes-previo { display: none; }
 
 /* Campos (guía §7): etiqueta visible, línea de escritura, ✓ que se dibuja, error que empuja. */
 .fm-campos { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s3); }

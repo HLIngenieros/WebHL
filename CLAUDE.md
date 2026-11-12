@@ -329,7 +329,13 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     compartidas en `Pestanas.astro` (Contacto y Acreedores · Documentos públicos); Términos y Datos sin cambios.
     **R5 · Noticias cerrado (12-nov):** tipos del acta (adjudicación · iniciativa · evento) con filtros, tarjeta y entrada con la
     identidad R, 3 entradas de muestra ES/EN (`muestra: true`, bloquean el lanzamiento; borrar `muestra-*.md` al publicar las reales).
-  - **Siguiente paso:** Plan R R6 (cierre: inglés de lo nuevo, 301, revisión de `enviar.php`, suite y Lighthouse); luego F6. El proveedor de producción (`anthropic` con clave,
+    **R6 · Cierre del Plan R (12-nov):** `inventario.csv` con `destino`; `src/lib/servidor.mjs` genera `dist/.htaccess` (301/410,
+    HTTPS sin www, caché, compresión) y `dist/sitemap.xml` al compilar (falla si un destino no existe; probar en Apache en F6);
+    `public/robots.txt`. `enviar.php`: 413 si el envío pasa de `post_max_size` y adjunto anónimo sin nombre original. CLS de
+    Contacto corregido (banda de pasos reservada). 424 pruebas, presupuesto OK, Lighthouse móvil 98-99 en Home, explorador,
+    Gestión integral y Contacto.
+  - **Siguiente paso:** F6 · Lanzamiento (en espera de la aprobación oficial y de los insumos de `/pendientes/`); Nosotros
+    sigue con Lighthouse 94 (pendiente de F6). El proveedor de producción (`anthropic` con clave,
     `foundry` o `azure-openai`) se agrega cuando Gerencia y TI den la credencial. F6 después.
   - **Ojo agente:** al desplegar no borrar `/api/vacantes.json` (lo escribe el flujo de Vacantes de F4 en Power
     Automate; **congelado por decisión de Juan David, 21-oct**: no se toca hasta nuevo aviso). El sitio es `https://hlingenieros.com` sin www.

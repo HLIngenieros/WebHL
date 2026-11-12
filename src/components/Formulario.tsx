@@ -186,6 +186,15 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, o
   if (!js) return (
     <form class="fm" method="post" action={accion} encType="multipart/form-data">
       {rotulo}
+      {/* Banda de pasos de muestra: con JavaScript reserva el lugar de la real hasta hidratar (sin ella, CLS 0,16 en
+          Contacto); sin JavaScript se oculta (formulario.css). */}
+      <div class="fm-ejes fm-ejes-previo voz-datos" style={`--n:${pasos.length}`} aria-hidden="true">
+        <ol>
+          {pasos.map((p, i) => (
+            <li key={p}><button type="button" class="fm-eje" data-estado={i === 0 ? 'actual' : ''} disabled tabIndex={-1}><i>{String.fromCharCode(65 + i)}</i><span class="fm-eje-txt">{p}</span></button></li>
+          ))}
+        </ol>
+      </div>
       <div class="fm-hojas fm-estatico">
         {hojaDatos}{hojaMensaje}{autorizacion}{fijos}
       </div>
