@@ -310,7 +310,9 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     pie del acta (oficina principal, enlaces, sellos, redes); fuera `PanelProyectos`.
     **R3 · Home cerrado (12-nov):** póster provisional (Columbus) con acercamiento y pausa, video listo para cuando
     llegue (`video:` en `sitio.yaml`; pendiente bloqueante), cifras con cota y contador, clientes. Fuera el gemelo y los
-    bloques viejos del inicio.
+    bloques viejos del inicio. Ajustes de Juan David: cifras en tarjetas blancas con borde sobre banda niebla (la de
+    seguridad en azul 600) e íconos de trazo (calendario, globo, reloj, escudo); H2 de todo el sitio en Poppins 700 −2 %
+    (`--fw-title`) y, en el Home, barra naranja de 48 × 4 px encima.
   - **Siguiente paso:** Plan R (R3: Quiénes somos); luego F6. El proveedor de producción (`anthropic` con clave,
     `foundry` o `azure-openai`) se agrega cuando Gerencia y TI den la credencial. F6 después.
   - **Ojo agente:** al desplegar no borrar `/api/vacantes.json` (lo escribe el flujo de Vacantes de F4 en Power
