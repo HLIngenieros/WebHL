@@ -1,18 +1,23 @@
 import { test, expect } from '@playwright/test';
-import { NAVEGACION, PIE, ruta } from '../src/i18n/rutas';
+import { PIE, ruta } from '../src/i18n/rutas';
 
+// Pie del acta: oficina principal y teléfono, enlaces complementarios, sellos ISO y redes. Nada más.
 for (const lang of ['es', 'en'] as const) {
-  test(`el pie (${lang}) enlaza las 13 secciones`, async ({ page }) => {
+  test(`el pie (${lang}) lleva solo lo del acta`, async ({ page }) => {
     await page.goto(ruta('inicio', lang));
-    const hrefs = await page.locator('#navegacion-pie a').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
-    expect(hrefs).toEqual([...NAVEGACION, ...PIE].map((k) => ruta(k, lang)));
+    const hrefs = await page.locator('#enlaces-pie a').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
+    expect(hrefs).toEqual(PIE.map((k) => ruta(k, lang)));
+    const pie = page.locator('footer');
+    await expect(pie.locator('a[href^="tel:"]')).toHaveCount(1);
+    await expect(pie.locator('.sellos li')).toHaveCount(3);
+    await expect(pie.locator('a[href*="linkedin"]')).toHaveCount(1);
+    await expect(pie.locator('a')).toHaveCount(PIE.length + 3); // + marca, teléfono y LinkedIn
   });
 }
 
-test('el rótulo del pie lleva el año actual', async ({ page }) => {
+test('el pie lleva el año actual', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('footer')).toContainText(String(new Date().getFullYear()));
-  await expect(page.locator('footer')).toContainText('1968');
 });
 
 test('Hablar con HL lleva a contacto en el idioma de la página', async ({ page }) => {
