@@ -1,13 +1,20 @@
 ---
 // HL en cifras (guía v2.0 §9, maqueta R0): cuatro cifras con su cota, que se mide al entrar en pantalla, y un
 // contador. El valor final va escrito en el HTML; el contador solo anima hasta él (sin JS o con movimiento
-// reducido, se ve quieto). La de seguridad lleva el signo en naranja.
+// reducido, se ve quieto). La de seguridad lleva el signo en naranja. Íconos de trazo (guía §7: 24 px, 1,8 px,
+// sin relleno, currentColor): calendario, globo, reloj y escudo.
 import type { CifraInicio } from '../../lib/inicio';
 import type { Lang } from '../../i18n/rutas';
 import { t } from '../../i18n/ui';
 
 interface Props { lang: Lang; cifras: CifraInicio[] }
 const { lang, cifras } = Astro.props;
+const ICONOS: Record<CifraInicio['clave'], string> = {
+  trayectoria: 'M4 6.5A1.5 1.5 0 0 1 5.5 5h13A1.5 1.5 0 0 1 20 6.5v12a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5zM4 10h16M8.5 3v4M15.5 3v4M8 14h2.5M13.5 14H16M8 17h2.5',
+  presencia: 'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM3.5 9.5h17M3.5 14.5h17M12 3c-2.6 2.6-3.8 5.6-3.8 9s1.2 6.4 3.8 9c2.6-2.6 3.8-5.6 3.8-9S14.6 5.6 12 3z',
+  horas: 'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 7v5l3.5 2',
+  seguridad: 'M12 3l7.5 3v5.5c0 4.4-3.1 8-7.5 9.5c-4.4-1.5-7.5-5.1-7.5-9.5V6zM8.5 12l2.5 2.5l4.5-4.5',
+};
 ---
 <section class="ci" aria-labelledby="ci-titulo">
   <div class="wrap">
@@ -15,7 +22,10 @@ const { lang, cifras } = Astro.props;
     <ul class="ci-lista" data-lang={lang}>
       {cifras.map((c, i) => (
         <li class:list={['ci-cifra', { clave: c.signo }]} style={`--i:${i}`}>
-          <span class="ci-cota" aria-hidden="true"></span>
+          <span class="ci-cab" aria-hidden="true">
+            <span class="ci-icono"><svg viewBox="0 0 24 24"><path d={ICONOS[c.clave]} /></svg></span>
+            <span class="ci-cota"></span>
+          </span>
           <span class="ci-valor">{c.signo && <b>{c.signo}</b>}<span data-n={c.valor}>{c.texto}</span>{c.clave === 'seguridad' && (lang === 'es' ? ' %' : '%')}</span>
           <span class="ci-unidad">{c.unidad}</span>
           <p>{c.descripcion}</p>
@@ -57,21 +67,26 @@ const { lang, cifras } = Astro.props;
 </script>
 
 <style>
-  .ci { padding-block: var(--s7); background: var(--bg); }
+  .ci { padding-block: var(--s7); background: var(--paper); }
   /* Títulos del Home: barra naranja corta encima del H2 (guía v2.0, 12-nov). */
   h2 { margin: 0; }
   h2::before { content: ''; display: block; width: 48px; height: 4px; margin-bottom: var(--s2); background: var(--hl-naranja); }
   .ci-lista { list-style: none; margin: var(--s6) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s3); }
-  /* Tarjeta: superficie con la cota arriba; se eleva al pasar el cursor. La de seguridad va en azul corporativo. */
+  /* Tarjeta blanca con borde sobre la banda niebla; se eleva al pasar el cursor. La de seguridad, en azul corporativo. */
   .ci-cifra {
-    position: relative; container-type: inline-size; padding: calc(var(--s4) + 12px) var(--s4) var(--s4);
-    background: var(--paper); border-radius: var(--r-card); border: var(--border) solid transparent;
-    transition: transform var(--t-rapido) var(--ease-izaje), box-shadow var(--t-rapido) ease;
+    position: relative; container-type: inline-size; padding: var(--s4);
+    background: var(--bg); border-radius: var(--r-card); border: var(--border) solid var(--line);
+    transition: transform var(--t-rapido) var(--ease-izaje), box-shadow var(--t-rapido) ease, border-color var(--t-rapido) ease;
   }
-  .ci-cifra:hover { transform: translateY(-4px); box-shadow: var(--sombra-card); }
-  .ci-cifra.clave { background: var(--azul-600); color: var(--hl-blanco); }
+  .ci-cifra:hover { transform: translateY(-4px); box-shadow: var(--sombra-card); border-color: transparent; }
+  .ci-cifra.clave { background: var(--azul-600); color: var(--hl-blanco); border-color: var(--azul-600); }
+  /* Cabecera: ícono en su placa y la cota que corre hasta el borde. */
+  .ci-cab { display: flex; align-items: center; gap: var(--s2); }
+  .ci-icono { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--r-card); background: var(--paper); color: var(--accent); }
+  .clave .ci-icono { background: color-mix(in srgb, var(--hl-blanco) 14%, transparent); color: var(--hl-blanco); }
+  .ci-icono svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: var(--stroke-icono); stroke-linecap: round; stroke-linejoin: round; }
   /* Cota: línea con dos topes; el trazo se mide de izquierda a derecha y el tope final aparece al terminar. */
-  .ci-cota { --c: var(--accent); position: absolute; top: var(--s3); left: var(--s4); right: var(--s4); height: 12px; border-left: 1.5px solid var(--c); }
+  .ci-cota { --c: var(--accent); position: relative; flex: 1; height: 12px; border-left: 1.5px solid var(--c); }
   .clave .ci-cota { --c: var(--hl-trazo); }
   .ci-cota::before { content: ''; position: absolute; left: 0; right: 0; top: 5px; height: 1.5px; background: var(--c); transform-origin: left; }
   .ci-cota::after { content: ''; position: absolute; right: 0; top: 0; width: 1.5px; height: 12px; background: var(--c); }
@@ -80,7 +95,7 @@ const { lang, cifras } = Astro.props;
   :global(html.js) .ci-cifra.visible .ci-cota::before { transform: none; }
   :global(html.js) .ci-cifra.visible .ci-cota::after { opacity: 1; }
   .ci-valor {
-    display: block; margin: var(--s3) 0 var(--s1); color: var(--accent); font: var(--fw-display) var(--fs-stat) / 1 var(--f-titulo);
+    display: block; margin: var(--s4) 0 var(--s1); color: var(--accent); font: var(--fw-display) var(--fs-stat) / 1 var(--f-titulo);
     font-size: min(var(--fs-stat), 17cqi); letter-spacing: -.02em; font-variant-numeric: tabular-nums; white-space: nowrap;
   }
   .clave .ci-valor { color: var(--hl-blanco); }
@@ -89,7 +104,7 @@ const { lang, cifras } = Astro.props;
   p { margin: var(--s2) 0 0; color: var(--muted); font-size: .9375rem; line-height: 1.5; }
   .clave p { color: var(--azul-100); }
   @media (max-width: 899.98px) { .ci-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 479.98px) { .ci-cifra { padding-inline: var(--s3); } .ci-cota { left: var(--s3); right: var(--s3); } }
+  @media (max-width: 479.98px) { .ci-cifra { padding: var(--s3); } .ci-icono { width: 36px; height: 36px; } .ci-icono svg { width: 20px; height: 20px; } }
   @media (prefers-reduced-motion: reduce) { .ci-cifra:hover { transform: none; } }
   @media print { :global(html.js) .ci-cifra .ci-cota::before { transform: none; } :global(html.js) .ci-cifra .ci-cota::after { opacity: 1; } }
 </style>
