@@ -1,12 +1,12 @@
 ---
-// Contacto y páginas de formulario del pie (F4, D7): entrada y datos a la izquierda, formulario por hojas a
-// la derecha. Contacto pide el motivo; Proveedores, Trabaje con nosotros y Buzón ético llegan con el suyo.
+// Contacto (acta, R5): solo los 4 formularios, en pestañas y sin sedes. Cada pestaña es un enlace a su URL
+// (Contacto, Proveedores, Buzón ético, Trabaje con nosotros), así funciona sin JS y cada una tiene su título.
 import Base from '../layouts/Base.astro';
 import Pod from '../components/Pod.astro';
 import Formulario from '../components/Formulario';
 import Vacantes from '../components/Vacantes';
 import { cargar } from '../lib/datos';
-import { bloque, txt } from '../lib/contenido';
+import { bloque } from '../lib/contenido';
 import { FORMULARIOS, PAGINAS, formulario, type Intencion } from '../lib/formularios';
 import { ruta, type Lang } from '../i18n/rutas';
 import { PAISES } from '../i18n/ui';
@@ -17,18 +17,17 @@ const { datos } = await cargar();
 const sitio = datos.sitio[0].data;
 const def = formulario(intencion);
 const pagina = PAGINAS[intencion];
-const esContacto = intencion === 'cotizacion';
 const porOrden = <X extends { data: { orden: number } }>(xs: X[]) => [...xs].sort((a, b) => a.data.orden - b.data.orden);
 
 const opciones = {
   pais: Object.entries(PAISES).map(([c, n]) => [c, n[lang]] as [string, string]),
-  servicio: porOrden(datos.servicios).map((s) => bloque(s.data, lang).nombre),
+  // R-5: EPC ya no es especialidad, pero el proyecto completo se sigue cotizando.
+  servicio: [lang === 'es' ? 'Proyecto completo (EPC / llave en mano)' : 'Full project (EPC / turnkey)', ...porOrden(datos.servicios).map((s) => bloque(s.data, lang).nombre)],
   // "Otros proyectos" es una categoría del explorador: el formulario ya ofrece "Otro".
   sector: porOrden(datos.sectores).filter((s) => s.id !== 'otros').map((s) => bloque(s.data, lang).nombre),
 };
 const enlaces = Object.fromEntries(FORMULARIOS.map((f) => [f.id, ruta(f.ruta, lang)])) as Record<Intencion, string>;
 const buzones = sitio.contacto.buzones;
-const tel = (t: string) => `tel:${t.split(/[,/]/)[0].replace(/[^\d+]/g, '')}`;
 ---
 <Base titulo={pagina.titulo[lang]} descripcion={pagina.lead[lang]} lang={lang} alterno={alterno}>
   <section class="wrap solicitud">
@@ -36,56 +35,75 @@ const tel = (t: string) => `tel:${t.split(/[,/]/)[0].replace(/[^\d+]/g, '')}`;
       <Pod forma="rotulo" codigo={def.codigo} nombre={pagina.titulo[lang]} />
       <h1><span class="l"><span>{pagina.h1[0][lang]}</span></span> <span class="l"><span>{pagina.h1[1][lang]}</span></span></h1>
       <p class="lead aparece" style="--i:2">{pagina.lead[lang]}</p>
-
-      {esContacto ? (
-        <ul class="sedes voz-datos revela">
-          {datos.sedes.map((s, i) => (
-            <li style={`--i:${i}`}>
-              <b>{txt(s.data.nombre, lang)} · {s.data.ciudad}</b>
-              <span>{s.data.direccion}</span>
-              {s.data.telefono && <a href={tel(s.data.telefono)}>{s.data.telefono}</a>}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p class="buzon voz-datos aparece" style="--i:3">
-          <span>{lang === 'es' ? 'Llega a' : 'Goes to'}</span> <a href={`mailto:${buzones[intencion]}`}>{buzones[intencion]}</a>
-        </p>
-      )}
-      {esContacto && sitio.redes.length > 0 && (
-        <p class="redes voz-datos">{sitio.redes.map((r) => <a href={r.url} rel="noopener" target="_blank">{r.red} ↗</a>)}</p>
-      )}
+      <p class="buzon voz-datos aparece" style="--i:3">
+        <span>{lang === 'es' ? 'Llega a' : 'Goes to'}</span> <a href={`mailto:${buzones[intencion]}`}>{buzones[intencion]}</a>
+      </p>
     </header>
 
-    {intencion === 'empleo' && (
-      <div class="tablero-vacantes" id="vacantes">
-        <Vacantes client:load lang={lang} fuente="/api/vacantes.json" />
-      </div>
-    )}
+    <div class="lado">
+      <nav class="pestanas" aria-label={lang === 'es' ? 'Formularios' : 'Forms'}>
+        {FORMULARIOS.map((f, i) => (
+          <a href={enlaces[f.id]} aria-current={f.id === intencion ? 'page' : undefined} class:list={['pst', { 'pst-etico': f.id === 'etico' }]} style={`--i:${i}`}>
+            <svg viewBox="0 0 40 40" aria-hidden="true"><path d={f.icono} /></svg>
+            <strong>{f.nombre[lang]}</strong><small>{f.desc[lang]}</small>
+          </a>
+        ))}
+      </nav>
 
-    <div class="caja-form aparece" id="formulario" style="--i:3">
-      <Formulario client:load lang={lang} accion="/api/enviar.php" politica={ruta('datos', lang)}
-        inicial={esContacto ? null : intencion} buzones={buzones} enlaces={enlaces} opciones={opciones} />
+      {intencion === 'empleo' && (
+        <div class="tablero-vacantes" id="vacantes">
+          <Vacantes client:load lang={lang} fuente="/api/vacantes.json" />
+        </div>
+      )}
+
+      <div class="caja-form" id="formulario" transition:name="formulario">
+        <Formulario client:load lang={lang} accion="/api/enviar.php" politica={ruta('datos', lang)}
+          inicial={intencion} buzones={buzones} opciones={opciones} />
+      </div>
     </div>
   </section>
 </Base>
 
 <style>
-  .solicitud { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s5) var(--s6); padding-block: var(--s6); align-items: start; }
-  @media (max-width: 959.98px) { .solicitud { grid-template-columns: 1fr; padding-block: var(--s5); gap: var(--s5); } }
+  .solicitud { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--s5) var(--s6); padding-block: var(--s6); align-items: start; }
+  @media (max-width: 959.98px) { .solicitud { grid-template-columns: 1fr; padding-block: var(--s5); gap: var(--s4); } }
   .cab { display: grid; gap: var(--s3); align-content: start; }
   @media (min-width: 960px) { .cab { position: sticky; top: calc(var(--bar-h) + var(--s4)); } }
   h1 { margin: 0; }
   .lead { margin: 0; }
-  .sedes { list-style: none; margin: var(--s3) 0 0; padding: 0; border-top: var(--border-strong) solid var(--ink); }
-  .sedes li { display: grid; gap: 2px; padding: var(--s2) 0; border-bottom: var(--stroke-thin) solid var(--line); }
-  .sedes span { color: var(--muted); text-transform: none; letter-spacing: 0; font-weight: var(--fw-text); font-size: var(--fs-sm); }
-  .sedes a, .buzon a, .redes a { color: var(--accent); text-decoration: none; }
-  .sedes a:hover, .buzon a:hover, .redes a:hover { text-decoration: underline; }
   .buzon { margin: 0; padding: var(--s2) var(--s3); border-left: var(--stroke-heavy) solid var(--accent); color: var(--muted); }
-  .redes { display: flex; gap: var(--s3); margin: 0; }
-  /* Trabaje con nosotros: el tablero de vacantes ocupa el ancho y el formulario queda debajo. */
-  .tablero-vacantes { grid-column: 1 / -1; }
-  .solicitud:has(.tablero-vacantes) .cab { grid-column: 1 / -1; position: static; }
-  .solicitud:has(.tablero-vacantes) .caja-form { grid-column: 1 / -1; width: 100%; max-width: 860px; scroll-margin-top: calc(var(--bar-h) + var(--s3)); }
+  .buzon a { color: var(--accent); text-decoration: none; }
+  .buzon a:hover { text-decoration: underline; }
+  .lado { display: grid; gap: var(--s4); min-width: 0; }
+  .caja-form { scroll-margin-top: calc(var(--bar-h) + var(--s3)); }
+
+  /* Pestañas: placas con pictograma que se traza al pasar; la abierta lleva la línea naranja del menú. */
+  .pestanas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s2); }
+  .pst { position: relative; display: grid; grid-template-columns: 28px 1fr; gap: 2px var(--s2); align-content: start; padding: var(--s2) var(--s3) var(--s3);
+    border: var(--stroke-thin) solid var(--line); border-radius: var(--r-card); background: var(--bg); color: var(--ink); text-decoration: none;
+    transition: border-color var(--t-rapido), transform var(--t-rapido) var(--ease-izaje), box-shadow var(--t-rapido); }
+  .pst::after { content: ''; position: absolute; left: var(--s3); right: var(--s3); bottom: 0; height: 2px; background: var(--hl-naranja);
+    transform: scaleX(0); transform-origin: left; transition: transform var(--t-izaje) var(--ease-izaje); }
+  .pst:hover { border-color: var(--ink); transform: translateY(-4px); box-shadow: var(--sombra-card); }
+  .pst[aria-current='page'] { border-color: var(--accent); }
+  .pst:is(:hover, [aria-current='page'])::after { transform: scaleX(1); }
+  .pst svg { grid-row: span 2; width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: var(--stroke-mid); }
+  .pst[aria-current='page'] svg { stroke: var(--accent); }
+  .pst:is(:hover, [aria-current='page']) svg path { animation: pst-trazo var(--t-trazo) var(--ease-plano) both; }
+  .pst strong { font-family: var(--f-titulo); font-weight: var(--fw-subtitle); font-size: var(--fs-sm); line-height: 1.2; }
+  .pst small { color: var(--muted); font-size: var(--fs-xs); line-height: 1.3; }
+  .pst-etico { border-style: dashed; }
+  .pst-etico[aria-current='page'] { border-style: solid; }
+  @keyframes pst-trazo { from { stroke-dasharray: 160; stroke-dashoffset: 160; } to { stroke-dasharray: 160; stroke-dashoffset: 0; } }
+  /* Bajo 1100 px las placas pierden la descripción; en móvil, cuadrícula de 2 × 2 (las 4 siempre a la vista). */
+  @media (max-width: 1099.98px) {
+    .pst { grid-template-columns: 24px 1fr; align-items: center; padding-block: var(--s2); }
+    .pst svg { grid-row: auto; width: 24px; height: 24px; }
+    .pst small { display: none; }
+  }
+  @media (max-width: 639.98px) { .pestanas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (prefers-reduced-motion: reduce) { .pst:hover { transform: none; } .pst svg path { animation: none !important; } }
+
+  /* Trabaje con nosotros: el tablero de vacantes va antes del formulario (pasa a /vacantes con las complementarias). */
+  .tablero-vacantes { min-width: 0; }
 </style>

@@ -48,7 +48,9 @@ export function par(pathname: string): string {
 /** Sección a la que pertenece una URL (también sus subpáginas); el inicio no cuenta. */
 export function seccionDe(pathname: string): ClaveRuta | undefined {
   const lang = langDe(pathname);
-  return (Object.keys(RUTAS) as ClaveRuta[])
+  const k = (Object.keys(RUTAS) as ClaveRuta[])
     .filter((k) => k !== 'inicio')
     .find((k) => pathname.startsWith(RUTAS[k][lang]));
+  // Proveedores, Buzón ético y Trabaje con nosotros son pestañas de Contacto (R-9).
+  return k === 'proveedores' || k === 'buzon' || k === 'trabaje' ? 'contacto' : k;
 }

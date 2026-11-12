@@ -73,17 +73,24 @@ $anonimo = $etico && ($_POST['anonimo'] ?? '') === 'si';
 
 $valores = [];
 $malos = [];
+// R-8: cada formulario tiene un solo campo de archivo (PDF de hasta 5 MB, tipo real); va como adjunto del correo
+// sin guardarse en disco. Un archivo de más, varios en el campo o uno inválido se rechazan (no se ignoran).
 $adjunto = null;
+if (count($_FILES) > count(array_filter($def['campos'], fn ($c) => $c['tipo'] === 'file'))) falla('Sobran archivos adjuntos.', 'Too many attachments.');
 foreach ($def['campos'] as $c) {
   $id = $c['id'];
   $requerido = !$c['opcional'] && !($anonimo && $c['identifica']);
   if ($anonimo && $c['identifica']) continue;
   if ($c['tipo'] === 'file') {
     $f = $_FILES[$id] ?? null;
-    $ok = $f && $f['error'] === UPLOAD_ERR_OK && $f['size'] <= $config['cvMax'] && is_uploaded_file($f['tmp_name'])
+    if (!$f || $f['error'] === UPLOAD_ERR_NO_FILE) { if ($requerido) $malos[] = $id; continue; }
+    $ok = !is_array($f['error']) && $f['error'] === UPLOAD_ERR_OK && $f['size'] <= $config['cvMax'] && is_uploaded_file($f['tmp_name'])
       && file_get_contents($f['tmp_name'], false, null, 0, 5) === '%PDF-';
-    if ($ok) $adjunto = ['nombre' => preg_replace('/[^\w.-]+/u', '_', linea($f['name'], 80)) ?: 'hoja-de-vida.pdf', 'ruta' => $f['tmp_name']];
-    elseif ($requerido) $malos[] = $id;
+    if (!$ok) { $malos[] = $id; continue; }
+    $nombre = preg_replace('/[^\w.-]+/u', '_', linea($f['name'], 80)) ?: "$id.pdf";
+    if (!str_ends_with(strtolower($nombre), '.pdf')) $nombre .= '.pdf';
+    $adjunto = ['nombre' => $nombre, 'ruta' => $f['tmp_name']];
+    $valores[$id] = ['label' => $c['label'], 'valor' => $nombre];
     continue;
   }
   $v = linea($_POST[$id] ?? '');

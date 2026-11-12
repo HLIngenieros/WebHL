@@ -20,15 +20,26 @@ test.describe('sin JavaScript', () => {
 test('las hojas no avanzan sin datos válidos y el error queda enlazado al campo', async ({ page }) => {
   await page.goto('/contacto/');
   const seguir = page.locator('.fm-pie .fm-primario');
-  await expect(seguir).toBeDisabled();
-  await page.locator('.fm-int').first().click();
-  await seguir.click();
   await expect(page.locator('.fm-hoja h2')).toHaveText('Sus datos');
   await seguir.click();
   const nombre = page.locator('#fm-nombre');
   await expect(nombre).toBeFocused();
   await expect(nombre).toHaveAttribute('aria-describedby', 'fm-e-nombre');
   await expect(page.locator('#fm-e-nombre')).toBeVisible();
+});
+
+test('las 4 pestañas del acta llevan a su URL con su formulario abierto y sin sedes', async ({ page }) => {
+  await page.goto('/contacto/');
+  const pestanas = page.locator('.pestanas a');
+  await expect(pestanas).toHaveText([/Cotizar/, /proveedor/, /Buzón ético/, /Trabajar con HL/]);
+  await expect(pestanas.first()).toHaveAttribute('aria-current', 'page');
+  await expect(page.locator('.sedes')).toHaveCount(0);
+  await pestanas.nth(2).click();
+  await expect(page).toHaveURL(/\/buzon-etico\/$/);
+  await expect(page).toHaveTitle(/Buzón ético/);
+  await expect(page.locator('#nav-principal a[aria-current=page]')).toHaveText('Contacto');
+  await expect(page.locator('.fm-cod')).toHaveText('F-03');
+  await expect(page.locator('#fm-adjunto')).toHaveAttribute('accept', /pdf/);
 });
 
 test('no se envía sin la autorización de datos', async ({ page }) => {

@@ -147,7 +147,7 @@ Cada plantilla lleva solo el contenido del acta (guía §10); movimiento según 
   (`agente.php` → modelo de IA directo), según [plan-agente.md](plan-agente.md) Rev. 2.
 - **Vacantes (20-oct):** Trabaje con nosotros muestra las vacantes abiertas, leídas al abrir la página de
   `/api/vacantes.json`, que publica Power Automate desde una lista de SharePoint de Talento Humano
-  (contrato en [plan-f4.md](plan-f4.md)). "Postularme" lleva la vacante al formulario F-03.
+  (contrato en [plan-f4.md](plan-f4.md)). "Postularme" lleva la vacante al formulario F-04.
 - **Buzones (D7, 20-oct):** direcciones por función en un solo archivo de configuración, marcadas como
   pendientes en `/pendientes/` hasta confirmarlas.
 

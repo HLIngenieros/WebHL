@@ -1,4 +1,4 @@
-// Formularios por intención (especificación §5, D7). Una sola definición alimenta la isla, las páginas y,
+// Formularios por intención (especificación §5, D7), en el orden de las pestañas del acta (R5). Una sola definición alimenta la isla, las páginas y,
 // por /api/config.json, al PHP que valida (mismos ids y obligatorios en los dos lados).
 import type { ClaveRuta, Lang } from '../i18n/rutas';
 
@@ -33,13 +33,15 @@ export interface DefFormulario {
 const nombre: Campo = { id: 'nombre', label: { es: 'Nombre y apellido', en: 'Full name' }, tipo: 'text', auto: 'name' };
 const correo: Campo = { id: 'correo', label: { es: 'Correo', en: 'Email' }, tipo: 'email', auto: 'email' };
 const tel: Campo = { id: 'telefono', label: { es: 'Teléfono', en: 'Phone' }, tipo: 'tel', auto: 'tel', opcional: true };
+/** PDF opcional de hasta 5 MB (R-8): uno por formulario, validado también en el PHP. */
+const adjunto = (es: string, en: string): Campo => ({ id: 'adjunto', label: { es: `${es} (PDF, máx. 5 MB)`, en: `${en} (PDF, max. 5 MB)` }, tipo: 'file', opcional: true, ancho: true });
 const op = (...xs: [string, string][]): T[] => xs.map(([es, en]) => ({ es, en }));
 
 export const FORMULARIOS: DefFormulario[] = [
   {
     id: 'cotizacion', codigo: 'F-01', ruta: 'contacto',
     nombre: { es: 'Cotizar un proyecto', en: 'Request a quote' },
-    desc: { es: 'EPC, obra civil, montaje, fabricación o mantenimiento', en: 'EPC, civil works, installation, fabrication or maintenance' },
+    desc: { es: 'Montaje mecánico, obra civil, eléctrico e instrumentación', en: 'Mechanical, civil, electrical and instrumentation' },
     icono: 'M6 34h28M10 34V14l10-8 10 8v20M16 34v-9h8v9',
     mensaje: { es: 'Alcance del proyecto: qué, dónde y para cuándo', en: 'Project scope: what, where and when' },
     respuesta: { es: 'El equipo comercial le responde en un máximo de 2 días hábiles.', en: 'Our sales team will reply within 2 business days.' },
@@ -53,6 +55,7 @@ export const FORMULARIOS: DefFormulario[] = [
       { id: 'sector', label: { es: 'Sector', en: 'Sector' }, tipo: 'sector' },
       { id: 'inicio', label: { es: 'Inicio estimado', en: 'Expected start' }, tipo: 'opciones',
         opciones: op(['Este trimestre', 'This quarter'], ['Este año', 'This year'], ['Próximo año', 'Next year'], ['En estudio', 'Under study']) },
+      adjunto('Pliego o alcance', 'Scope or bid documents'),
     ],
   },
   {
@@ -70,25 +73,11 @@ export const FORMULARIOS: DefFormulario[] = [
       { id: 'pais', label: { es: 'País', en: 'Country' }, tipo: 'pais' },
       { id: 'categoria', label: { es: 'Categoría', en: 'Category' }, tipo: 'opciones',
         opciones: op(['Materiales', 'Materials'], ['Equipos y alquiler', 'Equipment and rental'], ['Subcontrato de obra', 'Construction subcontract'], ['Transporte', 'Transport'], ['Servicios profesionales', 'Professional services']) },
+      adjunto('Presentación de la empresa', 'Company profile'),
     ],
   },
   {
-    id: 'empleo', codigo: 'F-03', ruta: 'trabaje',
-    nombre: { es: 'Trabajar con HL', en: 'Work with HL' },
-    desc: { es: 'Hoja de vida para obra u oficina', en: 'Résumé for site or office roles' },
-    icono: 'M8 18a12 10 0 0 1 24 0zM6 18h28M20 8v-2M14 26h12v8H14z',
-    mensaje: { es: 'Experiencia y cargo al que aspira', en: 'Experience and the role you are seeking' },
-    respuesta: { es: 'Si su perfil coincide con una vacante, Talento Humano lo contactará.', en: 'If your profile matches an opening, our HR team will contact you.' },
-    campos: [
-      nombre, correo, tel,
-      { id: 'pais', label: { es: 'País de residencia', en: 'Country of residence' }, tipo: 'pais' },
-      { id: 'area', label: { es: 'Área', en: 'Area' }, tipo: 'opciones',
-        opciones: op(['Obra', 'Site'], ['Ingeniería', 'Engineering'], ['HSE', 'HSE'], ['Administración', 'Administration']) },
-      { id: 'cv', label: { es: 'Hoja de vida (PDF, máx. 5 MB)', en: 'Résumé (PDF, max. 5 MB)' }, tipo: 'file', ancho: true },
-    ],
-  },
-  {
-    id: 'etico', codigo: 'F-04', ruta: 'buzon',
+    id: 'etico', codigo: 'F-03', ruta: 'buzon',
     nombre: { es: 'Buzón ético', en: 'Ethics line' },
     desc: { es: 'Confidencial, puede ser anónimo', en: 'Confidential, may be anonymous' },
     icono: 'M20 4l13 5v10c0 8-6 14-13 17C13 33 7 27 7 19V9zM14 20l4 4 8-8',
@@ -100,6 +89,22 @@ export const FORMULARIOS: DefFormulario[] = [
       { id: 'pais', label: { es: 'País', en: 'Country' }, tipo: 'pais' },
       { id: 'tipo', label: { es: 'Tipo de situación', en: 'Type of concern' }, tipo: 'opciones',
         opciones: op(['Conflicto de interés', 'Conflict of interest'], ['Fraude o soborno', 'Fraud or bribery'], ['Acoso', 'Harassment'], ['Seguridad y salud', 'Health and safety'], ['Otra', 'Other']) },
+      adjunto('Soporte', 'Supporting document'),
+    ],
+  },
+  {
+    id: 'empleo', codigo: 'F-04', ruta: 'trabaje',
+    nombre: { es: 'Trabajar con HL', en: 'Work with HL' },
+    desc: { es: 'Hoja de vida para obra u oficina', en: 'Résumé for site or office roles' },
+    icono: 'M8 18a12 10 0 0 1 24 0zM6 18h28M20 8v-2M14 26h12v8H14z',
+    mensaje: { es: 'Experiencia y cargo al que aspira', en: 'Experience and the role you are seeking' },
+    respuesta: { es: 'Si su perfil coincide con una vacante, Talento Humano lo contactará.', en: 'If your profile matches an opening, our HR team will contact you.' },
+    campos: [
+      nombre, correo, tel,
+      { id: 'pais', label: { es: 'País de residencia', en: 'Country of residence' }, tipo: 'pais' },
+      { id: 'area', label: { es: 'Área', en: 'Area' }, tipo: 'opciones',
+        opciones: op(['Obra', 'Site'], ['Ingeniería', 'Engineering'], ['HSE', 'HSE'], ['Administración', 'Administration']) },
+      { id: 'cv', label: { es: 'Hoja de vida (PDF, máx. 5 MB)', en: 'Résumé (PDF, max. 5 MB)' }, tipo: 'file', ancho: true },
     ],
   },
 ];
@@ -121,9 +126,9 @@ export const reglasServidor = () => Object.fromEntries(FORMULARIOS.map((f) => [f
 export const TEXTOS = {
   es: {
     motivo: 'Motivo', datos: 'Sus datos', mensaje: 'Mensaje', envio: 'Envío', hoja: 'Hoja', de: 'de', radicada: 'Radicada',
-    pregunta: '¿En qué le podemos ayudar?', cuentenos: 'Cuéntenos', revise: 'Revise y envíe', seleccione: 'Seleccione…', opcional: 'opcional',
+    cuentenos: 'Cuéntenos', revise: 'Revise y envíe', seleccione: 'Seleccione…', opcional: 'opcional',
     atras: '← Atrás', continuar: 'Continuar →', enviar: 'Enviar solicitud', enviando: 'Enviando…',
-    pistas: ['Elija un motivo para continuar', 'Los campos se revisan al salir de cada uno', 'Sea concreto: alcance, lugar y plazo', 'Falta la autorización de datos', 'Listo para enviar'],
+    pistas: ['Los campos se revisan al salir de cada uno', 'Sea concreto: alcance, lugar y plazo', 'Falta la autorización de datos', 'Listo para enviar'],
     obligatorio: 'Este campo es obligatorio.', correoMal: 'Revise el correo (ejemplo: nombre@empresa.com).', pdfMal: 'Adjunte un PDF de máximo 5 MB.',
     minimo: 'Mínimo', faltan: 'Faltan', caracteres: 'caracteres', suficiente: 'Suficiente', escriba: 'Escriba al menos',
     ley1: 'Autorizo a Grupo HL (HL Ingenieros S.A., HL Infraestructura S.A.S. y ECOHL S.A.S.) a tratar mis datos personales para atender esta solicitud, según la', ley2: 'política de tratamiento de datos', ley3: '(Ley 1581 de 2012).',
@@ -131,13 +136,13 @@ export const TEXTOS = {
     etica: 'Canal confidencial. HL no toma represalias contra quien reporta de buena fe.',
     recibida: 'Solicitud recibida', radicado: 'Radicado', buzon: 'Buzón', otraVez: 'Enviar otra solicitud',
     postulacion: 'Postulación a', quitar: 'Quitar ×', vacante: 'Vacante',
-    fallo: 'No se pudo enviar. Revise su conexión e intente de nuevo, o escriba a', otros: '¿Es proveedor, busca empleo o quiere hacer un reporte ético?', otro: 'Otro',
+    fallo: 'No se pudo enviar. Revise su conexión e intente de nuevo, o escriba a', otro: 'Otro',
   },
   en: {
     motivo: 'Reason', datos: 'Your details', mensaje: 'Message', envio: 'Send', hoja: 'Sheet', de: 'of', radicada: 'Filed',
-    pregunta: 'How can we help?', cuentenos: 'Tell us', revise: 'Review and send', seleccione: 'Select…', opcional: 'optional',
+    cuentenos: 'Tell us', revise: 'Review and send', seleccione: 'Select…', opcional: 'optional',
     atras: '← Back', continuar: 'Continue →', enviar: 'Send request', enviando: 'Sending…',
-    pistas: ['Choose a reason to continue', 'Fields are checked as you leave each one', 'Be specific: scope, location and timing', 'Data authorization is missing', 'Ready to send'],
+    pistas: ['Fields are checked as you leave each one', 'Be specific: scope, location and timing', 'Data authorization is missing', 'Ready to send'],
     obligatorio: 'This field is required.', correoMal: 'Check the email (e.g. name@company.com).', pdfMal: 'Attach a PDF of up to 5 MB.',
     minimo: 'Minimum', faltan: '', caracteres: 'characters left', suficiente: 'Enough', escriba: 'Write at least',
     ley1: 'I authorize Grupo HL (HL Ingenieros S.A., HL Infraestructura S.A.S. and ECOHL S.A.S.) to process my personal data to handle this request, under its', ley2: 'data processing policy', ley3: '(Colombian Law 1581 of 2012).',
@@ -145,7 +150,7 @@ export const TEXTOS = {
     etica: 'Confidential channel. HL does not retaliate against anyone reporting in good faith.',
     recibida: 'Request received', radicado: 'Reference', buzon: 'Inbox', otraVez: 'Send another request',
     postulacion: 'Applying for', quitar: 'Remove ×', vacante: 'Position',
-    fallo: 'The request could not be sent. Check your connection and try again, or write to', otros: 'Supplier, job seeker or ethics report?', otro: 'Other',
+    fallo: 'The request could not be sent. Check your connection and try again, or write to', otro: 'Other',
   },
 } as const;
 

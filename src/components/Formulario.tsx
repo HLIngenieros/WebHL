@@ -10,21 +10,18 @@ interface Props {
   lang: Lang;
   accion: string;
   politica: string;
-  /** null: la primera hoja pide el motivo (Contacto). */
-  inicial: Intencion | null;
+  /** La pestaña abierta (R5): el motivo lo elige la página, no el formulario. */
+  inicial: Intencion;
   buzones: Record<Intencion, string>;
-  enlaces: Record<Intencion, string>;
   opciones: { pais: [string, string][]; servicio: string[]; sector: string[] };
 }
 
 type Estado = 'editando' | 'enviando' | 'ok' | 'error';
 const CORREO = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
-export default function Formulario({ lang, accion, politica, inicial, buzones, enlaces, opciones }: Props) {
+export default function Formulario({ lang, accion, politica, inicial, buzones, opciones }: Props) {
   const tx = TEXTOS[lang];
-  const elegir = inicial === null;
   const [js, setJs] = useState(false);
-  const [int, setInt] = useState<Intencion | null>(inicial);
   const [paso, setPaso] = useState(0);
   const [atras, setAtras] = useState(false);
   const [anon, setAnon] = useState(false);
@@ -50,9 +47,9 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, e
   }, []);
   useEffect(() => { if (movido.current) titulo.current?.focus(); movido.current = true; }, [paso, estado]);
 
-  const def = FORMULARIOS.find((f) => f.id === (int ?? 'cotizacion'))!;
-  const pasos = [...(elegir ? [tx.motivo] : []), tx.datos, tx.mensaje, tx.envio];
-  const hoja = (elegir ? ['motivo'] : []).concat(['datos', 'mensaje', 'envio'])[paso];
+  const def = FORMULARIOS.find((f) => f.id === inicial)!;
+  const pasos = [tx.datos, tx.mensaje, tx.envio];
+  const hoja = (['datos', 'mensaje', 'envio'] as const)[paso];
   const visibles = def.campos.filter((c) => !(anon && c.identifica));
   const requerido = (c: Campo) => !c.opcional && !(anon && c.identifica);
 
@@ -60,7 +57,8 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, e
     if (c === 'mensaje') return v.trim().length >= MENSAJE_MIN ? null : `${tx.escriba} ${MENSAJE_MIN} ${lang === 'es' ? 'caracteres' : 'characters'}.`;
     if (c.tipo === 'file') {
       const f = archivo.current;
-      return f && f.type === 'application/pdf' && f.size <= CV_MAX ? null : tx.pdfMal;
+      if (!f) return requerido(c) ? tx.pdfMal : null;
+      return f.type === 'application/pdf' && f.size <= CV_MAX ? null : tx.pdfMal;
     }
     if (!v.trim()) return requerido(c) ? tx.obligatorio : null;
     return c.tipo === 'email' && !CORREO.test(v.trim()) ? tx.correoMal : null;
@@ -100,7 +98,7 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, e
     } catch { setEstado('error'); }
   }
 
-  function reiniciar() { setVacante(null); setVal({}); setErr({}); setLey(false); setAnon(false); archivo.current = null; setEstado('editando'); setAtras(true); setPaso(0); if (elegir) setInt(null); }
+  function reiniciar() { setVacante(null); setVal({}); setErr({}); setLey(false); setAnon(false); archivo.current = null; setEstado('editando'); setAtras(true); setPaso(0); }
 
   const control = (c: Campo) => {
     const props: Record<string, unknown> = {
@@ -178,8 +176,8 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, e
 
   const rotulo = (
     <div class="fm-rotulo voz-datos">
-      <span class="fm-cod">{int ? def.codigo : 'F-00'}</span>
-      <span>{int ? def.nombre[lang] : tx.pregunta}</span>
+      <span class="fm-cod">{def.codigo}</span>
+      <span>{def.nombre[lang]}</span>
       <span aria-live="polite">{estado === 'ok' ? tx.radicada : `${tx.hoja} ${paso + 1} ${tx.de} ${pasos.length}`}</span>
     </div>
   );
@@ -189,7 +187,6 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, e
     <form class="fm" method="post" action={accion} encType="multipart/form-data">
       {rotulo}
       <div class="fm-hojas fm-estatico">
-        {elegir && <p class="fm-otros">{tx.otros} {FORMULARIOS.filter((f) => f.id !== 'cotizacion').map((f) => <a key={f.id} href={enlaces[f.id]}>{f.nombre[lang]}</a>)}</p>}
         {hojaDatos}{hojaMensaje}{autorizacion}{fijos}
       </div>
       <div class="fm-pie"><span /><button class="fm-btn fm-primario" type="submit">{tx.enviar}</button></div>
@@ -232,20 +229,9 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, e
             <button type="button" class="fm-btn" onClick={reiniciar}>{tx.otraVez}</button>
           </div>
         ) : (
-          <fieldset key={hoja + (int ?? '')} class={`fm-hoja${atras ? ' fm-atras' : ''}`}>
+          <fieldset key={hoja} class={`fm-hoja${atras ? ' fm-atras' : ''}`}>
             <legend class="fm-sr">{pasos[paso]}</legend>
-            <h2 ref={titulo} tabIndex={-1}>{hoja === 'motivo' ? tx.pregunta : hoja === 'datos' ? tx.datos : hoja === 'mensaje' ? tx.cuentenos : tx.revise}</h2>
-            {hoja === 'motivo' && (
-              <div class="fm-intenciones" role="radiogroup" aria-label={tx.motivo}>
-                {FORMULARIOS.map((f, i) => (
-                  <button key={f.id} type="button" role="radio" aria-checked={int === f.id} class={`fm-int${f.id === 'etico' ? ' fm-int-etico' : ''}`} style={`--i:${i}`}
-                    onClick={() => { setInt(f.id); setAnon(false); setErr({}); }}>
-                    <svg viewBox="0 0 40 40" aria-hidden="true"><path d={f.icono} /></svg>
-                    <strong>{f.nombre[lang]}</strong><small>{f.desc[lang]}</small>
-                  </button>
-                ))}
-              </div>
-            )}
+            <h2 ref={titulo} tabIndex={-1}>{hoja === 'datos' ? tx.datos : hoja === 'mensaje' ? tx.cuentenos : tx.revise}</h2>
             {hoja === 'datos' && hojaDatos}
             {hoja === 'mensaje' && hojaMensaje}
             {hoja === 'envio' && (
@@ -269,9 +255,9 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, e
       {estado !== 'ok' && (
         <div class="fm-pie">
           {paso > 0 ? <button type="button" class="fm-btn" onClick={() => ir(paso - 1)}>{tx.atras}</button> : <span />}
-          <span class="fm-pista voz-datos">{hoja === 'envio' && ley ? tx.pistas[4] : tx.pistas[elegir ? paso : paso + 1]}</span>
+          <span class="fm-pista voz-datos">{hoja === 'envio' && ley ? tx.pistas[3] : tx.pistas[paso]}</span>
           <button type="submit" class={`fm-btn fm-primario${estado === 'enviando' ? ' fm-cargando' : ''}`}
-            disabled={(hoja === 'motivo' && !int) || (hoja === 'envio' && !ley) || estado === 'enviando'}>
+            disabled={(hoja === 'envio' && !ley) || estado === 'enviando'}>
             {estado === 'enviando' ? tx.enviando : hoja === 'envio' ? tx.enviar : tx.continuar}
           </button>
         </div>

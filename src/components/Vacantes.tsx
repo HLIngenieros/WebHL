@@ -1,7 +1,7 @@
 // Tablero de vacantes de Trabaje con nosotros (maqueta aprobada 20-oct). Lee /api/vacantes.json al abrir:
 // en producción lo publica Power Automate desde SharePoint, así el sitio no se recompila por cada vacante.
 // Conteo en tablero de aeropuerto, filtros en placas con reacomodo (FLIP), órdenes de trabajo que se
-// despliegan y "Postularme", que entrega la vacante al formulario F-03 (evento `hl:postular`).
+// despliegan y "Postularme", que entrega la vacante al formulario F-04 (evento `hl:postular`).
 import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks';
 import type { Lang } from '../i18n/rutas';
 import './vacantes.css';

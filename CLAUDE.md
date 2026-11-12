@@ -322,7 +322,10 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     (en `/pendientes/`).
     **R5 · Gestión integral cerrado (12-nov):** `/gestion-integral/` (EN `/en/integrated-management/`) con índice y los 6
     bloques del acta; herramientas tecnológicas nuevas (lista del anexo, por confirmar con TI); fuera foto, prácticas y cierre.
-  - **Siguiente paso:** Plan R (R5: Contacto, Noticias y complementarias); luego R6 y F6. El proveedor de producción (`anthropic` con clave,
+    **R5 · Contacto cerrado (12-nov):** 4 pestañas-enlace del acta (cotizar · proveedores · buzón ético · trabaja con HL)
+    en las 4 URL, sin sedes ni hoja "Motivo"; PDF opcional ≤ 5 MB en los 3 primeros, validado en `enviar.php` (cantidad,
+    tipo real, tamaño) y `public/api/.user.ini` con los límites de subida.
+  - **Siguiente paso:** Plan R (R5: Noticias y complementarias, con `/vacantes`); luego R6 y F6. El proveedor de producción (`anthropic` con clave,
     `foundry` o `azure-openai`) se agrega cuando Gerencia y TI den la credencial. F6 después.
   - **Ojo agente:** al desplegar no borrar `/api/vacantes.json` (lo escribe el flujo de Vacantes de F4 en Power
     Automate; **congelado por decisión de Juan David, 21-oct**: no se toca hasta nuevo aviso). El sitio es `https://hlingenieros.com` sin www.

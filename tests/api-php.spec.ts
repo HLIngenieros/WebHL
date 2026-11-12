@@ -24,7 +24,7 @@ test.beforeAll(async () => {
   writeFileSync(env, `# prueba (con comentario: el .env real los lleva)\nAGENTE_URL=\nTOPE_DIARIO=5\n`);
   const ini = join(dirname(PHP), 'php.ini');
   php = spawn(PHP, [...(existsSync(ini) ? ['-c', ini] : []), '-S', `127.0.0.1:${PUERTO}`, '-t', DIST], {
-    env: { ...process.env, HL_ENV: env, HL_AGENTE_PRUEBA: '1' }, stdio: 'ignore',
+    env: { ...process.env, HL_ENV: env, HL_AGENTE_PRUEBA: '1', HL_FORM_PRUEBA: '1' }, stdio: 'ignore',
   });
   for (let i = 0; i < 50; i++) {
     try { await fetch(`${BASE}/`); return; } catch { await new Promise((r) => setTimeout(r, 100)); }
@@ -67,5 +67,30 @@ test.describe('agente.php (respuestas simuladas)', () => {
     let ultimo = '';
     for (let i = 0; i < 6; i++) ultimo = (await (await preguntar('Proyectos de cemento')).json()).estado;
     expect(ultimo).toBe('limite');
+  });
+});
+
+// R-8: adjuntos PDF de hasta 5 MB, validados en el PHP (tipo real, tamaño, cantidad); HL_FORM_PRUEBA escribe el
+// correo en el temporal en vez de enviarlo.
+test.describe('enviar.php (adjuntos)', () => {
+  const pdf = (bytes = 2000) => new Blob(['%PDF-1.4\n' + 'x'.repeat(bytes)], { type: 'application/pdf' });
+  const proveedor = (archivos: [string, Blob, string][] = []) => {
+    const fd = new FormData();
+    for (const [k, v] of Object.entries({ intencion: 'proveedor', lang: 'es', t: '0', ley: 'si', empresa: 'Demo S.A.S.', nit: '900', nombre: 'Ana',
+      correo: 'ana@demo.com', pais: 'Colombia', categoria: 'Materiales', mensaje: 'Suministro de acero estructural certificado.' })) fd.append(k, v);
+    for (const [k, b, n] of archivos) fd.append(k, b, n);
+    return fetch(`${BASE}/api/enviar.php`, { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
+  };
+
+  test('acepta un PDF opcional o ninguno', async () => {
+    expect(await (await proveedor()).json()).toMatchObject({ ok: true });
+    expect(await (await proveedor([['adjunto', pdf(), 'presentación.pdf']])).json()).toMatchObject({ ok: true });
+  });
+  test('rechaza lo que no es PDF, lo que pasa de 5 MB y los archivos de más', async () => {
+    const r1 = await proveedor([['adjunto', new Blob(['MZ ejecutable'], { type: 'application/pdf' }), 'falso.pdf']]);
+    expect(r1.status).toBe(422);
+    expect((await r1.json()).campos).toContain('adjunto');
+    expect((await proveedor([['adjunto', pdf(5 * 1024 * 1024 + 10), 'grande.pdf']])).status).toBe(422);
+    expect((await proveedor([['adjunto', pdf(), 'a.pdf'], ['otro', pdf(), 'b.pdf']])).status).toBe(422);
   });
 });

@@ -2,6 +2,6 @@
 <Files "conocimiento.json">
   Require all denied
 </Files>
-<FilesMatch "\.(tmp|lock)$">
+<FilesMatch "\.(tmp|lock)$|^\.user\.ini$">
   Require all denied
 </FilesMatch>
