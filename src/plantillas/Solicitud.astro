@@ -1,8 +1,11 @@
 ---
 // Contacto (acta, R5): solo los 4 formularios, en pestañas y sin sedes. Cada pestaña es un enlace a su URL
 // (Contacto, Proveedores, Buzón ético, Trabaje con nosotros), así funciona sin JS y cada una tiene su título.
+// Con `vacantes`, es la página /vacantes del pie (R-9): sin pestañas, el tablero y debajo el formulario F-04, que
+// recibe la vacante de "Postularme" (evento `hl:postular`, Vacantes.tsx sin cambios: el flujo sigue congelado).
 import Base from '../layouts/Base.astro';
 import Pod from '../components/Pod.astro';
+import Pestanas from '../components/Pestanas.astro';
 import Formulario from '../components/Formulario';
 import Vacantes from '../components/Vacantes';
 import { cargar } from '../lib/datos';
@@ -11,12 +14,17 @@ import { FORMULARIOS, PAGINAS, formulario, type Intencion } from '../lib/formula
 import { ruta, type Lang } from '../i18n/rutas';
 import { PAISES } from '../i18n/ui';
 
-interface Props { lang: Lang; alterno: string; intencion: Intencion }
-const { lang, alterno, intencion } = Astro.props;
+interface Props { lang: Lang; alterno: string; intencion: Intencion; vacantes?: boolean }
+const { lang, alterno, intencion, vacantes = false } = Astro.props;
 const { datos } = await cargar();
 const sitio = datos.sitio[0].data;
 const def = formulario(intencion);
-const pagina = PAGINAS[intencion];
+const VACANTES = {
+  titulo: { es: 'Vacantes', en: 'Jobs' },
+  h1: [{ es: 'Vacantes', en: 'Open' }, { es: 'abiertas', en: 'positions' }],
+  lead: { es: 'Cargos abiertos hoy en obra y en oficina. Elija uno y postúlese con su hoja de vida en el formulario.', en: 'Positions open today on site and in the office. Pick one and apply with your résumé in the form.' },
+};
+const pagina = vacantes ? VACANTES : PAGINAS[intencion];
 const porOrden = <X extends { data: { orden: number } }>(xs: X[]) => [...xs].sort((a, b) => a.data.orden - b.data.orden);
 
 const opciones = {
@@ -38,19 +46,19 @@ const buzones = sitio.contacto.buzones;
       <p class="buzon voz-datos aparece" style="--i:3">
         <span>{lang === 'es' ? 'Llega a' : 'Goes to'}</span> <a href={`mailto:${buzones[intencion]}`}>{buzones[intencion]}</a>
       </p>
+      {intencion === 'empleo' && !vacantes && (
+        <a class="ver-vac aparece" style="--i:4" href={ruta('vacantes', lang)}>{lang === 'es' ? 'Ver vacantes abiertas' : 'See open positions'} <span aria-hidden="true">→</span></a>
+      )}
     </header>
 
     <div class="lado">
-      <nav class="pestanas" aria-label={lang === 'es' ? 'Formularios' : 'Forms'}>
-        {FORMULARIOS.map((f, i) => (
-          <a href={enlaces[f.id]} aria-current={f.id === intencion ? 'page' : undefined} class:list={['pst', { 'pst-etico': f.id === 'etico' }]} style={`--i:${i}`}>
-            <svg viewBox="0 0 40 40" aria-hidden="true"><path d={f.icono} /></svg>
-            <strong>{f.nombre[lang]}</strong><small>{f.desc[lang]}</small>
-          </a>
-        ))}
-      </nav>
+      {!vacantes && (
+        <Pestanas etiqueta={lang === 'es' ? 'Formularios' : 'Forms'} items={FORMULARIOS.map((f) => ({
+          href: enlaces[f.id], nombre: f.nombre[lang], desc: f.desc[lang], icono: f.icono, actual: f.id === intencion, punteada: f.id === 'etico',
+        }))} />
+      )}
 
-      {intencion === 'empleo' && (
+      {vacantes && (
         <div class="tablero-vacantes" id="vacantes">
           <Vacantes client:load lang={lang} fuente="/api/vacantes.json" />
         </div>
@@ -77,33 +85,9 @@ const buzones = sitio.contacto.buzones;
   .lado { display: grid; gap: var(--s4); min-width: 0; }
   .caja-form { scroll-margin-top: calc(var(--bar-h) + var(--s3)); }
 
-  /* Pestañas: placas con pictograma que se traza al pasar; la abierta lleva la línea naranja del menú. */
-  .pestanas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s2); }
-  .pst { position: relative; display: grid; grid-template-columns: 28px 1fr; gap: 2px var(--s2); align-content: start; padding: var(--s2) var(--s3) var(--s3);
-    border: var(--stroke-thin) solid var(--line); border-radius: var(--r-card); background: var(--bg); color: var(--ink); text-decoration: none;
-    transition: border-color var(--t-rapido), transform var(--t-rapido) var(--ease-izaje), box-shadow var(--t-rapido); }
-  .pst::after { content: ''; position: absolute; left: var(--s3); right: var(--s3); bottom: 0; height: 2px; background: var(--hl-naranja);
-    transform: scaleX(0); transform-origin: left; transition: transform var(--t-izaje) var(--ease-izaje); }
-  .pst:hover { border-color: var(--ink); transform: translateY(-4px); box-shadow: var(--sombra-card); }
-  .pst[aria-current='page'] { border-color: var(--accent); }
-  .pst:is(:hover, [aria-current='page'])::after { transform: scaleX(1); }
-  .pst svg { grid-row: span 2; width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: var(--stroke-mid); }
-  .pst[aria-current='page'] svg { stroke: var(--accent); }
-  .pst:is(:hover, [aria-current='page']) svg path { animation: pst-trazo var(--t-trazo) var(--ease-plano) both; }
-  .pst strong { font-family: var(--f-titulo); font-weight: var(--fw-subtitle); font-size: var(--fs-sm); line-height: 1.2; }
-  .pst small { color: var(--muted); font-size: var(--fs-xs); line-height: 1.3; }
-  .pst-etico { border-style: dashed; }
-  .pst-etico[aria-current='page'] { border-style: solid; }
-  @keyframes pst-trazo { from { stroke-dasharray: 160; stroke-dashoffset: 160; } to { stroke-dasharray: 160; stroke-dashoffset: 0; } }
-  /* Bajo 1100 px las placas pierden la descripción; en móvil, cuadrícula de 2 × 2 (las 4 siempre a la vista). */
-  @media (max-width: 1099.98px) {
-    .pst { grid-template-columns: 24px 1fr; align-items: center; padding-block: var(--s2); }
-    .pst svg { grid-row: auto; width: 24px; height: 24px; }
-    .pst small { display: none; }
-  }
-  @media (max-width: 639.98px) { .pestanas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (prefers-reduced-motion: reduce) { .pst:hover { transform: none; } .pst svg path { animation: none !important; } }
-
-  /* Trabaje con nosotros: el tablero de vacantes va antes del formulario (pasa a /vacantes con las complementarias). */
+  .ver-vac { justify-self: start; color: var(--accent); font-weight: var(--fw-strong); text-decoration: none; }
+  .ver-vac span { display: inline-block; transition: transform var(--t-rapido) var(--ease-izaje); }
+  .ver-vac:hover span { transform: translateX(4px); }
+  /* Vacantes: el tablero va antes del formulario. */
   .tablero-vacantes { min-width: 0; }
 </style>

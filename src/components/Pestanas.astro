@@ -1,0 +1,44 @@
+---
+// Pestañas-enlace del acta (R-9): placas con pictograma que se traza al pasar; la abierta lleva la línea naranja del
+// menú. Cada pestaña es un enlace a su URL, así funcionan sin JS y cada página conserva su título. Las usan Contacto
+// (4 formularios) y Acreedores · Documentos (2).
+export interface Pestana { href: string; nombre: string; desc: string; icono: string; actual: boolean; punteada?: boolean }
+interface Props { items: Pestana[]; etiqueta: string }
+const { items, etiqueta } = Astro.props;
+---
+<nav class="pestanas" aria-label={etiqueta} style={`--n:${items.length}`}>
+  {items.map((p, i) => (
+    <a href={p.href} aria-current={p.actual ? 'page' : undefined} class:list={['pst', { 'pst-punteada': p.punteada }]} style={`--i:${i}`}>
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d={p.icono} /></svg>
+      <strong>{p.nombre}</strong><small>{p.desc}</small>
+    </a>
+  ))}
+</nav>
+
+<style>
+  .pestanas { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: var(--s2); }
+  .pst { position: relative; display: grid; grid-template-columns: 28px 1fr; gap: 2px var(--s2); align-content: start; padding: var(--s2) var(--s3) var(--s3);
+    border: var(--stroke-thin) solid var(--line); border-radius: var(--r-card); background: var(--bg); color: var(--ink); text-decoration: none;
+    transition: border-color var(--t-rapido), transform var(--t-rapido) var(--ease-izaje), box-shadow var(--t-rapido); }
+  .pst::after { content: ''; position: absolute; left: var(--s3); right: var(--s3); bottom: 0; height: 2px; background: var(--hl-naranja);
+    transform: scaleX(0); transform-origin: left; transition: transform var(--t-izaje) var(--ease-izaje); }
+  .pst:hover { border-color: var(--ink); transform: translateY(-4px); box-shadow: var(--sombra-card); }
+  .pst[aria-current='page'] { border-color: var(--accent); }
+  .pst:is(:hover, [aria-current='page'])::after { transform: scaleX(1); }
+  .pst svg { grid-row: span 2; width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: var(--stroke-mid); }
+  .pst[aria-current='page'] svg { stroke: var(--accent); }
+  .pst:is(:hover, [aria-current='page']) svg path { animation: pst-trazo var(--t-trazo) var(--ease-plano) both; }
+  .pst strong { font-family: var(--f-titulo); font-weight: var(--fw-subtitle); font-size: var(--fs-sm); line-height: 1.2; }
+  .pst small { color: var(--muted); font-size: var(--fs-xs); line-height: 1.3; }
+  .pst-punteada { border-style: dashed; }
+  .pst-punteada[aria-current='page'] { border-style: solid; }
+  @keyframes pst-trazo { from { stroke-dasharray: 160; stroke-dashoffset: 160; } to { stroke-dasharray: 160; stroke-dashoffset: 0; } }
+  /* Bajo 1100 px las placas pierden la descripción; en móvil, cuadrícula de 2 columnas (todas siempre a la vista). */
+  @media (max-width: 1099.98px) {
+    .pst { grid-template-columns: 24px 1fr; align-items: center; padding-block: var(--s2); }
+    .pst svg { grid-row: auto; width: 24px; height: 24px; }
+    .pst small { display: none; }
+  }
+  @media (max-width: 639.98px) { .pestanas { grid-template-columns: repeat(min(var(--n), 2), minmax(0, 1fr)); } }
+  @media (prefers-reduced-motion: reduce) { .pst:hover { transform: none; } .pst svg path { animation: none !important; } }
+</style>

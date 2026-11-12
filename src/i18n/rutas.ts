@@ -10,6 +10,7 @@ export const RUTAS = {
   noticias: { es: '/noticias/', en: '/en/news/' },
   contacto: { es: '/contacto/', en: '/en/contact/' },
   trabaje: { es: '/trabaje-con-nosotros/', en: '/en/careers/' },
+vacantes: { es: '/vacantes/', en: '/en/jobs/' },
   proveedores: { es: '/proveedores/', en: '/en/suppliers/' },
   buzon: { es: '/buzon-etico/', en: '/en/ethics-line/' },
   acreedores: { es: '/acreedores/', en: '/en/creditors/' },
@@ -22,8 +23,8 @@ export type ClaveRuta = keyof typeof RUTAS;
 
 /** Menú de 6 pestañas (acta GHL-WEB-001, guía §7). La clave `hse` es Gestión integral (R5). */
 export const MENU: ClaveRuta[] = ['nosotros', 'proyectos', 'servicios', 'hse', 'noticias', 'contacto'];
-/** Enlaces complementarios del pie (acta). Vacantes vive en Trabaje con nosotros hasta R5. */
-export const PIE: ClaveRuta[] = ['terminos', 'datos', 'trabaje', 'acreedores', 'documentos'];
+/** Enlaces complementarios del pie (acta). */
+export const PIE: ClaveRuta[] = ['terminos', 'datos', 'vacantes', 'acreedores', 'documentos'];
 
 export const ruta = (clave: ClaveRuta, lang: Lang): string => RUTAS[clave][lang];
 

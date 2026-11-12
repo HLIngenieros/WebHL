@@ -3,10 +3,11 @@
 // isla Documentos.tsx con el catálogo de la colección (plan AG.11), ya en el HTML; aquí van la cabecera con la planoteca de alambre que se dibuja y el cierre que abre el asistente.
 import Base from '../layouts/Base.astro';
 import Pod from '../components/Pod.astro';
+import Pestanas from '../components/Pestanas.astro';
 import Documentos from '../components/Documentos';
 import { ruta, type Lang } from '../i18n/rutas';
 import { t } from '../i18n/ui';
-import { documentos } from '../lib/documentos';
+import { documentos, pestanasPublicas } from '../lib/documentos';
 
 interface Props { lang: Lang; alterno: string }
 const { lang, alterno } = Astro.props;
@@ -48,6 +49,8 @@ const T = {
       </svg>
     </header>
 
+    <div class="pst-pub"><Pestanas etiqueta={lang === 'es' ? 'Información pública' : 'Public information'} items={pestanasPublicas(lang, 'documentos')} /></div>
+
     <Documentos client:load lang={lang} docs={docs} />
 
     <aside class="cierre">
@@ -69,6 +72,7 @@ const T = {
 </script>
 
 <style>
+  .pst-pub { max-width: 760px; margin-block: var(--s5); }
   .documentos { padding-block: var(--s5) var(--s7); }
   .cab { display: grid; gap: var(--s4); align-items: end; }
   h1 { margin: var(--s3) 0 0; font-size: var(--fs-h1); line-height: var(--lh-display); }

@@ -69,7 +69,7 @@ test('Hablar con HL abre el agente sin navegar y Escape lo cierra', async ({ pag
 });
 
 test('las vacantes se filtran y "Postularme" entrega la vacante al formulario', async ({ page }) => {
-  await page.goto('/trabaje-con-nosotros/');
+  await page.goto('/vacantes/');
   const vacantes = page.locator('.vc-vac');
   await expect(vacantes.first()).toBeVisible();
   const total = await vacantes.count();
