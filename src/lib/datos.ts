@@ -130,7 +130,7 @@ export async function rutasNoticias(lang: Lang, soloConMinimo = false) {
     const par = datos.noticias.find((x) => x.data.lang === otro && x.id.replace(/\.\w+$/, '') === id); return par ? `${RUTAS.noticias[otro]}${par.data.slug}/` : RUTAS.noticias[otro]; };
   const items = lista.map((x, i) => ({
     codigo: codigo(i), url: `${base}${x.data.slug}/`, titulo: x.data.titulo, resumen: x.data.resumen, fecha: x.data.fecha,
-    tipo: x.data.tipo, foto: x.data.foto, etiqueta: x.data.etiqueta,
+    tipo: x.data.tipo, foto: x.data.foto, etiqueta: x.data.etiqueta, muestra: x.data.muestra,
   }));
   return [
     { params: { slug: undefined }, props: { tipo: 'indice' as const, lang, alterno: RUTAS.noticias[otro], items } },

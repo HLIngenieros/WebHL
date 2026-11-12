@@ -27,7 +27,7 @@ const url = new URL(Astro.url.pathname, Astro.site).href;
       {n.foto && <Foto src={n.foto} alt="" sizes="100vw" prioridad />}
       <span class="tinte" aria-hidden="true"></span>
       <div class="wrap hero-in">
-        <span class="voz-datos">{codigo} · {t(lang, n.tipo === 'adjudicado' ? 'adjudicado' : 'noticia')}</span>
+        <span class="voz-datos">{codigo} · {t(lang, n.tipo)}{n.muestra && <> · {t(lang, 'muestra')}</>}</span>
         <h1>{n.titulo}</h1>
       </div>
       <span class="sello" aria-hidden="true"><small class="voz-datos">{t(lang, 'recibido')}</small><b>{sello}</b></span>
@@ -86,8 +86,8 @@ const url = new URL(Astro.url.pathname, Astro.site).href;
   .lectura { position: sticky; top: var(--bar-h); z-index: 5; height: 4px; }
   .lectura i { display: block; height: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); }
   .hero { position: relative; min-height: 420px; overflow: hidden; background: var(--azul-900); color: var(--hl-blanco); display: flex; align-items: flex-end; }
-  .hero :global(img) { position: absolute; inset: 0; width: 100%; max-width: none; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.1); transform: scale(1.1); }
-  .tinte { position: absolute; inset: 0; background: var(--accent); mix-blend-mode: multiply; opacity: .8; }
+  .hero :global(img) { position: absolute; inset: 0; width: 100%; max-width: none; height: 100%; object-fit: cover; transform: scale(1.1); }
+  .tinte { position: absolute; inset: 0; background: var(--velo-video); } /* capa oscura del Home: foto a color, texto legible */
   .hero-in { position: relative; display: grid; gap: var(--s2); padding-block: var(--s6) var(--s5); }
   .hero-in .voz-datos { color: var(--azul-50); }
   h1 { margin: 0; max-width: 20ch; color: var(--hl-blanco); font-size: var(--fs-h1); line-height: var(--lh-display); animation: aparece var(--t-izaje) var(--ease-izaje) both; }
@@ -115,7 +115,7 @@ const url = new URL(Astro.url.pathname, Astro.site).href;
   .rel .voz-datos, .rel .ir { color: var(--accent); }
   .rel b { font-size: var(--fs-lead); }
   .compartir { display: grid; gap: var(--s2); align-content: start; }
-  .compartir a, .compartir button { position: relative; display: flex; align-items: center; min-height: 44px; padding: 0 var(--s3); overflow: hidden; background: var(--paper); border: var(--border-strong) solid var(--ink); color: var(--ink); font: inherit; text-decoration: none; cursor: pointer; transition: background-color var(--t-rapido) ease, color var(--t-rapido) ease; }
+  .compartir a, .compartir button { position: relative; display: flex; align-items: center; min-height: 44px; padding: 0 var(--s3); overflow: hidden; background: var(--bg); border: var(--stroke-thin) solid var(--line); border-radius: var(--r-card); color: var(--ink); font: inherit; text-decoration: none; cursor: pointer; transition: background-color var(--t-rapido) ease, color var(--t-rapido) ease; }
   .compartir a:hover, .compartir button:hover { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
   @media (min-width: 900px) {
     .cuerpo-g { grid-template-columns: minmax(0, 3fr) minmax(0, 7fr) minmax(0, 2fr); }

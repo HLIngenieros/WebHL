@@ -144,15 +144,23 @@ test.describe('acreedores y legales', () => {
   });
 });
 
-test.describe('noticias con menos de 3 entradas', () => {
-  test('la sección sigue en el menú y dice que pronto habrá; el inicio no muestra bloque', async ({ page }) => {
-    await page.setViewportSize({ width: 1366, height: 900 });
+test.describe('noticias (acta: adjudicaciones, iniciativas y eventos)', () => {
+  test('el índice filtra por tipo y la marca sigue al botón también en dos filas (móvil)', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
     const r = await page.goto('/noticias/');
     expect(r?.status()).toBe(200);
-    await expect(page.locator('.pronto')).toBeVisible();
     await expect(page.locator('#nav-principal a[href="/noticias/"]')).toHaveCount(1);
-    await page.goto('/');
-    await expect(page.locator('.noticias-inicio')).toHaveCount(0);
+    const tarjetas = page.locator('.noti:not([hidden])');
+    const total = await tarjetas.count();
+    expect(total).toBeGreaterThanOrEqual(3);
+    const boton = page.locator('.filtros button[data-f="iniciativa"]');
+    await boton.click();
+    await expect.poll(() => tarjetas.count()).toBeLessThan(total);
+    await expect(tarjetas.first()).toHaveAttribute('data-tipo', 'iniciativa');
+    await page.waitForTimeout(700);
+    const [m, bb] = await Promise.all([page.locator('.filtros .marca').boundingBox(), boton.boundingBox()]);
+    expect(Math.abs(m!.y - bb!.y)).toBeLessThan(2);
+    expect(Math.abs(m!.height - bb!.height)).toBeLessThan(2);
   });
 
   test('regla pura: hacen falta 3 en español', async () => {

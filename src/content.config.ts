@@ -195,7 +195,8 @@ const noticias = defineCollection({
     titulo: z.string(),
     resumen: z.string(),
     fecha: z.coerce.date(),
-    tipo: z.enum(['noticia', 'adjudicado']),
+    tipo: z.enum(['adjudicacion', 'iniciativa', 'evento']), // acta GHL-WEB-001: adjudicaciones, iniciativas y eventos
+    muestra: z.boolean().optional(), // entrada de muestra (R5): bloquea el lanzamiento hasta reemplazarla
     foto: image().optional(),
     proyecto: reference('proyectos').optional(),
     etiqueta: z.string().optional(),

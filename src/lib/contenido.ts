@@ -39,6 +39,7 @@ interface Hito extends ConIdiomas { anio?: number; foto?: unknown }
 interface Testimonio { autorizado: boolean; cargo: Texto; cita: Texto }
 interface Sitio { paises?: string[]; asociadas?: { nombre?: string; aprobada?: boolean }[]; clientes?: { nombre?: string }[]; video?: object; confirmar?: string[] }
 interface Pagina { pagina: string; lang: Lang; revisionJuridica?: boolean; confirmar?: string[] }
+interface Noticia { lang: Lang; muestra?: boolean }
 
 export interface Datos {
   proyectos?: Entrada<Proyecto>[];
@@ -50,6 +51,7 @@ export interface Datos {
   testimonios?: Entrada<Testimonio>[];
   sitio?: Entrada<Sitio>[];
   paginas?: Entrada<Pagina>[];
+  noticias?: Entrada<Noticia>[];
 }
 
 export type Pendiente = {
@@ -200,6 +202,9 @@ export function auditar(datos: Datos, opciones: { modo: 'desarrollo' | 'lanzamie
     if (data.lang === 'es' && !paginas.some((x) => x.data.pagina === data.pagina && x.data.lang === 'en')) add('paginas', id, 'en', 'traduccion');
     if (['datos', 'terminos', 'acreedores'].includes(data.pagina) && !data.revisionJuridica) add('paginas', id, 'revisión jurídica', 'confirmar');
     dudas('paginas', id, data.confirmar);
+  }
+  for (const { id, data } of datos.noticias ?? []) {
+    if (data.lang === 'es' && data.muestra) add('noticias', id, 'muestra', 'insumo', true, 'entrada de muestra: reemplazar por una noticia real (adjudicación, iniciativa o evento)');
   }
 
   const bloqueantes = out.filter((x) => x.bloquea);
