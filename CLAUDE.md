@@ -335,7 +335,7 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     Contacto corregido (banda de pasos reservada). 422 pruebas, presupuesto OK, Lighthouse móvil 98-99 en Home, explorador,
     Gestión integral y Contacto.
     **Ajustes de Juan David (13-nov, maqueta `design/maquetas/ajustes-13nov.html`):** Quiénes somos con recibimiento "Puente"
-    (4 obras actuales que se funden, la ventana cruza hacia la tira); año de la tira con ancho por dígito (sin hueco tras el
+    (4 obras actuales que se funden; la ventana ya no cruza hacia la tira: se amontonaba con su foto grande); año de la tira con ancho por dígito (sin hueco tras el
     "1"); Gestión integral con los 3 anillos ISO que se cruzan en el SGI, Política en `--azul-800` (separada de Indicadores) y
     herramientas como diagrama (4 módulos + Microsoft 365 `transversal`; `logo:` opcional en `public/logos/`, por confirmar
     con TI). `/vacantes` sin formulario: tablero a todo el ancho y "Postularme" lleva a Trabaje con HL con la vacante en la

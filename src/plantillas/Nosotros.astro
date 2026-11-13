@@ -100,23 +100,12 @@ const dos = (n: number) => String(n).padStart(2, '0');
 </script>
 
 <style>
-  /* La ventana cruza la costura hacia la tira (--puente): la cabecera va encima y la tira deja ese espacio. */
-  .cabecera { --puente: 96px; position: relative; z-index: 1; background: var(--bg); padding-top: var(--s7); }
-  /* Solo la lista (sin JS o movimiento reducido): el escenario activo ya deja ese margen arriba. */
-  .cabecera + :global(.tira:not(.activa)) { padding-top: 96px; }
-  .cabecera-g { display: grid; gap: var(--s5); }
-  .izq { padding-bottom: var(--s5); }
-  @media (min-width: 900px) {
-    .cabecera { --puente: 140px; }
-    .cabecera + :global(.tira:not(.activa)) { padding-top: 140px; }
-    .cabecera-g { grid-template-columns: 7fr 5fr; gap: var(--s6); }
-    .izq { padding-bottom: var(--s7); }
-  }
-  .ventana {
-    position: relative; align-self: end; margin: 0 0 calc(var(--puente) * -1); aspect-ratio: 4 / 3; overflow: hidden;
-    border-radius: var(--r-card); background: var(--azul-900);
-  }
-  @media (min-width: 900px) { .ventana { aspect-ratio: 4 / 5; } }
+  /* La ventana se queda dentro del recibimiento (13-nov): cruzar hacia la tira la amontonaba con su foto grande. */
+  .cabecera { background: var(--bg); padding-block: var(--s7) var(--s6); }
+  .cabecera-g { display: grid; gap: var(--s5); align-items: center; }
+  @media (min-width: 900px) { .cabecera-g { grid-template-columns: 7fr 5fr; gap: var(--s6); } }
+  .ventana { position: relative; margin: 0; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--r-card); background: var(--azul-900); }
+  @media (min-width: 900px) { .ventana { aspect-ratio: 5 / 4; } }
   .capa { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease; }
   .capa.ver { opacity: 1; }
   .capa :global(img.foto) { width: 100%; height: 100%; max-width: none; object-fit: cover; }

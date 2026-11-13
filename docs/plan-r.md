@@ -155,7 +155,7 @@ Pedidos por Juan David y decididos con la maqueta `design/maquetas/ajustes-13nov
 
 | # | Ajuste | Estado |
 |---|---|---|
-| A1 | Quiénes somos: recibimiento "Puente" con 4 obras actuales que se funden; la ventana cruza hacia la tira | ✔ |
+| A1 | Quiénes somos: recibimiento con 4 obras actuales que se funden (la ventana se queda dentro: cruzar hacia la tira la amontonaba) | ✔ |
 | A2 | Tira: el año ajusta el ancho a cada dígito (sin hueco tras el "1") | ✔ |
 | A3 | Gestión integral: anillos ISO 9001 · 14001 · 45001 que se cruzan en el SGI | ✔ |
 | A4 | Política en azul 800: separada de Indicadores | ✔ |
