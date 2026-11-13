@@ -17,6 +17,51 @@
         ],
         "createdAt": "2026-11-12T13:46:16.232Z",
         "reason": "Client and sector ribbons are explicitly requested in acta GHL-WEB-001 §3.6; they pause on hover and stop under reduced-motion"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "design/maquetas/ajustes-13nov.html"
+        ],
+        "createdAt": "2026-11-13T13:59:19.602Z",
+        "reason": "Claude (triage 13-nov): maqueta de decisión ya aprobada y construida, no se publica; hallazgo es falso positivo: la barra centra con align-items en 64 px y marco es contenedor"
+      },
+      {
+        "rule": "buried-raster",
+        "value": "*",
+        "files": [
+          "design/maquetas/ajustes-13nov.html"
+        ],
+        "createdAt": "2026-11-13T13:59:19.955Z",
+        "reason": "Claude (triage 13-nov): maqueta de decisión ya aprobada y construida, no se publica; hallazgo es falso positivo: capas ocultas del fundido del carrusel"
+      },
+      {
+        "rule": "wide-tracking",
+        "value": "*",
+        "files": [
+          "design/maquetas/ajustes-13nov.html"
+        ],
+        "createdAt": "2026-11-13T13:59:20.310Z",
+        "reason": "Claude (triage 13-nov): maqueta de decisión ya aprobada y construida, no se publica; hallazgo es falso positivo: 0,12em solo en rótulos cortos en mayúsculas (.mono)"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "design/maquetas/ajustes-13nov.html"
+        ],
+        "createdAt": "2026-11-13T13:59:20.673Z",
+        "reason": "Claude (triage 13-nov): maqueta de decisión ya aprobada y construida, no se publica; hallazgo es falso positivo: línea de hover de los módulos, igual que en el sitio"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/plantillas/Hse.astro"
+        ],
+        "createdAt": "2026-11-13T13:59:27.646Z",
+        "reason": "Claude (triage 13-nov): única coincidencia es .mod::before, línea de 3 px arriba que solo se traza al pasar el cursor (gesto de la casa, como Pestanas); no es franja lateral fija"
       }
     ]
   }
