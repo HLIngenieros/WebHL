@@ -335,8 +335,9 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     Contacto corregido (banda de pasos reservada). 422 pruebas, presupuesto OK, Lighthouse móvil 98-99 en Home, explorador,
     Gestión integral y Contacto.
   - **Siguiente paso:** F6 · Lanzamiento (en espera de la aprobación oficial y de los insumos de `/pendientes/`). Nosotros
-    ya da 100/100/100/100 tras R3 (13-nov, Lighthouse 13: LCP 1,1 s; `/en/about/` 100, `/en/` 99). El `.htaccess` sigue sin
-    probar en Apache real (orden entre `mod_rewrite` y `mod_alias`). El proveedor de producción (`anthropic` con clave,
+    ya da 100/100/100/100 tras R3 (13-nov, Lighthouse 13: LCP 1,1 s; `/en/about/` 100, `/en/` 99). El `.htaccess` se prueba
+    en el hosting al desplegar en F6 (decisión 13-nov; vigilar el orden entre `mod_rewrite` y `mod_alias`: `http://www…` a
+    una URL vieja debe llegar a `https://hlingenieros.com/<destino>` en un salto, o máximo dos). El proveedor de producción (`anthropic` con clave,
     `foundry` o `azure-openai`) se agrega cuando Gerencia y TI den la credencial. F6 después.
   - **Ojo agente:** al desplegar no borrar `/api/vacantes.json` (lo escribe el flujo de Vacantes de F4 en Power
     Automate; **congelado por decisión de Juan David, 21-oct**: no se toca hasta nuevo aviso). El sitio es `https://hlingenieros.com` sin www.
