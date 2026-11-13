@@ -50,13 +50,27 @@ function iniciar() {
     anchoRegla = regla.offsetWidth || 1;
   };
 
+  // Ancho de cada dígito (0-9) en em: la caja toma el del dígito visible, así el "1" no deja un hueco.
+  let anchos: number[] = [];
+  const medirDigitos = () => {
+    const d = digitos[0];
+    if (!d) return;
+    const fs = parseFloat(getComputedStyle(d).fontSize) || 1;
+    anchos = [...d.children].map((b) => b.getBoundingClientRect().width / fs);
+    alCambiar();
+  };
+
   let y = scrollY, actual = -1, cambio = 0, marco = 0, visible = false, anioPrevio = -1;
   const cuadro = (ahora: number) => {
     marco = 0;
     const a = avance((y - inicio) / recorrido, anios);
     if (a.anio !== anioPrevio) {
       anioPrevio = a.anio;
-      String(a.anio).padStart(4, '0').split('').forEach((d, k) => { if (digitos[k]) digitos[k].style.transform = `translateY(${-Number(d) * 10}%)`; });
+      String(a.anio).padStart(4, '0').split('').forEach((d, k) => {
+        if (!digitos[k]) return;
+        digitos[k].style.transform = `translateY(${-Number(d) * 10}%)`;
+        if (anchos.length) digitos[k].parentElement!.style.width = `${anchos[Number(d)]}em`;
+      });
       anioTexto.textContent = String(a.anio);
       cursorAnio.textContent = String(a.anio);
       const p = (a.anio - A0) / (A1 - A0);
@@ -99,6 +113,7 @@ function iniciar() {
   const vigia = new IntersectionObserver(([en]) => { visible = en.isIntersecting; pedir(); });
 
   medir();
+  document.fonts.ready.then(medirDigitos);
   addEventListener('scroll', alScroll, { passive: true });
   addEventListener('resize', alCambiar);
   vigia.observe(sec);

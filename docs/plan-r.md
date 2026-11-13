@@ -148,3 +148,17 @@ porque la banda de pasos del formulario aparecía al hidratar; ahora el HTML ini
 - **Rendimiento:** pasamos de 1 familia a 3 y se suma el video. El LCP del Home lo pone el póster (AVIF, sin precarga del video) y el video se carga después del evento `load`, solo en escritorio y sin `prefers-reduced-motion`. Presupuesto vigente: LCP < 2,0 s y JS ≤ 30 KB gz.
 - **Adjuntos en el PHP:** validación del tipo real (`finfo`), tope de tamaño y de cantidad, sin escritura en el servidor; correo MIME armado a mano.
 - **Fotos:** no hay fotos recientes en alta resolución ni video de obra. Se trabaja con las actuales (≤ 800 px) y póster de muestra, y quedan marcadas en `/pendientes/`.
+
+## Ajustes posteriores (13-nov)
+
+Pedidos por Juan David y decididos con la maqueta `design/maquetas/ajustes-13nov.html` (opciones 1A y 3A):
+
+| # | Ajuste | Estado |
+|---|---|---|
+| A1 | Quiénes somos: recibimiento "Puente" con 4 obras actuales que se funden; la ventana cruza hacia la tira | ✔ |
+| A2 | Tira: el año ajusta el ancho a cada dígito (sin hueco tras el "1") | ✔ |
+| A3 | Gestión integral: anillos ISO 9001 · 14001 · 45001 que se cruzan en el SGI | ✔ |
+| A4 | Política en azul 800: separada de Indicadores | ✔ |
+| A5 | Herramientas como diagrama: 4 módulos + Microsoft 365 transversal (logos por confirmar con TI) | ✔ |
+| A6 | `/vacantes` sin formulario: tablero a todo el ancho; "Postularme" lleva a Trabaje con HL con la vacante | ✔ |
+| A7 | Acreedores con acceso limitado: fuera del pie y de las pestañas; texto discreto en Documentos públicos | ✔ |

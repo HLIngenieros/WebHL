@@ -38,12 +38,12 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, o
   const movido = useRef(false);
 
   useEffect(() => { setJs(true); desde.current = Math.floor(Date.now() / 1000); }, []);
-  // "Postularme" en el tablero de vacantes (Vacantes.tsx) entrega aquí la vacante elegida.
+  // "Postularme" en el tablero de /vacantes (Vacantes.tsx) llega con la vacante en la URL (?vacante, cargo, sede).
   useEffect(() => {
     if (inicial !== 'empleo') return;
-    const tomar = (e: Event) => { setVacante((e as CustomEvent).detail); setEstado((s) => (s === 'ok' ? 'editando' : s)); };
-    addEventListener('hl:postular', tomar);
-    return () => removeEventListener('hl:postular', tomar);
+    const q = new URLSearchParams(location.search), corto = (x: string | null) => (x ?? '').trim().slice(0, 120);
+    const id = corto(q.get('vacante')), titulo = corto(q.get('cargo'));
+    if (id && titulo) setVacante({ id, titulo, sede: corto(q.get('sede')) });
   }, []);
   useEffect(() => { if (movido.current) titulo.current?.focus(); movido.current = true; }, [paso, estado]);
 
@@ -87,7 +87,7 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, o
     fd.append('intencion', def.id); fd.append('lang', lang); fd.append('t', String(desde.current));
     fd.append('sitio_web', trampa.current?.value ?? ''); fd.append('ley', ley ? 'si' : '');
     if (anon) fd.append('anonimo', 'si');
-    if (vacante) fd.append('vacante', `${vacante.id} · ${vacante.titulo} · ${vacante.sede}`);
+    if (vacante) fd.append('vacante', [vacante.id, vacante.titulo, vacante.sede].filter(Boolean).join(" · "));
     for (const c of visibles) c.tipo === 'file' ? archivo.current && fd.append(c.id, archivo.current) : fd.append(c.id, val[c.id] ?? '');
     fd.append('mensaje', val.mensaje ?? '');
     try {
@@ -224,7 +224,7 @@ export default function Formulario({ lang, accion, politica, inicial, buzones, o
       <div class="fm-hojas">
         {vacante && estado !== 'ok' && (
           <div class="fm-vacante" key={vacante.id}>
-            <span class="voz-datos">{tx.postulacion}</span><strong>{vacante.id} · {vacante.titulo} · {vacante.sede}</strong>
+            <span class="voz-datos">{tx.postulacion}</span><strong>{[vacante.id, vacante.titulo, vacante.sede].filter(Boolean).join(" · ")}</strong>
             <button type="button" class="voz-datos" onClick={() => setVacante(null)}>{tx.quitar}</button>
           </div>
         )}

@@ -1,7 +1,7 @@
 // Tablero de vacantes de Trabaje con nosotros (maqueta aprobada 20-oct). Lee /api/vacantes.json al abrir:
 // en producción lo publica Power Automate desde SharePoint, así el sitio no se recompila por cada vacante.
 // Conteo en tablero de aeropuerto, filtros en placas con reacomodo (FLIP), órdenes de trabajo que se
-// despliegan y "Postularme", que entrega la vacante al formulario F-04 (evento `hl:postular`).
+// despliegan y "Postularme", un enlace al formulario F-04 de Trabaje con HL con la vacante en la URL (13-nov).
 import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks';
 import type { Lang } from '../i18n/rutas';
 import './vacantes.css';
@@ -37,7 +37,7 @@ const quieto = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const valida = (v: Partial<Vacante>): v is Vacante =>
   !!(v && v.id && v.titulo && v.publicada && v.cierre && !isNaN(fecha(v.cierre).getTime())) && Array.isArray(v.requisitos ?? []);
 
-export default function Vacantes({ lang, fuente }: { lang: Lang; fuente: string }) {
+export default function Vacantes({ lang, fuente, formulario }: { lang: Lang; fuente: string; formulario: string }) {
   const t = T[lang];
   const [lista, setLista] = useState<Vacante[] | null>(null);
   const [area, setArea] = useState<string | null>(null);
@@ -104,10 +104,7 @@ export default function Vacantes({ lang, fuente }: { lang: Lang; fuente: string 
     const url = `${location.origin}${location.pathname}?vacante=${encodeURIComponent(id)}`;
     navigator.clipboard?.writeText(url).then(() => { setCopiada(id); setTimeout(() => setCopiada(null), 1600); });
   };
-  const postular = (v: Vacante) => {
-    dispatchEvent(new CustomEvent('hl:postular', { detail: { id: v.id, titulo: v.titulo, sede: v.sede } }));
-    document.getElementById('formulario')?.scrollIntoView({ behavior: quieto() ? 'auto' : 'smooth', block: 'start' });
-  };
+  const postular = (v: Vacante) => `${formulario}?${new URLSearchParams({ vacante: v.id, cargo: v.titulo, sede: v.sede })}#formulario`;
 
   return (
     <div class="vc">
@@ -147,8 +144,8 @@ export default function Vacantes({ lang, fuente }: { lang: Lang; fuente: string 
                     <ul class="vc-req">{v.requisitos.map((r, j) => <li key={r} style={`--j:${j}`}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8l4 4 8-8" /></svg>{r}</li>)}</ul>
                   </div>
                   <div class="vc-acciones">
-                    <button type="button" class="fm-btn fm-primario" onClick={() => postular(v)}>{t.postular}</button>
-                    <button type="button" class="fm-btn" onClick={() => copiar(v.id)}>{copiada === v.id ? t.copiado : t.copiar}</button>
+                    <a class="vc-btn vc-primario" href={postular(v)}>{t.postular}</a>
+                    <button type="button" class="vc-btn" onClick={() => copiar(v.id)}>{copiada === v.id ? t.copiado : t.copiar}</button>
                   </div>
                 </div></div>
               </div>

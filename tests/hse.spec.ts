@@ -47,12 +47,14 @@ test.describe('página Gestión integral', () => {
     await expect(page.locator('.compromisos button')).toHaveCount(4);
     await expect(page.locator('.reglas .regla')).toHaveCount(10);
     await expect(page.locator('.eje li')).toHaveCount(3);
-    await expect(page.locator('.herr li')).toHaveCount(5);
+    // Diagrama: 4 módulos y Microsoft 365 como base transversal.
+    await expect(page.locator('.mods .mod')).toHaveCount(4);
+    await expect(page.locator('.diag .base')).toContainText('Microsoft 365');
   });
 
   test('la versión en inglés vive en /en/integrated-management/ y /hse/ ya no existe', async ({ page, request }) => {
     await page.goto('/en/integrated-management/');
-    await expect(page.locator('.herr li').first()).toContainText('Construction management');
+    await expect(page.locator('.mods .mod').first()).toContainText('Construction management');
     await expect(page.locator('#nav-principal a[href="/en/integrated-management/"]')).toHaveAttribute('aria-current', 'page');
     expect((await request.get('/hse/')).status()).toBe(404);
   });
@@ -114,6 +116,13 @@ test.describe('página Gestión integral', () => {
 });
 
 test.describe('acreedores y legales', () => {
+  test('acreedores: fuera del pie; se llega desde un texto discreto en Documentos públicos', async ({ page }) => {
+    await page.goto('/documentos/');
+    await expect(page.locator('footer a[href="/acreedores/"]')).toHaveCount(0);
+    await page.locator('.nota-acreedores a').click();
+    await expect(page).toHaveURL(/\/acreedores\/$/);
+  });
+
   test('acreedores: las 3 convocatorias en PDF descargables desde el sitio', async ({ page, request }) => {
     await page.goto('/acreedores/');
     const docs = page.locator('.linea .doc');

@@ -28,19 +28,44 @@ const INDICE: [string, string][] = [
   ['cert-titulo', t(lang, 'hseCert1')], ['ind-titulo', t(lang, 'hseIndicadores1')], ['pol-titulo', t(lang, 'hsePolitica1')],
   ['reglas-titulo', `${t(lang, 'hseReglas1')} ${t(lang, 'hseReglas2')}`], ['piensa-titulo', 'PIENSA®'], ['herr-titulo', t(lang, 'hseHerramientas1')],
 ];
+const modulos = (pagina.herramientas ?? []).filter((h) => !h.transversal);
+const base = (pagina.herramientas ?? []).find((h) => h.transversal);
+const ANILLOS = [
+  { norma: 'ISO 9001', ambito: t(lang, 'hseCalidad'), cx: 190, cy: 180, tx: 112, ty: 140 },
+  { norma: 'ISO 14001', ambito: t(lang, 'hseAmbiente'), cx: 330, cy: 180, tx: 330, ty: 140 },
+  { norma: 'ISO 45001', ambito: t(lang, 'hseSeguridad'), cx: 260, cy: 300, tx: 260, ty: 370, centro: true },
+];
 ---
 <Base titulo={pagina.titulo} descripcion={pagina.descripcion} lang={lang} alterno={alterno}>
   <!-- Cabecera: título, entrada e índice de los 6 bloques -->
   <section class="wrap cabecera" aria-labelledby="hse-h1">
-    <h1 id="hse-h1"><span class="l"><span>{t(lang, 'hseInicio1')}</span></span> <span class="l"><span>{t(lang, 'hseInicio2')}</span></span></h1>
-    <p class="lead aparece" style="--i:3">{pagina.descripcion}</p>
-    <nav class="indice" aria-label={t(lang, 'hseIndice')}>
-      <ol>
-        {INDICE.map(([id, nombre], i) => (
-          <li class="aparece" style={`--i:${i + 4}`}><a href={`#${id}`}><span class="voz-datos">0{i + 1}</span>{nombre}</a></li>
-        ))}
-      </ol>
-    </nav>
+    <div class="cab-txt">
+      <h1 id="hse-h1"><span class="l"><span>{t(lang, 'hseInicio1')}</span></span> <span class="l"><span>{t(lang, 'hseInicio2')}</span></span></h1>
+      <p class="lead aparece" style="--i:3">{pagina.descripcion}</p>
+      <nav class="indice" aria-label={t(lang, 'hseIndice')}>
+        <ol>
+          {INDICE.map(([id, nombre], i) => (
+            <li class="aparece" style={`--i:${i + 4}`}><a href={`#${id}`}><span class="voz-datos">0{i + 1}</span>{nombre}</a></li>
+          ))}
+        </ol>
+      </nav>
+    </div>
+    {/* Tres normas, un sistema (maqueta ajustes-13nov, 3A): los anillos se trazan y se cruzan en el núcleo. */}
+    <svg class="anillos" viewBox="0 0 520 470" role="img" aria-label={ANILLOS.map((a) => `${a.norma} (${a.ambito})`).join(', ') + ` · ${t(lang, 'hseSgi')}`}>
+      <defs>
+        <clipPath id="anillo-a"><circle cx="190" cy="180" r="130" /></clipPath>
+        <clipPath id="anillo-b"><circle cx="330" cy="180" r="130" /></clipPath>
+      </defs>
+      {ANILLOS.map((a, i) => <circle class="aro" cx={a.cx} cy={a.cy} r="130" pathLength="1" style={`--i:${i}`} />)}
+      <g clip-path="url(#anillo-a)"><g clip-path="url(#anillo-b)"><circle class="nucleo" cx="260" cy="300" r="130" /></g></g>
+      {ANILLOS.map((a, i) => (
+        <g class="et" style={`--i:${i}`}>
+          <text x={a.tx} y={a.ty} class="et-norma" text-anchor={a.centro ? 'middle' : 'start'}>{a.norma}</text>
+          <text x={a.tx} y={a.ty + 22} class="et-ambito" text-anchor={a.centro ? 'middle' : 'start'}>{a.ambito}</text>
+        </g>
+      ))}
+      <text x="260" y="232" class="et-sgi" text-anchor="middle">{lang === 'es' ? 'SGI' : 'IMS'}</text>
+    </svg>
   </section>
 
   <!-- 1 · Certificados -->
@@ -95,15 +120,28 @@ const INDICE: [string, string][] = [
     <section class="herramientas" aria-labelledby="herr-titulo">
       <div class="wrap">
         <div class="cab"><h2 id="herr-titulo" class="tit h2-barra">{t(lang, 'hseHerramientas1')} <span>{t(lang, 'hseHerramientas2')}</span></h2></div>
-        <ul class="herr revela">
-          {pagina.herramientas.map((h, i) => (
-            <li style={`--i:${i}`}>
-              <span class="voz-datos cat">{h.categoria}</span>
-              <h3>{h.nombre}</h3>
-              <p>{h.uso}</p>
-            </li>
-          ))}
-        </ul>
+        {/* Diagrama (maqueta ajustes-13nov, 5): módulos arriba, conectores con pulso y la base transversal debajo. */}
+        <div class="diag revela">
+          <ul class="mods">
+            {modulos.map((h, i) => (
+              <li class="mod" style={`--i:${i}`}>
+                <span class="voz-datos cat">0{i + 1} · {h.categoria}</span>
+                <h3 class="logo">{h.logo ? <img src={h.logo} alt={h.nombre} height="32" loading="lazy" /> : h.nombre}</h3>
+                <p>{h.uso}</p>
+              </li>
+            ))}
+          </ul>
+          {base && (
+            <>
+              <div class="con" aria-hidden="true" style={`--n:${modulos.length}`}>{modulos.map((_, i) => <i style={`--i:${i}`} />)}</div>
+              <div class="base">
+                <h3 class="logo">{base.logo ? <img src={base.logo} alt={base.nombre} height="32" loading="lazy" /> : base.nombre}</h3>
+                <p><span class="voz-datos">{t(lang, 'hseTransversal')} · {base.categoria}</span>{base.uso}</p>
+                {base.apps && <ul class="apps">{base.apps.map((a) => <li class="voz-datos">{a}</li>)}</ul>}
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </section>
   )}
@@ -134,7 +172,20 @@ const INDICE: [string, string][] = [
   .cab > .voz-datos { color: var(--muted); }
 
   /* Cabecera */
-  .cabecera { display: grid; gap: var(--s4); justify-items: start; padding-block: var(--s6); }
+  .cabecera { display: grid; gap: var(--s5); align-items: center; padding-block: var(--s6); }
+  .cab-txt { display: grid; gap: var(--s4); justify-items: start; }
+  @media (min-width: 900px) { .cabecera { grid-template-columns: 7fr 5fr; gap: var(--s6); } }
+  /* Anillos ISO: se trazan uno tras otro, luego aparecen las etiquetas y el núcleo late. */
+  .anillos { width: 100%; max-width: 480px; justify-self: center; overflow: visible; }
+  .aro { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-dasharray: 1; stroke-dashoffset: 1; animation: aro var(--t-trazo) var(--ease-plano) forwards; animation-delay: calc(var(--i) * 250ms); }
+  @keyframes aro { to { stroke-dashoffset: 0; } }
+  .nucleo { fill: var(--hl-naranja); opacity: 0; transform-box: fill-box; transform-origin: center; animation: nucleo var(--t-aparece) ease 1.4s forwards, late 2.4s ease-in-out 2.2s infinite; }
+  @keyframes nucleo { to { opacity: 1; } }
+  @keyframes late { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+  .et { opacity: 0; animation: nucleo var(--t-aparece) ease forwards; animation-delay: calc(700ms + var(--i) * 200ms); }
+  .et-norma { font-family: var(--f-titulo); font-weight: var(--fw-title); font-size: 17px; fill: var(--ink); } /* unidades del viewBox */
+  .et-ambito { font-size: 15px; fill: var(--muted); } /* unidades del viewBox */
+  .et-sgi { font-family: var(--f-titulo); font-weight: var(--fw-display); font-size: 20px; fill: var(--azul-900); opacity: 0; animation: nucleo var(--t-aparece) ease 1.7s forwards; } /* unidades del viewBox */
   h1 { margin: 0; max-width: 18ch; font-size: var(--fs-h1); line-height: var(--lh-display); }
   h1 .l { display: block; overflow: hidden; padding-bottom: .06em; }
   h1 .l > span { display: block; animation: linea var(--t-izaje) var(--ease-izaje) both; }
@@ -200,26 +251,52 @@ const INDICE: [string, string][] = [
 
   /* 6 · Herramientas */
   .herramientas { padding-block: var(--s7); background: var(--paper); }
-  .herr { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s3); grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-  .herr li {
+  .mods { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s3); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (min-width: 900px) { .mods { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .mod {
     position: relative; display: grid; gap: var(--s2); align-content: start; padding: var(--s4); overflow: hidden;
     background: var(--bg); border: var(--border) solid var(--line); border-radius: var(--r-card);
   }
-  /* Línea naranja que se traza al pasar: la herramienta "se conecta". */
-  .herr li::before { content: ''; position: absolute; left: 0; top: 0; height: 3px; width: 100%; background: var(--hl-naranja); transform: scaleX(0); transform-origin: left; transition: transform var(--t-aparece) var(--ease-plano); }
-  .herr li:hover::before { transform: scaleX(1); }
-  .herr .cat { color: var(--accent); }
-  .herr h3 { margin: 0; font-size: var(--fs-h3); line-height: var(--lh-title); }
-  .herr p { margin: 0; color: var(--muted); font-size: var(--fs-sm); }
-  :global(html.js) .herr li { transition: opacity var(--t-izaje) var(--ease-izaje), transform var(--t-izaje) var(--ease-izaje), box-shadow var(--t-rapido) ease; transition-delay: calc(var(--i) * 80ms); }
-  :global(html.js) .herr:not(:global(.visible)) li { opacity: 0; transform: translateY(28px); }
-  @media (hover: hover) { :global(html.js) .herr:global(.visible) li:hover { transform: translateY(-4px); box-shadow: var(--sombra-card); transition-delay: 0s; } }
-  :global(html.sin-revela) .herr li { opacity: 1; transform: none; }
+  /* Línea naranja que se traza al pasar: el módulo "se conecta". */
+  .mod::before { content: ''; position: absolute; left: 0; top: 0; height: 3px; width: 100%; background: var(--hl-naranja); transform: scaleX(0); transform-origin: left; transition: transform var(--t-aparece) var(--ease-plano); }
+  .mod:hover::before { transform: scaleX(1); }
+  .cat { color: var(--accent); }
+  /* Casilla del logo: mientras no haya SVG aprobado, el nombre hace de logotipo. */
+  .logo {
+    display: grid; place-items: center; min-height: 56px; margin: 0; padding: var(--s1) var(--s2); border: var(--border) dashed var(--line);
+    border-radius: var(--r-card); font-size: var(--fs-h3); line-height: var(--lh-title); text-align: center;
+  }
+  .logo img { height: 32px; width: auto; }
+  .mod p { margin: 0; color: var(--muted); font-size: var(--fs-sm); }
+  /* Conectores: una guía punteada por módulo y un pulso que sube desde la base (solo escritorio). */
+  .con { display: none; }
+  @media (min-width: 900px) {
+    .con { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: var(--s3); height: var(--s6); }
+    .con i { position: relative; justify-self: center; width: 2px; background: repeating-linear-gradient(180deg, var(--azul-200) 0 6px, transparent 6px 10px); }
+    .con i::after { content: ''; position: absolute; left: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--hl-naranja); animation: pulso 2.2s ease-in-out infinite; animation-delay: calc(var(--i) * 400ms); }
+  }
+  @keyframes pulso { 0% { top: 100%; opacity: 0; } 15%, 85% { opacity: 1; } 100% { top: -8px; opacity: 0; } }
+  .base {
+    display: grid; gap: var(--s3) var(--s5); align-items: center; margin-top: var(--s3); padding: var(--s4) var(--s5);
+    background: var(--azul-900); color: var(--hl-blanco); border-radius: var(--r-card);
+  }
+  @media (min-width: 900px) { .base { grid-template-columns: 220px 1fr auto; margin-top: 0; } }
+  .base .logo { border-color: color-mix(in srgb, var(--hl-trazo) 45%, transparent); color: var(--hl-blanco); }
+  .base p { margin: 0; color: var(--azul-50); font-size: var(--fs-sm); }
+  .base p .voz-datos { display: block; margin-bottom: var(--s1); color: var(--hl-naranja); }
+  .apps { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s2); }
+  .apps li { padding: 2px var(--s2); border: var(--border) solid color-mix(in srgb, var(--hl-trazo) 45%, transparent); color: var(--hl-trazo); }
+  :global(html.js) .mod, :global(html.js) .base { transition: opacity var(--t-izaje) var(--ease-izaje), transform var(--t-izaje) var(--ease-izaje), box-shadow var(--t-rapido) ease; transition-delay: calc(var(--i, 4) * 80ms); }
+  :global(html.js) .diag:not(:global(.visible)) :is(.mod, .base) { opacity: 0; transform: translateY(28px); }
+  @media (hover: hover) { :global(html.js) .diag:global(.visible) .mod:hover { transform: translateY(-4px); box-shadow: var(--sombra-card); transition-delay: 0s; } }
+  :global(html.sin-revela) :is(.mod, .base) { opacity: 1; transform: none; }
 
   @media (prefers-reduced-motion: reduce) {
     h1 .l > span { animation: none; }
-    .cert, .sello, .herr li::before, .eje .bur, .indice a { transition: none; }
-    :global(html.js) .certs .cert, :global(html.js) .certs .sello, :global(html.js) .herr li { opacity: 1; transform: none; transition: none; }
+    .aro, .nucleo, .et, .et-sgi { animation: none; stroke-dashoffset: 0; opacity: 1; }
+    .cert, .sello, .mod::before, .eje .bur, .indice a { transition: none; }
+    .con i::after { animation: none; display: none; }
+    :global(html.js) .certs .cert, :global(html.js) .certs .sello, :global(html.js) :is(.mod, .base) { opacity: 1; transform: none; transition: none; }
     :global(html.js) .eje::before { transform: none; }
   }
 </style>

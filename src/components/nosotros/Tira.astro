@@ -112,9 +112,9 @@ const datos = JSON.stringify(hitos.map((h, i) => ({ anio: h.anio, decada: h.deca
   }
   .escena-anio { grid-column: 1; grid-row: 1; display: flex; font-family: var(--f-titulo); font-weight: var(--fw-negra); font-size: var(--fs-anio-tira); line-height: .82; letter-spacing: -.04em; }
   .escena-anio-texto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-  .digito { display: block; height: .82em; overflow: hidden; }
+  .digito { display: block; height: .82em; overflow: hidden; transition: width .5s var(--ease-izaje); }
   .digito i { display: block; font-style: normal; transition: transform .5s var(--ease-izaje); }
-  .digito b { display: block; height: .82em; font-weight: inherit; }
+  .digito b { display: block; width: max-content; height: .82em; font-weight: inherit; }
   .escena-hito { grid-column: 1; grid-row: 2; align-self: start; margin-top: var(--s5); transition: opacity var(--t-aparece) var(--ease-izaje), transform var(--t-aparece) var(--ease-izaje); }
   .escena-hito.cambia { opacity: 0; transform: translateY(14px); }
   .escena-meta { display: flex; align-items: center; gap: var(--s2); margin: 0; }

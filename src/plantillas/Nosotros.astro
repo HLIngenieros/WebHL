@@ -8,7 +8,8 @@ import Valores from '../components/nosotros/Valores.astro';
 import Presencia from '../components/nosotros/Presencia.astro';
 import Tira from '../components/nosotros/Tira.astro';
 import { cargar } from '../lib/datos';
-import { txt } from '../lib/contenido';
+import { bloque, txt } from '../lib/contenido';
+import Foto from '../components/ui/Foto.astro';
 import { hitos, type HistoriaData } from '../lib/nosotros';
 import { type Lang } from '../i18n/rutas';
 import { PAISES, t } from '../i18n/ui';
@@ -27,15 +28,34 @@ const columbus = datos.proyectos.find((x) => x.id === 'planta-columbus' && x.dat
 const lineaTiempo = hitos(datos.historia as unknown as { id: string; data: HistoriaData }[], lang, new Date(),
   { foto: columbus?.data.fotos[1]?.archivo as ImageMetadata | undefined });
 const paises = sitio.paises.map((c) => ({ codigo: c, nombre: PAISES[c][lang] }));
+// Recibimiento "Puente" (maqueta ajustes-13nov, 1A): obras actuales que se funden solas; no repiten las fotos de la
+// tira (archivo histórico) ni la de Misión (equipo). Solo proyectos no discretos (D6).
+const OBRAS = ['planta-columbus', 'planta-chimborazo', 'ptar-salitre', 'planta-cementos-progreso'];
+const ventana = OBRAS.map((id) => datos.proyectos.find((x) => x.id === id && x.data.visibilidad !== 'discreta'))
+  .filter((p) => p && p.data.fotos[0])
+  .map((p) => ({ src: p!.data.fotos[0].archivo as ImageMetadata, pie: `${bloque(p!.data, lang).titulo} · ${p!.data.ciudad}` }));
+const dos = (n: number) => String(n).padStart(2, '0');
 ---
 <Base titulo={t(lang, 'nosotros')} descripcion={pagina.descripcion} lang={lang} alterno={alterno}>
   <section class="cabecera" aria-labelledby="nosotros-h1">
     <div class="wrap cabecera-g">
-      <h1 id="nosotros-h1" class="aparece">{lema}</h1>
-      {/* El primer párrafo es el LCP: sin animación de entrada (Aparece parte de opacidad 0 y lo retrasa). */}
-      <div class="cabecera-txt">
+      <div class="izq">
+        <h1 id="nosotros-h1" class="aparece">{lema}</h1>
+        {/* El primer párrafo no lleva animación de entrada (Aparece parte de opacidad 0 y retrasaría el LCP). */}
         {pagina.quienes?.map((q, i) => <p class:list={i === 0 ? 'lead-1' : 'aparece lead-2'} style={`--i:${i + 1}`}>{q}</p>)}
       </div>
+      {ventana.length > 0 && (
+        <figure class="ventana" data-ventana>
+          <span class="puntos" aria-hidden="true">{ventana.map((_, i) => <i class:list={{ on: i === 0 }} />)}</span>
+          {ventana.map((f, i) => (
+            <div class:list={['capa', { ver: i === 0 }]} data-pie={f.pie}>
+              <Foto src={f.src} alt={f.pie} sizes="(min-width: 900px) 460px, 100vw" prioridad={i === 0} baja={i > 0} />
+            </div>
+          ))}
+          <span class="cota" aria-hidden="true"></span>
+          <figcaption class="voz-datos"><span class="v-pie">{ventana[0].pie}</span><b class="v-n">01/{dos(ventana.length)}</b></figcaption>
+        </figure>
+      )}
     </div>
   </section>
 
@@ -49,15 +69,74 @@ const paises = sitio.paises.map((c) => ({ codigo: c, nombre: PAISES[c][lang] }))
   {pagina.presencia && <Presencia titulo={t(lang, 'secPresencia')} presencia={pagina.presencia} paises={paises} />}
 </Base>
 
+<script>
+  // Ventana del recibimiento: cambia de obra cada 5 s mientras se ve; quieta con movimiento reducido.
+  let parar: (() => void) | null = null;
+  function iniciar() {
+    const v = document.querySelector<HTMLElement>('[data-ventana]:not([data-listo])');
+    if (!v) return;
+    v.dataset.listo = '1';
+    const capas = [...v.querySelectorAll<HTMLElement>('.capa')];
+    if (capas.length < 2 || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const puntos = [...v.querySelectorAll('.puntos i')];
+    const pie = v.querySelector('.v-pie')!, n = v.querySelector('.v-n')!;
+    const total = String(capas.length).padStart(2, '0');
+    let i = 0, reloj = 0;
+    const pasar = () => {
+      i = (i + 1) % capas.length;
+      capas.forEach((c, k) => c.classList.toggle('ver', k === i));
+      puntos.forEach((p, k) => p.classList.toggle('on', k === i));
+      pie.textContent = capas[i].dataset.pie ?? '';
+      n.textContent = `${String(i + 1).padStart(2, '0')}/${total}`;
+      v.style.setProperty('--p', `${((i + 1) / capas.length) * 100}%`);
+    };
+    const vigia = new IntersectionObserver(([e]) => { clearInterval(reloj); if (e.isIntersecting) reloj = window.setInterval(pasar, 5000); });
+    vigia.observe(v);
+    parar = () => { clearInterval(reloj); vigia.disconnect(); parar = null; };
+  }
+  iniciar();
+  document.addEventListener('astro:page-load', iniciar);
+  document.addEventListener('astro:before-swap', () => parar?.());
+</script>
+
 <style>
-  .cabecera { background: var(--bg); padding-block: var(--s7) var(--s6); border-bottom: var(--border) solid var(--line); }
-  .cabecera-g { display: grid; gap: var(--s5); align-items: end; }
-  @media (min-width: 900px) { .cabecera-g { grid-template-columns: 7fr 5fr; gap: var(--s6); } }
+  /* La ventana cruza la costura hacia la tira (--puente): la cabecera va encima y la tira deja ese espacio. */
+  .cabecera { --puente: 96px; position: relative; z-index: 1; background: var(--bg); padding-top: var(--s7); }
+  /* Solo la lista (sin JS o movimiento reducido): el escenario activo ya deja ese margen arriba. */
+  .cabecera + :global(.tira:not(.activa)) { padding-top: 96px; }
+  .cabecera-g { display: grid; gap: var(--s5); }
+  .izq { padding-bottom: var(--s5); }
+  @media (min-width: 900px) {
+    .cabecera { --puente: 140px; }
+    .cabecera + :global(.tira:not(.activa)) { padding-top: 140px; }
+    .cabecera-g { grid-template-columns: 7fr 5fr; gap: var(--s6); }
+    .izq { padding-bottom: var(--s7); }
+  }
+  .ventana {
+    position: relative; align-self: end; margin: 0 0 calc(var(--puente) * -1); aspect-ratio: 4 / 3; overflow: hidden;
+    border-radius: var(--r-card); background: var(--azul-900);
+  }
+  @media (min-width: 900px) { .ventana { aspect-ratio: 4 / 5; } }
+  .capa { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease; }
+  .capa.ver { opacity: 1; }
+  .capa :global(img.foto) { width: 100%; height: 100%; max-width: none; object-fit: cover; }
+  /* Acercamiento lento: vuelve a empezar cada vez que la capa se muestra. */
+  .capa.ver :global(img.foto) { animation: acerca 6.5s linear both; }
+  @keyframes acerca { from { transform: scale(1.12) translate(1.5%, 1%); } }
+  .ventana::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, transparent 55%, color-mix(in srgb, var(--azul-900) 85%, transparent)); }
+  .puntos { position: absolute; right: var(--s3); top: var(--s3); z-index: 1; display: flex; gap: 6px; }
+  .puntos i { width: 22px; height: 3px; background: color-mix(in srgb, var(--hl-blanco) 40%, transparent); transition: background-color var(--t-aparece) ease; }
+  .puntos i.on { background: var(--hl-naranja); }
+  .cota { position: absolute; left: var(--s3); right: var(--s3); bottom: 44px; z-index: 1; height: 9px; border-inline: 1px solid var(--hl-naranja); }
+  .cota::after { content: ''; position: absolute; left: 0; top: 4px; height: 1px; width: var(--p, 25%); background: var(--hl-naranja); transition: width var(--t-izaje) var(--ease-izaje); }
+  .ventana figcaption { position: absolute; left: var(--s3); right: var(--s3); bottom: var(--s2); z-index: 1; display: flex; justify-content: space-between; gap: var(--s2); color: var(--hl-blanco); }
+  .ventana figcaption b { color: var(--hl-naranja); font-weight: inherit; }
+  @media (prefers-reduced-motion: reduce) { .capa, .capa.ver :global(img.foto) { transition: none; animation: none; } }
   .cabecera h1 {
     margin: 0; font-family: var(--f-titulo); font-weight: var(--fw-display); font-size: var(--fs-h1);
     line-height: var(--lh-display); letter-spacing: var(--ls-display); text-wrap: balance; color: var(--accent);
   }
   .cabecera h1::before { content: ''; display: block; width: 64px; height: 6px; margin-bottom: var(--s4); background: var(--hl-naranja); }
-  .lead-1 { margin: 0; font-size: var(--fs-lead); line-height: 1.6; max-width: 52ch; }
+  .lead-1 { margin: var(--s5) 0 0; font-size: var(--fs-lead); line-height: 1.6; max-width: 52ch; }
   .lead-2 { margin: var(--s3) 0 0; color: var(--muted); max-width: 52ch; }
 </style>

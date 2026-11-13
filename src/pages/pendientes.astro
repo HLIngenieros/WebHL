@@ -7,7 +7,7 @@ import Tabla from '../components/ui/Tabla.astro';
 import Chip from '../components/ui/Chip.astro';
 import { cargar, type Pendiente } from '../lib/datos';
 
-const nombres = ['proyectos', 'servicios', 'sectores', 'sedes', 'certificaciones', 'historia', 'testimonios', 'sitio', 'paginas'] as const;
+const nombres = ['proyectos', 'servicios', 'sectores', 'sedes', 'certificaciones', 'historia', 'testimonios', 'sitio', 'paginas', 'noticias'] as const;
 const { datos, pendientes } = await cargar();
 
 const grupos: { tipo: Pendiente['tipo']; titulo: string; entrada: string }[] = [

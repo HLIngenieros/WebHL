@@ -1,0 +1,271 @@
+<!-- Maqueta de ajustes (13-nov-2026): recibimiento de Quiénes somos (2 opciones), recibimiento de Gestión integral
+     (2 opciones) y herramientas tecnológicas como diagrama (4 módulos + Microsoft 365 transversal).
+     Identidad R (azul #003399 + naranja #FF6633, Poppins / Open Sans / Plex Mono). Abrir con doble clic. -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ajustes 13-nov · maqueta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Open+Sans:wght@400;600&family=Poppins:wght@300;600;700;800&display=swap">
+<style>
+:root{
+  --a50:#EEF2FB;--a100:#D9E2F6;--a200:#B3C5EC;--a600:#003399;--a800:#00226A;--a900:#071A40;--a950:#040F26;
+  --naranja:#FF6633;--trazo:#8FB0F0;--tenue:#A7B4CB;
+  --bg:#fff;--alt:#EEF2FB;--ink:#14181C;--muted:#56606A;--line:#D5DBE3;--accent:#003399;
+  --f-tit:"Poppins",system-ui,sans-serif;--f-txt:"Open Sans",system-ui,sans-serif;--f-mono:"IBM Plex Mono",ui-monospace,monospace;
+  --ease-izaje:cubic-bezier(.2,.8,.2,1);--ease-plano:cubic-bezier(.6,.05,.25,1);--r:6px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#E4E8EF;color:var(--ink);font:400 17px/1.6 var(--f-txt)}
+img{display:block;max-width:100%}
+h1,h2,h3{font-family:var(--f-tit);margin:0}
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+
+/* Rótulos de la maqueta */
+.rot{max-width:1200px;margin:56px auto 14px;padding:0 32px;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.rot b{font-family:var(--f-tit);font-size:22px}
+.rot span{color:var(--muted);font-size:15px}
+.rot .rec{background:var(--naranja);color:var(--a900);font:600 11px var(--f-mono);letter-spacing:.1em;padding:3px 8px;text-transform:uppercase}
+.marco{max-width:1440px;margin:0 auto;background:var(--bg);box-shadow:0 1px 0 var(--line);overflow:hidden}
+.barra{height:64px;background:var(--a900);display:flex;align-items:center;padding:0 32px;gap:28px;color:#fff;font:600 14px var(--f-tit)}
+.barra i{font-style:normal;opacity:.85}.barra i.on{opacity:1;box-shadow:0 2px 0 var(--naranja)}
+.barra .logo{margin-right:auto;font-weight:800}
+
+/* Tira (cola, para ver la unión) */
+.tira{background:var(--a900);color:#fff;padding:56px 32px 40px;position:relative}
+.tira .anio{font:800 120px/0.82 var(--f-tit);letter-spacing:-.04em}
+.tira .anio small{display:block;font:500 12px var(--f-mono);letter-spacing:.12em;color:var(--naranja);margin-top:18px}
+
+/* ── 1A · Puente ── */
+.h1a{position:relative;padding:72px 0 0}
+.h1a .g{display:grid;grid-template-columns:7fr 5fr;gap:48px;align-items:start}
+.h1a h1{font-size:clamp(36px,4.4vw,58px);line-height:1.04;letter-spacing:-.02em;color:var(--accent)}
+.h1a h1::before{content:"";display:block;width:64px;height:6px;background:var(--naranja);margin-bottom:24px}
+.h1a p{margin:24px 0 0;max-width:52ch}.h1a p+p{color:var(--muted);margin-top:12px}
+.h1a .izq{padding-bottom:72px}
+/* La foto cruza la costura blanco → azul noche: la tira empieza "debajo" de ella. */
+.ventana{position:relative;align-self:end;margin:0 0 -140px;z-index:2;aspect-ratio:4/5;overflow:hidden;border-radius:var(--r);background:var(--a900)}
+.ventana img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.12);transition:opacity 1.2s ease}
+.ventana img.ver{opacity:1;animation:kb 7s linear both}
+@keyframes kb{from{transform:scale(1.12) translate(1.5%,1%)}to{transform:scale(1) translate(0,0)}}
+.ventana::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(7,26,64,.85))}
+.ventana figcaption{position:absolute;left:16px;right:16px;bottom:14px;z-index:1;display:flex;justify-content:space-between;color:#fff}
+.ventana figcaption b{color:var(--naranja);font-weight:500}
+.ventana .cota{position:absolute;left:16px;right:16px;bottom:44px;z-index:1;height:9px;border-inline:1px solid var(--naranja)}
+.ventana .cota::after{content:"";position:absolute;left:0;top:4px;height:1px;width:var(--p,0%);background:var(--naranja);transition:width 1.2s var(--ease-izaje)}
+.puntos{position:absolute;right:16px;top:16px;z-index:1;display:flex;gap:6px}
+.puntos i{width:22px;height:3px;background:rgba(255,255,255,.35)}.puntos i.on{background:var(--naranja)}
+.h1a + .tira{padding-top:180px}
+
+/* ── 1B · Lámina oscura ── */
+.h1b{position:relative;background:var(--a900);color:#fff;min-height:560px;display:grid;align-items:end;overflow:hidden}
+.h1b .fotos{position:absolute;inset:0 0 0 38%}
+.h1b .fotos img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.4s ease}
+.h1b .fotos img.ver{opacity:.9;animation:kb 8s linear both}
+.h1b .fotos::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--a900) 0%,var(--a900) 8%,rgba(7,26,64,.6) 40%,rgba(7,26,64,.1) 70%),linear-gradient(0deg,var(--a900),transparent 35%)}
+.h1b .txt{position:relative;z-index:1;padding:96px 0 64px;max-width:640px}
+.h1b h1{font-size:clamp(36px,4.4vw,58px);line-height:1.04;letter-spacing:-.02em}
+.h1b h1::before{content:"";display:block;width:64px;height:6px;background:var(--naranja);margin-bottom:24px}
+.h1b p{color:var(--a50);opacity:.88;max-width:52ch;margin:24px 0 0}
+.h1b .pie{position:absolute;right:32px;bottom:24px;z-index:1;color:var(--tenue)}
+.h1b .pie b{color:var(--naranja);font-weight:500}
+.h1b + .tira{border-top:1px solid rgba(143,176,240,.15)}
+
+/* ── 3A · Tres normas, un sistema ── */
+.h3{padding:72px 0}
+.h3 .g{display:grid;grid-template-columns:6fr 6fr;gap:48px;align-items:center}
+.h3 h1{font-size:clamp(36px,4.4vw,58px);line-height:1.04;letter-spacing:-.02em}
+.h3 h1 span{display:block;color:var(--accent)}
+.h3 p{color:var(--muted);max-width:52ch;margin:24px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.chips a{border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14px;text-decoration:none;color:var(--ink)}
+.chips a b{font:500 11px var(--f-mono);color:var(--accent);margin-right:6px}
+.anillos{width:100%;max-width:520px;justify-self:center;overflow:visible}
+.anillos circle.r{fill:none;stroke-width:2.5;stroke-dasharray:820;stroke-dashoffset:820;animation:traza 1.6s var(--ease-plano) forwards}
+.anillos circle.r:nth-of-type(2){animation-delay:.25s}.anillos circle.r:nth-of-type(3){animation-delay:.5s}
+.anillos .rel{fill-opacity:0;animation:llena .8s ease 1.6s forwards}
+.anillos text{font-family:var(--f-tit)}
+.anillos .et{opacity:0;animation:llena .6s ease forwards}
+@keyframes traza{to{stroke-dashoffset:0}}
+@keyframes llena{to{fill-opacity:1;opacity:1}}
+.nucleo{transform-box:fill-box;transform-origin:center;animation:late 2.4s ease-in-out 2.4s infinite}
+@keyframes late{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+/* ── 3B · Foto de obra ── */
+.h3b{display:grid;grid-template-columns:6fr 6fr;min-height:520px}
+.h3b .txt{padding:72px 48px 72px 32px;align-self:center}
+.h3b h1{font-size:clamp(36px,4.4vw,58px);line-height:1.04;letter-spacing:-.02em}.h3b h1 span{display:block;color:var(--accent)}
+.h3b p{color:var(--muted);max-width:52ch;margin:24px 0 0}
+.h3b figure{margin:0;position:relative;overflow:hidden}
+.h3b figure img{width:100%;height:100%;object-fit:cover;animation:kb 9s linear infinite alternate}
+.h3b .sellos{position:absolute;left:24px;bottom:24px;display:flex;gap:8px}
+.h3b .sellos span{background:#fff;color:var(--a900);font:600 13px var(--f-tit);padding:8px 12px;border-radius:var(--r);border-left:4px solid var(--naranja)}
+
+/* ── 5 · Herramientas como diagrama ── */
+.herr{background:var(--alt);padding:88px 0}
+.herr h2{font-size:clamp(28px,3vw,40px);letter-spacing:-.02em;line-height:1.1}
+.herr h2::before{content:"";display:block;width:48px;height:4px;background:var(--naranja);margin-bottom:16px}
+.herr h2 span{display:block;font-weight:300}
+.herr .lead{color:var(--muted);max-width:60ch;margin:16px 0 48px}
+.diag{position:relative}
+.mods{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative;z-index:1}
+.mod{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:10px;align-content:start;position:relative;transition:transform .3s var(--ease-izaje),border-color .3s}
+.mod:hover{transform:translateY(-4px);border-color:var(--accent)}
+.mod::before{content:"";position:absolute;left:0;top:0;height:3px;width:100%;background:var(--naranja);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease-plano)}
+.mod:hover::before{transform:scaleX(1)}
+.mod .n{color:var(--accent)}
+.logo-slot{height:56px;display:grid;place-items:center;border:1px dashed var(--a200);border-radius:4px;font:700 20px var(--f-tit);color:var(--a900);letter-spacing:-.01em;position:relative}
+.logo-slot::after{content:"logo por confirmar";position:absolute;right:6px;bottom:3px;font:500 9px var(--f-mono);letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.mod h3{font-size:16px}.mod p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
+/* Conectores: bajan de cada módulo a la base y llevan un pulso. */
+.con{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;height:56px}
+.con i{position:relative;justify-self:center;width:2px;background:repeating-linear-gradient(180deg,var(--a200) 0 6px,transparent 6px 10px)}
+.con i::after{content:"";position:absolute;left:-3px;width:8px;height:8px;border-radius:50%;background:var(--naranja);animation:pulso 2.2s ease-in-out infinite}
+.con i:nth-child(2)::after{animation-delay:.4s}.con i:nth-child(3)::after{animation-delay:.8s}.con i:nth-child(4)::after{animation-delay:1.2s}
+@keyframes pulso{0%{top:100%;opacity:0}15%{opacity:1}85%{opacity:1}100%{top:-8px;opacity:0}}
+.base{background:var(--a900);color:#fff;border-radius:var(--r);padding:22px 28px;display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center}
+.base .logo-slot{width:200px;border-color:rgba(143,176,240,.45);color:#fff}
+.base .logo-slot::after{color:var(--tenue)}
+.base p{margin:0;color:var(--a50);opacity:.88;font-size:15px}
+.base .apps{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.base .apps span{font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border:1px solid rgba(143,176,240,.4);color:var(--trazo)}
+.base .tx{display:block;font:500 11px var(--f-mono);letter-spacing:.12em;color:var(--naranja);text-transform:uppercase;margin-bottom:4px}
+
+.nota{max-width:1200px;margin:10px auto 0;padding:0 32px;color:var(--muted);font-size:14px}
+@media (max-width:860px){
+  .h1a .g,.h3 .g,.h3b{grid-template-columns:1fr}.ventana{margin-bottom:-90px;aspect-ratio:4/3}.h1a .izq{padding-bottom:24px}
+  .mods,.con{grid-template-columns:repeat(2,1fr)}.con{display:none}.mods{margin-bottom:20px}.base{grid-template-columns:1fr}.base .apps{justify-content:flex-start}
+  .h1b .fotos{inset:0}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.anillos circle.r{stroke-dashoffset:0}.anillos .rel,.anillos .et{fill-opacity:1;opacity:1}}
+</style>
+</head>
+<body>
+
+<!-- ═════════════ 1 · Quiénes somos ═════════════ -->
+<div class="rot"><b>1A · Puente</b><span class="rec">Recomendada</span><span>Se mantiene el blanco con el lema; la foto cambia sola (fundido + acercamiento lento) y cruza la costura hacia la tira azul: la unión deja de ser un corte.</span></div>
+<div class="marco">
+  <div class="barra"><span class="logo">GRUPO HL</span><i class="on">Quiénes somos</i><i>Proyectos</i><i>Servicios</i><i>Gestión integral</i><i>Noticias</i><i>Contacto</i></div>
+  <section class="h1a"><div class="wrap g">
+    <div class="izq">
+      <h1>Construimos la industria con gente que cumple, desde 1968.</h1>
+      <p>Somos el Grupo HL, antes HL Ingenieros: una compañía con experiencia desde 1968 en el mercado nacional e internacional, con proyectos en energía, aguas, minería, cemento, petróleo y gas, industria e infraestructura.</p>
+      <p>Ofrecemos soluciones completas de construcción que integran obras civiles y montajes electromecánicos, con un mismo equipo responsable de principio a fin.</p>
+    </div>
+    <figure class="ventana" data-carrusel>
+      <div class="puntos"><i class="on"></i><i></i><i></i><i></i></div>
+      <img class="ver" src="../../src/assets/historia/1-la-idea-de-servicio.jpg" alt="" data-pie="Archivo HL" data-anio="1968">
+      <img src="../../src/assets/historia/4-el-desarrollo.jpg" alt="" data-pie="Archivo HL" data-anio="1990">
+      <img src="../../src/assets/generales/mejor-gente.jpg" alt="" data-pie="Nuestra gente" data-anio="Hoy">
+      <img src="../../src/assets/proyectos/planta-columbus/2.jpg" alt="" data-pie="Planta Columbus · Cartagena" data-anio="Hoy">
+      <span class="cota mono"></span>
+      <figcaption class="mono"><span class="pie">Archivo HL</span><b class="anio">1968</b></figcaption>
+    </figure>
+  </div></section>
+  <div class="tira"><div class="anio">1968<small>01/06 · Década de los 60</small></div></div>
+</div>
+
+<div class="rot"><b>1B · Lámina oscura</b><span>El recibimiento ya es azul noche, como la tira: fotos a sangre que se funden detrás del lema, en blanco. Más dramático; la página arranca oscura.</span></div>
+<div class="marco">
+  <div class="barra"><span class="logo">GRUPO HL</span><i class="on">Quiénes somos</i><i>Proyectos</i><i>Servicios</i><i>Gestión integral</i><i>Noticias</i><i>Contacto</i></div>
+  <section class="h1b" data-carrusel>
+    <div class="fotos">
+      <img class="ver" src="../../src/assets/proyectos/planta-columbus/2.jpg" alt="" data-pie="Planta Columbus · Cartagena" data-anio="Hoy">
+      <img src="../../src/assets/historia/1-la-idea-de-servicio.jpg" alt="" data-pie="Archivo HL" data-anio="1968">
+      <img src="../../src/assets/generales/mejor-gente.jpg" alt="" data-pie="Nuestra gente" data-anio="Hoy">
+    </div>
+    <div class="wrap"><div class="txt">
+      <h1>Construimos la industria con gente que cumple, desde 1968.</h1>
+      <p>Somos el Grupo HL, antes HL Ingenieros: una compañía con experiencia desde 1968 en el mercado nacional e internacional.</p>
+    </div></div>
+    <span class="pie mono"><span class="pie-t">Planta Columbus · Cartagena</span> · <b class="anio">Hoy</b></span>
+  </section>
+  <div class="tira"><div class="anio">1968<small>01/06 · Década de los 60</small></div></div>
+</div>
+
+<!-- ═════════════ 3 · Gestión integral ═════════════ -->
+<div class="rot"><b>3A · Tres normas, un sistema</b><span class="rec">Recomendada</span><span>Los tres anillos ISO se trazan y se cruzan en el centro: el "bajo un solo sistema" del título, dibujado. Sin foto, liviano (SVG).</span></div>
+<div class="marco">
+  <div class="barra"><span class="logo">GRUPO HL</span><i>Quiénes somos</i><i>Proyectos</i><i>Servicios</i><i class="on">Gestión integral</i><i>Noticias</i><i>Contacto</i></div>
+  <section class="h3"><div class="wrap g">
+    <div>
+      <h1>Calidad, seguridad y ambiente <span>bajo un solo sistema</span></h1>
+      <p>Sistema de gestión integral del Grupo HL: certificaciones ISO 9001, ISO 14001 e ISO 45001, indicadores de seguridad, política, Reglas de Oro HSE, PIENSA® y herramientas de gestión.</p>
+      <div class="chips"><a href="#"><b>01</b>Certificaciones</a><a href="#"><b>02</b>Indicadores</a><a href="#"><b>03</b>Política</a><a href="#"><b>04</b>10 Reglas de Oro</a><a href="#"><b>05</b>PIENSA®</a><a href="#"><b>06</b>Herramientas</a></div>
+    </div>
+    <svg class="anillos" viewBox="0 0 520 470" role="img" aria-label="ISO 9001, ISO 14001 e ISO 45001 se cruzan en el sistema de gestión integral">
+      <defs><clipPath id="c1"><circle cx="190" cy="180" r="130"/></clipPath><clipPath id="c2"><circle cx="330" cy="180" r="130"/></clipPath></defs>
+      <circle class="r" cx="190" cy="180" r="130" stroke="#003399"/>
+      <circle class="r" cx="330" cy="180" r="130" stroke="#003399"/>
+      <circle class="r" cx="260" cy="300" r="130" stroke="#003399"/>
+      <g clip-path="url(#c1)"><g clip-path="url(#c2)"><circle class="rel nucleo" cx="260" cy="300" r="130" fill="#FF6633"/></g></g>
+      <text class="et" x="120" y="140" font-size="15" font-weight="600" fill="#14181C" style="animation-delay:.9s">ISO 9001</text>
+      <text class="et" x="120" y="160" font-size="13" fill="#56606A" style="animation-delay:.9s">Calidad</text>
+      <text class="et" x="335" y="140" font-size="15" font-weight="600" fill="#14181C" style="animation-delay:1.1s">ISO 14001</text>
+      <text class="et" x="335" y="160" font-size="13" fill="#56606A" style="animation-delay:1.1s">Ambiente</text>
+      <text class="et" x="226" y="390" font-size="15" font-weight="600" fill="#14181C" style="animation-delay:1.3s">ISO 45001</text>
+      <text class="et" x="226" y="410" font-size="13" fill="#56606A" style="animation-delay:1.3s">Seguridad</text>
+      <text class="et" x="260" y="230" font-size="17" font-weight="800" fill="#071A40" text-anchor="middle" style="animation-delay:1.9s">SGI</text>
+    </svg>
+  </div></section>
+</div>
+
+<div class="rot"><b>3B · Foto de obra</b><span>Media pantalla con foto de equipo en obra (acercamiento lento) y los tres sellos encima. Depende de tener una buena foto reciente.</span></div>
+<div class="marco">
+  <div class="barra"><span class="logo">GRUPO HL</span><i>Quiénes somos</i><i>Proyectos</i><i>Servicios</i><i class="on">Gestión integral</i><i>Noticias</i><i>Contacto</i></div>
+  <section class="h3b">
+    <div class="txt">
+      <h1>Calidad, seguridad y ambiente <span>bajo un solo sistema</span></h1>
+      <p>Sistema de gestión integral del Grupo HL: certificaciones ISO 9001, ISO 14001 e ISO 45001, indicadores de seguridad, política, Reglas de Oro HSE, PIENSA® y herramientas de gestión.</p>
+    </div>
+    <figure><img src="../../src/assets/generales/mejor-gente.jpg" alt=""><div class="sellos"><span>ISO 9001</span><span>ISO 14001</span><span>ISO 45001</span></div></figure>
+  </section>
+</div>
+
+<!-- ═════════════ 5 · Herramientas ═════════════ -->
+<div class="rot"><b>5 · Herramientas como diagrama</b><span>Cuatro módulos conectados a Microsoft 365, que los atraviesa a todos. Los pulsos suben de la base a cada módulo. Logos en espera (por confirmar con TI que se pueden mostrar).</span></div>
+<div class="marco">
+  <section class="herr"><div class="wrap">
+    <h2>Herramientas tecnológicas <span>de gestión</span></h2>
+    <p class="lead">Cada frente del negocio tiene su sistema, y todos trabajan sobre la misma base de colaboración.</p>
+    <div class="diag">
+      <div class="mods">
+        <article class="mod"><span class="n mono">01 · Gestión de obra</span><div class="logo-slot">Procore</div><p>Planos, RFI, reportes diarios y seguimiento de cada proyecto en campo.</p></article>
+        <article class="mod"><span class="n mono">02 · ERP</span><div class="logo-slot">Libra</div><p>Finanzas, compras, inventarios y nómina del grupo.</p></article>
+        <article class="mod"><span class="n mono">03 · Comercial</span><div class="logo-slot">Zoho CRM</div><p>Oportunidades, clientes y seguimiento de cotizaciones.</p></article>
+        <article class="mod"><span class="n mono">04 · Presupuestos</span><div class="logo-slot">Opus</div><p>Presupuestos, análisis de precios unitarios y control de costos de obra.</p></article>
+      </div>
+      <div class="con" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="base">
+        <div class="logo-slot">Microsoft 365</div>
+        <p><span class="tx">Transversal · Colaboración</span>Correo, documentos, Teams y trabajo compartido entre oficina y obra.</p>
+        <div class="apps"><span>Outlook</span><span>Teams</span><span>SharePoint</span><span>OneDrive</span></div>
+      </div>
+    </div>
+  </div></section>
+</div>
+<p class="nota">En el sitio: el diagrama se lee igual sin animación; en móvil los módulos van en 2 × 2 y la base debajo, sin conectores.</p>
+<div style="height:80px"></div>
+
+<script>
+// Carrusel de las opciones 1A y 1B: fundido cada 4,5 s, cota y pie sincronizados.
+document.querySelectorAll('[data-carrusel]').forEach((c) => {
+  const imgs = [...c.querySelectorAll('img')], puntos = [...c.querySelectorAll('.puntos i')];
+  const pie = c.querySelector('.pie-t') || c.querySelector('.pie'), anio = c.querySelector('.anio'), cota = c.querySelector('.cota');
+  let i = 0;
+  const pintar = () => {
+    imgs.forEach((im, k) => { im.classList.toggle('ver', k === i); if (k === i) { im.style.animation = 'none'; im.offsetWidth; im.style.animation = ''; } });
+    puntos.forEach((p, k) => p.classList.toggle('on', k === i));
+    if (pie) pie.textContent = imgs[i].dataset.pie; if (anio) anio.textContent = imgs[i].dataset.anio;
+    if (cota) cota.style.setProperty('--p', `${((i + 1) / imgs.length) * 100}%`);
+  };
+  pintar();
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(() => { i = (i + 1) % imgs.length; pintar(); }, 4500);
+});
+</script>
+</body>
+</html>

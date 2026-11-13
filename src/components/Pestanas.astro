@@ -1,7 +1,7 @@
 ---
 // Pestañas-enlace del acta (R-9): placas con pictograma que se traza al pasar; la abierta lleva la línea naranja del
 // menú. Cada pestaña es un enlace a su URL, así funcionan sin JS y cada página conserva su título. Las usan Contacto
-// (4 formularios) y Acreedores · Documentos (2).
+// (4 formularios).
 export interface Pestana { href: string; nombre: string; desc: string; icono: string; actual: boolean; punteada?: boolean }
 interface Props { items: Pestana[]; etiqueta: string }
 const { items, etiqueta } = Astro.props;

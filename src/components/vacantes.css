@@ -78,3 +78,9 @@
 @media (prefers-reduced-motion: reduce) {
   .vc *, .vc *::before, .vc *::after { animation: none !important; transition: none !important; }
 }
+/* Botones propios del tablero (13-nov): /vacantes ya no carga el CSS del formulario. */
+.vc-btn { display: inline-flex; align-items: center; min-height: 44px; padding: var(--s2) var(--s4); border: var(--stroke-thin) solid var(--ink); border-radius: var(--radius); background: var(--bg); color: var(--ink); font: inherit; font-family: var(--f-titulo); font-weight: var(--fw-boton); font-size: var(--fs-boton); text-decoration: none; cursor: pointer; transition: transform var(--t-rapido) var(--ease-izaje); }
+.vc-btn:hover { transform: translateY(-2px); }
+.vc-btn:active { transform: translateY(1px); }
+.vc-primario { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .vc-btn { transition: none; } .vc-btn:hover { transform: none; } }

@@ -68,15 +68,17 @@ test('Hablar con HL abre el agente sin navegar y Escape lo cierra', async ({ pag
   await expect(page.locator('.ag')).not.toHaveClass(/ag-abierto/);
 });
 
-test('las vacantes se filtran y "Postularme" entrega la vacante al formulario', async ({ page }) => {
+test('las vacantes se filtran y "Postularme" lleva la vacante al formulario de Trabaje con HL', async ({ page }) => {
   await page.goto('/vacantes/');
+  await expect(page.locator('.caja-form')).toHaveCount(0);
   const vacantes = page.locator('.vc-vac');
   await expect(vacantes.first()).toBeVisible();
   const total = await vacantes.count();
   await page.locator('.vc-grupo').first().locator('.vc-placa').nth(1).click();
   await expect.poll(() => vacantes.count()).toBeLessThan(total);
   await vacantes.first().locator('.vc-fila').click();
-  await vacantes.first().getByRole('button', { name: 'Postularme a esta vacante' }).click();
+  await vacantes.first().getByRole('link', { name: 'Postularme a esta vacante' }).click();
+  await expect(page).toHaveURL(/\/trabaje-con-nosotros\/\?vacante=V-\d+/);
   await expect(page.locator('.fm-vacante strong')).toContainText(/^V-\d+/);
 });
 

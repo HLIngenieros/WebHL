@@ -44,7 +44,7 @@ herramientas:
   - { nombre: Libra, categoria: ERP, uso: "Finanzas, compras, inventarios y nómina del grupo." }
   - { nombre: Zoho CRM, categoria: Gestión comercial, uso: "Oportunidades, clientes y seguimiento de cotizaciones." }
   - { nombre: Opus, categoria: Presupuestos, uso: "Presupuestos, análisis de precios unitarios y control de costos de obra." }
-  - { nombre: Microsoft 365, categoria: Colaboración, uso: "Correo, documentos, Teams y trabajo compartido entre oficina y obra." }
+  - { nombre: Microsoft 365, categoria: Colaboración, transversal: true, apps: [Outlook, Teams, SharePoint, OneDrive], uso: "Correo, documentos, Teams y trabajo compartido entre oficina y obra." }
 confirmar:
   - "Indicadores HSE de los últimos 3 años (los publicados son del programa de 8 años del PDF de ECOHL, de 2020)."
   - "Herramientas tecnológicas de gestión (Procore, Libra, Zoho CRM, Opus y Microsoft 365, del anexo del acta): confirmar con TI que siguen vigentes y si se pueden mostrar sus logos."

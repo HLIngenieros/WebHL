@@ -3,11 +3,9 @@
 // tiempo; la esquina doblada se abre al pasar y la flecha de descarga rebota. Acento azul.
 import Base from '../layouts/Base.astro';
 import Pod from '../components/Pod.astro';
-import Pestanas from '../components/Pestanas.astro';
 import { cargar } from '../lib/datos';
-import type { Lang } from '../i18n/rutas';
+import { ruta, type Lang } from '../i18n/rutas';
 import { t } from '../i18n/ui';
-import { pestanasPublicas } from '../lib/documentos';
 
 interface Props { lang: Lang; alterno: string }
 const { lang, alterno } = Astro.props;
@@ -27,7 +25,8 @@ const [t1, ...t2] = pagina.titulo.split(' ');
       <p class="lead aparece" style="--i:2">{pagina.descripcion}</p>
     </header>
 
-    <div class="pst-pub"><Pestanas etiqueta={lang === 'es' ? 'Información pública' : 'Public information'} items={pestanasPublicas(lang, 'acreedores')} /></div>
+    {/* Acceso limitado (13-nov): se llega desde un texto discreto en Documentos públicos; sin pestañas ni pie. */}
+    <a class="volver" href={ruta('documentos', lang)}><span aria-hidden="true">←</span> {t(lang, 'pieDocumentos')}</a>
 
     <ol class="linea revela">
       {(pagina.documentos ?? []).map((d, i) => (
@@ -54,7 +53,8 @@ const [t1, ...t2] = pagina.titulo.split(' ');
 </Base>
 
 <style>
-  .pst-pub { max-width: 760px; margin-block: var(--s5); }
+  .volver { display: inline-block; margin-block: var(--s4) var(--s5); color: var(--muted); font-size: var(--fs-sm); text-decoration: none; }
+  .volver:hover { color: var(--accent); }
   .acreedores { padding-block: var(--s5) var(--s7); }
   .cab { display: grid; gap: var(--s4); align-items: end; margin-bottom: var(--s6); }
   h1 { margin: var(--s3) 0 0; font-size: var(--fs-h1); line-height: var(--lh-display); }

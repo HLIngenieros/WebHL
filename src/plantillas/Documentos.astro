@@ -3,11 +3,10 @@
 // isla Documentos.tsx con el catálogo de la colección (plan AG.11), ya en el HTML; aquí van la cabecera con la planoteca de alambre que se dibuja y el cierre que abre el asistente.
 import Base from '../layouts/Base.astro';
 import Pod from '../components/Pod.astro';
-import Pestanas from '../components/Pestanas.astro';
 import Documentos from '../components/Documentos';
 import { ruta, type Lang } from '../i18n/rutas';
 import { t } from '../i18n/ui';
-import { documentos, pestanasPublicas } from '../lib/documentos';
+import { documentos } from '../lib/documentos';
 
 interface Props { lang: Lang; alterno: string }
 const { lang, alterno } = Astro.props;
@@ -17,11 +16,13 @@ const T = {
     titulo: 'Documentos públicos', l1: 'Documentos', l2: 'públicos',
     lead: 'Certificaciones, políticas y material del Grupo HL, siempre en su versión vigente.',
     cierre: '¿No encuentra un documento?', cierreTxt: 'Pregúntele al asistente: responde con lo publicado y le indica con quién hablar.', boton: 'Hablar con HL',
+    acreedores: 'Las convocatorias y avisos para acreedores (Ley 1116 de 2006) están en', acreedoresLink: 'información para acreedores',
   },
   en: {
     titulo: 'Public documents', l1: 'Public', l2: 'documents',
     lead: 'Certifications, policies and materials from Grupo HL, always in their current version.',
     cierre: "Can't find a document?", cierreTxt: 'Ask the assistant: it answers from what we publish and tells you who to talk to.', boton: 'Talk to HL',
+    acreedores: 'Calls and notices for creditors (Law 1116 of 2006) are in', acreedoresLink: 'information for creditors',
   },
 }[lang];
 ---
@@ -49,14 +50,14 @@ const T = {
       </svg>
     </header>
 
-    <div class="pst-pub"><Pestanas etiqueta={lang === 'es' ? 'Información pública' : 'Public information'} items={pestanasPublicas(lang, 'documentos')} /></div>
-
     <Documentos client:load lang={lang} docs={docs} />
 
     <aside class="cierre">
       <div><b>{T.cierre}</b><span>{T.cierreTxt}</span></div>
       <a href={ruta('contacto', lang)} data-abre-agente>{T.boton}</a>
     </aside>
+    {/* Acreedores (13-nov): acceso limitado, solo este texto discreto; fuera de las pestañas y del pie. */}
+    <p class="nota-acreedores">{T.acreedores} <a href={ruta('acreedores', lang)}>{T.acreedoresLink}</a>.</p>
   </section>
 </Base>
 
@@ -72,7 +73,9 @@ const T = {
 </script>
 
 <style>
-  .pst-pub { max-width: 760px; margin-block: var(--s5); }
+  .nota-acreedores { margin: var(--s4) 0 0; color: var(--muted); font-size: var(--fs-xs); }
+  .nota-acreedores a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  .nota-acreedores a:hover { color: var(--accent); }
   .documentos { padding-block: var(--s5) var(--s7); }
   .cab { display: grid; gap: var(--s4); align-items: end; }
   h1 { margin: var(--s3) 0 0; font-size: var(--fs-h1); line-height: var(--lh-display); }

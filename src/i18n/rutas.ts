@@ -24,7 +24,8 @@ export type ClaveRuta = keyof typeof RUTAS;
 /** Menú de 6 pestañas (acta GHL-WEB-001, guía §7). La clave `hse` es Gestión integral (R5). */
 export const MENU: ClaveRuta[] = ['nosotros', 'proyectos', 'servicios', 'hse', 'noticias', 'contacto'];
 /** Enlaces complementarios del pie (acta). */
-export const PIE: ClaveRuta[] = ['terminos', 'datos', 'vacantes', 'acreedores', 'documentos'];
+// Acreedores salió del pie (13-nov): se llega desde Documentos públicos.
+export const PIE: ClaveRuta[] = ['terminos', 'datos', 'vacantes', 'documentos'];
 
 export const ruta = (clave: ClaveRuta, lang: Lang): string => RUTAS[clave][lang];
 

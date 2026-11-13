@@ -334,6 +334,13 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     `public/robots.txt`. `enviar.php`: 413 si el envío pasa de `post_max_size` y adjunto anónimo sin nombre original. CLS de
     Contacto corregido (banda de pasos reservada). 422 pruebas, presupuesto OK, Lighthouse móvil 98-99 en Home, explorador,
     Gestión integral y Contacto.
+    **Ajustes de Juan David (13-nov, maqueta `design/maquetas/ajustes-13nov.html`):** Quiénes somos con recibimiento "Puente"
+    (4 obras actuales que se funden, la ventana cruza hacia la tira); año de la tira con ancho por dígito (sin hueco tras el
+    "1"); Gestión integral con los 3 anillos ISO que se cruzan en el SGI, Política en `--azul-800` (separada de Indicadores) y
+    herramientas como diagrama (4 módulos + Microsoft 365 `transversal`; `logo:` opcional en `public/logos/`, por confirmar
+    con TI). `/vacantes` sin formulario: tablero a todo el ancho y "Postularme" lleva a Trabaje con HL con la vacante en la
+    URL (`?vacante&cargo&sede`). **Acreedores con acceso limitado:** fuera del pie y sin pestañas; solo un texto discreto al
+    final de Documentos públicos. 423 pruebas, Lighthouse móvil 100 en Nosotros y Gestión integral.
   - **Siguiente paso:** F6 · Lanzamiento (en espera de la aprobación oficial y de los insumos de `/pendientes/`). Nosotros
     ya da 100/100/100/100 tras R3 (13-nov, Lighthouse 13: LCP 1,1 s; `/en/about/` 100, `/en/` 99). El `.htaccess` se prueba
     en el hosting al desplegar en F6 (decisión 13-nov; vigilar el orden entre `mod_rewrite` y `mod_alias`: `http://www…` a

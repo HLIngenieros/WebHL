@@ -16,7 +16,7 @@ const sede = datos.sedes.find((s) => s.id === 'bogota')?.data;
 const lugar = sede ? [sede.ciudad, PAISES[sede.pais]?.[lang]].filter(Boolean).join(', ') : '';
 const telefono = sede?.telefono ?? '';
 const iso = datos.certificaciones.filter((c) => c.id.startsWith('iso')).sort((a, b) => parseInt(a.id.slice(4)) - parseInt(b.id.slice(4))).map((c) => c.data.norma[lang] ?? c.data.norma.es);
-const ETIQUETA = { terminos: 'pieTerminos', datos: 'pieDatos', vacantes: 'pieVacantes', acreedores: 'pieAcreedores', documentos: 'pieDocumentos' } as const;
+const ETIQUETA = { terminos: 'pieTerminos', datos: 'pieDatos', vacantes: 'pieVacantes', documentos: 'pieDocumentos' } as const;
 ---
 <footer class="pie">
   <div class="wrap pie-in">

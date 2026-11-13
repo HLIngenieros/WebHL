@@ -176,7 +176,11 @@ const paginas = defineCollection({
     reglas: z.array(z.object({ titulo: z.string(), texto: z.string() })).optional(),
     piensa: z.object({ texto: z.string(), pasos: z.array(z.object({ titulo: z.string(), texto: z.string() })) }).optional(),
     // Herramientas tecnológicas de gestión (acta, bloque 6): nombre, para qué y uso.
-    herramientas: z.array(z.object({ nombre: z.string(), categoria: z.string(), uso: z.string() })).optional(),
+    // Diagrama (13-nov): módulos y una base `transversal` (Microsoft 365). `logo`: SVG en public/logos/ (por confirmar con TI).
+    herramientas: z.array(z.object({
+      nombre: z.string(), categoria: z.string(), uso: z.string(),
+      transversal: z.boolean().optional(), apps: z.array(z.string()).optional(), logo: z.string().optional(),
+    })).optional(),
     // Acreedores y legales: documentos en PDF (public/documentos/).
     documentos: z.array(z.object({ numero: z.string(), titulo: z.string(), fecha: z.string(), pdf: z.string(), estado: z.enum(['vigente', 'anterior']) })).optional(),
     documento: z.object({ codigo: z.string(), actualizacion: z.number(), fecha: z.string(), ley: z.string(), pdf: z.string() }).optional(),

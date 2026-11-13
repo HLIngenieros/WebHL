@@ -1,8 +1,8 @@
 ---
 // Contacto (acta, R5): solo los 4 formularios, en pestañas y sin sedes. Cada pestaña es un enlace a su URL
 // (Contacto, Proveedores, Buzón ético, Trabaje con nosotros), así funciona sin JS y cada una tiene su título.
-// Con `vacantes`, es la página /vacantes del pie (R-9): sin pestañas, el tablero y debajo el formulario F-04, que
-// recibe la vacante de "Postularme" (evento `hl:postular`, Vacantes.tsx sin cambios: el flujo sigue congelado).
+// Con `vacantes`, es la página /vacantes del pie (R-9; ajuste 13-nov): sin pestañas ni formulario, el tablero a todo
+// el ancho y un enlace a Trabaje con HL; "Postularme" lleva allá la vacante en la URL (el flujo sigue congelado).
 import Base from '../layouts/Base.astro';
 import Pod from '../components/Pod.astro';
 import Pestanas from '../components/Pestanas.astro';
@@ -22,7 +22,7 @@ const def = formulario(intencion);
 const VACANTES = {
   titulo: { es: 'Vacantes', en: 'Jobs' },
   h1: [{ es: 'Vacantes', en: 'Open' }, { es: 'abiertas', en: 'positions' }],
-  lead: { es: 'Cargos abiertos hoy en obra y en oficina. Elija uno y postúlese con su hoja de vida en el formulario.', en: 'Positions open today on site and in the office. Pick one and apply with your résumé in the form.' },
+  lead: { es: 'Cargos abiertos hoy en obra y en oficina. Elija uno y postúlese con su hoja de vida.', en: 'Positions open today on site and in the office. Pick one and apply with your résumé.' },
 };
 const pagina = vacantes ? VACANTES : PAGINAS[intencion];
 const porOrden = <X extends { data: { orden: number } }>(xs: X[]) => [...xs].sort((a, b) => a.data.orden - b.data.orden);
@@ -38,6 +38,23 @@ const enlaces = Object.fromEntries(FORMULARIOS.map((f) => [f.id, ruta(f.ruta, la
 const buzones = sitio.contacto.buzones;
 ---
 <Base titulo={pagina.titulo[lang]} descripcion={pagina.lead[lang]} lang={lang} alterno={alterno}>
+  {vacantes ? (
+  <section class="wrap vac">
+    <header class="vac-cab">
+      <div>
+        <Pod forma="rotulo" codigo={def.codigo} nombre={pagina.titulo[lang]} />
+        <h1><span class="l"><span>{pagina.h1[0][lang]}</span></span> <span class="l"><span>{pagina.h1[1][lang]}</span></span></h1>
+      </div>
+      <div class="vac-txt">
+        <p class="lead aparece" style="--i:2">{pagina.lead[lang]}</p>
+        <a class="ver-vac aparece" style="--i:3" href={`${enlaces.empleo}#formulario`}>{lang === 'es' ? 'Enviar mi hoja de vida sin una vacante' : 'Send my résumé without a position'} <span aria-hidden="true">→</span></a>
+      </div>
+    </header>
+    <div class="tablero-vacantes" id="vacantes">
+      <Vacantes client:load lang={lang} fuente="/api/vacantes.json" formulario={enlaces.empleo} />
+    </div>
+  </section>
+  ) : (
   <section class="wrap solicitud">
     <header class="cab">
       <Pod forma="rotulo" codigo={def.codigo} nombre={pagina.titulo[lang]} />
@@ -46,23 +63,15 @@ const buzones = sitio.contacto.buzones;
       <p class="buzon voz-datos aparece" style="--i:3">
         <span>{lang === 'es' ? 'Llega a' : 'Goes to'}</span> <a href={`mailto:${buzones[intencion]}`}>{buzones[intencion]}</a>
       </p>
-      {intencion === 'empleo' && !vacantes && (
+      {intencion === 'empleo' && (
         <a class="ver-vac aparece" style="--i:4" href={ruta('vacantes', lang)}>{lang === 'es' ? 'Ver vacantes abiertas' : 'See open positions'} <span aria-hidden="true">→</span></a>
       )}
     </header>
 
     <div class="lado">
-      {!vacantes && (
-        <Pestanas etiqueta={lang === 'es' ? 'Formularios' : 'Forms'} items={FORMULARIOS.map((f) => ({
-          href: enlaces[f.id], nombre: f.nombre[lang], desc: f.desc[lang], icono: f.icono, actual: f.id === intencion, punteada: f.id === 'etico',
-        }))} />
-      )}
-
-      {vacantes && (
-        <div class="tablero-vacantes" id="vacantes">
-          <Vacantes client:load lang={lang} fuente="/api/vacantes.json" />
-        </div>
-      )}
+      <Pestanas etiqueta={lang === 'es' ? 'Formularios' : 'Forms'} items={FORMULARIOS.map((f) => ({
+        href: enlaces[f.id], nombre: f.nombre[lang], desc: f.desc[lang], icono: f.icono, actual: f.id === intencion, punteada: f.id === 'etico',
+      }))} />
 
       <div class="caja-form" id="formulario" transition:name="formulario">
         <Formulario client:load lang={lang} accion="/api/enviar.php" politica={ruta('datos', lang)}
@@ -70,6 +79,7 @@ const buzones = sitio.contacto.buzones;
       </div>
     </div>
   </section>
+  )}
 </Base>
 
 <style>
@@ -88,6 +98,11 @@ const buzones = sitio.contacto.buzones;
   .ver-vac { justify-self: start; color: var(--accent); font-weight: var(--fw-strong); text-decoration: none; }
   .ver-vac span { display: inline-block; transition: transform var(--t-rapido) var(--ease-izaje); }
   .ver-vac:hover span { transform: translateX(4px); }
-  /* Vacantes: el tablero va antes del formulario. */
+  /* Vacantes: cabecera en dos columnas y el tablero a todo el ancho. */
+  .vac { display: grid; gap: var(--s5); padding-block: var(--s6); }
+  .vac-cab { display: grid; gap: var(--s4); align-items: end; }
+  .vac-cab > div:first-child { display: grid; gap: var(--s3); }
+  .vac-txt { display: grid; gap: var(--s3); justify-items: start; }
+  @media (min-width: 960px) { .vac-cab { grid-template-columns: 7fr 5fr; gap: var(--s6); } }
   .tablero-vacantes { min-width: 0; }
 </style>
