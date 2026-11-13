@@ -1,6 +1,6 @@
 ---
 // Misión y visión (guía §12.2-2): lámina con el equipo sobre el plano y su trazo, misión en grande,
-// cota "Visión", la visión con sus dos promesas marcadas y los indicadores que las respaldan.
+// título "Visión" (H2, igual que Misión y Valores; 13-nov), la visión con sus dos promesas marcadas y los indicadores que las respaldan.
 import Foto from '../ui/Foto.astro';
 import type { ImageMetadata } from 'astro';
 
@@ -39,7 +39,7 @@ partes.push({ t: resto, marca: false });
       )}
       <p class="mision"><span>{mision.antes}</span> <b>{mision.clave}</b></p>
     </div>
-    <div class="mv-cota cota" aria-hidden="true"><span class="regla"></span><i class="voz-datos">{tituloVision}</i></div>
+    <h2 class="h2-barra mv-vision">{tituloVision}</h2>
     <p class="vision">{partes.map((x) => (x.marca ? <mark>{x.t}</mark> : x.t))}</p>
     <ul class="indicadores cota">
       {indicadores.map((x, i) => (
@@ -65,12 +65,7 @@ partes.push({ t: resto, marca: false });
   .mision { margin: 0; font-family: var(--f-titulo); font-size: calc(var(--fs-lema) * .7); line-height: 1; letter-spacing: -.025em; text-wrap: balance; }
   .mision span { font-weight: var(--fw-fina); }
   .mision b { font-weight: var(--fw-negra); color: var(--accent); }
-  .mv-cota { position: relative; height: 12px; margin: var(--s6) 0 var(--s5); border-inline: 1px solid var(--accent); }
-  .mv-cota .regla { position: absolute; left: 0; right: 0; top: 5.5px; height: 1px; background: var(--accent); transform-origin: left; }
-  :global(html.js) .mv-cota:not(.visible) .regla { transform: scaleX(0); }
-  :global(html.js) .mv-cota .regla { transition: transform var(--t-cota) var(--ease-plano); }
-  :global(html.sin-revela) .mv-cota .regla { transform: none; }
-  .mv-cota i { position: absolute; left: 50%; top: -9px; transform: translateX(-50%); padding: 0 var(--s2); background: var(--paper); color: var(--accent); font-style: normal; }
+  .mv-vision { margin: var(--s7) 0 var(--s5); }
   .vision { margin: 0; max-width: 46ch; font-size: var(--fs-h3); line-height: 1.45; }
   .vision mark { background: none; color: inherit; font-weight: var(--fw-strong); box-shadow: inset 0 -.38em 0 var(--signal-soft); }
   .indicadores { list-style: none; margin: var(--s5) 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: var(--border) solid var(--line); }
@@ -87,5 +82,5 @@ partes.push({ t: resto, marca: false });
   :global(html.sin-revela) .indicadores .indicador-regla { transform: none; }
   .indicador-etiqueta { margin: 0; color: var(--muted); font-size: var(--fs-sm); line-height: 1.4; }
   .indicador-fuente { margin: var(--s1) 0 0; color: var(--muted); }
-  @media (prefers-reduced-motion: reduce) { :global(html.js) :is(.mv-cota .regla, .indicador-regla) { transform: none; transition: none; } }
+  @media (prefers-reduced-motion: reduce) { :global(html.js) :is(.indicador-regla) { transform: none; transition: none; } }
 </style>

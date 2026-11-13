@@ -340,7 +340,8 @@ clave de API para desarrollo, `widgetcode` de SalesIQ y certificados ISO en PDF.
     herramientas como diagrama (4 módulos + Microsoft 365 `transversal`; `logo:` opcional en `public/logos/`, por confirmar
     con TI). `/vacantes` sin formulario: tablero a todo el ancho y "Postularme" lleva a Trabaje con HL con la vacante en la
     URL (`?vacante&cargo&sede`). **Acreedores con acceso limitado:** fuera del pie y sin pestañas; solo un texto discreto al
-    final de Documentos públicos. 423 pruebas, Lighthouse móvil 100 en Nosotros y Gestión integral.
+    final de Documentos públicos. 423 pruebas, Lighthouse móvil 100 en Nosotros y Gestión integral. Después: "Visión" es H2
+    con barra, como Misión, y el título de valores es "Valores corporativos" (EN "Corporate values").
   - **Siguiente paso:** F6 · Lanzamiento (en espera de la aprobación oficial y de los insumos de `/pendientes/`). Nosotros
     ya da 100/100/100/100 tras R3 (13-nov, Lighthouse 13: LCP 1,1 s; `/en/about/` 100, `/en/` 99). El `.htaccess` se prueba
     en el hosting al desplegar en F6 (decisión 13-nov; vigilar el orden entre `mod_rewrite` y `mod_alias`: `http://www…` a
